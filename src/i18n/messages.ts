@@ -1926,6 +1926,17 @@ export const messages = {
     "authenticationTab.selectInterval": "Select interval...",
     "authenticationTab.days": "Days",
     "authenticationTab.hours": "Hours",
+    "authenticationTab.loginMethodLabel": "Login Method",
+    "authenticationTab.loginMethodHelp":
+      "Choose which sign-in option users should see on the embedded login page.",
+    "authenticationTab.loginMethodPlaceholder": "Select login method...",
+    "authenticationTab.loginMethodAll": "Show all login methods",
+    "authenticationTab.loginMethodEmail": "Email only",
+    "authenticationTab.loginMethodWeChatWork": "Enterprise WeChat only",
+    "authenticationTab.loginMethodEmailDisabled":
+      "Email login is disabled for this instance, so this option is unavailable.",
+    "authenticationTab.loginMethodWeChatWorkDisabled":
+      "Configure a WeChat Work identity provider first to use this option.",
     "authenticationTab.requireLoginAfterDisconnect":
       "Require login after disconnect",
     "authenticationTab.requireLoginAfterDisconnectHelp":
@@ -4511,6 +4522,17 @@ export const messages = {
     "authenticationTab.selectInterval": "选择时间单位...",
     "authenticationTab.days": "天",
     "authenticationTab.hours": "小时",
+    "authenticationTab.loginMethodLabel": "登录方式",
+    "authenticationTab.loginMethodHelp":
+      "选择用户在内置登录页中看到的登录方式。",
+    "authenticationTab.loginMethodPlaceholder": "选择登录方式...",
+    "authenticationTab.loginMethodAll": "显示全部登录方式",
+    "authenticationTab.loginMethodEmail": "仅邮箱登录",
+    "authenticationTab.loginMethodWeChatWork": "仅企业微信登录",
+    "authenticationTab.loginMethodEmailDisabled":
+      "当前实例已禁用邮箱登录，因此这个选项不可用。",
+    "authenticationTab.loginMethodWeChatWorkDisabled":
+      "请先配置企业微信身份提供商后再使用此选项。",
     "authenticationTab.requireLoginAfterDisconnect": "断开后需要重新登录",
     "authenticationTab.requireLoginAfterDisconnectHelp":
       "启用后，用户与管理连接断开 10 分钟后将需要重新认证。",
