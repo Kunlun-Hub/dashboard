@@ -232,7 +232,10 @@ export function useApiErrorHandling(ignoreError = false) {
       return login(currentPath);
     }
     if (err.code == 401 && err.message == "token invalid") {
-      setError(err);
+      // Stale browser tokens can happen after the embedded IdP state changes
+      // across restarts. Re-run the OIDC login flow instead of leaving the UI
+      // stuck on repeated unauthorized API calls.
+      return login(currentPath);
     }
 
     // Handle user blocked/pending approval responses
