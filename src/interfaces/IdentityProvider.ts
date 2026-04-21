@@ -83,4 +83,5 @@ export interface SSOIdentityProviderRequest {
   issuer: string;
   client_id: string;
   client_secret: string;
+  suite_ticket?: string;
 }

@@ -62,7 +62,7 @@ const defaultNames: Record<SSOIdentityProviderType, string> = {
   pocketid: "PocketID",
   authentik: "Authentik",
   keycloak: "Keycloak",
-  wechatwork: "WeChat Work",
+  wechatwork: "企业微信",
 };
 
 type Props = {
@@ -96,8 +96,11 @@ export default function IdentityProviderModal({
   const [issuer, setIssuer] = useState(provider?.issuer ?? "");
   const [clientId, setClientId] = useState(provider?.client_id ?? "");
   const [clientSecret, setClientSecret] = useState("");
+  const [suiteTicket, setSuiteTicket] = useState("");
 
-  const requiresIssuer = type !== "google" && type !== "microsoft";
+  const isWeChatWork = type === "wechatwork";
+  const requiresIssuer =
+    type !== "google" && type !== "microsoft" && type !== "wechatwork";
   const clientIdChanged = isEditing && trim(clientId) !== provider?.client_id;
 
   const isDisabled = useMemo(() => {
@@ -105,11 +108,14 @@ export default function IdentityProviderModal({
     const trimmedIssuer = trim(issuer);
     const trimmedClientId = trim(clientId);
     const trimmedClientSecret = trim(clientSecret);
+    const trimmedSuiteTicket = trim(suiteTicket);
 
     if (trimmedName.length === 0) return true;
     if (requiresIssuer && trimmedIssuer.length === 0) return true;
     if (trimmedClientId.length === 0) return true;
     if ((!isEditing || clientIdChanged) && trimmedClientSecret.length === 0)
+      return true;
+    if (isWeChatWork && trimmedSuiteTicket.length === 0 && !isEditing)
       return true;
 
     return false;
@@ -118,8 +124,10 @@ export default function IdentityProviderModal({
     issuer,
     clientId,
     clientSecret,
+    suiteTicket,
     isEditing,
     clientIdChanged,
+    isWeChatWork,
     requiresIssuer,
   ]);
 
@@ -130,6 +138,7 @@ export default function IdentityProviderModal({
       issuer: trim(issuer),
       client_id: trim(clientId),
       client_secret: trim(clientSecret),
+      suite_ticket: isWeChatWork ? trim(suiteTicket) : undefined,
     };
 
     if (isEditing) {
@@ -238,10 +247,20 @@ export default function IdentityProviderModal({
           )}
 
           <div>
-            <Label>{t("identityProviderModal.clientId")}</Label>
-            <HelpText>{t("identityProviderModal.clientIdHelp")}</HelpText>
+            <Label>
+              {isWeChatWork ? "Suite ID" : t("identityProviderModal.clientId")}
+            </Label>
+            <HelpText>
+              {isWeChatWork
+                ? "填写企业微信第三方应用的 Suite ID。"
+                : t("identityProviderModal.clientIdHelp")}
+            </HelpText>
             <Input
-              placeholder={t("identityProviderModal.clientIdPlaceholder")}
+              placeholder={
+                isWeChatWork
+                  ? "输入企业微信 Suite ID"
+                  : t("identityProviderModal.clientIdPlaceholder")
+              }
               value={clientId}
               onChange={(e) => setClientId(e.target.value)}
               customPrefix={<IdCard size={16} className="text-nb-gray-300" />}
@@ -249,26 +268,60 @@ export default function IdentityProviderModal({
           </div>
 
           <div>
-            <Label>{t("identityProviderModal.clientSecret")}</Label>
+            <Label>
+              {isWeChatWork
+                ? "Suite Secret"
+                : t("identityProviderModal.clientSecret")}
+            </Label>
             <HelpText>
-              {isEditing
-                ? clientIdChanged
-                  ? t("identityProviderModal.clientSecretChangedHelp")
-                  : t("identityProviderModal.clientSecretOptionalHelp")
-                : t("identityProviderModal.clientSecretHelp")}
+              {isWeChatWork
+                ? isEditing
+                  ? "留空将保留现有企业微信 Suite Secret。"
+                  : "填写企业微信第三方应用的 Suite Secret。"
+                : isEditing
+                  ? clientIdChanged
+                    ? t("identityProviderModal.clientSecretChangedHelp")
+                    : t("identityProviderModal.clientSecretOptionalHelp")
+                  : t("identityProviderModal.clientSecretHelp")}
             </HelpText>
             <Input
               type="password"
               placeholder={
-                isEditing
-                  ? t("identityProviderModal.clientSecretMaskedPlaceholder")
-                  : t("identityProviderModal.clientSecretPlaceholder")
+                isWeChatWork
+                  ? isEditing
+                    ? "留空则不修改 Suite Secret"
+                    : "输入企业微信 Suite Secret"
+                  : isEditing
+                    ? t("identityProviderModal.clientSecretMaskedPlaceholder")
+                    : t("identityProviderModal.clientSecretPlaceholder")
               }
               value={clientSecret}
               onChange={(e) => setClientSecret(e.target.value)}
               customPrefix={<KeyIcon size={16} className="text-nb-gray-300" />}
             />
           </div>
+
+          {isWeChatWork && (
+            <div>
+              <Label>Suite Ticket</Label>
+              <HelpText>
+                {isEditing
+                  ? "留空将保留现有 Suite Ticket。企业微信第三方应用获取 suite_access_token 时需要该值。"
+                  : "填写企业微信后台推送的最新 Suite Ticket。"}
+              </HelpText>
+              <Input
+                type="password"
+                placeholder={
+                  isEditing
+                    ? "留空则不修改 Suite Ticket"
+                    : "输入企业微信 Suite Ticket"
+                }
+                value={suiteTicket}
+                onChange={(e) => setSuiteTicket(e.target.value)}
+                customPrefix={<KeyIcon size={16} className="text-nb-gray-300" />}
+              />
+            </div>
+          )}
 
           <Separator />
 
@@ -279,7 +332,9 @@ export default function IdentityProviderModal({
               codeToCopy={redirectUrl}
               message={t("identityProviderModal.redirectCopied")}
             >
-              <Code.Line>{redirectUrl}</Code.Line>
+              <Code.Line>
+                {isWeChatWork ? `${redirectUrl}/{connector_id}` : redirectUrl}
+              </Code.Line>
             </Code>
           </div>
         </div>
