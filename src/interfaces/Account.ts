@@ -8,6 +8,30 @@ export interface Account {
     extra: {
       peer_approval_enabled: boolean;
       user_approval_required: boolean;
+      network_traffic_logs_enabled?: boolean;
+      network_traffic_logs_groups?: string[];
+      network_traffic_packet_counter_enabled?: boolean;
+      network_traffic_exit_node_collection_enabled?: boolean;
+      network_traffic_dns_collection_enabled?: boolean;
+      flow_enabled?: boolean;
+      flow_groups?: string[];
+      flow_packet_counter_enabled?: boolean;
+      flow_exit_node_collection_enabled?: boolean;
+      flow_dns_collection_enabled?: boolean;
+    };
+    flow?: {
+      enabled?: boolean;
+      groups?: string[];
+      counters?: boolean;
+      dns_collection?: boolean;
+      exit_node_collection?: boolean;
+    };
+    flow_logs?: {
+      enabled?: boolean;
+      groups?: string[];
+      counters?: boolean;
+      dns_collection?: boolean;
+      exit_node_collection?: boolean;
     };
     peer_login_expiration_enabled: boolean;
     peer_expose_enabled?: boolean;

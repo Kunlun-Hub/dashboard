@@ -277,6 +277,13 @@ const ActivityNavigationItem = () => {
         exactPathMatch={true}
         visible={permission.events.read}
       />
+      <SidebarItem
+        label={t("nav.networkLogs")}
+        isChild
+        href={"/events/network"}
+        exactPathMatch={true}
+        visible={permission.events.read}
+      />
     </SidebarItem>
   );
 };

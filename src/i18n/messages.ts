@@ -62,6 +62,7 @@ export const messages = {
     "nav.activity": "Activity",
     "nav.auditEvents": "Audit Events",
     "nav.proxyEvents": "Proxy Events",
+    "nav.networkLogs": "Network Logs",
     "nav.settings": "Settings",
     "nav.documentation": "Documentation",
     "help.title": "Help and Support",
@@ -141,6 +142,7 @@ export const messages = {
     "settings.permissions": "Permissions",
     "settings.networks": "Networks",
     "settings.clients": "Clients",
+    "settings.flowLogs": "Flow Logs",
     "settings.dangerZone": "Danger zone",
     "accessControl.title": "Access Control",
     "accessControl.policiesTitle": "Access Control Policies",
@@ -1234,6 +1236,56 @@ export const messages = {
     "proxyEvents.title": "Proxy Events",
     "proxyEvents.description":
       "View access logs for your reverse proxy services, including allowed and denied requests.",
+    "networkLogs.title": "Network Logs",
+    "networkLogs.description":
+      "View traffic observed inside the zero-trust network, including source, destination, protocol, and device context.",
+    "networkLogs.searchPlaceholder":
+      "Search by user, device, source, or destination...",
+    "networkLogs.emptyTitle": "No network logs yet",
+    "networkLogs.emptyDescription":
+      "Traffic events will appear here after clients report zero-trust network activity.",
+    "networkLogs.latestTime": "Latest Time",
+    "networkLogs.user": "User",
+    "networkLogs.client": "Client",
+    "networkLogs.protocol": "Protocol",
+    "networkLogs.destination": "Destination",
+    "networkLogs.source": "Source",
+    "networkLogs.direction": "Direction",
+    "networkLogs.events": "Events",
+    "networkLogs.time": "Time",
+    "networkLogs.packets": "Packets",
+    "networkLogs.traffic": "Traffic",
+    "networkLogs.totalTraffic": "Total Traffic",
+    "networkLogs.flowCount": "Flows",
+    "networkLogs.flowCountValue": "{count} flows",
+    "networkLogs.moreDestinations": " and {count} more",
+    "networkLogs.tx": "Tx",
+    "networkLogs.rx": "Rx",
+    "networkLogs.protocol.icmp": "ICMP",
+    "networkLogs.protocol.tcp": "TCP",
+    "networkLogs.protocol.udp": "UDP",
+    "networkLogs.protocol.sctp": "SCTP",
+    "flowLogsSettings.description":
+      "Enable client-side network flow collection so administrators can review zero-trust traffic in the network logs view.",
+    "flowLogsSettings.enable": "Enable Flow Logs",
+    "flowLogsSettings.enableHelp":
+      "Turn on network flow collection and ask connected clients to start uploading flow events.",
+    "flowLogsSettings.enableCounters": "Enable Counters",
+    "flowLogsSettings.enableCountersHelp":
+      "Include packet and byte counters in uploaded flow records.",
+    "flowLogsSettings.enableDnsCollection": "Enable DNS Collection",
+    "flowLogsSettings.enableDnsCollectionHelp":
+      "Collect DNS query-related flow events from supported clients.",
+    "flowLogsSettings.enableExitNodeCollection":
+      "Enable Exit Node Collection",
+    "flowLogsSettings.enableExitNodeCollectionHelp":
+      "Collect flow events generated while a client acts as an exit node.",
+    "flowLogsSettings.windowsCallout":
+      "Windows clients need administrator privileges to collect flow logs. After this is enabled, the client may request elevation when starting.",
+    "flowLogsSettings.notifyTitle": "Flow Log Settings",
+    "flowLogsSettings.updatedDescription":
+      "Flow log settings were updated successfully.",
+    "flowLogsSettings.updating": "Updating flow log settings...",
     "customDomains.title": "Domains",
     "customDomains.description":
       "Add and manage custom domains for your reverse proxy services.",
@@ -2804,6 +2856,7 @@ export const messages = {
     "nav.activity": "活动",
     "nav.auditEvents": "审计事件",
     "nav.proxyEvents": "代理事件",
+    "nav.networkLogs": "网络日志",
     "nav.settings": "设置",
     "nav.documentation": "文档",
     "help.title": "帮助与支持",
@@ -2882,6 +2935,7 @@ export const messages = {
     "settings.permissions": "权限",
     "settings.networks": "网络",
     "settings.clients": "客户端",
+    "settings.flowLogs": "流日志",
     "settings.dangerZone": "危险区域",
     "accessControl.title": "访问控制",
     "accessControl.policiesTitle": "访问控制策略",
@@ -3918,6 +3972,53 @@ export const messages = {
     "proxyEvents.title": "代理事件",
     "proxyEvents.description":
       "查看反向代理服务的访问日志，包括被允许和被拒绝的请求。",
+    "networkLogs.title": "网络日志",
+    "networkLogs.description":
+      "查看零信任网络内观测到的流量，包括源地址、目标地址、协议和设备上下文。",
+    "networkLogs.searchPlaceholder": "按用户、设备、源地址或目标地址搜索...",
+    "networkLogs.emptyTitle": "暂无网络日志",
+    "networkLogs.emptyDescription":
+      "客户端开始回传零信任网络流量后，日志会显示在这里。",
+    "networkLogs.latestTime": "最近时间",
+    "networkLogs.user": "用户",
+    "networkLogs.client": "客户端",
+    "networkLogs.protocol": "协议",
+    "networkLogs.destination": "目标",
+    "networkLogs.source": "源",
+    "networkLogs.direction": "方向",
+    "networkLogs.events": "事件",
+    "networkLogs.time": "时间",
+    "networkLogs.packets": "包数",
+    "networkLogs.traffic": "流量",
+    "networkLogs.totalTraffic": "总流量",
+    "networkLogs.flowCount": "流数量",
+    "networkLogs.flowCountValue": "{count} 条",
+    "networkLogs.moreDestinations": " 等 {count} 个",
+    "networkLogs.tx": "Tx",
+    "networkLogs.rx": "Rx",
+    "networkLogs.protocol.icmp": "ICMP",
+    "networkLogs.protocol.tcp": "TCP",
+    "networkLogs.protocol.udp": "UDP",
+    "networkLogs.protocol.sctp": "SCTP",
+    "flowLogsSettings.description":
+      "开启客户端网络流量采集后，管理员可以在网络日志页面查看零信任网络内的访问流量。",
+    "flowLogsSettings.enable": "启用流日志",
+    "flowLogsSettings.enableHelp":
+      "开启网络流量采集，并通知已连接客户端开始上传流事件。",
+    "flowLogsSettings.enableCounters": "启用计数器",
+    "flowLogsSettings.enableCountersHelp":
+      "在上传的流日志中附带数据包和字节计数。",
+    "flowLogsSettings.enableDnsCollection": "启用 DNS 采集",
+    "flowLogsSettings.enableDnsCollectionHelp":
+      "在支持的客户端上采集与 DNS 查询相关的流事件。",
+    "flowLogsSettings.enableExitNodeCollection": "启用出口节点采集",
+    "flowLogsSettings.enableExitNodeCollectionHelp":
+      "采集客户端作为出口节点时产生的流日志事件。",
+    "flowLogsSettings.windowsCallout":
+      "Windows 客户端采集流日志需要管理员权限。开启后，客户端启动时可能会请求提升权限。",
+    "flowLogsSettings.notifyTitle": "流日志设置",
+    "flowLogsSettings.updatedDescription": "流日志设置已成功更新。",
+    "flowLogsSettings.updating": "正在更新流日志设置...",
     "customDomains.title": "域名",
     "customDomains.description": "为你的反向代理服务添加和管理自定义域名。",
     "jobs.title": "任务",
