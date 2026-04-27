@@ -5287,8 +5287,6 @@ export const messages = {
     "peerGroupSelector.toAddResourcesSuffix": "添加资源。",
     "peerGroupSelector.toAddPeersPrefix": "前往",
     "peerGroupSelector.toAddPeersSuffix": "添加设备。",
-  },
-
     "peerSelector.selectPeer": "选择设备...",
     "peerSelector.searchPlaceholder": "按名称或 IP 搜索设备...",
     "peerSelector.noPeersAvailable": "没有可供选择的设备。",
@@ -5407,6 +5405,7 @@ export const messages = {
     "table.ttl": "TTL",
     "dns.records": "DNS 记录",
     "networkResources.saveGroups": "保存分组",
+  },
 } as const;
 
 export type MessageKey = keyof (typeof messages)["en"];
