@@ -7,7 +7,7 @@ import DataTableHeader from "@components/table/DataTableHeader";
 import DataTableRefreshButton from "@components/table/DataTableRefreshButton";
 import { DataTableRowsPerPage } from "@components/table/DataTableRowsPerPage";
 import GetStartedTest from "@components/ui/GetStartedTest";
-import type { ColumnDef, SortingState } from "@tanstack/react-table";
+import type { ColumnDef, SortingState, PaginationState } from "@tanstack/react-table";
 import dayjs from "dayjs";
 import { ChevronDown, ChevronRightIcon } from "lucide-react";
 import React, { useCallback, useMemo, useState } from "react";
@@ -208,12 +208,11 @@ type Props = {
 export default function NetworkLogsTable({ headingTarget }: Readonly<Props>) {
   const { t } = useI18n();
   const {
-    data,
+    data: rawData,
     isLoading,
     mutate,
     setFilter,
     getFilter,
-    ...paginationProps
   } = useServerPagination<NetworkLog[]>();
 
   const dateRange = useMemo<DateRange | undefined>(() => {
@@ -243,8 +242,12 @@ export default function NetworkLogsTable({ headingTarget }: Readonly<Props>) {
   const [sorting, setSorting] = useState<SortingState>([
     { id: "timestamp", desc: true },
   ]);
+  const [{ pageIndex, pageSize }, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 20,
+  });
 
-  const groupedData = useMemo(() => groupLogsByClient(data), [data]);
+  const groupedData = useMemo(() => groupLogsByClient(rawData), [rawData]);
   const columns = useMemo<ColumnDef<NetworkLogClientGroup>[]>(
     () => [
       {
@@ -344,9 +347,10 @@ export default function NetworkLogsTable({ headingTarget }: Readonly<Props>) {
     [t],
   );
 
+  const pageCount = useMemo(() => Math.ceil(groupedData.length / pageSize), [groupedData.length, pageSize]);
+
   return (
     <DataTable
-      {...paginationProps}
       data={groupedData}
       headingTarget={headingTarget}
       isLoading={isLoading}
@@ -355,6 +359,15 @@ export default function NetworkLogsTable({ headingTarget }: Readonly<Props>) {
       sorting={sorting}
       setSorting={setSorting}
       columns={columns}
+      pagination={{ pageIndex, pageSize }}
+      onPaginationChange={setPagination}
+      pageCount={pageCount}
+      totalRecords={groupedData.length}
+      manualPagination={true}
+      serverSidePagination={false}
+      keepStateInLocalStorage={false}
+      manualFiltering={false}
+      hasServerSideFilters={false}
       searchPlaceholder={t("networkLogs.searchPlaceholder")}
       renderExpandedRow={(group) => <NetworkLogDetails group={group} />}
       getStartedCard={
