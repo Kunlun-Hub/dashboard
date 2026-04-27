@@ -18,6 +18,15 @@ export interface Account {
       flow_packet_counter_enabled?: boolean;
       flow_exit_node_collection_enabled?: boolean;
       flow_dns_collection_enabled?: boolean;
+      flow_local_storage_enabled?: boolean;
+      flow_local_storage_path?: string;
+      flow_local_storage_max_size_mb?: number;
+      flow_local_storage_max_files?: number;
+      flow_syslog_enabled?: boolean;
+      flow_syslog_server?: string;
+      flow_syslog_protocol?: string;
+      flow_syslog_facility?: string;
+      flow_syslog_tag?: string;
     };
     flow?: {
       enabled?: boolean;

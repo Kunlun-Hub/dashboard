@@ -6,7 +6,7 @@ import { notify } from "@components/Notification";
 import { useHasChanges } from "@hooks/useHasChanges";
 import * as Tabs from "@radix-ui/react-tabs";
 import { useApiCall } from "@utils/api";
-import { ActivityIcon, InfoIcon, SettingsIcon as LucideSettingsIcon } from "lucide-react";
+import { ActivityIcon, InfoIcon, SettingsIcon as LucideSettingsIcon, HardDrive, Network } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import { useSWRConfig } from "swr";
 import SettingsIcon from "@/assets/icons/SettingsIcon";
@@ -84,6 +84,35 @@ export default function FlowLogsSettingsTab({ account }: Readonly<Props>) {
   const [flowExitNodeCollectionEnabled, setFlowExitNodeCollectionEnabled] =
     useState(() => readFlowExitNode(account));
 
+  const [flowLocalStorageEnabled, setFlowLocalStorageEnabled] = useState(() =>
+    account.settings?.extra?.flow_local_storage_enabled ?? false
+  );
+  const [flowLocalStoragePath, setFlowLocalStoragePath] = useState(() =>
+    account.settings?.extra?.flow_local_storage_path ?? ""
+  );
+  const [flowLocalStorageMaxSizeMb, setFlowLocalStorageMaxSizeMb] = useState(() =>
+    account.settings?.extra?.flow_local_storage_max_size_mb ?? 100
+  );
+  const [flowLocalStorageMaxFiles, setFlowLocalStorageMaxFiles] = useState(() =>
+    account.settings?.extra?.flow_local_storage_max_files ?? 10
+  );
+
+  const [flowSyslogEnabled, setFlowSyslogEnabled] = useState(() =>
+    account.settings?.extra?.flow_syslog_enabled ?? false
+  );
+  const [flowSyslogServer, setFlowSyslogServer] = useState(() =>
+    account.settings?.extra?.flow_syslog_server ?? ""
+  );
+  const [flowSyslogProtocol, setFlowSyslogProtocol] = useState(() =>
+    account.settings?.extra?.flow_syslog_protocol ?? "udp"
+  );
+  const [flowSyslogFacility, setFlowSyslogFacility] = useState(() =>
+    account.settings?.extra?.flow_syslog_facility ?? "daemon"
+  );
+  const [flowSyslogTag, setFlowSyslogTag] = useState(() =>
+    account.settings?.extra?.flow_syslog_tag ?? "netbird"
+  );
+
   const flowGroups = useMemo(() => readFlowGroups(account), [account]);
 
   const { hasChanges, updateRef } = useHasChanges([
@@ -91,6 +120,15 @@ export default function FlowLogsSettingsTab({ account }: Readonly<Props>) {
     flowCountersEnabled,
     flowDNSCollectionEnabled,
     flowExitNodeCollectionEnabled,
+    flowLocalStorageEnabled,
+    flowLocalStoragePath,
+    flowLocalStorageMaxSizeMb,
+    flowLocalStorageMaxFiles,
+    flowSyslogEnabled,
+    flowSyslogServer,
+    flowSyslogProtocol,
+    flowSyslogFacility,
+    flowSyslogTag,
   ]);
 
   const saveChanges = async () => {
@@ -117,6 +155,15 @@ export default function FlowLogsSettingsTab({ account }: Readonly<Props>) {
               flow_dns_collection_enabled: flowDNSCollectionEnabled,
               flow_exit_node_collection_enabled:
                 flowExitNodeCollectionEnabled,
+              flow_local_storage_enabled: flowLocalStorageEnabled,
+              flow_local_storage_path: flowLocalStoragePath,
+              flow_local_storage_max_size_mb: flowLocalStorageMaxSizeMb,
+              flow_local_storage_max_files: flowLocalStorageMaxFiles,
+              flow_syslog_enabled: flowSyslogEnabled,
+              flow_syslog_server: flowSyslogServer,
+              flow_syslog_protocol: flowSyslogProtocol,
+              flow_syslog_facility: flowSyslogFacility,
+              flow_syslog_tag: flowSyslogTag,
             },
             flow: {
               enabled: flowEnabled,
@@ -141,6 +188,15 @@ export default function FlowLogsSettingsTab({ account }: Readonly<Props>) {
             flowCountersEnabled,
             flowDNSCollectionEnabled,
             flowExitNodeCollectionEnabled,
+            flowLocalStorageEnabled,
+            flowLocalStoragePath,
+            flowLocalStorageMaxSizeMb,
+            flowLocalStorageMaxFiles,
+            flowSyslogEnabled,
+            flowSyslogServer,
+            flowSyslogProtocol,
+            flowSyslogFacility,
+            flowSyslogTag,
           ]);
         }),
       loadingMessage: t("flowLogsSettings.updating"),
@@ -237,6 +293,151 @@ export default function FlowLogsSettingsTab({ account }: Readonly<Props>) {
             helpText={t("flowLogsSettings.enableExitNodeCollectionHelp")}
             disabled={!permission.settings.update || !flowEnabled}
           />
+
+          <div className="border-t border-nb-gray-700 pt-6">
+            <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+              <HardDrive size={18} />
+              {t("flowLogsSettings.localStorage")}
+            </h2>
+            
+            <FancyToggleSwitch
+              value={flowLocalStorageEnabled}
+              onChange={setFlowLocalStorageEnabled}
+              dataCy={"flow-local-storage-enabled"}
+              label={
+                <>
+                  <HardDrive size={15} />
+                  {t("flowLogsSettings.enableLocalStorage")}
+                </>
+              }
+              helpText={t("flowLogsSettings.enableLocalStorageHelp")}
+              disabled={!permission.settings.update || !flowEnabled}
+            />
+
+            {flowLocalStorageEnabled && (
+              <div className="mt-4 pl-6 space-y-4">
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm text-nb-gray-300">{t("flowLogsSettings.storagePath")}</label>
+                  <input
+                    type="text"
+                    value={flowLocalStoragePath}
+                    onChange={(e) => setFlowLocalStoragePath(e.target.value)}
+                    placeholder={t("flowLogsSettings.storagePathPlaceholder")}
+                    className="bg-nb-gray-800 border border-nb-gray-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-nb-primary"
+                    disabled={!permission.settings.update}
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm text-nb-gray-300">{t("flowLogsSettings.maxFileSize")}</label>
+                  <input
+                    type="number"
+                    value={flowLocalStorageMaxSizeMb}
+                    onChange={(e) => setFlowLocalStorageMaxSizeMb(Number(e.target.value))}
+                    min="1"
+                    max="1000"
+                    className="bg-nb-gray-800 border border-nb-gray-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-nb-primary w-32"
+                    disabled={!permission.settings.update}
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm text-nb-gray-300">{t("flowLogsSettings.maxFiles")}</label>
+                  <input
+                    type="number"
+                    value={flowLocalStorageMaxFiles}
+                    onChange={(e) => setFlowLocalStorageMaxFiles(Number(e.target.value))}
+                    min="1"
+                    max="100"
+                    className="bg-nb-gray-800 border border-nb-gray-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-nb-primary w-32"
+                    disabled={!permission.settings.update}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="border-t border-nb-gray-700 pt-6">
+            <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+              <Network size={18} />
+              {t("flowLogsSettings.syslog")}
+            </h2>
+            
+            <FancyToggleSwitch
+              value={flowSyslogEnabled}
+              onChange={setFlowSyslogEnabled}
+              dataCy={"flow-syslog-enabled"}
+              label={
+                <>
+                  <Network size={15} />
+                  {t("flowLogsSettings.enableSyslog")}
+                </>
+              }
+              helpText={t("flowLogsSettings.enableSyslogHelp")}
+              disabled={!permission.settings.update || !flowEnabled}
+            />
+
+            {flowSyslogEnabled && (
+              <div className="mt-4 pl-6 space-y-4">
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm text-nb-gray-300">{t("flowLogsSettings.syslogServer")}</label>
+                  <input
+                    type="text"
+                    value={flowSyslogServer}
+                    onChange={(e) => setFlowSyslogServer(e.target.value)}
+                    placeholder={t("flowLogsSettings.syslogServerPlaceholder")}
+                    className="bg-nb-gray-800 border border-nb-gray-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-nb-primary"
+                    disabled={!permission.settings.update}
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm text-nb-gray-300">{t("flowLogsSettings.syslogProtocol")}</label>
+                  <select
+                    value={flowSyslogProtocol}
+                    onChange={(e) => setFlowSyslogProtocol(e.target.value)}
+                    className="bg-nb-gray-800 border border-nb-gray-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-nb-primary w-32"
+                    disabled={!permission.settings.update}
+                  >
+                    <option value="udp">UDP</option>
+                    <option value="tcp">TCP</option>
+                  </select>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm text-nb-gray-300">{t("flowLogsSettings.syslogFacility")}</label>
+                  <select
+                    value={flowSyslogFacility}
+                    onChange={(e) => setFlowSyslogFacility(e.target.value)}
+                    className="bg-nb-gray-800 border border-nb-gray-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-nb-primary w-40"
+                    disabled={!permission.settings.update}
+                  >
+                    <option value="daemon">Daemon</option>
+                    <option value="local0">Local0</option>
+                    <option value="local1">Local1</option>
+                    <option value="local2">Local2</option>
+                    <option value="local3">Local3</option>
+                    <option value="local4">Local4</option>
+                    <option value="local5">Local5</option>
+                    <option value="local6">Local6</option>
+                    <option value="local7">Local7</option>
+                    <option value="kern">Kernel</option>
+                    <option value="user">User</option>
+                    <option value="mail">Mail</option>
+                    <option value="auth">Auth</option>
+                    <option value="syslog">Syslog</option>
+                  </select>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm text-nb-gray-300">{t("flowLogsSettings.syslogTag")}</label>
+                  <input
+                    type="text"
+                    value={flowSyslogTag}
+                    onChange={(e) => setFlowSyslogTag(e.target.value)}
+                    placeholder={t("flowLogsSettings.syslogTagPlaceholder")}
+                    className="bg-nb-gray-800 border border-nb-gray-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-nb-primary w-40"
+                    disabled={!permission.settings.update}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
 
           <Callout
             variant={"info"}
