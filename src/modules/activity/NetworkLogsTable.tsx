@@ -73,7 +73,8 @@ const groupLogsByClient = (logs?: NetworkLog[]): NetworkLogClientGroup[] => {
   const groups = new Map<string, NetworkLogClientGroup>();
 
   for (const log of logs ?? []) {
-    const clientKey = log.reporter_id || log.source.id || log.source.address;
+    // 按账户名和设备名称分组
+    const clientKey = `${log.user.name || log.user.email}-${log.source.name || log.source.address}`;
     const existing = groups.get(clientKey);
     const timestamp = latestEventTimestamp(log);
 
@@ -283,7 +284,14 @@ export default function NetworkLogsTable({ headingTarget }: Readonly<Props>) {
         header: ({ column }) => (
           <DataTableHeader column={column}>{t("networkLogs.user")}</DataTableHeader>
         ),
-        cell: ({ row }) => row.original.user.name || row.original.user.email || "-",
+        cell: ({ row }) => (
+          <div className="flex flex-col">
+            <span className="font-medium">{row.original.user.name || row.original.user.email}</span>
+            {row.original.user.name && (
+              <span className="text-xs text-nb-gray-300">{row.original.user.email}</span>
+            )}
+          </div>
+        ),
       },
       {
         id: "device",
@@ -293,7 +301,7 @@ export default function NetworkLogsTable({ headingTarget }: Readonly<Props>) {
         ),
         cell: ({ row }) => (
           <div className="flex flex-col">
-            <span>{row.original.client.name || row.original.client.address}</span>
+            <span className="font-medium">{row.original.client.name || row.original.client.address}</span>
             {row.original.client.name && (
               <span className="text-xs text-nb-gray-300">{row.original.client.address}</span>
             )}
