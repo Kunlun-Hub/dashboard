@@ -222,17 +222,9 @@ export const useAccessControl = ({
   };
 
   const submit = async () => {
+    // 暂时跳过创建/更新 group，假设所有 group 都已经存在
     const allGroups = rules.flatMap((rule) => [...rule.sources, ...rule.destinations]);
-    const createOrUpdateGroups = uniqBy(allGroups, "name")
-      .filter((g) => g)
-      .map((g) => g.promise);
-
-    const groups = await Promise.all(
-      createOrUpdateGroups.map((call) => call()),
-    ).then((groups) => {
-        mutate("/groups");
-        return groups;
-      });
+    const groups = uniqBy(allGroups, "name").filter((g) => g);
 
     let hasError = false;
     let allChecks = postureChecks;
