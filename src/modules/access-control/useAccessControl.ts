@@ -14,8 +14,7 @@ import {
   PortRange,
   Protocol,
 } from "@/interfaces/Policy";
-import { PostureCheck } from "@/interfaces/PostureCheck";
-import useGroupHelper from "@/modules/groups/useGroupHelper";
+import { PostureCheck } from "@interfaces/PostureCheck";
 import { usePostureCheck } from "@/modules/posture-checks/usePostureCheck";
 
 type RuleState = {
@@ -135,9 +134,32 @@ export const useAccessControl = ({
   const { updatePolicy } = usePolicies();
 
   const [rules, setRules] = useState<RuleState[]>(() => {
+    // 兼容旧格式的 policy：先检查是否有 rules 数组
     if (policy?.rules && policy.rules.length > 0) {
       return policy.rules.map(convertRuleToState);
     }
+    // 兼容旧格式的 policy：如果没有 rules 数组，但有直接的字段
+    if (policy && (policy.sources || policy.destinations || policy.protocol)) {
+      return [{
+        ...createDefaultRule(),
+        id: (policy as any).rule_id,
+        name: policy.name,
+        description: policy.description,
+        protocol: (policy as any).protocol ?? "all",
+        ports: (policy as any).ports?.map((p) => Number(p)) ?? [],
+        port_ranges: (policy as any).port_ranges ?? [],
+        sources: (policy as any).sources as Group[] ?? [],
+        destinations: (policy as any).destinations as Group[] ?? [],
+        direction: (policy as any).bidirectional ? "bi" : "in",
+        bidirectional: (policy as any).bidirectional ?? true,
+        sourceResource: (policy as any).sourceResource,
+        destinationResource: (policy as any).destinationResource,
+        sshAccessType:
+          (policy as any).authorized_groups && Object.keys((policy as any).authorized_groups).length > 0 ? "limited" : "full",
+        sshAuthorizedGroups: (policy as any).authorized_groups,
+      }];
+    }
+    // 如果有初始参数
     if (initialDestinationGroups || initialProtocol || initialPorts || initialDestinationResource) {
       return [{
         ...createDefaultRule(),

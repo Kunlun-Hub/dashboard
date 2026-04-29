@@ -184,7 +184,7 @@ const RuleEditor = ({
   const { permission } = usePermissions();
 
   return (
-    <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+    <div className="border rounded-lg p-4">
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center gap-2">
           <button
