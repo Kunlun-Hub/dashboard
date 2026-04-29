@@ -146,7 +146,7 @@ export const useAccessControl = ({
         name: policy.name,
         description: policy.description,
         protocol: (policy as any).protocol ?? "all",
-        ports: (policy as any).ports?.map((p) => Number(p)) ?? [],
+        ports: (policy as any).ports?.map((p: string) => Number(p)) ?? [],
         port_ranges: (policy as any).port_ranges ?? [],
         sources: (policy as any).sources as Group[] ?? [],
         destinations: (policy as any).destinations as Group[] ?? [],
