@@ -139,7 +139,7 @@ export const useAccessControl = ({
       return policy.rules.map(convertRuleToState);
     }
     // 兼容旧格式的 policy：如果没有 rules 数组，但有直接的字段
-    if (policy && (policy.sources || policy.destinations || policy.protocol)) {
+    if (policy && ((policy as any).sources || (policy as any).destinations || (policy as any).protocol)) {
       return [{
         ...createDefaultRule(),
         id: (policy as any).rule_id,
