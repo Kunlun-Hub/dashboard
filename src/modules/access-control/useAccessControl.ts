@@ -60,7 +60,7 @@ const convertRuleToState = (rule: PolicyRule): RuleState => ({
   protocol: rule.protocol,
   direction: rule.bidirectional ? "bi" : "in",
   bidirectional: rule.bidirectional ?? true,
-  action: rule.action || "accept",
+  action: (rule.action || "accept") as "accept" | "drop",
   sources: rule.sources as Group[] ?? [],
   destinations: rule.destinations as Group[] ?? [],
   sourceResource: rule.sourceResource,
