@@ -112,7 +112,7 @@ export const useAccessControl = ({
             return policy.source_posture_checks.some((c) => {
               let policyCheck = c as PostureCheck;
               return policyCheck.id === check.id;
-            };
+            });
           }
         }
         return false;
