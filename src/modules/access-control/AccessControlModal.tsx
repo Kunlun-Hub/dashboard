@@ -358,13 +358,19 @@ const RuleEditor = ({
                 </div>
                 <SSHAccessType
                   value={rule.sshAccessType}
-                  onChange={(v) => updateRule(ruleIndex, { sshAccessType: v })}
+                  onChange={(v) => {
+                    const newAccessType = typeof v === "function" ? v(rule.sshAccessType) : v;
+                    updateRule(ruleIndex, { sshAccessType: newAccessType });
+                  }}
                 />
               </div>
               <SSHAuthorizedGroups
                 sourceGroups={rule.sources}
                 authorizedGroups={rule.sshAuthorizedGroups}
-                setAuthorizedGroups={(v) => updateRule(ruleIndex, { sshAuthorizedGroups: v })}
+                setAuthorizedGroups={(v) => {
+                  const newAuthorizedGroups = typeof v === "function" ? v(rule.sshAuthorizedGroups) : v;
+                  updateRule(ruleIndex, { sshAuthorizedGroups: newAuthorizedGroups });
+                }}
                 accessType={rule.sshAccessType}
               />
             </div>
@@ -377,9 +383,15 @@ const RuleEditor = ({
                 <PortSelector
                   showAll={true}
                   ports={rule.ports}
-                  onPortsChange={(v) => updateRule(ruleIndex, { ports: v })}
+                  onPortsChange={(v) => {
+                    const newPorts = typeof v === "function" ? v(rule.ports) : v;
+                    updateRule(ruleIndex, { ports: newPorts });
+                  }}
                   portRanges={rule.port_ranges}
-                  onPortRangesChange={(v) => updateRule(ruleIndex, { port_ranges: v })}
+                  onPortRangesChange={(v) => {
+                    const newPortRanges = typeof v === "function" ? v(rule.port_ranges) : v;
+                    updateRule(ruleIndex, { port_ranges: newPortRanges });
+                  }}
                   disabled={portDisabled}
                 />
               </div>
