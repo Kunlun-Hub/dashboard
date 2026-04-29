@@ -367,10 +367,7 @@ const RuleEditor = ({
               <SSHAuthorizedGroups
                 sourceGroups={rule.sources}
                 authorizedGroups={rule.sshAuthorizedGroups}
-                setAuthorizedGroups={(v) => {
-                  const newAuthorizedGroups = typeof v === "function" ? v(rule.sshAuthorizedGroups) : v;
-                  updateRule(ruleIndex, { sshAuthorizedGroups: newAuthorizedGroups });
-                }}
+                setAuthorizedGroups={(v) => updateRule(ruleIndex, { sshAuthorizedGroups: v })}
                 accessType={rule.sshAccessType}
               />
             </div>
