@@ -38,9 +38,10 @@ import {
   PlusCircle,
   Power,
   Share2,
-  Shield,
   SquareTerminalIcon,
-  Text,
+  Trash2,
+  ChevronDown,
+  ChevronRight,
 } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import AccessControlIcon from "@/assets/icons/AccessControlIcon";
@@ -55,7 +56,6 @@ import { PostureCheckTab } from "@/modules/posture-checks/ui/PostureCheckTab";
 import { PostureCheckTabTrigger } from "@/modules/posture-checks/ui/PostureCheckTabTrigger";
 import { SSHAccessType } from "@/modules/access-control/ssh/SSHAccessType";
 import { SSHAuthorizedGroups } from "@/modules/access-control/ssh/SSHAuthorizedGroups";
-import { useUsers } from "@/contexts/UsersProvider";
 import { HelpTooltip } from "@components/HelpTooltip";
 
 type Props = {
@@ -113,6 +113,297 @@ export function AccessControlUpdateModal({
   );
 }
 
+type RuleEditorProps = {
+  ruleIndex: number;
+  allowEditPeers: boolean;
+  onRemoveRule: () => void;
+  canRemove: boolean;
+  additionalResources?: NetworkResource[];
+};
+
+const RuleEditor = ({
+  ruleIndex,
+  allowEditPeers,
+  onRemoveRule,
+  canRemove,
+  additionalResources,
+}: RuleEditorProps) => {
+  const {
+    rules,
+    updateRule,
+    hasPortSupport,
+  } = useAccessControl();
+  
+  const rule = rules[ruleIndex];
+  const [expanded, setExpanded] = useState(true);
+
+  const portDisabled = !hasPortSupport(rule.protocol);
+
+  const destinationHasResources = useMemo(() => {
+    const isDestinationPeer = rule.destinationResource?.type === "peer";
+    if (isDestinationPeer) return false;
+    if (rule.destinationResource) return true;
+
+    return rule.destinations.some((group) => {
+      if (group.resources_count !== undefined) {
+        return group.resources_count > 0;
+      }
+      if (group.resources && Array.isArray(group.resources)) {
+        return group.resources.length > 0;
+      }
+      return false;
+    });
+  }, [rule.destinations, rule.destinationResource]);
+
+  const destinationOnlyResources = useMemo(() => {
+    const isDestinationPeer = rule.destinationResource?.type === "peer";
+    if (isDestinationPeer) return false;
+    if (rule.destinationResource) return true;
+
+    return (
+      rule.destinations.length > 0 &&
+      rule.destinations.every((group) => {
+        const hasPeers =
+          group.peers_count !== undefined
+            ? group.peers_count > 0
+            : group.peers &&
+              Array.isArray(group.peers) &&
+              group.peers.length > 0;
+        const hasResources =
+          group.resources_count !== undefined
+            ? group.resources_count > 0
+            : group.resources &&
+              Array.isArray(group.resources) &&
+              group.resources.length > 0;
+
+        return hasResources && !hasPeers;
+      })
+    );
+  }, [rule.destinations, rule.destinationResource]);
+
+  const { permission } = usePermissions();
+
+  return (
+    <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+      <div className="flex justify-between items-center mb-4">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setExpanded(!expanded)}
+            className="text-gray-500 hover:text-gray-700"
+          >
+            {expanded ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
+          </button>
+          <Label className="text-lg font-medium">
+            Rule {ruleIndex + 1} - {rule.action === "accept" ? "Allow" : "Deny"}
+          </Label>
+        </div>
+        <div className="flex items-center gap-2">
+          <FancyToggleSwitch
+            value={rule.enabled}
+            onChange={(v) => updateRule(ruleIndex, { enabled: v })}
+            label=""
+          />
+          {canRemove && (
+            <button
+              onClick={onRemoveRule}
+              className="text-red-500 hover:text-red-700 p-1"
+              title="Remove Rule"
+            >
+              <Trash2 size={18} />
+            </button>
+          )}
+        </div>
+      </div>
+
+      {expanded && (
+        <div className="space-y-4">
+          <div className="flex gap-6 items-center">
+            <div className="w-full">
+              <Label>Action</Label>
+              <Select
+                value={rule.action}
+                onValueChange={(v) => updateRule(ruleIndex, { action: v as "accept" | "drop" })}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="accept">Allow (Accept)</SelectItem>
+                  <SelectItem value="drop">Deny (Drop)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="w-full">
+              <Label>Protocol</Label>
+              <Select
+                value={rule.protocol}
+                onValueChange={(v) => updateRule(ruleIndex, { protocol: v as Protocol })}
+              >
+                <SelectTrigger>
+                  <div className="flex items-center gap-3">
+                    <Share2 size={15} className="text-gray-400" />
+                    <SelectValue />
+                  </div>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Protocols</SelectItem>
+                  <SelectItem value="tcp">TCP</SelectItem>
+                  <SelectItem value="udp">UDP</SelectItem>
+                  <SelectItem value="icmp">ICMP</SelectItem>
+                  <SelectItem value="netbird-ssh">
+                    NetBird SSH
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <div className="flex gap-6 items-center">
+            <div className="w-full self-start">
+              <Label className="mb-2">
+                <FolderDown size={15} />
+                Source
+              </Label>
+              <PeerGroupSelector
+                popoverWidth={500}
+                placeholder="Select Sources"
+                showRoutes={rule.protocol !== "netbird-ssh"}
+                showResources={false}
+                showPeers={rule.protocol !== "netbird-ssh"}
+                showResourceCounter={false}
+                showPeerCount={allowEditPeers}
+                disableInlineRemoveGroup={false}
+                values={rule.sources}
+                onChange={(v) => updateRule(ruleIndex, { sources: v })}
+                resource={rule.sourceResource}
+                onResourceChange={(v) => updateRule(ruleIndex, { sourceResource: v })}
+                disabled={
+                  !permission.policies.update || !permission.policies.create
+                }
+              />
+            </div>
+            <PolicyDirection
+              value={rule.direction}
+              onChange={(v) => updateRule(ruleIndex, { direction: v })}
+              disabled={destinationOnlyResources}
+              protocol={rule.protocol}
+              destinationResource={rule.destinationResource}
+            />
+            <div className="w-full self-start">
+              <Label className="mb-2">
+                <FolderInput size={15} />
+                Destination
+              </Label>
+              <PeerGroupSelector
+                popoverWidth={500}
+                placeholder="Select Destinations"
+                showRoutes={true}
+                showResources={rule.protocol !== "netbird-ssh"}
+                showPeers={true}
+                showResourceCounter={true}
+                showPeerCount={allowEditPeers}
+                disableInlineRemoveGroup={false}
+                values={rule.destinations}
+                onChange={(v) => updateRule(ruleIndex, { destinations: v })}
+                resource={rule.destinationResource}
+                onResourceChange={(v) => updateRule(ruleIndex, { destinationResource: v })}
+                additionalResources={additionalResources}
+              />
+            </div>
+          </div>
+
+          {destinationHasResources &&
+            !destinationOnlyResources &&
+            rule.direction === "bi" && (
+              <Callout
+                variant="warning"
+                icon={
+                  <AlertCircleIcon
+                    size={14}
+                    className="shrink-0 relative top-[3px] text-netbird"
+                  />
+                }
+              >
+                Resource Warning
+              </Callout>
+            )}
+
+          {rule.protocol === "netbird-ssh" ? (
+            <div>
+              {destinationHasResources && (
+                <Callout
+                  variant="warning"
+                  icon={
+                    <AlertCircleIcon
+                      size={14}
+                      className="shrink-0 relative top-[3px] text-netbird"
+                    />
+                  }
+                >
+                  SSH Resource Warning
+                </Callout>
+              )}
+              <div className="flex justify-between items-center gap-10">
+                <div className="w-full">
+                  <Label className="flex items-center gap-2">
+                    <SquareTerminalIcon size={15} />
+                    SSH Access
+                  </Label>
+                </div>
+                <SSHAccessType
+                  value={rule.sshAccessType}
+                  onChange={(v) => updateRule(ruleIndex, { sshAccessType: v })}
+                />
+              </div>
+              <SSHAuthorizedGroups
+                sourceGroups={rule.sources}
+                authorizedGroups={rule.sshAuthorizedGroups}
+                setAuthorizedGroups={(v) => updateRule(ruleIndex, { sshAuthorizedGroups: v })}
+                accessType={rule.sshAccessType}
+              />
+            </div>
+          ) : (
+            <div className={cn("mb-2 mt-2", portDisabled && "opacity-30 pointer-events-none")}>
+              <div>
+                <Label className="flex items-center gap-2">Ports</Label>
+              </div>
+              <div>
+                <PortSelector
+                  showAll={true}
+                  ports={rule.ports}
+                  onPortsChange={(v) => updateRule(ruleIndex, { ports: v })}
+                  portRanges={rule.port_ranges}
+                  onPortRangesChange={(v) => updateRule(ruleIndex, { port_ranges: v })}
+                  disabled={portDisabled}
+                />
+              </div>
+            </div>
+          )}
+
+          <div className="flex gap-4">
+            <div className="flex-1">
+              <Label>Rule Name (Optional)</Label>
+              <Input
+                value={rule.name || ""}
+                onChange={(e) => updateRule(ruleIndex, { name: e.target.value })}
+                placeholder="Rule name"
+              />
+            </div>
+            <div className="flex-1">
+              <Label>Rule Description (Optional)</Label>
+              <Input
+                value={rule.description || ""}
+                onChange={(e) => updateRule(ruleIndex, { description: e.target.value })}
+                placeholder="Rule description"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
 type ModalProps = {
   onSuccess?: (p: Policy) => void;
   policy?: Policy;
@@ -145,49 +436,27 @@ export function AccessControlModalContent({
   initialPorts,
   initialDestinationResource,
   initialTab,
-  disableDestinationSelector = false,
+  disableDestinationSelector,
   additionalResources,
 }: Readonly<ModalProps>) {
   const { permission } = usePermissions();
-  const { users } = useUsers();
   const { t } = useI18n();
 
   const {
-    portDisabled,
-    destinationGroups,
-    direction,
-    ports,
-    sourceGroups,
-    destinationHasResources,
-    destinationOnlyResources,
-    setSourceGroups,
-    setDestinationGroups,
-    setPorts,
-    setDirection,
-    setProtocol,
-    enabled,
-    setEnabled,
-    setName,
-    setDescription,
-    setPostureChecks,
-    name,
-    protocol,
-    description,
+    rules,
+    addRule,
+    removeRule,
+    policyName,
+    setPolicyName,
+    policyDescription,
+    setPolicyDescription,
+    policyEnabled,
+    setPolicyEnabled,
     postureChecks,
+    setPostureChecks,
     submit,
-    isPostureChecksLoading,
     getPolicyData,
-    sourceResource,
-    setSourceResource,
-    destinationResource,
-    setDestinationResource,
-    portRanges,
-    setPortRanges,
-    hasPortSupport,
-    sshAccessType,
-    setSshAccessType,
-    sshAuthorizedGroups,
-    setSshAuthorizedGroups,
+    isPostureChecksLoading,
   } = useAccessControl({
     policy,
     postureCheckTemplates,
@@ -207,33 +476,13 @@ export function AccessControlModalContent({
     return "policy";
   });
 
-  const canContinueToPostureChecks = useMemo(() => {
-    const hasSource = sourceGroups.length > 0 || !!sourceResource;
-    const hasDestination =
-      destinationGroups.length > 0 || !!destinationResource;
-    return hasSource && hasDestination;
-  }, [sourceGroups, destinationGroups, destinationResource, sourceResource]);
-
-  const submitDisabled = useMemo(() => {
-    if (name.length == 0) return true;
-    if (!canContinueToPostureChecks) return true;
-  }, [name, canContinueToPostureChecks]);
-
-  const handleProtocolChange = (p: Protocol) => {
-    setProtocol(p);
-    if (!hasPortSupport(p)) {
-      setPorts([]);
-      setPortRanges([]);
-    }
-  };
-
   const close = () => {
     const data = getPolicyData();
     onSuccess && onSuccess(data);
   };
 
   return (
-    <ModalContent maxWidthClass={"max-w-3xl"}>
+    <ModalContent maxWidthClass={"max-w-4xl"}>
       <ModalHeader
         icon={<AccessControlIcon className={"fill-netbird"} />}
         title={
@@ -249,230 +498,67 @@ export function AccessControlModalContent({
         <TabsList justify={"start"} className={"px-8"}>
           <TabsTrigger value={"policy"}>
             <ArrowRightLeft size={16} />
-            {t("accessControl.tabPolicy")}
+            Policy Rules
           </TabsTrigger>
-          <PostureCheckTabTrigger disabled={!canContinueToPostureChecks} />
-          <TabsTrigger value={"general"} disabled={!canContinueToPostureChecks}>
-            <Text
-              size={16}
-              className={
-                "text-nb-gray-500 group-data-[state=active]/trigger:text-netbird transition-all"
-              }
-            />
-            {t("accessControl.tabGeneral")}
+          <PostureCheckTabTrigger disabled={false} />
+          <TabsTrigger value={"general"} disabled={false}>
+            Policy Details
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value={"policy"} className={"pb-8"}>
-          <div className={"px-8 flex-col flex gap-6"}>
-            <div
-              className={"flex justify-between items-center gap-10"}
-              data-cy={"protocol-wrapper"}
-            >
-              <div className={"w-full"}>
-                <Label>{t("accessControl.protocol")}</Label>
-                <HelpText className={"max-w-sm"}>
-                  {t("accessControl.protocolHelp")}
-                </HelpText>
-              </div>
-              <Select
-                value={protocol}
-                onValueChange={(v) => handleProtocolChange(v as Protocol)}
-                disabled={
-                  !permission.policies.update || !permission.policies.create
-                }
-              >
-                <SelectTrigger className="w-[280px]">
-                  <div
-                    className={"flex items-center gap-3"}
-                    data-cy={"protocol-select-button"}
-                  >
-                    <Share2 size={15} className={"text-nb-gray-300"} />
-                    <SelectValue placeholder={t("accessControl.selectProtocol")} />
-                  </div>
-                </SelectTrigger>
-                <SelectContent data-cy={"protocol-selection"}>
-                  <SelectItem value="all">
-                    {t("accessControl.allProtocol")}
-                  </SelectItem>
-                  <SelectItem value="tcp">TCP</SelectItem>
-                  <SelectItem value="udp">UDP</SelectItem>
-                  <SelectItem value="icmp">ICMP</SelectItem>
-                  <SelectItem
-                    value="netbird-ssh"
-                    extra={
-                      <HelpTooltip
-                        triggerClassName={"ml-[0.01rem]"}
-                        align={"center"}
-                        side={"right"}
-                        content={
-                          <>{t("accessControl.netbirdSshTooltip")}</>
-                        }
-                      />
-                    }
-                  >
-                    {t("accessControl.netbirdSsh")}
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className={"flex gap-6 items-center"}>
-              <div className={"w-full self-start"}>
-                <Label className={"mb-2"}>
-                  <FolderDown size={15} />
-                  {t("accessControl.source")}
-                  <HelpTooltip
-                    content={<>{t("accessControl.sourceHelp")}</>}
-                  />
-                </Label>
-                <PeerGroupSelector
-                  dataCy={"source-group-selector"}
-                  popoverWidth={500}
-                  placeholder={t("accessControl.selectSources")}
-                  showRoutes={protocol !== "netbird-ssh"}
-                  showResources={false}
-                  showPeers={protocol !== "netbird-ssh"}
-                  showResourceCounter={false}
-                  showPeerCount={allowEditPeers}
-                  disableInlineRemoveGroup={false}
-                  values={sourceGroups}
-                  onChange={setSourceGroups}
-                  users={protocol === "netbird-ssh" ? users : undefined}
-                  resource={sourceResource}
-                  onResourceChange={setSourceResource}
-                  saveGroupAssignments={useSave}
-                  disabled={
-                    !permission.policies.update || !permission.policies.create
-                  }
-                />
-              </div>
-              <PolicyDirection
-                value={direction}
-                onChange={setDirection}
-                disabled={destinationOnlyResources}
-                protocol={protocol}
-                destinationResource={destinationResource}
+          <div className="px-8 flex-col flex gap-4">
+            {rules.map((rule, index) => (
+              <RuleEditor
+                key={index}
+                ruleIndex={index}
+                allowEditPeers={allowEditPeers}
+                onRemoveRule={() => removeRule(index)}
+                canRemove={rules.length > 1}
+                additionalResources={additionalResources}
               />
-
-              <div className={"w-full self-start"}>
-                <Label className={"mb-2"}>
-                  <FolderInput size={15} />
-                  {t("accessControl.destination")}
-                  <HelpTooltip
-                    content={<>{t("accessControl.destinationHelp")}</>}
-                  />
-                </Label>
-                <PeerGroupSelector
-                  dataCy={"destination-group-selector"}
-                  popoverWidth={500}
-                  placeholder={t("accessControl.selectDestinations")}
-                  showRoutes={true}
-                  showResources={protocol !== "netbird-ssh"}
-                  showPeers={true}
-                  showResourceCounter={true}
-                  showPeerCount={allowEditPeers}
-                  disableInlineRemoveGroup={false}
-                  values={destinationGroups}
-                  onChange={setDestinationGroups}
-                  resource={destinationResource}
-                  onResourceChange={setDestinationResource}
-                  saveGroupAssignments={useSave}
-                  additionalResources={additionalResources}
-                  disabled={
-                    disableDestinationSelector ||
-                    !permission.policies.update ||
-                    !permission.policies.create
-                  }
-                />
-              </div>
+            ))}
+            <Button
+              variant="secondary"
+              onClick={addRule}
+              className="w-full justify-center"
+            >
+              <PlusCircle size={16} />
+              Add Rule
+            </Button>
+          </div>
+        </TabsContent>
+        <PostureCheckTab
+          isLoading={isPostureChecksLoading}
+          postureChecks={postureChecks}
+          setPostureChecks={setPostureChecks}
+        />
+        <TabsContent value={"general"} className={"px-8 pb-6"}>
+          <div className="flex flex-col gap-6">
+            <div>
+              <Label>{t("accessControl.ruleName")}</Label>
+              <Input
+                autoFocus={true}
+                tabIndex={0}
+                value={policyName}
+                data-cy={"policy-name"}
+                onChange={(e) => setPolicyName(e.target.value)}
+                placeholder={t("accessControl.ruleNamePlaceholder")}
+              />
             </div>
-
-            {destinationHasResources &&
-              !destinationOnlyResources &&
-              direction === "bi" && (
-                <Callout
-                  variant={"warning"}
-                  icon={
-                    <AlertCircleIcon
-                      size={14}
-                      className={"shrink-0 relative top-[3px] text-netbird"}
-                    />
-                  }
-                  className="mb-4"
-                >
-                  {t("accessControl.resourceWarning")}
-                </Callout>
-              )}
-
-            {protocol === "netbird-ssh" ? (
-              <div>
-                {destinationHasResources && (
-                  <Callout
-                    variant={"warning"}
-                    icon={
-                      <AlertCircleIcon
-                        size={14}
-                        className={"shrink-0 relative top-[3px] text-netbird"}
-                      />
-                    }
-                    className="mb-6"
-                  >
-                    {t("accessControl.sshResourceWarning")}
-                  </Callout>
-                )}
-                <div
-                  className={"flex justify-between items-center gap-10 mt-2"}
-                >
-                  <div className={"w-full"}>
-                    <Label className={"flex items-center gap-2"}>
-                      <SquareTerminalIcon size={15} />
-                      {t("accessControl.sshAccess")}
-                    </Label>
-                    <HelpText>{t("accessControl.sshAccessHelp")}</HelpText>
-                  </div>
-                  <SSHAccessType
-                    value={sshAccessType}
-                    onChange={setSshAccessType}
-                  />
-                </div>
-                <SSHAuthorizedGroups
-                  sourceGroups={sourceGroups}
-                  authorizedGroups={sshAuthorizedGroups}
-                  setAuthorizedGroups={setSshAuthorizedGroups}
-                  accessType={sshAccessType}
-                />
-              </div>
-            ) : (
-              <div
-                className={cn(
-                  "mb-2 mt-2",
-                  portDisabled && "opacity-30 pointer-events-none",
-                )}
-              >
-                <div>
-                  <Label className={"flex items-center gap-2"}>
-                    <Shield size={14} />
-                    {t("accessControl.ports")}
-                  </Label>
-                  <HelpText>{t("accessControl.portsHelp")}</HelpText>
-                </div>
-                <div className={""}>
-                  <PortSelector
-                    showAll={true}
-                    ports={ports}
-                    onPortsChange={setPorts}
-                    portRanges={portRanges}
-                    onPortRangesChange={setPortRanges}
-                    disabled={portDisabled}
-                  />
-                </div>
-              </div>
-            )}
-
+            <div>
+              <Label>{t("accessControl.ruleDescription")}</Label>
+              <Textarea
+                value={policyDescription}
+                data-cy={"policy-description"}
+                onChange={(e) => setPolicyDescription(e.target.value)}
+                placeholder={t("accessControl.ruleDescriptionPlaceholder")}
+                rows={3}
+              />
+            </div>
             <FancyToggleSwitch
-              value={enabled}
-              onChange={setEnabled}
+              value={policyEnabled}
+              onChange={setPolicyEnabled}
               disabled={
                 !permission.policies.update || !permission.policies.create
               }
@@ -482,52 +568,13 @@ export function AccessControlModalContent({
                   {t("accessControl.enablePolicy")}
                 </>
               }
-              helpText={t("accessControl.enablePolicyHelp")}
             />
-          </div>
-        </TabsContent>
-        <PostureCheckTab
-          isLoading={isPostureChecksLoading}
-          postureChecks={postureChecks}
-          setPostureChecks={setPostureChecks}
-        />
-        <TabsContent value={"general"} className={"px-8 pb-6"}>
-          <div className={"flex flex-col gap-6"}>
-            <div>
-              <Label>{t("accessControl.ruleName")}</Label>
-              <HelpText>{t("accessControl.ruleNameHelp")}</HelpText>
-              <Input
-                autoFocus={true}
-                tabIndex={0}
-                value={name}
-                data-cy={"policy-name"}
-                onChange={(e) => setName(e.target.value)}
-                placeholder={t("accessControl.ruleNamePlaceholder")}
-                disabled={
-                  !permission.policies.update || !permission.policies.create
-                }
-              />
-            </div>
-            <div>
-              <Label>{t("accessControl.ruleDescription")}</Label>
-              <HelpText>{t("accessControl.ruleDescriptionHelp")}</HelpText>
-              <Textarea
-                value={description}
-                data-cy={"policy-description"}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder={t("accessControl.ruleDescriptionPlaceholder")}
-                rows={3}
-                disabled={
-                  !permission.policies.update || !permission.policies.create
-                }
-              />
-            </div>
           </div>
         </TabsContent>
       </Tabs>
 
       <ModalFooter className={"items-center"}>
-        <div className={"w-full"}>
+        <div className="w-full">
           <Paragraph className={"text-sm mt-auto"}>
             {t("common.learnMorePrefix")}{" "}
             <InlineLink
@@ -539,10 +586,10 @@ export function AccessControlModalContent({
             </InlineLink>
           </Paragraph>
         </div>
-        <div className={"flex gap-3 w-full justify-end"}>
+        <div className="flex gap-3 w-full justify-end">
           {!policy ? (
             <>
-              {tab == "policy" && (
+              {tab === "policy" && (
                 <>
                   <ModalClose asChild={true}>
                     <Button variant={"secondary"}>{t("actions.cancel")}</Button>
@@ -550,14 +597,13 @@ export function AccessControlModalContent({
                   <Button
                     variant={"primary"}
                     onClick={() => setTab("posture_checks")}
-                    disabled={!canContinueToPostureChecks}
                   >
                     {t("actions.continue")}
                   </Button>
                 </>
               )}
 
-              {tab == "posture_checks" && (
+              {tab === "posture_checks" && (
                 <>
                   <Button
                     variant={"secondary"}
@@ -568,14 +614,13 @@ export function AccessControlModalContent({
                   <Button
                     variant={"primary"}
                     onClick={() => setTab("general")}
-                    disabled={!canContinueToPostureChecks}
                   >
                     {t("actions.continue")}
                   </Button>
                 </>
               )}
 
-              {tab == "general" && (
+              {tab === "general" && (
                 <>
                   <Button
                     variant={"secondary"}
@@ -583,10 +628,9 @@ export function AccessControlModalContent({
                   >
                     {t("actions.back")}
                   </Button>
-
                   <Button
                     variant={"primary"}
-                    disabled={submitDisabled || !permission.policies.create}
+                    disabled={policyName.length === 0 || !permission.policies.create}
                     onClick={() => {
                       if (useSave) {
                         submit();
@@ -609,7 +653,7 @@ export function AccessControlModalContent({
               </ModalClose>
               <Button
                 variant={"primary"}
-                disabled={submitDisabled || !permission.policies.update}
+                disabled={policyName.length === 0 || !permission.policies.update}
                 onClick={() => {
                   if (useSave) {
                     submit();
