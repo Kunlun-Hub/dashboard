@@ -14,7 +14,7 @@ import {
   PortRange,
   Protocol,
 } from "@/interfaces/Policy";
-import { PostureCheck } from "@interfaces/PostureCheck";
+import { PostureCheck } from "@/interfaces/PostureCheck";
 import { usePostureCheck } from "@/modules/posture-checks/usePostureCheck";
 
 type RuleState = {
