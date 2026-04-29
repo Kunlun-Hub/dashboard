@@ -268,7 +268,7 @@ export const useAccessControl = ({
           Object.keys(rule.sshAuthorizedGroups).length === 0 ||
           rule.sshAccessType === "full";
 
-        if (!isEmpty) {
+        if (!isEmpty && rule.sshAuthorizedGroups) {
           Object.entries(rule.sshAuthorizedGroups).reduce(
             (acc, [groupName, usernames]) => {
               const group = groups?.find((group) => group.name === groupName);
