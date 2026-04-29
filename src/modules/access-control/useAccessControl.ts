@@ -1,7 +1,7 @@
 import { notify } from "@components/Notification";
 import { Direction } from "@components/ui/PolicyDirection";
 import useFetchApi, { useApiCall } from "@utils/api";
-import { merge, orderBy, uniqBy } from "lodash";
+import { merge, orderBy, uniqBy, isEmpty } from "lodash";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useSWRConfig } from "swr";
 import { usePolicies } from "@/contexts/PoliciesProvider";
@@ -158,6 +158,7 @@ export const useAccessControl = ({
   const { mutate } = useSWRConfig();
 
   const policyRequest = useApiCall<Policy>("/policies");
+  const groupRequest = useApiCall<Group>("/groups");
 
   const addRule = () => {
     setRules((prev) => [...prev, createDefaultRule()]);
@@ -222,9 +223,35 @@ export const useAccessControl = ({
   };
 
   const submit = async () => {
-    // 暂时跳过创建/更新 group，假设所有 group 都已经存在
     const allGroups = rules.flatMap((rule) => [...rule.sources, ...rule.destinations]);
-    const groups = uniqBy(allGroups, "name").filter((g) => g);
+    const uniqueGroups = uniqBy(allGroups, "name").filter((g) => g);
+
+    // 创建/更新 groups
+    const groupPromises = uniqueGroups.map(async (group) => {
+      // 如果 group 已有 id，说明已经存在，直接返回
+      if (group.id) {
+        return group;
+      }
+      // 否则创建新的 group
+      const groupPeers =
+        group.peers &&
+        group.peers
+          .map((p) => {
+            const groupPeer = p as any;
+            return groupPeer.id;
+          })
+          .filter((p) => p !== undefined && p !== null);
+      return groupRequest.post({
+        name: group.name,
+        peers: isEmpty(groupPeers) ? [] : groupPeers,
+        resources: group.resources,
+      });
+    });
+
+    const groups = await Promise.all(groupPromises).then((groups) => {
+      mutate("/groups");
+      return groups;
+    });
 
     let hasError = false;
     let allChecks = postureChecks;
