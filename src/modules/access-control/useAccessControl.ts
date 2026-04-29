@@ -264,7 +264,7 @@ export const useAccessControl = ({
         [sources, destinations] = [destinations, sources];
       }
 
-      const [newPorts, newPortRanges] = parseAccessControlPorts(rule.ports, rule.port_ranges);
+      let [newPorts, newPortRanges] = parseAccessControlPorts(rule.ports, rule.port_ranges);
 
       let authorizedGroups: AuthorizedGroups = {};
       if (rule.protocol === "netbird-ssh") {
