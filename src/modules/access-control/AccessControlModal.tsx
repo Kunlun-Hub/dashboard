@@ -274,7 +274,10 @@ const RuleEditor = ({
                 showPeerCount={allowEditPeers}
                 disableInlineRemoveGroup={false}
                 values={rule.sources}
-                onChange={(v) => updateRule(ruleIndex, { sources: v })}
+                onChange={(v) => {
+                  const newSources = typeof v === "function" ? v(rule.sources) : v;
+                  updateRule(ruleIndex, { sources: newSources });
+                }}
                 resource={rule.sourceResource}
                 onResourceChange={(v) => updateRule(ruleIndex, { sourceResource: v })}
                 disabled={
@@ -304,7 +307,10 @@ const RuleEditor = ({
                 showPeerCount={allowEditPeers}
                 disableInlineRemoveGroup={false}
                 values={rule.destinations}
-                onChange={(v) => updateRule(ruleIndex, { destinations: v })}
+                onChange={(v) => {
+                  const newDestinations = typeof v === "function" ? v(rule.destinations) : v;
+                  updateRule(ruleIndex, { destinations: newDestinations });
+                }}
                 resource={rule.destinationResource}
                 onResourceChange={(v) => updateRule(ruleIndex, { destinationResource: v })}
                 additionalResources={additionalResources}
