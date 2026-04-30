@@ -27,6 +27,7 @@ import {
 } from "@components/Select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@components/Tabs";
 import { Textarea } from "@components/Textarea";
+import { ToggleSwitch } from "@components/ToggleSwitch";
 import PolicyDirection from "@components/ui/PolicyDirection";
 import { cn } from "@utils/helpers";
 import {
@@ -51,7 +52,10 @@ import { Group } from "@/interfaces/Group";
 import { NetworkResource } from "@/interfaces/Network";
 import { Policy, PolicyRuleResource, Protocol } from "@/interfaces/Policy";
 import { PostureCheck } from "@/interfaces/PostureCheck";
-import { useAccessControl } from "@/modules/access-control/useAccessControl";
+import {
+  RuleState,
+  useAccessControl,
+} from "@/modules/access-control/useAccessControl";
 import { PostureCheckTab } from "@/modules/posture-checks/ui/PostureCheckTab";
 import { PostureCheckTabTrigger } from "@/modules/posture-checks/ui/PostureCheckTabTrigger";
 import { SSHAccessType } from "@/modules/access-control/ssh/SSHAccessType";
@@ -115,6 +119,9 @@ export function AccessControlUpdateModal({
 
 type RuleEditorProps = {
   ruleIndex: number;
+  rule: RuleState;
+  updateRule: (index: number, updates: Partial<RuleState>) => void;
+  hasPortSupport: (protocol: Protocol) => boolean;
   allowEditPeers: boolean;
   onRemoveRule: () => void;
   canRemove: boolean;
@@ -123,18 +130,15 @@ type RuleEditorProps = {
 
 const RuleEditor = ({
   ruleIndex,
+  rule,
+  updateRule,
+  hasPortSupport,
   allowEditPeers,
   onRemoveRule,
   canRemove,
   additionalResources,
 }: RuleEditorProps) => {
-  const {
-    rules,
-    updateRule,
-    hasPortSupport,
-  } = useAccessControl();
-  
-  const rule = rules[ruleIndex];
+  const { t } = useI18n();
   const [expanded, setExpanded] = useState(true);
 
   const portDisabled = !hasPortSupport(rule.protocol);
@@ -183,31 +187,44 @@ const RuleEditor = ({
 
   const { permission } = usePermissions();
 
+  const actionLabel =
+    rule.action === "accept"
+      ? t("accessControl.actionAllow")
+      : t("accessControl.actionDrop");
+  const ruleTitle = rule.name?.trim() || t("accessControl.untitledRule");
+
   return (
-    <div className="border rounded-lg p-4">
-      <div className="flex justify-between items-center mb-4">
-        <div className="flex items-center gap-2">
+    <div className={cn("border rounded-lg", expanded ? "p-4" : "px-4 py-3")}>
+      <div
+        className={cn(
+          "flex justify-between items-center gap-4",
+          expanded && "mb-4",
+        )}
+      >
+        <div className="flex items-center gap-2 min-w-0">
           <button
             onClick={() => setExpanded(!expanded)}
             className="text-gray-500 hover:text-gray-700"
           >
-            {expanded ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
+            {expanded ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
           </button>
-          <Label className="text-lg font-medium">
-            Rule {ruleIndex + 1} - {rule.action === "accept" ? "Allow" : "Deny"}
+          <Label className="text-base font-medium truncate">
+            {ruleTitle}
+            <span className="ml-2 text-sm text-nb-gray-300 font-normal">
+              {actionLabel}
+            </span>
           </Label>
         </div>
         <div className="flex items-center gap-2">
-          <FancyToggleSwitch
-            value={rule.enabled}
-            onChange={(v) => updateRule(ruleIndex, { enabled: v })}
-            label=""
+          <ToggleSwitch
+            checked={rule.enabled}
+            onCheckedChange={(v) => updateRule(ruleIndex, { enabled: v })}
           />
           {canRemove && (
             <button
               onClick={onRemoveRule}
               className="text-red-500 hover:text-red-700 p-1"
-              title="Remove Rule"
+              title={t("accessControl.removeRule")}
             >
               <Trash2 size={18} />
             </button>
@@ -219,25 +236,33 @@ const RuleEditor = ({
         <div className="space-y-4">
           <div className="flex gap-6 items-center">
             <div className="w-full">
-              <Label>Action</Label>
+              <Label>{t("accessControl.action")}</Label>
               <Select
                 value={rule.action}
-                onValueChange={(v) => updateRule(ruleIndex, { action: v as "accept" | "drop" })}
+                onValueChange={(v) =>
+                  updateRule(ruleIndex, { action: v as "accept" | "drop" })
+                }
               >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="accept">Allow (Accept)</SelectItem>
-                  <SelectItem value="drop">Deny (Drop)</SelectItem>
+                  <SelectItem value="accept">
+                    {t("accessControl.actionAllow")}
+                  </SelectItem>
+                  <SelectItem value="drop">
+                    {t("accessControl.actionDrop")}
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="w-full">
-              <Label>Protocol</Label>
+              <Label>{t("accessControl.protocol")}</Label>
               <Select
                 value={rule.protocol}
-                onValueChange={(v) => updateRule(ruleIndex, { protocol: v as Protocol })}
+                onValueChange={(v) =>
+                  updateRule(ruleIndex, { protocol: v as Protocol })
+                }
               >
                 <SelectTrigger>
                   <div className="flex items-center gap-3">
@@ -246,12 +271,14 @@ const RuleEditor = ({
                   </div>
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Protocols</SelectItem>
+                  <SelectItem value="all">
+                    {t("accessControl.allProtocol")}
+                  </SelectItem>
                   <SelectItem value="tcp">TCP</SelectItem>
                   <SelectItem value="udp">UDP</SelectItem>
                   <SelectItem value="icmp">ICMP</SelectItem>
                   <SelectItem value="netbird-ssh">
-                    NetBird SSH
+                    {t("accessControl.netbirdSsh")}
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -262,11 +289,11 @@ const RuleEditor = ({
             <div className="w-full self-start">
               <Label className="mb-2">
                 <FolderDown size={15} />
-                Source
+                {t("accessControl.source")}
               </Label>
               <PeerGroupSelector
                 popoverWidth={500}
-                placeholder="Select Sources"
+                placeholder={t("accessControl.selectSources")}
                 showRoutes={rule.protocol !== "netbird-ssh"}
                 showResources={false}
                 showPeers={rule.protocol !== "netbird-ssh"}
@@ -275,11 +302,14 @@ const RuleEditor = ({
                 disableInlineRemoveGroup={false}
                 values={rule.sources}
                 onChange={(v) => {
-                  const newSources = typeof v === "function" ? v(rule.sources) : v;
+                  const newSources =
+                    typeof v === "function" ? v(rule.sources) : v;
                   updateRule(ruleIndex, { sources: newSources });
                 }}
                 resource={rule.sourceResource}
-                onResourceChange={(v) => updateRule(ruleIndex, { sourceResource: v })}
+                onResourceChange={(v) =>
+                  updateRule(ruleIndex, { sourceResource: v })
+                }
                 disabled={
                   !permission.policies.update || !permission.policies.create
                 }
@@ -295,11 +325,11 @@ const RuleEditor = ({
             <div className="w-full self-start">
               <Label className="mb-2">
                 <FolderInput size={15} />
-                Destination
+                {t("accessControl.destination")}
               </Label>
               <PeerGroupSelector
                 popoverWidth={500}
-                placeholder="Select Destinations"
+                placeholder={t("accessControl.selectDestinations")}
                 showRoutes={true}
                 showResources={rule.protocol !== "netbird-ssh"}
                 showPeers={true}
@@ -308,11 +338,14 @@ const RuleEditor = ({
                 disableInlineRemoveGroup={false}
                 values={rule.destinations}
                 onChange={(v) => {
-                  const newDestinations = typeof v === "function" ? v(rule.destinations) : v;
+                  const newDestinations =
+                    typeof v === "function" ? v(rule.destinations) : v;
                   updateRule(ruleIndex, { destinations: newDestinations });
                 }}
                 resource={rule.destinationResource}
-                onResourceChange={(v) => updateRule(ruleIndex, { destinationResource: v })}
+                onResourceChange={(v) =>
+                  updateRule(ruleIndex, { destinationResource: v })
+                }
                 additionalResources={additionalResources}
               />
             </div>
@@ -330,7 +363,7 @@ const RuleEditor = ({
                   />
                 }
               >
-                Resource Warning
+                {t("accessControl.resourceWarning")}
               </Callout>
             )}
 
@@ -346,20 +379,21 @@ const RuleEditor = ({
                     />
                   }
                 >
-                  SSH Resource Warning
+                  {t("accessControl.sshResourceWarning")}
                 </Callout>
               )}
               <div className="flex justify-between items-center gap-10">
                 <div className="w-full">
                   <Label className="flex items-center gap-2">
                     <SquareTerminalIcon size={15} />
-                    SSH Access
+                    {t("accessControl.sshAccess")}
                   </Label>
                 </div>
                 <SSHAccessType
                   value={rule.sshAccessType}
                   onChange={(v) => {
-                    const newAccessType = typeof v === "function" ? v(rule.sshAccessType) : v;
+                    const newAccessType =
+                      typeof v === "function" ? v(rule.sshAccessType) : v;
                     updateRule(ruleIndex, { sshAccessType: newAccessType });
                   }}
                 />
@@ -367,26 +401,37 @@ const RuleEditor = ({
               <SSHAuthorizedGroups
                 sourceGroups={rule.sources}
                 authorizedGroups={rule.sshAuthorizedGroups}
-                setAuthorizedGroups={(v) => updateRule(ruleIndex, { sshAuthorizedGroups: v })}
+                setAuthorizedGroups={(v) =>
+                  updateRule(ruleIndex, { sshAuthorizedGroups: v })
+                }
                 accessType={rule.sshAccessType}
               />
             </div>
           ) : (
-            <div className={cn("mb-2 mt-2", portDisabled && "opacity-30 pointer-events-none")}>
+            <div
+              className={cn(
+                "mb-2 mt-2",
+                portDisabled && "opacity-30 pointer-events-none",
+              )}
+            >
               <div>
-                <Label className="flex items-center gap-2">Ports</Label>
+                <Label className="flex items-center gap-2">
+                  {t("accessControl.ports")}
+                </Label>
               </div>
               <div>
                 <PortSelector
                   showAll={true}
                   ports={rule.ports}
                   onPortsChange={(v) => {
-                    const newPorts = typeof v === "function" ? v(rule.ports) : v;
+                    const newPorts =
+                      typeof v === "function" ? v(rule.ports) : v;
                     updateRule(ruleIndex, { ports: newPorts });
                   }}
                   portRanges={rule.port_ranges}
                   onPortRangesChange={(v) => {
-                    const newPortRanges = typeof v === "function" ? v(rule.port_ranges) : v;
+                    const newPortRanges =
+                      typeof v === "function" ? v(rule.port_ranges) : v;
                     updateRule(ruleIndex, { port_ranges: newPortRanges });
                   }}
                   disabled={portDisabled}
@@ -397,19 +442,24 @@ const RuleEditor = ({
 
           <div className="flex gap-4">
             <div className="flex-1">
-              <Label>Rule Name (Optional)</Label>
+              <Label>{t("accessControl.ruleNameRequired")}</Label>
               <Input
                 value={rule.name || ""}
-                onChange={(e) => updateRule(ruleIndex, { name: e.target.value })}
-                placeholder="Rule name"
+                onChange={(e) =>
+                  updateRule(ruleIndex, { name: e.target.value })
+                }
+                placeholder={t("accessControl.ruleNamePlaceholder")}
+                required
               />
             </div>
             <div className="flex-1">
-              <Label>Rule Description (Optional)</Label>
+              <Label>{t("accessControl.ruleDescription")}</Label>
               <Input
                 value={rule.description || ""}
-                onChange={(e) => updateRule(ruleIndex, { description: e.target.value })}
-                placeholder="Rule description"
+                onChange={(e) =>
+                  updateRule(ruleIndex, { description: e.target.value })
+                }
+                placeholder={t("accessControl.ruleDescriptionPlaceholder")}
               />
             </div>
           </div>
@@ -472,6 +522,8 @@ export function AccessControlModalContent({
     submit,
     getPolicyData,
     isPostureChecksLoading,
+    updateRule,
+    hasPortSupport,
   } = useAccessControl({
     policy,
     postureCheckTemplates,
@@ -496,6 +548,9 @@ export function AccessControlModalContent({
     onSuccess && onSuccess(data);
   };
 
+  const hasInvalidRuleNames = rules.some((rule) => !rule.name?.trim());
+  const isPolicyNameEmpty = policyName.trim().length === 0;
+
   return (
     <ModalContent maxWidthClass={"max-w-4xl"}>
       <ModalHeader
@@ -513,11 +568,11 @@ export function AccessControlModalContent({
         <TabsList justify={"start"} className={"px-8"}>
           <TabsTrigger value={"policy"}>
             <ArrowRightLeft size={16} />
-            Policy Rules
+            {t("accessControl.rules")}
           </TabsTrigger>
           <PostureCheckTabTrigger disabled={false} />
           <TabsTrigger value={"general"} disabled={false}>
-            Policy Details
+            {t("accessControl.tabGeneral")}
           </TabsTrigger>
         </TabsList>
 
@@ -527,6 +582,9 @@ export function AccessControlModalContent({
               <RuleEditor
                 key={index}
                 ruleIndex={index}
+                rule={rule}
+                updateRule={updateRule}
+                hasPortSupport={hasPortSupport}
                 allowEditPeers={allowEditPeers}
                 onRemoveRule={() => removeRule(index)}
                 canRemove={rules.length > 1}
@@ -539,7 +597,7 @@ export function AccessControlModalContent({
               className="w-full justify-center"
             >
               <PlusCircle size={16} />
-              Add Rule
+              {t("accessControl.addRule")}
             </Button>
           </div>
         </TabsContent>
@@ -611,6 +669,7 @@ export function AccessControlModalContent({
                   </ModalClose>
                   <Button
                     variant={"primary"}
+                    disabled={hasInvalidRuleNames}
                     onClick={() => setTab("posture_checks")}
                   >
                     {t("actions.continue")}
@@ -626,10 +685,7 @@ export function AccessControlModalContent({
                   >
                     {t("actions.back")}
                   </Button>
-                  <Button
-                    variant={"primary"}
-                    onClick={() => setTab("general")}
-                  >
+                  <Button variant={"primary"} onClick={() => setTab("general")}>
                     {t("actions.continue")}
                   </Button>
                 </>
@@ -645,7 +701,11 @@ export function AccessControlModalContent({
                   </Button>
                   <Button
                     variant={"primary"}
-                    disabled={policyName.length === 0 || !permission.policies.create}
+                    disabled={
+                      isPolicyNameEmpty ||
+                      hasInvalidRuleNames ||
+                      !permission.policies.create
+                    }
                     onClick={() => {
                       if (useSave) {
                         submit();
@@ -668,7 +728,11 @@ export function AccessControlModalContent({
               </ModalClose>
               <Button
                 variant={"primary"}
-                disabled={policyName.length === 0 || !permission.policies.update}
+                disabled={
+                  isPolicyNameEmpty ||
+                  hasInvalidRuleNames ||
+                  !permission.policies.update
+                }
                 onClick={() => {
                   if (useSave) {
                     submit();

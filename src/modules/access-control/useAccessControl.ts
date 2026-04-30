@@ -5,6 +5,7 @@ import { merge, orderBy, uniqBy, isEmpty } from "lodash";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useSWRConfig } from "swr";
 import { usePolicies } from "@/contexts/PoliciesProvider";
+import { useGroups } from "@/contexts/GroupsProvider";
 import { Group } from "@/interfaces/Group";
 import {
   AuthorizedGroups,
@@ -17,7 +18,7 @@ import {
 import { PostureCheck } from "@/interfaces/PostureCheck";
 import { usePostureCheck } from "@/modules/posture-checks/usePostureCheck";
 
-type RuleState = {
+export type RuleState = {
   id?: string;
   name?: string;
   description?: string;
@@ -47,27 +48,54 @@ const createDefaultRule = (): RuleState => ({
   sources: [],
   destinations: [],
   sshAccessType: "full",
+  sshAuthorizedGroups: {},
 });
 
-const convertRuleToState = (rule: PolicyRule): RuleState => ({
-  id: rule.id,
-  name: rule.name,
-  description: rule.description,
-  enabled: rule.enabled ?? true,
-  ports: rule.ports?.map((p) => Number(p)) ?? [],
-  port_ranges: rule.port_ranges ?? [],
-  protocol: rule.protocol,
-  direction: rule.bidirectional ? "bi" : "in",
-  bidirectional: rule.bidirectional ?? true,
-  action: (rule.action || "accept") as "accept" | "drop",
-  sources: rule.sources as Group[] ?? [],
-  destinations: rule.destinations as Group[] ?? [],
-  sourceResource: rule.sourceResource,
-  destinationResource: rule.destinationResource,
-  sshAccessType:
-    rule.authorized_groups && Object.keys(rule.authorized_groups).length > 0 ? "limited" : "full",
-  sshAuthorizedGroups: rule.authorized_groups,
-});
+const resolveGroup = (
+  group: Group | string | null | undefined,
+  groups?: Group[],
+): Group | null => {
+  if (!group) return null;
+  if (typeof group === "object" && "id" in group) return group;
+  if (typeof group === "string") {
+    return groups?.find((g) => g.id === group) ?? null;
+  }
+  return null;
+};
+
+const resolveGroups = (
+  values: Group[] | string[] | null | undefined,
+  groups?: Group[],
+): Group[] => {
+  if (!Array.isArray(values)) return [];
+  return values
+    .map((group) => resolveGroup(group, groups))
+    .filter(Boolean) as Group[];
+};
+
+const convertRuleToState = (rule: PolicyRule, groups: Group[]): RuleState => {
+  return {
+    id: rule.id,
+    name: rule.name,
+    description: rule.description,
+    enabled: rule.enabled ?? true,
+    ports: rule.ports?.map((p) => Number(p)) ?? [],
+    port_ranges: rule.port_ranges ?? [],
+    protocol: rule.protocol ?? "all",
+    direction: rule.bidirectional ? "bi" : "in",
+    bidirectional: rule.bidirectional ?? true,
+    action: (rule.action || "accept") as "accept" | "drop",
+    sources: resolveGroups(rule.sources, groups),
+    destinations: resolveGroups(rule.destinations, groups),
+    sourceResource: rule.sourceResource,
+    destinationResource: rule.destinationResource,
+    sshAccessType:
+      rule.authorized_groups && Object.keys(rule.authorized_groups).length > 0
+        ? "limited"
+        : "full",
+    sshAuthorizedGroups: rule.authorized_groups,
+  };
+};
 
 type Props = {
   policy?: Policy;
@@ -94,6 +122,7 @@ export const useAccessControl = ({
 }: Props = {}) => {
   const { data: allPostureChecks, isLoading: isPostureChecksLoading } =
     useFetchApi<PostureCheck[]>("/posture-checks");
+  const { groups } = useGroups();
 
   const [postureChecks, setPostureChecks] = useState<PostureCheck[]>([]);
   const postureChecksLoaded = useRef(false);
@@ -133,50 +162,107 @@ export const useAccessControl = ({
 
   const { updatePolicy } = usePolicies();
 
-  const [rules, setRules] = useState<RuleState[]>(() => {
+  const initRules = useMemo((): RuleState[] => {
     // 兼容旧格式的 policy：先检查是否有 rules 数组
     if (policy?.rules && policy.rules.length > 0) {
-      return policy.rules.map(convertRuleToState);
+      if (!groups) return [createDefaultRule()];
+      return policy.rules.map((rule) => convertRuleToState(rule, groups));
     }
     // 兼容旧格式的 policy：如果没有 rules 数组，但有直接的字段
-    if (policy && ((policy as any).sources || (policy as any).destinations || (policy as any).protocol)) {
-      return [{
-        ...createDefaultRule(),
-        id: (policy as any).rule_id,
-        name: policy.name,
-        description: policy.description,
-        protocol: (policy as any).protocol ?? "all",
-        ports: (policy as any).ports?.map((p: string) => Number(p)) ?? [],
-        port_ranges: (policy as any).port_ranges ?? [],
-        sources: (policy as any).sources as Group[] ?? [],
-        destinations: (policy as any).destinations as Group[] ?? [],
-        direction: (policy as any).bidirectional ? "bi" : "in",
-        bidirectional: (policy as any).bidirectional ?? true,
-        sourceResource: (policy as any).sourceResource,
-        destinationResource: (policy as any).destinationResource,
-        sshAccessType:
-          (policy as any).authorized_groups && Object.keys((policy as any).authorized_groups).length > 0 ? "limited" : "full",
-        sshAuthorizedGroups: (policy as any).authorized_groups,
-      }];
+    if (
+      policy &&
+      ((policy as any).sources ||
+        (policy as any).destinations ||
+        (policy as any).protocol)
+    ) {
+      if (!groups) return [createDefaultRule()];
+
+      const direction: Direction = (policy as any).bidirectional ? "bi" : "in";
+
+      return [
+        {
+          ...createDefaultRule(),
+          id: (policy as any).rule_id,
+          name: policy.name,
+          description: policy.description,
+          protocol: (policy as any).protocol ?? "all",
+          ports: (policy as any).ports?.map((p: string) => Number(p)) ?? [],
+          port_ranges: (policy as any).port_ranges ?? [],
+          sources: resolveGroups((policy as any).sources, groups),
+          destinations: resolveGroups((policy as any).destinations, groups),
+          direction,
+          bidirectional: (policy as any).bidirectional ?? true,
+          sourceResource: (policy as any).sourceResource,
+          destinationResource: (policy as any).destinationResource,
+          sshAccessType:
+            (policy as any).authorized_groups &&
+            Object.keys((policy as any).authorized_groups).length > 0
+              ? "limited"
+              : "full",
+          sshAuthorizedGroups: (policy as any).authorized_groups,
+        },
+      ];
     }
     // 如果有初始参数
-    if (initialDestinationGroups || initialProtocol || initialPorts || initialDestinationResource) {
-      return [{
-        ...createDefaultRule(),
-        protocol: initialProtocol ?? "all",
-        ports: initialPorts ?? [],
-        destinations: initialDestinationGroups as Group[] ?? [],
-        destinationResource: initialDestinationResource,
-      }];
+    if (
+      initialDestinationGroups ||
+      initialProtocol ||
+      initialPorts ||
+      initialDestinationResource
+    ) {
+      return [
+        {
+          ...createDefaultRule(),
+          protocol: initialProtocol ?? "all",
+          ports: initialPorts ?? [],
+          destinations: resolveGroups(initialDestinationGroups, groups),
+          destinationResource: initialDestinationResource,
+        },
+      ];
     }
     return [createDefaultRule()];
-  });
+  }, [
+    policy,
+    groups,
+    initialDestinationGroups,
+    initialProtocol,
+    initialPorts,
+    initialDestinationResource,
+  ]);
 
-  const [policyName, setPolicyName] = useState(policy?.name || initialName || "");
+  const [rules, setRules] = useState<RuleState[]>(initRules);
+  const initializedRulesKey = useRef<string | undefined>(
+    policy || !groups ? undefined : "__create__",
+  );
+
+  useEffect(() => {
+    if (!groups) return;
+
+    const key = policy?.id ?? "__create__";
+    if (initializedRulesKey.current === key) return;
+
+    initializedRulesKey.current = key;
+    setRules(initRules);
+  }, [policy, groups, initRules]);
+
+  const [policyName, setPolicyName] = useState(
+    policy?.name || initialName || "",
+  );
   const [policyDescription, setPolicyDescription] = useState(
     policy?.description || initialDescription || "",
   );
-  const [policyEnabled, setPolicyEnabled] = useState<boolean>(policy?.enabled ?? true);
+  const [policyEnabled, setPolicyEnabled] = useState<boolean>(
+    policy?.enabled ?? true,
+  );
+
+  // 当 policy 变化时更新 policyName 和 policyDescription
+  useEffect(() => {
+    if (policy) {
+      setPolicyName(policy.name || initialName || "");
+      setPolicyDescription(policy.description || initialDescription || "");
+      setPolicyEnabled(policy.enabled ?? true);
+    }
+  }, [policy, initialName, initialDescription]);
   const { mutate } = useSWRConfig();
 
   const policyRequest = useApiCall<Policy>("/policies");
@@ -192,7 +278,9 @@ export const useAccessControl = ({
   };
 
   const updateRule = (index: number, updates: Partial<RuleState>) => {
-    setRules((prev) => prev.map((rule, i) => i === index ? { ...rule, ...updates } : rule));
+    setRules((prev) =>
+      prev.map((rule, i) => (i === index ? { ...rule, ...updates } : rule)),
+    );
   };
 
   const { updateOrCreateAndNotify: checkToCreate } = usePostureCheck({});
@@ -245,7 +333,10 @@ export const useAccessControl = ({
   };
 
   const submit = async () => {
-    const allGroups = rules.flatMap((rule) => [...rule.sources, ...rule.destinations]);
+    const allGroups = rules.flatMap((rule) => [
+      ...rule.sources,
+      ...rule.destinations,
+    ]);
     const uniqueGroups = uniqBy(allGroups, "name").filter((g) => g);
 
     // 创建/更新 groups
@@ -305,7 +396,10 @@ export const useAccessControl = ({
         [sources, destinations] = [destinations, sources];
       }
 
-      let [newPorts, newPortRanges] = parseAccessControlPorts(rule.ports, rule.port_ranges);
+      let [newPorts, newPortRanges] = parseAccessControlPorts(
+        rule.ports,
+        rule.port_ranges,
+      );
 
       let authorizedGroups: AuthorizedGroups = {};
       if (rule.protocol === "netbird-ssh") {
