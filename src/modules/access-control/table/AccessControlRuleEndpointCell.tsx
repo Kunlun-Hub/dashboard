@@ -45,6 +45,13 @@ type Props = {
   disableRedirect?: boolean;
 };
 
+type EndpointResourceData = {
+  resources?: NetworkResource[];
+  peers?: Peer[];
+  isLoadingResources: boolean;
+  isLoadingPeers: boolean;
+};
+
 export const collectRuleEndpointItems = (
   policy: Policy,
   endpoint: Endpoint,
@@ -114,6 +121,54 @@ const collectSingleRuleEndpointItems = (
   return items;
 };
 
+const collectPolicyEndpointItems = (policy: Policy): EndpointItem[] => {
+  return (
+    policy.rules?.flatMap((rule) => [
+      ...collectSingleRuleEndpointItems(rule, "sources"),
+      ...collectSingleRuleEndpointItems(rule, "destinations"),
+    ]) ?? []
+  );
+};
+
+const useEndpointResourceData = (
+  items: EndpointItem[],
+  enabled = true,
+): EndpointResourceData => {
+  const needsPeers = React.useMemo(
+    () =>
+      enabled &&
+      items.some(
+        (item) => item.type === "resource" && item.resource.type === "peer",
+      ),
+    [enabled, items],
+  );
+  const needsResources = React.useMemo(
+    () =>
+      enabled &&
+      items.some(
+        (item) => item.type === "resource" && item.resource.type !== "peer",
+      ),
+    [enabled, items],
+  );
+
+  const { data: resources, isLoading: isLoadingResources } = useFetchApi<
+    NetworkResource[]
+  >("/networks/resources", false, true, needsResources);
+  const { data: peers, isLoading: isLoadingPeers } = useFetchApi<Peer[]>(
+    "/peers",
+    false,
+    true,
+    needsPeers,
+  );
+
+  return {
+    resources,
+    peers,
+    isLoadingResources: needsResources && isLoadingResources,
+    isLoadingPeers: needsPeers && isLoadingPeers,
+  };
+};
+
 export default function AccessControlRuleEndpointCell({
   policy,
   endpoint,
@@ -126,6 +181,11 @@ export default function AccessControlRuleEndpointCell({
     () => collectRuleEndpointItems(policy, endpoint),
     [policy, endpoint],
   );
+  const policyEndpointItems = React.useMemo(
+    () => collectPolicyEndpointItems(policy),
+    [policy],
+  );
+  const resourceData = useEndpointResourceData(policyEndpointItems);
 
   if (items.length === 0) return <EmptyRow />;
 
@@ -142,7 +202,11 @@ export default function AccessControlRuleEndpointCell({
       <HoverCard openDelay={200} closeDelay={100}>
         <HoverCardTrigger>
           <div className="inline-flex items-center gap-2 z-0">
-            <EndpointBadge item={firstItem} disableRedirect={disableRedirect} />
+            <EndpointBadge
+              item={firstItem}
+              disableRedirect={disableRedirect}
+              resourceData={resourceData}
+            />
             {otherItems.length > 0 && (
               <Badge
                 variant="gray-ghost"
@@ -160,6 +224,7 @@ export default function AccessControlRuleEndpointCell({
         <AccessControlRulesOverviewHoverContent
           policy={policy}
           disableRedirect={disableRedirect}
+          resourceData={resourceData}
         />
       </HoverCard>
       {canUpdate && !hideEdit && <TransparentEditIconButton />}
@@ -170,11 +235,22 @@ export default function AccessControlRuleEndpointCell({
 export const AccessControlRulesOverviewHoverContent = ({
   policy,
   disableRedirect,
+  resourceData,
 }: {
   policy: Policy;
   disableRedirect: boolean;
+  resourceData?: EndpointResourceData;
 }) => {
   const { t } = useI18n();
+  const endpointItems = React.useMemo(
+    () => collectPolicyEndpointItems(policy),
+    [policy],
+  );
+  const fetchedResourceData = useEndpointResourceData(
+    endpointItems,
+    !resourceData,
+  );
+  const resolvedResourceData = resourceData ?? fetchedResourceData;
 
   return (
     <HoverCardContent
@@ -192,6 +268,7 @@ export const AccessControlRulesOverviewHoverContent = ({
               rule={rule}
               ruleIndex={index}
               disableRedirect={disableRedirect}
+              resourceData={resolvedResourceData}
             />
           ))}
         </div>
@@ -204,10 +281,12 @@ const RuleOverview = ({
   rule,
   ruleIndex,
   disableRedirect,
+  resourceData,
 }: {
   rule: PolicyRule;
   ruleIndex: number;
   disableRedirect: boolean;
+  resourceData: EndpointResourceData;
 }) => {
   const { t } = useI18n();
   const sources = collectSingleRuleEndpointItems(rule, "sources");
@@ -234,6 +313,7 @@ const RuleOverview = ({
           items={sources}
           disableRedirect={disableRedirect}
           emptyLabel={t("table.sources")}
+          resourceData={resourceData}
         />
         <RuleDirectionIndicator rule={rule} isDrop={isDrop} />
         <div
@@ -250,6 +330,7 @@ const RuleOverview = ({
           items={destinations}
           disableRedirect={disableRedirect}
           emptyLabel={t("table.destinations")}
+          resourceData={resourceData}
         />
       </div>
     </div>
@@ -298,10 +379,12 @@ const EndpointBadgeList = ({
   items,
   disableRedirect,
   emptyLabel,
+  resourceData,
 }: {
   items: EndpointItem[];
   disableRedirect: boolean;
   emptyLabel: string;
+  resourceData: EndpointResourceData;
 }) => {
   if (items.length === 0) {
     return <span className="text-xs text-nb-gray-400">{emptyLabel}</span>;
@@ -314,6 +397,7 @@ const EndpointBadgeList = ({
           key={item.key}
           item={item}
           disableRedirect={disableRedirect}
+          resourceData={resourceData}
         />
       ))}
     </div>
@@ -323,16 +407,12 @@ const EndpointBadgeList = ({
 const EndpointBadge = ({
   item,
   disableRedirect,
+  resourceData,
 }: {
   item: EndpointItem;
   disableRedirect: boolean;
+  resourceData: EndpointResourceData;
 }) => {
-  const { data: resources, isLoading: isLoadingResources } = useFetchApi<
-    NetworkResource[]
-  >("/networks/resources");
-  const { data: peers, isLoading: isLoadingPeers } =
-    useFetchApi<Peer[]>("/peers");
-
   if (item.type === "group") {
     return (
       <GroupBadge
@@ -344,16 +424,19 @@ const EndpointBadge = ({
   }
 
   const isPeer = item.resource.type === "peer";
-  const peer = peers?.find((p) => p.id === item.resource.id);
+  const peer = resourceData.peers?.find((p) => p.id === item.resource.id);
   const resource =
-    resources?.find((r) => r.id === item.resource.id) ??
+    resourceData.resources?.find((r) => r.id === item.resource.id) ??
     ({
       id: item.resource.id,
       name: item.resource.id,
       type: item.resource.type,
     } as NetworkResource);
 
-  if ((isPeer && isLoadingPeers) || (!isPeer && isLoadingResources)) {
+  if (
+    (isPeer && resourceData.isLoadingPeers) ||
+    (!isPeer && resourceData.isLoadingResources)
+  ) {
     return <Skeleton height={35} width={72} />;
   }
 
