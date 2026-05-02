@@ -284,6 +284,13 @@ const ActivityNavigationItem = () => {
         exactPathMatch={true}
         visible={permission.events.read}
       />
+      <SidebarItem
+        label={t("nav.dnsLogs")}
+        isChild
+        href={"/events/dns"}
+        exactPathMatch={true}
+        visible={permission.events.read}
+      />
     </SidebarItem>
   );
 };
