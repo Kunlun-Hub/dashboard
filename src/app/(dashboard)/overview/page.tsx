@@ -6,6 +6,7 @@ import { useI18n } from "@/i18n/I18nProvider";
 import PageContainer from "@/layouts/PageContainer";
 import { DeviceDistributionMap } from "@/modules/overview/DeviceDistributionMap";
 import { DeviceTypeDistribution } from "@/modules/overview/DeviceTypeDistribution";
+import { RelayTrafficStats } from "@/modules/overview/RelayTrafficStats";
 
 export default function OverviewPage() {
   const { t } = useI18n();
@@ -26,6 +27,7 @@ export default function OverviewPage() {
       <div className="grid grid-cols-1 gap-4 px-4 pb-6 lg:grid-cols-2">
         <DeviceDistributionMap />
         <DeviceTypeDistribution />
+        <RelayTrafficStats />
       </div>
     </PageContainer>
   );
