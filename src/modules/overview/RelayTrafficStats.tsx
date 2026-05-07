@@ -7,15 +7,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@components/Select";
-import useFetchApi from "@utils/api";
+import { useApiCall } from "@utils/api";
 import { formatBytes } from "@utils/helpers";
 import * as d3 from "d3";
 import dayjs from "dayjs";
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useId, useMemo, useRef, useState } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { NetworkLog } from "@/interfaces/NetworkLog";
 import { Pagination } from "@/interfaces/Pagination";
-import { useOverviewRefresh } from "@/app/(dashboard)/overview/page";
+import { useOverviewRefresh } from "@/modules/overview/OverviewRefreshContext";
 
 type RangeValue = "6h" | "12h" | "24h" | "3d" | "7d";
 
@@ -30,6 +30,8 @@ type TrafficPoint = {
 const WIDTH = 1320;
 const HEIGHT = 380;
 const MARGIN = { top: 28, right: 24, bottom: 46, left: 64 };
+const PAGE_SIZE = 10000;
+const ROUTED_CONNECTION_TYPE = "ROUTED";
 
 const rangeOptions: Array<{ value: RangeValue; hours: number; labelKey: string }> = [
   { value: "6h", hours: 6, labelKey: "overview.last6Hours" },
@@ -59,9 +61,12 @@ const formatTotal = (bytes: number) => formatBytes(bytes, bytes >= 1024 * 1024 ?
 
 export function RelayTrafficStats() {
   const { t } = useI18n();
-  const [range, setRange] = React.useState<RangeValue>("6h");
+  const [range, setRange] = useState<RangeValue>("6h");
+  const [now, setNow] = useState(() => dayjs());
+  const [logs, setLogs] = useState<NetworkLog[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const selectedRange = rangeOptions.find((option) => option.value === range) ?? rangeOptions[0];
-  const endDate = useMemo(() => dayjs(), [range]);
+  const endDate = now;
   const startDate = useMemo(
     () => endDate.subtract(selectedRange.hours, "hour"),
     [endDate, selectedRange.hours],
@@ -70,36 +75,79 @@ export function RelayTrafficStats() {
   const svgRef = useRef<SVGSVGElement>(null);
   const gRef = useRef<SVGGElement>(null);
   const zoomRef = useRef<any>(null);
+  const chartClipId = useId().replaceAll(":", "-");
   const { refreshTrigger, refreshInterval } = useOverviewRefresh();
-
-  const apiUrl = useMemo(() => {
-    const params = new URLSearchParams();
-    params.set("page", "1");
-    params.set("page_size", "10000");
-    params.set("start_date", startDate.toISOString());
-    params.set("end_date", endDate.toISOString());
-    params.set("sort_by", "timestamp");
-    params.set("sort_order", "asc");
-    return `/events/network-traffic?${params.toString()}`;
-  }, [endDate, startDate]);
-
-  const { data: response, isLoading, mutate } = useFetchApi<Pagination<NetworkLog[]>>(
-    apiUrl,
-    false,
-    false,
-    true,
-    {
-      refreshInterval: refreshInterval > 0 ? refreshInterval : undefined,
-    },
-  );
+  const networkTrafficApi = useApiCall<Pagination<NetworkLog[]>>("/events/network-traffic", true);
+  const networkTrafficApiRef = useRef(networkTrafficApi);
 
   useEffect(() => {
-    if (refreshTrigger > 0) {
-      mutate();
-    }
-  }, [refreshTrigger, mutate]);
+    networkTrafficApiRef.current = networkTrafficApi;
+  }, [networkTrafficApi]);
 
-  const { points, totals, peaks } = useMemo(() => {
+  useEffect(() => {
+    setNow(dayjs());
+  }, [range, refreshTrigger]);
+
+  useEffect(() => {
+    if (refreshInterval <= 0) return;
+
+    const intervalID = window.setInterval(() => {
+      setNow(dayjs());
+    }, refreshInterval);
+
+    return () => window.clearInterval(intervalID);
+  }, [refreshInterval]);
+
+  const queryParams = useMemo(() => {
+    const params = new URLSearchParams();
+    params.set("page", "1");
+    params.set("page_size", String(PAGE_SIZE));
+    params.set("start_date", startDate.toISOString());
+    params.set("end_date", endDate.toISOString());
+    params.set("connection_type", ROUTED_CONNECTION_TYPE);
+    params.set("sort_by", "timestamp");
+    params.set("sort_order", "asc");
+    return params;
+  }, [endDate, startDate]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const fetchLogs = async () => {
+      setIsLoading(true);
+      const allLogs: NetworkLog[] = [];
+
+      try {
+        const firstPage = await networkTrafficApiRef.current.get(`?${queryParams.toString()}`);
+        if (cancelled) return;
+
+        allLogs.push(...(firstPage?.data ?? []));
+
+        const totalPages = firstPage?.total_pages ?? 1;
+        for (let page = 2; page <= totalPages; page += 1) {
+          const pageParams = new URLSearchParams(queryParams);
+          pageParams.set("page", String(page));
+          const response = await networkTrafficApiRef.current.get(`?${pageParams.toString()}`);
+          if (cancelled) return;
+          allLogs.push(...(response?.data ?? []));
+        }
+
+        setLogs(allLogs);
+      } finally {
+        if (!cancelled) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    fetchLogs();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [queryParams]);
+
+  const { points, totals, peaks, scaleMaxRate } = useMemo(() => {
     const bucketSeconds = bucketSecondsForHours(selectedRange.hours);
     const bucketMs = bucketSeconds * 1000;
     const buckets = new Map<number, { upload: number; download: number }>();
@@ -110,7 +158,7 @@ export function RelayTrafficStats() {
       buckets.set(ts, { upload: 0, download: 0 });
     }
 
-    for (const log of response?.data ?? []) {
+    for (const log of logs) {
       const timestamp = dayjs(eventTimestamp(log));
       if (!timestamp.isValid()) continue;
       const bucket = Math.floor(timestamp.valueOf() / bucketMs) * bucketMs;
@@ -139,15 +187,24 @@ export function RelayTrafficStats() {
       0,
     );
 
+    const uploadPeak = Math.max(0, ...chartPoints.map((point) => point.uploadRate));
+    const downloadPeak = Math.max(0, ...chartPoints.map((point) => point.downloadRate));
+
     return {
       points: chartPoints,
       totals: { upload: totalUpload, download: totalDownload },
       peaks: {
-        upload: Math.max(1, ...chartPoints.map((point) => point.uploadRate)),
-        download: Math.max(1, ...chartPoints.map((point) => point.downloadRate)),
+        upload: uploadPeak,
+        download: downloadPeak,
       },
+      scaleMaxRate: Math.max(1, uploadPeak, downloadPeak),
     };
-  }, [endDate, response?.data, selectedRange.hours, startDate]);
+  }, [endDate, logs, selectedRange.hours, startDate]);
+
+  useEffect(() => {
+    if (!gRef.current || points.length > 0) return;
+    d3.select(gRef.current).selectAll("*").remove();
+  }, [points.length]);
 
   useEffect(() => {
     if (!svgRef.current || !gRef.current || points.length === 0) return;
@@ -156,8 +213,6 @@ export function RelayTrafficStats() {
     const g = d3.select(gRef.current);
     g.selectAll("*").remove();
 
-    const maxRate = Math.max(1, peaks.upload, peaks.download);
-    
     const xScale = d3
       .scaleTime()
       .domain([startDate.toDate(), endDate.toDate()])
@@ -165,22 +220,21 @@ export function RelayTrafficStats() {
 
     const yScale = d3
       .scaleLinear()
-      .domain([-maxRate * 1.12, maxRate * 1.12])
+      .domain([-scaleMaxRate * 1.12, scaleMaxRate * 1.12])
       .range([HEIGHT - MARGIN.bottom, MARGIN.top]);
 
     const renderChart = (currentX: d3.ScaleTime<number, number>, currentY: d3.ScaleLinear<number, number>) => {
       g.selectAll("*").remove();
 
-      const clipId = "chart-clip";
       const defs = g.append("defs");
-      const clipPath = defs.append("clipPath").attr("id", clipId);
+      const clipPath = defs.append("clipPath").attr("id", chartClipId);
       clipPath.append("rect")
         .attr("x", MARGIN.left)
         .attr("y", MARGIN.top)
         .attr("width", WIDTH - MARGIN.left - MARGIN.right)
         .attr("height", HEIGHT - MARGIN.top - MARGIN.bottom);
 
-      const chartGroup = g.append("g").attr("clip-path", `url(#${clipId})`);
+      const chartGroup = g.append("g").attr("clip-path", `url(#${chartClipId})`);
 
       const yTicks = currentY.ticks(8);
       const xTicks = currentX.ticks(selectedRange.hours <= 12 ? 10 : 8);
@@ -383,18 +437,33 @@ export function RelayTrafficStats() {
 
     renderChart(xScale, yScale);
 
+    let zoomFrame: number | null = null;
+
     const zoom = d3
       .zoom()
       .scaleExtent([0.5, 10])
       .on("zoom", (event) => {
-        const newX = event.transform.rescaleX(xScale);
-        renderChart(newX, yScale);
+        if (zoomFrame !== null) {
+          window.cancelAnimationFrame(zoomFrame);
+        }
+        zoomFrame = window.requestAnimationFrame(() => {
+          const newX = event.transform.rescaleX(xScale);
+          renderChart(newX, yScale);
+          zoomFrame = null;
+        });
       });
 
     (svg as any).call(zoom);
     zoomRef.current = zoom;
 
-  }, [points, peaks, startDate, endDate, selectedRange, t]);
+    return () => {
+      if (zoomFrame !== null) {
+        window.cancelAnimationFrame(zoomFrame);
+      }
+      svg.on(".zoom", null);
+      g.selectAll("*").remove();
+    };
+  }, [points, scaleMaxRate, startDate, endDate, selectedRange.hours, chartClipId, t]);
 
   const resetZoom = () => {
     if (svgRef.current && zoomRef.current) {
@@ -457,12 +526,12 @@ export function RelayTrafficStats() {
         </svg>
 
         <div className="absolute bottom-0 left-0 right-0 flex justify-center gap-8 text-xs text-neutral-600 dark:text-nb-gray-300">
-        <LegendDot color="#9aa5b1" label={t("overview.uploadRate")} />
-        <LegendDot color="#64748b" label={t("overview.downloadRate")} />
-        <div className="text-xs text-slate-400 dark:text-nb-gray-500">
-          {t("overview.zoomHint")}
+          <LegendDot color="#9aa5b1" label={t("overview.uploadRate")} />
+          <LegendDot color="#64748b" label={t("overview.downloadRate")} />
+          <div className="text-xs text-slate-400 dark:text-nb-gray-500">
+            {t("overview.zoomHint")}
+          </div>
         </div>
-      </div>
 
         {isLoading && (
           <div className="absolute inset-0 flex items-center justify-center bg-white/30 text-sm text-nb-gray-300 backdrop-blur-[1px] dark:bg-nb-gray/20">

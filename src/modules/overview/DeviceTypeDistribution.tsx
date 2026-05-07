@@ -5,7 +5,7 @@ import * as d3 from "d3";
 import React, { useEffect, useMemo, useState } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { Peer } from "@/interfaces/Peer";
-import { useOverviewRefresh } from "@/app/(dashboard)/overview/page";
+import { useOverviewRefresh } from "@/modules/overview/OverviewRefreshContext";
 
 type DeviceTypeSlice = {
   key: string;

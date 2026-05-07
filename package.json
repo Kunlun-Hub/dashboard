@@ -8,6 +8,8 @@
   "scripts": {
     "copy": "copyfiles -f ./node_modules/@axa-fr/react-oidc/dist/OidcServiceWorker.js ./public",
     "copytrusted": "copyfiles -f ./public/local/OidcTrustedDomains.js ./public",
+    "download:ironrdp": "node scripts/download-ironrdp.mjs",
+    "prebuild": "npm run download:ironrdp",
     "dev": "next dev -p 3000",
     "turbo": "next dev -p 3000 --turbo",
     "build": "next build",

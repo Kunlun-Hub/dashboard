@@ -6,8 +6,9 @@ import { useI18n } from "@/i18n/I18nProvider";
 import PageContainer from "@/layouts/PageContainer";
 import { DeviceDistributionMap } from "@/modules/overview/DeviceDistributionMap";
 import { DeviceTypeDistribution } from "@/modules/overview/DeviceTypeDistribution";
+import { RefreshContext } from "@/modules/overview/OverviewRefreshContext";
 import { RelayTrafficStats } from "@/modules/overview/RelayTrafficStats";
-import React, { createContext, useCallback, useContext, useRef, useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -15,23 +16,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@components/Select";
-
-type RefreshContextType = {
-  refreshTrigger: number;
-  refreshInterval: number;
-  triggerRefresh: () => void;
-  setRefreshInterval: (interval: number) => void;
-};
-
-const RefreshContext = createContext<RefreshContextType | undefined>(undefined);
-
-export function useOverviewRefresh() {
-  const context = useContext(RefreshContext);
-  if (context === undefined) {
-    throw new Error("useOverviewRefresh must be used within RefreshContext.Provider");
-  }
-  return context;
-}
 
 const refreshOptions = [
   { value: 0, labelKey: "overview.refreshInterval.off" },

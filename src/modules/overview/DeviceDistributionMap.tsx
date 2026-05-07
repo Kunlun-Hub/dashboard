@@ -10,7 +10,7 @@ import { useI18n } from "@/i18n/I18nProvider";
 import { Peer } from "@/interfaces/Peer";
 import { User } from "@/interfaces/User";
 import world from "@/modules/overview/world-countries.json";
-import { useOverviewRefresh } from "@/app/(dashboard)/overview/page";
+import { useOverviewRefresh } from "@/modules/overview/OverviewRefreshContext";
 
 type CityPoint = {
   key: string;
