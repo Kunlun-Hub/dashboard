@@ -50,6 +50,7 @@ const issuerHints: Partial<Record<SSOIdentityProviderType, string>> = {
   okta: "https://{ORG}.okta.com",
   entra: "https://login.microsoftonline.com/{TENANT_ID}/v2.0",
   pocketid: "https://pocketid.example.com",
+  adfs: "https://adfs.example.com/adfs",
 };
 
 const defaultNames: Record<SSOIdentityProviderType, string> = {
@@ -63,6 +64,7 @@ const defaultNames: Record<SSOIdentityProviderType, string> = {
   authentik: "Authentik",
   keycloak: "Keycloak",
   wechatwork: "企业微信",
+  adfs: "Microsoft AD FS",
 };
 
 type Props = {
@@ -270,7 +272,8 @@ export default function IdentityProviderModal({
             <div>
               <Label>Agent ID</Label>
               <HelpText>
-                填写企业微信应用的 Agent ID，官方登录组件会使用该值初始化登录面板。
+                填写企业微信应用的 Agent
+                ID，官方登录组件会使用该值初始化登录面板。
               </HelpText>
               <Input
                 placeholder="输入企业微信 Agent ID"
@@ -283,7 +286,9 @@ export default function IdentityProviderModal({
 
           <div>
             <Label>
-              {isWeChatWork ? "Secret" : t("identityProviderModal.clientSecret")}
+              {isWeChatWork
+                ? "Secret"
+                : t("identityProviderModal.clientSecret")}
             </Label>
             <HelpText>
               {isWeChatWork
@@ -291,10 +296,10 @@ export default function IdentityProviderModal({
                   ? "留空将保留现有企业微信应用 Secret。"
                   : "填写企业微信自建应用的 Secret。"
                 : isEditing
-                  ? clientIdChanged
-                    ? t("identityProviderModal.clientSecretChangedHelp")
-                    : t("identityProviderModal.clientSecretOptionalHelp")
-                  : t("identityProviderModal.clientSecretHelp")}
+                ? clientIdChanged
+                  ? t("identityProviderModal.clientSecretChangedHelp")
+                  : t("identityProviderModal.clientSecretOptionalHelp")
+                : t("identityProviderModal.clientSecretHelp")}
             </HelpText>
             <Input
               type="password"
@@ -304,8 +309,8 @@ export default function IdentityProviderModal({
                     ? "留空则不修改 Secret"
                     : "输入企业微信应用 Secret"
                   : isEditing
-                    ? t("identityProviderModal.clientSecretMaskedPlaceholder")
-                    : t("identityProviderModal.clientSecretPlaceholder")
+                  ? t("identityProviderModal.clientSecretMaskedPlaceholder")
+                  : t("identityProviderModal.clientSecretPlaceholder")
               }
               value={clientSecret}
               onChange={(e) => setClientSecret(e.target.value)}

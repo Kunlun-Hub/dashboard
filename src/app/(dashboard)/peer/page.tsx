@@ -2,7 +2,6 @@
 
 import Breadcrumbs from "@components/Breadcrumbs";
 import Button from "@components/Button";
-import { Callout } from "@components/Callout";
 import Card from "@components/Card";
 import HelpText from "@components/HelpText";
 import { Input } from "@components/Input";
@@ -71,6 +70,7 @@ import ReverseProxiesProvider, {
   useReverseProxies,
 } from "@/contexts/ReverseProxiesProvider";
 import { ReverseProxyFlatTargetsTabContent } from "@/modules/reverse-proxy/targets/flat/ReverseProxyFlatTargetsTabContent";
+import { PeerEditIPModal } from "@/modules/peer/PeerEditIPModal";
 import { PeerSSHToggle } from "@/modules/peer/PeerSSHToggle";
 import { RDPButton } from "@/modules/remote-access/rdp/RDPButton";
 import { SSHButton } from "@/modules/remote-access/ssh/SSHButton";
@@ -470,31 +470,55 @@ function PeerInformationCard({ peer }: Readonly<{ peer: Peer }>) {
   const { update } = usePeer();
   const { mutate } = useSWRConfig();
   const [showEditIPModal, setShowEditIPModal] = useState(false);
+  const [showEditIPv6Modal, setShowEditIPv6Modal] = useState(false);
   const { permission } = usePermissions();
 
   const countryText = useMemo(() => {
     return getRegionByPeer(peer);
   }, [getRegionByPeer, peer]);
 
+  const handleSaveIP = (newIP: string) => {
+    notify({
+      title: peer.name,
+      description: t("peerDetails.ipUpdated"),
+      promise: update({ ip: newIP }).then(() => {
+        mutate("/peers/" + peer.id);
+        setShowEditIPModal(false);
+      }),
+      loadingMessage: t("peerDetails.ipUpdating"),
+    });
+  };
+
+  const handleSaveIPv6 = (newIPv6: string) => {
+    notify({
+      title: peer.name,
+      description: "NetBird Peer IPv6 was successfully updated",
+      promise: update({ ipv6: newIPv6 }).then(() => {
+        mutate("/peers/" + peer.id);
+        setShowEditIPv6Modal(false);
+      }),
+      loadingMessage: "Updating peer IPv6...",
+    });
+  };
+
   return (
     <>
-      <Modal open={showEditIPModal} onOpenChange={setShowEditIPModal}>
-        <EditIPModal
-          onSuccess={(newIP) => {
-            notify({
-              title: peer.name,
-              description: t("peerDetails.ipUpdated"),
-              promise: update({ ip: newIP }).then(() => {
-                mutate("/peers/" + peer.id);
-                setShowEditIPModal(false);
-              }),
-              loadingMessage: t("peerDetails.ipUpdating"),
-            });
-          }}
-          peer={peer}
-          key={showEditIPModal ? 1 : 0}
-        />
-      </Modal>
+      <PeerEditIPModal
+        version="v4"
+        currentIP={peer.ip}
+        open={showEditIPModal}
+        onOpenChange={setShowEditIPModal}
+        onSave={handleSaveIP}
+        key={showEditIPModal ? "v4-open" : "v4-closed"}
+      />
+      <PeerEditIPModal
+        version="v6"
+        currentIP={peer.ipv6 || ""}
+        open={showEditIPv6Modal}
+        onOpenChange={setShowEditIPv6Modal}
+        onSave={handleSaveIPv6}
+        key={showEditIPv6Modal ? "v6-open" : "v6-closed"}
+      />
       <Card className={"w-full xl:w-1/2"}>
         <Card.List>
           <Card.ListItem
@@ -503,35 +527,48 @@ function PeerInformationCard({ peer }: Readonly<{ peer: Peer }>) {
             copyText={t("peerDetails.netbirdIpAddress")}
             label={
               <>
-                <MapPin size={16} />
+                <MapPin size={16} className={"shrink-0"} />
                 {t("peerDetails.netbirdIpAddress")}
               </>
             }
             valueToCopy={peer.ip}
             value={
-              <div className="flex items-center gap-2 justify-between w-full">
-                <span>{peer.ip}</span>
-                {permission.peers.update && (
-                  <button
-                    className="flex w-7 h-7 items-center justify-center gap-2 text-nb-gray-400 hover:text-neutral-100 transition-all hover:bg-nb-gray-800/60 rounded-md cursor-pointer"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setShowEditIPModal(true);
-                    }}
-                  >
-                    <PencilIcon size={14} />
-                  </button>
-                )}
-              </div>
+              <EditableValue
+                value={peer.ip}
+                canEdit={permission.peers.update}
+                onEdit={() => setShowEditIPModal(true)}
+              />
             }
           />
+
+          {peer.ipv6 && (
+            <Card.ListItem
+              copy
+              tooltip={false}
+              copyText={"NetBird IPv6 Address"}
+              label={
+                <>
+                  <MapPin size={16} className={"shrink-0"} />
+                  {t("peerDetails.netbirdIpAddress")} IPv6
+                </>
+              }
+              valueToCopy={peer.ipv6}
+              value={
+                <EditableValue
+                  value={peer.ipv6}
+                  canEdit={permission.peers.update}
+                  onEdit={() => setShowEditIPv6Modal(true)}
+                />
+              }
+            />
+          )}
 
           <Card.ListItem
             copy
             copyText={t("peerDetails.publicIpAddress")}
             label={
               <>
-                <NetworkIcon size={16} />
+                <NetworkIcon size={16} className={"shrink-0"} />
                 {t("peerDetails.publicIpAddress")}
               </>
             }
@@ -543,7 +580,7 @@ function PeerInformationCard({ peer }: Readonly<{ peer: Peer }>) {
             copyText={t("peerDetails.dnsLabel")}
             label={
               <>
-                <Globe size={16} />
+                <Globe size={16} className={"shrink-0"} />
                 {t("peerDetails.domainName")}
               </>
             }
@@ -561,7 +598,7 @@ function PeerInformationCard({ peer }: Readonly<{ peer: Peer }>) {
             copyText={t("peerDetails.hostname")}
             label={
               <>
-                <MonitorSmartphoneIcon size={16} />
+                <MonitorSmartphoneIcon size={16} className={"shrink-0"} />
                 {t("peerDetails.hostname")}
               </>
             }
@@ -571,7 +608,7 @@ function PeerInformationCard({ peer }: Readonly<{ peer: Peer }>) {
           <Card.ListItem
             label={
               <>
-                <FlagIcon size={16} />
+                <FlagIcon size={16} className={"shrink-0"} />
                 {t("peerDetails.region")}
               </>
             }
@@ -601,7 +638,7 @@ function PeerInformationCard({ peer }: Readonly<{ peer: Peer }>) {
           <Card.ListItem
             label={
               <>
-                <Cpu size={16} />
+                <Cpu size={16} className={"shrink-0"} />
                 {t("peerDetails.operatingSystem")}
               </>
             }
@@ -612,7 +649,7 @@ function PeerInformationCard({ peer }: Readonly<{ peer: Peer }>) {
             <Card.ListItem
               label={
                 <>
-                  <Barcode size={16} />
+                  <Barcode size={16} className={"shrink-0"} />
                   {t("peerDetails.serialNumber")}
                 </>
               }
@@ -624,7 +661,7 @@ function PeerInformationCard({ peer }: Readonly<{ peer: Peer }>) {
             <Card.ListItem
               label={
                 <>
-                  <CalendarDays size={16} />
+                  <CalendarDays size={16} className={"shrink-0"} />
                   {t("peerDetails.registeredOn")}
                 </>
               }
@@ -640,14 +677,16 @@ function PeerInformationCard({ peer }: Readonly<{ peer: Peer }>) {
           <Card.ListItem
             label={
               <>
-                <History size={16} />
+                <History size={16} className={"shrink-0"} />
                 {t("peerDetails.lastSeen")}
               </>
             }
-              value={
-                peer.connected
-                  ? t("peerDetails.justNow")
-                  : dayjs(peer.last_seen).format(t("peerDetails.dateTimeFormat")) +
+            value={
+              peer.connected
+                ? t("peerDetails.justNow")
+                : dayjs(peer.last_seen).format(
+                    t("peerDetails.dateTimeFormat"),
+                  ) +
                   " (" +
                   dayjs().to(peer.last_seen) +
                   ")"
@@ -657,7 +696,7 @@ function PeerInformationCard({ peer }: Readonly<{ peer: Peer }>) {
           <Card.ListItem
             label={
               <>
-                <NetBirdIcon size={16} />
+                <NetBirdIcon size={16} className={"shrink-0"} />
                 {t("peerDetails.agentVersion")}
               </>
             }
@@ -668,7 +707,7 @@ function PeerInformationCard({ peer }: Readonly<{ peer: Peer }>) {
             <Card.ListItem
               label={
                 <>
-                  <NetBirdIcon size={16} />
+                  <NetBirdIcon size={16} className={"shrink-0"} />
                   {t("peerDetails.uiVersion")}
                 </>
               }
@@ -766,83 +805,29 @@ function EditNameModal({ onSuccess, peer, initialName }: Readonly<ModalProps>) {
   );
 }
 
-interface EditIPModalProps {
-  onSuccess: (ip: string) => void;
-  peer: Peer;
-}
-
-function EditIPModal({ onSuccess, peer }: Readonly<EditIPModalProps>) {
-  const { t } = useI18n();
-  const [ip, setIP] = useState(peer.ip);
-  const [error, setError] = useState("");
-
-  const validateIP = (ipAddress: string) => {
-    const ipRegex =
-      /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-    return ipRegex.test(ipAddress);
-  };
-
-  const isDisabled = useMemo(() => {
-    if (ip === peer.ip) return true;
-    const trimmedIP = trim(ip);
-    return trimmedIP.length === 0 || !validateIP(ip);
-  }, [ip, peer.ip]);
-
-  React.useEffect(() => {
-    switch (true) {
-      case ip === peer.ip:
-        setError("");
-        break;
-      case !validateIP(ip):
-        setError(t("peerDetails.validIpError"));
-        break;
-      default:
-        setError("");
-        break;
-    }
-  }, [ip, peer.ip]);
-
+function EditableValue({
+  value,
+  canEdit,
+  onEdit,
+}: {
+  value: string;
+  canEdit: boolean;
+  onEdit: () => void;
+}) {
   return (
-    <ModalContent maxWidthClass={"max-w-md"}>
-      <form>
-        <ModalHeader
-          title={t("peerDetails.editIpTitle")}
-          description={t("peerDetails.editIpDescription")}
-          color={"blue"}
-        />
-
-        <div className={"p-default flex flex-col gap-4"}>
-          <div>
-            <Input
-              placeholder={t("peerDetails.ipPlaceholder")}
-              value={ip}
-              onChange={(e) => setIP(e.target.value)}
-              error={error}
-            />
-          </div>
-
-          <Callout>{t("peerDetails.reconnectNotice")}</Callout>
-        </div>
-
-        <ModalFooter className={"items-center"} separator={false}>
-          <div className={"flex gap-3 w-full justify-end"}>
-            <ModalClose asChild={true}>
-              <Button variant={"secondary"} className={"w-full"}>
-                {t("actions.cancel")}
-              </Button>
-            </ModalClose>
-
-            <Button
-              variant={"primary"}
-              className={"w-full"}
-              onClick={() => onSuccess(ip)}
-              disabled={isDisabled}
-            >
-              {t("actions.save")}
-            </Button>
-          </div>
-        </ModalFooter>
-      </form>
-    </ModalContent>
+    <div className="flex items-center gap-2 justify-between w-full">
+      <span>{value}</span>
+      {canEdit && (
+        <button
+          className="flex w-7 h-7 items-center justify-center gap-2 text-nb-gray-400 hover:text-neutral-100 transition-all hover:bg-nb-gray-800/60 rounded-md cursor-pointer"
+          onClick={(e) => {
+            e.stopPropagation();
+            onEdit();
+          }}
+        >
+          <PencilIcon size={14} />
+        </button>
+      )}
+    </div>
   );
 }

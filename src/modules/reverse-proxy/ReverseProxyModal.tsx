@@ -597,6 +597,7 @@ export default function ReverseProxyModal({
                 value={accessRestrictions}
                 onChange={setAccessRestrictions}
                 onValidationChange={setAccessControlHasErrors}
+                supportsCrowdSec={selectedDomain?.supports_crowdsec}
               />
             </div>
           </TabsContent>

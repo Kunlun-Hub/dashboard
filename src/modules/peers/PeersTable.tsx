@@ -71,7 +71,9 @@ function usePeersTableColumns(): ColumnDef<Peer>[] {
       id: "name",
       accessorFn: (peer) => `${peer?.name}${peer?.dns_label}`,
       header: ({ column }) => {
-        return <DataTableHeader column={column}>{t("table.name")}</DataTableHeader>;
+        return (
+          <DataTableHeader column={column}>{t("table.name")}</DataTableHeader>
+        );
       },
       sortingFn: "text",
       cell: ({ row }) => <PeerNameCell peer={row.original} />,
@@ -107,13 +109,18 @@ function usePeersTableColumns(): ColumnDef<Peer>[] {
     },
     {
       id: "user_email",
-      accessorFn: (peer) => (peer.user ? peer.user?.email : t("common.unknown")),
+      accessorFn: (peer) =>
+        peer.user ? peer.user?.email : t("common.unknown"),
     },
     {
       id: "dns_label",
       accessorKey: "dns_label",
       header: ({ column }) => {
-        return <DataTableHeader column={column}>{t("table.address")}</DataTableHeader>;
+        return (
+          <DataTableHeader column={column}>
+            {t("table.address")}
+          </DataTableHeader>
+        );
       },
       cell: ({ row }) => <PeerAddressCell peer={row.original} />,
     },
@@ -132,7 +139,9 @@ function usePeersTableColumns(): ColumnDef<Peer>[] {
       accessorFn: (peer) => peer.groups?.length,
       id: "groups",
       header: ({ column }) => {
-        return <DataTableHeader column={column}>{t("table.groups")}</DataTableHeader>;
+        return (
+          <DataTableHeader column={column}>{t("table.groups")}</DataTableHeader>
+        );
       },
       cell: ({ row }) => (
         <PeerProvider peer={row.original}>
@@ -162,7 +171,9 @@ function usePeersTableColumns(): ColumnDef<Peer>[] {
       id: "os",
       accessorFn: (peer) => removeAllSpaces(peer?.os),
       header: ({ column }) => {
-        return <DataTableHeader column={column}>{t("table.os")}</DataTableHeader>;
+        return (
+          <DataTableHeader column={column}>{t("table.os")}</DataTableHeader>
+        );
       },
       cell: ({ row }) => (
         <PeerOSCell os={row.original.os} serial={row.original.serial_number} />
@@ -171,7 +182,11 @@ function usePeersTableColumns(): ColumnDef<Peer>[] {
     {
       id: "serial",
       header: ({ column }) => {
-        return <DataTableHeader column={column}>{t("table.serialNumber")}</DataTableHeader>;
+        return (
+          <DataTableHeader column={column}>
+            {t("table.serialNumber")}
+          </DataTableHeader>
+        );
       },
       accessorFn: (peer) => peer.serial_number,
       sortingFn: "text",
@@ -179,7 +194,11 @@ function usePeersTableColumns(): ColumnDef<Peer>[] {
     {
       accessorKey: "version",
       header: ({ column }) => {
-        return <DataTableHeader column={column}>{t("table.version")}</DataTableHeader>;
+        return (
+          <DataTableHeader column={column}>
+            {t("table.version")}
+          </DataTableHeader>
+        );
       },
       cell: ({ row }) => (
         <PeerVersionCell
@@ -217,6 +236,10 @@ function usePeersTableColumns(): ColumnDef<Peer>[] {
           <PeerActionCell />
         </PeerProvider>
       ),
+    },
+    {
+      id: "ipv6",
+      accessorFn: (row) => row.ipv6,
     },
   ];
 }
@@ -333,6 +356,7 @@ export default function PeersTable({
           connect: permission.peers.update,
           groups: permission.groups.read,
           os: false,
+          ipv6: false,
         }}
         isLoading={isLoading}
         getStartedCard={<NoPeersGettingStarted showBackground={true} />}

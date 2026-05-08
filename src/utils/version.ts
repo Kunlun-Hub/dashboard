@@ -30,7 +30,7 @@ export const compareVersions = (
 /**
  * Check if peer as routing peer is supported by the provided version and operating system.
  * Routing peers are supported on Windows, macOS, iOS & Android starting from NetBird v0.36.6+.
- * @param version 
+ * @param version
  * @param os
  */
 export const isRoutingPeerSupported = (version: string, os: string) => {

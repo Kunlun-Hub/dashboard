@@ -232,6 +232,7 @@ export const useNetBirdClient = () => {
       port: number,
       username: string,
       jwtToken?: string,
+      ipVersion?: string,
     ): Promise<any> => {
       if (!netBirdClient.current?.createSSHConnection) {
         throw new Error(t("remoteAccess.goClientNotReady"));
@@ -241,6 +242,7 @@ export const useNetBirdClient = () => {
         port,
         username,
         jwtToken,
+        ipVersion,
       );
     },
     [t],

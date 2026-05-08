@@ -41,7 +41,8 @@ export type SSOIdentityProviderType =
   | "microsoft"
   | "authentik"
   | "keycloak"
-  | "wechatwork";
+  | "wechatwork"
+  | "adfs";
 
 export const SSOIdentityProviderOptions: {
   value: SSOIdentityProviderType;
@@ -57,6 +58,7 @@ export const SSOIdentityProviderOptions: {
   { value: "authentik", label: "Authentik" },
   { value: "keycloak", label: "Keycloak" },
   { value: "wechatwork", label: "企业微信" },
+  { value: "adfs", label: "Microsoft AD FS" },
 ];
 
 export const getSSOIdentityProviderLabelByType = (

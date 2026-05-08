@@ -6,6 +6,7 @@ interface SSHConfig {
   hostname: string;
   port: number;
   username: string;
+  ipVersion?: string;
 }
 
 interface SSHConnection {
@@ -73,6 +74,7 @@ export const useSSH = (client: any) => {
           config.port,
           config.username,
           requiresJwt ? accessToken : undefined,
+          config.ipVersion,
         );
 
         ssh.onclose = () => {
