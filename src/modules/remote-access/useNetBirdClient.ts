@@ -197,7 +197,6 @@ export const useNetBirdClient = () => {
               ? error.message
               : t("remoteAccess.connectionFailed"),
         });
-        console.log(error);
         return false;
       }
     },
@@ -248,19 +247,25 @@ export const useNetBirdClient = () => {
     [t],
   );
 
-  const makeRequest = useCallback(async (url: string): Promise<any> => {
-    if (!netBirdClient.current?.makeRequest) {
-      throw new Error(t("remoteAccess.goClientNotReady"));
-    }
-    return netBirdClient.current.makeRequest(url);
-  }, [t]);
+  const makeRequest = useCallback(
+    async (url: string): Promise<any> => {
+      if (!netBirdClient.current?.makeRequest) {
+        throw new Error(t("remoteAccess.goClientNotReady"));
+      }
+      return netBirdClient.current.makeRequest(url);
+    },
+    [t],
+  );
 
-  const proxyRequest = useCallback(async (request: any): Promise<any> => {
-    if (!netBirdClient.current?.proxyRequest) {
-      throw new Error(t("remoteAccess.goClientNotReady"));
-    }
-    return netBirdClient.current.proxyRequest(request);
-  }, [t]);
+  const proxyRequest = useCallback(
+    async (request: any): Promise<any> => {
+      if (!netBirdClient.current?.proxyRequest) {
+        throw new Error(t("remoteAccess.goClientNotReady"));
+      }
+      return netBirdClient.current.proxyRequest(request);
+    },
+    [t],
+  );
 
   const setupRDPProxy = useCallback(
     async (hostname: string, port: string): Promise<string> => {

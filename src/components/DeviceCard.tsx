@@ -25,13 +25,13 @@ export const DeviceCard = ({
   description,
 }: DeviceCardProps) => {
   const { t } = useI18n();
-  if (!device && !resource) return null;
-
   const descriptionText = useMemo(() => {
     return description !== undefined
       ? description
       : address || device?.ip || resource?.address;
-  }, [description, address, device]);
+  }, [description, address, device?.ip, resource?.address]);
+
+  if (!device && !resource) return null;
 
   return (
     <div

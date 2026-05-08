@@ -843,6 +843,7 @@ const PolicyCounter = ({
   group: Group;
   policies: Policy[];
 }) => {
+  const { t } = useI18n();
   const count = useMemo(() => {
     if (!group.id) return 0;
     return policies.filter((policy) => {
@@ -858,8 +859,6 @@ const PolicyCounter = ({
   }, [group.id, policies]);
 
   if (count === 0) return null;
-
-  const { t } = useI18n();
 
   return (
     <div

@@ -14,7 +14,7 @@
     "turbo": "next dev -p 3000 --turbo",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "test:unit": "node --import tsx --test src/modules/access-control/useAccessControl.helpers.test.ts",
     "cypress:open": "cypress open"
   },

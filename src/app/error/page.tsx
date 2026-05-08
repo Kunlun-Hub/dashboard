@@ -1,6 +1,10 @@
 "use client";
 
-import { useOidc, useOidcAccessToken, useOidcIdToken } from "@axa-fr/react-oidc";
+import {
+  useOidc,
+  useOidcAccessToken,
+  useOidcIdToken,
+} from "@axa-fr/react-oidc";
 import Button from "@components/Button";
 import Paragraph from "@components/Paragraph";
 import loadConfig from "@utils/config";
@@ -58,9 +62,8 @@ export default function ErrorPage() {
         // 如果 API 成功返回，说明用户已经被批准，重定向到主页
         router.push("/");
       }
-    } catch (e) {
+    } catch {
       // API 调用失败，继续显示错误页面
-      console.log("Failed to check user status:", e);
     } finally {
       setIsCheckingStatus(false);
     }
@@ -166,7 +169,12 @@ export default function ErrorPage() {
 
       <div className="mt-5 space-y-3">
         {isPendingApproval && (
-          <Button variant="default-outline" size="sm" onClick={handleCheckStatus} disabled={isCheckingStatus}>
+          <Button
+            variant="default-outline"
+            size="sm"
+            onClick={handleCheckStatus}
+            disabled={isCheckingStatus}
+          >
             {isCheckingStatus ? (
               <>
                 <Loader2 size={16} className="mr-2 animate-spin" />

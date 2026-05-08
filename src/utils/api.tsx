@@ -51,7 +51,7 @@ async function apiRequest<T>(
 
   const res = await oidcFetch(`${origin}${newUrl}`, {
     method,
-    body: isFormData ? data : (data ? JSON.stringify(data) : undefined),
+    body: isFormData ? data : data ? JSON.stringify(data) : undefined,
     signal: options?.signal,
   });
 
@@ -233,7 +233,6 @@ export function useApiErrorHandling(ignoreError = false) {
 
   if (ignoreError)
     return (err: ErrorResponse) => {
-      console.log(err);
       return Promise.reject(err);
     };
 
