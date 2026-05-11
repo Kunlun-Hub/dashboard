@@ -29,7 +29,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import NetworkRoutesIcon from "@/assets/icons/NetworkRoutesIcon";
 import PeerIcon from "@/assets/icons/PeerIcon";
 import ReverseProxyIcon from "@/assets/icons/ReverseProxyIcon";
@@ -38,12 +38,17 @@ import ReverseProxiesProvider, {
   flattenReverseProxies,
   useReverseProxies,
 } from "@/contexts/ReverseProxiesProvider";
-import useUrlTab from "@/hooks/useUrlTab";
 import { useI18n } from "@/i18n/I18nProvider";
 import { Network, NetworkResource, NetworkRouter } from "@/interfaces/Network";
 import PageContainer from "@/layouts/PageContainer";
 import { NetworkInformationSquare } from "@/modules/networks/misc/NetworkInformationSquare";
 import { NetworkAccessControlProvider } from "@/modules/networks/NetworkAccessControlProvider";
+import {
+  buildNetworkHref,
+  consumeNetworkNavigationTarget,
+  type NetworkNavigationTarget,
+  peekNetworkNavigationTarget,
+} from "@/modules/networks/networkNavigation";
 import {
   NetworkProvider,
   useNetworksContext,
@@ -52,25 +57,82 @@ import { ResourcesTabContent } from "@/modules/networks/resources/ResourcesTabCo
 import { NetworkRoutingPeersTabContent } from "@/modules/networks/routing-peers/NetworkRoutingPeersTabContent";
 import { ReverseProxyFlatTargetsTabContent } from "@/modules/reverse-proxy/targets/flat/ReverseProxyFlatTargetsTabContent";
 
-type NetworkDetailPageClientProps = {
-  networkId?: string;
+const networkTabs = ["resources", "routing-peers", "services"];
+
+type NetworkSearchParams = {
+  get: (name: string) => string | null;
+};
+
+const getNetworkTargetFromSearchParams = (
+  params: NetworkSearchParams,
+): NetworkNavigationTarget | undefined => {
+  const id = params.get("id") ?? undefined;
+  if (!id) return undefined;
+
+  return {
+    id,
+    tab: params.get("tab") ?? undefined,
+    resource: params.get("resource") ?? undefined,
+    target: params.get("target") ?? undefined,
+  };
+};
+
+const getNetworkTargetFromBrowser = () => {
+  if (typeof window === "undefined") return undefined;
+  return getNetworkTargetFromSearchParams(
+    new URLSearchParams(window.location.search),
+  );
+};
+
+const areNetworkTargetsEqual = (
+  first?: NetworkNavigationTarget,
+  second?: NetworkNavigationTarget,
+) => {
+  if (!first || !second) return first === second;
+  return (
+    first.id === second.id &&
+    first.tab === second.tab &&
+    first.resource === second.resource &&
+    first.target === second.target
+  );
 };
 
 export default function NetworkDetailPage() {
   const queryParameter = useSearchParams();
-  const networkId = queryParameter.get("id") ?? undefined;
+  const searchTarget = getNetworkTargetFromSearchParams(queryParameter);
+  const pendingTarget = peekNetworkNavigationTarget();
+  const [networkTarget, setNetworkTarget] = useState<
+    NetworkNavigationTarget | undefined
+  >(pendingTarget?.id ? pendingTarget : searchTarget);
+
+  // Next's router cache can restore /network with stale search params.
+  // Re-read the browser URL after each render, but only update state on changes.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    const target = consumeNetworkNavigationTarget();
+    const nextTarget = target?.id ? target : getNetworkTargetFromBrowser();
+
+    if (target?.id) {
+      window.history.replaceState(null, "", buildNetworkHref(target, false));
+    }
+
+    setNetworkTarget((current) =>
+      areNetworkTargetsEqual(current, nextTarget) ? current : nextTarget,
+    );
+  });
 
   return (
     <NetworkDetailPageContent
-      key={networkId ?? "network"}
-      networkId={networkId}
+      key={networkTarget?.id ?? "network"}
+      networkTarget={networkTarget}
     />
   );
 }
 
 function NetworkDetailPageContent({
-  networkId,
-}: Readonly<NetworkDetailPageClientProps>) {
+  networkTarget,
+}: Readonly<{ networkTarget?: NetworkNavigationTarget }>) {
+  const networkId = networkTarget?.id;
   const { data: network, isLoading } = useFetchApi<Network>(
     `/networks/${networkId}`,
     true,
@@ -85,14 +147,17 @@ function NetworkDetailPageContent({
 
   return currentNetwork ? (
     <ReverseProxiesProvider initialNetwork={currentNetwork}>
-      <NetworkOverview network={currentNetwork} />
+      <NetworkOverview network={currentNetwork} initialTarget={networkTarget} />
     </ReverseProxiesProvider>
   ) : (
     <SkeletonNetwork />
   );
 }
 
-function NetworkOverview({ network }: Readonly<{ network: Network }>) {
+function NetworkOverview({
+  network,
+  initialTarget,
+}: Readonly<{ network: Network; initialTarget?: NetworkNavigationTarget }>) {
   const { t } = useI18n();
   const { permission } = usePermissions();
 
@@ -109,10 +174,15 @@ function NetworkOverview({ network }: Readonly<{ network: Network }>) {
     [reverseProxies, network],
   );
 
-  const [tab, setTab] = useUrlTab(
-    ["resources", "routing-peers", "services"],
-    "resources",
-  );
+  const initialTab =
+    initialTarget?.tab && networkTabs.includes(initialTarget.tab)
+      ? initialTarget.tab
+      : "resources";
+  const [tab, setTab] = useState(initialTab);
+
+  useEffect(() => {
+    setTab(initialTab);
+  }, [initialTab, network.id]);
 
   const isActive = !!(
     network?.routing_peers_count && network.routing_peers_count > 0
@@ -130,11 +200,7 @@ function NetworkOverview({ network }: Readonly<{ network: Network }>) {
                 disabled={!permission.networks.read}
                 icon={<NetworkRoutesIcon size={13} />}
               />
-              <Breadcrumbs.Item
-                href={"/network"}
-                label={network.name}
-                active={true}
-              />
+              <Breadcrumbs.Item label={network.name} active={true} />
             </Breadcrumbs>
 
             <div className={"flex justify-between max-w-6xl"}>
@@ -203,6 +269,7 @@ function NetworkOverview({ network }: Readonly<{ network: Network }>) {
             <TabsContent value={"resources"} className={"pb-8"}>
               <ResourcesTabContent
                 data={resources}
+                initialResourceId={initialTarget?.resource}
                 isLoading={isResourcesLoading}
               />
             </TabsContent>
@@ -217,6 +284,7 @@ function NetworkOverview({ network }: Readonly<{ network: Network }>) {
             <TabsContent value={"services"} className={"pb-8"}>
               <ReverseProxyFlatTargetsTabContent
                 targets={services}
+                initialTargetId={initialTarget?.target}
                 isLoading={isServicesLoading}
               />
             </TabsContent>

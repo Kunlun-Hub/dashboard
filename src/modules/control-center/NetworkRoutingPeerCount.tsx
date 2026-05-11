@@ -5,6 +5,7 @@ import * as React from "react";
 import { useMemo } from "react";
 import CircleIcon from "@/assets/icons/CircleIcon";
 import { Network } from "@/interfaces/Network";
+import { navigateToNetwork } from "@/modules/networks/networkNavigation";
 
 type Props = {
   network: Network;
@@ -23,7 +24,10 @@ export const NetworkRoutingPeerCount = ({ network }: Props) => {
   }, [network, routerCount]);
 
   const openNetworkPage = () => {
-    router.push(`/network?id=${network.id}&tab=routing-peers`);
+    navigateToNetwork(router, {
+      id: network.id,
+      tab: "routing-peers",
+    });
   };
 
   return (

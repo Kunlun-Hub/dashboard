@@ -7,10 +7,12 @@ import {
   DropdownMenuTrigger,
 } from "@components/DropdownMenu";
 import { EyeIcon, MoreVertical, PencilLineIcon, Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import * as React from "react";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useI18n } from "@/i18n/I18nProvider";
 import { Network } from "@/interfaces/Network";
+import { navigateToNetwork } from "@/modules/networks/networkNavigation";
 import { useNetworksContext } from "@/modules/networks/NetworkProvider";
 
 type Props = {
@@ -19,6 +21,7 @@ type Props = {
 export default function NetworkActionCell({ network }: Readonly<Props>) {
   const { permission } = usePermissions();
   const { deleteNetwork, openEditNetworkModal } = useNetworksContext();
+  const router = useRouter();
   const { t } = useI18n();
 
   return (
@@ -36,7 +39,9 @@ export default function NetworkActionCell({ network }: Readonly<Props>) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-auto" align="end">
-          <DropdownMenuItem href={`/network?id=${network.id}`}>
+          <DropdownMenuItem
+            onClick={() => navigateToNetwork(router, { id: network.id })}
+          >
             <div className={"flex gap-3 items-center"}>
               <EyeIcon size={14} className={"shrink-0"} />
               {t("actions.viewDetails")}

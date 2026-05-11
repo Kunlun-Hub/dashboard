@@ -1,14 +1,15 @@
+import Badge from "@components/Badge";
 import Button from "@components/Button";
+import { CirclePlusIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useMemo } from "react";
+import ReverseProxyIcon from "@/assets/icons/ReverseProxyIcon";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useReverseProxies } from "@/contexts/ReverseProxiesProvider";
-import { NetworkResource } from "@/interfaces/Network";
 import { isResourceTargetType } from "@/contexts/ReverseProxiesProvider";
+import { NetworkResource } from "@/interfaces/Network";
+import { navigateToNetwork } from "@/modules/networks/networkNavigation";
 import { useNetworksContext } from "@/modules/networks/NetworkProvider";
-import ReverseProxyIcon from "@/assets/icons/ReverseProxyIcon";
-import Badge from "@components/Badge";
-import { CirclePlusIcon } from "lucide-react";
 
 type Props = {
   resource: NetworkResource;
@@ -42,7 +43,11 @@ export const ResourceExposeServiceCell = ({ resource }: Props) => {
             e.preventDefault();
             e.stopPropagation();
             if (!network?.id) return;
-            router.push(`/network?id=${network.id}&tab=services&target=${resource.id}`);
+            navigateToNetwork(router, {
+              id: network.id,
+              tab: "services",
+              target: resource.id,
+            });
           }}
         >
           <ReverseProxyIcon size={14} className={"fill-green-500"} />
@@ -62,7 +67,10 @@ export const ResourceExposeServiceCell = ({ resource }: Props) => {
             initialNetwork: network,
             onSuccess: () => {
               if (!network?.id) return;
-              router.push(`/network?id=${network.id}&tab=services`);
+              navigateToNetwork(router, {
+                id: network.id,
+                tab: "services",
+              });
             },
           });
         }}

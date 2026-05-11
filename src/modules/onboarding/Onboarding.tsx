@@ -8,11 +8,11 @@ import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import useFetchApi, { useApiCall } from "@utils/api";
 import { cn } from "@utils/helpers";
 import { isNetBirdHosted } from "@utils/netbird";
-import { useRouter } from "next/navigation";
 import * as React from "react";
 import { useEffect, useMemo, useReducer, useState } from "react";
 import { useSWRConfig } from "swr";
 import { HubspotFormField } from "@/contexts/AnalyticsProvider";
+import { useI18n } from "@/i18n/I18nProvider";
 import { Group } from "@/interfaces/Group";
 import { Network, NetworkResource, NetworkRouter } from "@/interfaces/Network";
 import type { Peer } from "@/interfaces/Peer";
@@ -30,7 +30,6 @@ import { OnboardingExplainDefaultPolicy } from "@/modules/onboarding/p2p/Onboard
 import { OnboardingFirstDevice } from "@/modules/onboarding/p2p/OnboardingFirstDevice";
 import { OnboardingSecondDevice } from "@/modules/onboarding/p2p/OnboardingSecondDevice";
 import { OnboardingTestP2P } from "@/modules/onboarding/p2p/OnboardingTestP2P";
-import { useI18n } from "@/i18n/I18nProvider";
 
 export interface OnboardingState {
   intent: Intent;
@@ -103,7 +102,6 @@ export const Onboarding = ({
   const { t } = useI18n();
   const { data: networks } = useFetchApi<Network[]>("/networks", true, false);
   const { data: policies } = useFetchApi<Policy[]>("/policies", true);
-  const router = useRouter();
 
   const resourceRequest = useApiCall<NetworkResource>("/networks", true);
   const routerRequest = useApiCall<NetworkRouter>("/networks", true);
@@ -285,14 +283,6 @@ export const Onboarding = ({
   useEffect(() => {
     setLocalOnboarding(onboarding);
   }, [onboarding, setLocalOnboarding]);
-
-  /**
-   * Prefetch the first network page if it exists for faster navigation
-   */
-  useEffect(() => {
-    if (!firstNetwork) return;
-    router.prefetch(`/network?id=${firstNetwork.id}`);
-  }, [firstNetwork, router]);
 
   return (
     <Modal open={true}>

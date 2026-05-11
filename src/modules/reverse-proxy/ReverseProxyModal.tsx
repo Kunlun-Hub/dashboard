@@ -6,15 +6,15 @@ import HelpText from "@components/HelpText";
 import InlineLink from "@components/InlineLink";
 import { Input } from "@components/Input";
 import { Label } from "@components/Label";
-import SettingCard from "@components/SettingCard";
 import {
   Modal,
   ModalClose,
   ModalContent,
   ModalFooter,
 } from "@components/modal/Modal";
-import Paragraph from "@components/Paragraph";
 import ModalHeader from "@components/modal/ModalHeader";
+import Paragraph from "@components/Paragraph";
+import SettingCard from "@components/SettingCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@components/Tabs";
 import {
   ArrowRight,
@@ -36,6 +36,7 @@ import React, { useMemo, useState } from "react";
 import ReverseProxyIcon from "@/assets/icons/ReverseProxyIcon";
 import { useDialog } from "@/contexts/DialogProvider";
 import { usePermissions } from "@/contexts/PermissionsProvider";
+import { useReverseProxies } from "@/contexts/ReverseProxiesProvider";
 import { useI18n } from "@/i18n/I18nProvider";
 import { Network, NetworkResource } from "@/interfaces/Network";
 import { Peer } from "@/interfaces/Peer";
@@ -55,28 +56,28 @@ import {
   ReverseProxyTargetType,
   ServiceMode,
 } from "@/interfaces/ReverseProxy";
-import { useReverseProxies } from "@/contexts/ReverseProxiesProvider";
-import ReverseProxyDomainInput from "./domain/ReverseProxyDomainInput";
-import { useReverseProxyDomain } from "./domain/useReverseProxyDomain";
-import AuthPasswordModal from "@/modules/reverse-proxy/auth/AuthPasswordModal";
+import useGroupHelper from "@/modules/groups/useGroupHelper";
+import { navigateToNetwork } from "@/modules/networks/networkNavigation";
 import AuthHeaderModal from "@/modules/reverse-proxy/auth/AuthHeaderModal";
+import AuthPasswordModal from "@/modules/reverse-proxy/auth/AuthPasswordModal";
 import AuthPinModal from "@/modules/reverse-proxy/auth/AuthPinModal";
 import AuthSSOModal from "@/modules/reverse-proxy/auth/AuthSSOModal";
+import { ReverseProxyAccessControlRules } from "@/modules/reverse-proxy/ReverseProxyAccessControlRules";
 import ReverseProxyHTTPTargets from "@/modules/reverse-proxy/ReverseProxyHTTPTargets";
 import ReverseProxyLayer4Content from "@/modules/reverse-proxy/ReverseProxyLayer4Content";
-import ReverseProxyTargetModal from "@/modules/reverse-proxy/targets/ReverseProxyTargetModal";
-import { type Target } from "@/modules/reverse-proxy/targets/ReverseProxyTargetSelector";
-import { useReverseProxyAddress } from "@/modules/reverse-proxy/targets/ReverseProxyAddressInput";
-import {
-  validateSessionIdleTimeout,
-  validateTimeout,
-} from "@/modules/reverse-proxy/targets/useReverseProxyTargetOptions";
-import useGroupHelper from "@/modules/groups/useGroupHelper";
 import {
   ReverseProxyServiceModeSelector,
   SERVICE_MODES,
 } from "@/modules/reverse-proxy/ReverseProxyServiceModeSelector";
-import { ReverseProxyAccessControlRules } from "@/modules/reverse-proxy/ReverseProxyAccessControlRules";
+import { useReverseProxyAddress } from "@/modules/reverse-proxy/targets/ReverseProxyAddressInput";
+import ReverseProxyTargetModal from "@/modules/reverse-proxy/targets/ReverseProxyTargetModal";
+import { type Target } from "@/modules/reverse-proxy/targets/ReverseProxyTargetSelector";
+import {
+  validateSessionIdleTimeout,
+  validateTimeout,
+} from "@/modules/reverse-proxy/targets/useReverseProxyTargetOptions";
+import ReverseProxyDomainInput from "./domain/ReverseProxyDomainInput";
+import { useReverseProxyDomain } from "./domain/useReverseProxyDomain";
 
 type Props = {
   open: boolean;
@@ -292,7 +293,6 @@ export default function ReverseProxyModal({
     baseDomain,
     domainAlreadyExists,
     selectedDomain,
-    serviceMode,
     targets.length,
     isL4Mode,
     l4Target,
@@ -531,9 +531,11 @@ export default function ReverseProxyModal({
                   initialNetwork={initialNetwork}
                   onNavigateToResources={() => {
                     onOpenChange(false);
-                    router.push(
-                      `/network?id=${initialNetwork?.id}&tab=resources`,
-                    );
+                    initialNetwork?.id &&
+                      navigateToNetwork(router, {
+                        id: initialNetwork.id,
+                        tab: "resources",
+                      });
                   }}
                 />
               )}

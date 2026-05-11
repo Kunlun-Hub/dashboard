@@ -17,9 +17,10 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import * as React from "react";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import Skeleton from "react-loading-skeleton";
 import { Network, NetworkResource } from "@/interfaces/Network";
+import { navigateToNetwork } from "@/modules/networks/networkNavigation";
 
 type Props = {
   open: boolean;
@@ -86,11 +87,11 @@ const GlobalSearchModalContent = ({ open, setOpen }: Props) => {
     key: "global-search-resources",
   });
 
-  const findNetworkByResourceId = (resourceId: string) => {
+  const findNetworkByResourceId = useCallback((resourceId: string) => {
     return networks?.find(
       (network) => network.resources?.some((res) => res === resourceId),
     );
-  };
+  }, [networks]);
 
   const items: AnySearchResult[] = useMemo(() => {
     if (isNetworksLoading || isResourcesLoading) return [];
@@ -99,7 +100,7 @@ const GlobalSearchModalContent = ({ open, setOpen }: Props) => {
         type: SearchType.Network,
         id: network.id,
         data: network,
-        onAction: () => router.push(`/network?id=${network.id}`),
+        onAction: () => navigateToNetwork(router, { id: network.id }),
       }),
     );
 
@@ -111,13 +112,23 @@ const GlobalSearchModalContent = ({ open, setOpen }: Props) => {
         onAction: () => {
           const network = findNetworkByResourceId(resource.id);
           if (network)
-            router.push(`/network?id=${network.id}&resource=${resource.id}`);
+            navigateToNetwork(router, {
+              id: network.id,
+              resource: resource.id,
+            });
         },
       }),
     );
 
     return [...networkResults, ...resourceResults];
-  }, [isNetworksLoading, isResourcesLoading, networks, resources]);
+  }, [
+    findNetworkByResourceId,
+    isNetworksLoading,
+    isResourcesLoading,
+    networks,
+    resources,
+    router,
+  ]);
 
   const [filteredItems, search, setSearch, setQuery, isSearching] = useSearch(
     items,

@@ -1,22 +1,24 @@
+import InlineLink from "@components/InlineLink";
+import Paragraph from "@components/Paragraph";
 import SkeletonTable, {
   SkeletonTableHeader,
 } from "@components/skeletons/SkeletonTable";
+import { ExternalLinkIcon } from "lucide-react";
 import * as React from "react";
 import { Suspense } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { NetworkResource } from "@/interfaces/Network";
 import ResourcesTable from "@/modules/networks/resources/ResourcesTable";
-import Paragraph from "@components/Paragraph";
-import InlineLink from "@components/InlineLink";
-import { ExternalLinkIcon } from "lucide-react";
 
 type ResourcesSectionProps = {
   data?: NetworkResource[];
+  initialResourceId?: string;
   isLoading: boolean;
 };
 
 export const ResourcesTabContent = ({
   data,
+  initialResourceId,
   isLoading,
 }: ResourcesSectionProps) => {
   const { t } = useI18n();
@@ -50,7 +52,11 @@ export const ResourcesTabContent = ({
           </div>
         }
       >
-        <ResourcesTable isLoading={isLoading} resources={data} />
+        <ResourcesTable
+          initialResourceId={initialResourceId}
+          isLoading={isLoading}
+          resources={data}
+        />
       </Suspense>
     </div>
   );

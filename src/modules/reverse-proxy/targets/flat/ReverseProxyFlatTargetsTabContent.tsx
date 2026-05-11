@@ -17,6 +17,7 @@ type Props = {
   targets: ReverseProxyFlatTarget[];
   isLoading?: boolean;
   hideResourceColumn?: boolean;
+  initialTargetId?: string;
   emptyTableTitle?: string;
   emptyTableDescription?: string;
 };
@@ -25,6 +26,7 @@ export const ReverseProxyFlatTargetsTabContent = ({
   targets,
   isLoading,
   hideResourceColumn,
+  initialTargetId,
   emptyTableTitle,
   emptyTableDescription,
 }: Props) => {
@@ -58,6 +60,7 @@ export const ReverseProxyFlatTargetsTabContent = ({
       >
         <ReverseProxyFlatTargetsTable
           targets={targets}
+          initialTargetId={initialTargetId}
           isLoading={isLoading}
           hideResourceColumn={hideResourceColumn}
           emptyTableTitle={emptyTableTitle ?? t("reverseProxyTargets.emptyTitle")}

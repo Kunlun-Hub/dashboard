@@ -1,10 +1,14 @@
+import { useRouter } from "next/navigation";
 import { Network } from "@/interfaces/Network";
 import { NetworkInformationSquare } from "@/modules/networks/misc/NetworkInformationSquare";
+import { navigateToNetwork } from "@/modules/networks/networkNavigation";
 
 type Props = {
   network: Network;
 };
 export default function NetworkNameCell({ network }: Readonly<Props>) {
+  const router = useRouter();
+
   const isActive = !!(
     network?.routing_peers_count && network.routing_peers_count > 0
   );
@@ -14,7 +18,7 @@ export default function NetworkNameCell({ network }: Readonly<Props>) {
       <NetworkInformationSquare
         name={network.name}
         active={isActive}
-        href={`/network?id=${network.id}`}
+        onClick={() => navigateToNetwork(router, { id: network.id })}
         description={network.description}
       />
     </div>

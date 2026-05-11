@@ -17,9 +17,9 @@ import { Group } from "@/interfaces/Group";
 import { NetworkResource } from "@/interfaces/Network";
 import { useNetworksContext } from "@/modules/networks/NetworkProvider";
 import { ResourceActionCell } from "@/modules/networks/resources/ResourceActionCell";
-import { ResourceExposeServiceCell } from "@/modules/networks/resources/ResourceExposeServiceCell";
 import ResourceAddressCell from "@/modules/networks/resources/ResourceAddressCell";
 import { ResourceEnabledCell } from "@/modules/networks/resources/ResourceEnabledCell";
+import { ResourceExposeServiceCell } from "@/modules/networks/resources/ResourceExposeServiceCell";
 import { ResourceGroupCell } from "@/modules/networks/resources/ResourceGroupCell";
 import ResourceNameCell from "@/modules/networks/resources/ResourceNameCell";
 import { ResourcePolicyCell } from "@/modules/networks/resources/ResourcePolicyCell";
@@ -28,6 +28,7 @@ type Props = {
   resources?: NetworkResource[];
   isLoading: boolean;
   headingTarget?: HTMLHeadingElement | null;
+  initialResourceId?: string;
   isGroupPage?: boolean;
 };
 
@@ -116,12 +117,13 @@ export default function ResourcesTable({
   resources,
   isLoading,
   headingTarget,
+  initialResourceId,
   isGroupPage,
 }: Readonly<Props>) {
   const { permission } = usePermissions();
   const { t } = useI18n();
   const params = useSearchParams();
-  const resourceId = params.get("resource") ?? undefined;
+  const resourceId = initialResourceId ?? params.get("resource") ?? undefined;
 
   const [sorting, setSorting] = useState<SortingState>([
     {
@@ -134,7 +136,9 @@ export default function ResourcesTable({
 
   const removeResourceParam = React.useCallback(() => {
     if (!resourceId) return;
-    const newParams = new URLSearchParams(params.toString());
+    const newParams = new URLSearchParams(
+      typeof window === "undefined" ? params.toString() : window.location.search,
+    );
     newParams.delete("resource");
     router.replace(`?${newParams.toString()}`, { scroll: false });
   }, [resourceId, params, router]);

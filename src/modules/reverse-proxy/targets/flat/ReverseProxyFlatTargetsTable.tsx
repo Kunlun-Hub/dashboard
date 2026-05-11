@@ -2,8 +2,8 @@ import Button from "@components/Button";
 import Card from "@components/Card";
 import { DataTable } from "@components/table/DataTable";
 import DataTableHeader from "@components/table/DataTableHeader";
-import NoResults from "@components/ui/NoResults";
 import { DataTableRowsPerPage } from "@components/table/DataTableRowsPerPage";
+import NoResults from "@components/ui/NoResults";
 import { ColumnDef, SortingState } from "@tanstack/react-table";
 import { PlusCircle } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -14,8 +14,8 @@ import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useReverseProxies } from "@/contexts/ReverseProxiesProvider";
 import { useI18n } from "@/i18n/I18nProvider";
 import { ReverseProxyFlatTarget } from "@/interfaces/ReverseProxy";
-import ReverseProxyArrowCell from "@/modules/reverse-proxy/table/ReverseProxyArrowCell";
 import ReverseProxyAccessControlCell from "@/modules/reverse-proxy/table/ReverseProxyAccessControlCell";
+import ReverseProxyArrowCell from "@/modules/reverse-proxy/table/ReverseProxyArrowCell";
 import ReverseProxyAuthCell from "@/modules/reverse-proxy/table/ReverseProxyAuthCell";
 import ReverseProxyClusterCell from "@/modules/reverse-proxy/table/ReverseProxyClusterCell";
 import ReverseProxyDestinationCell from "@/modules/reverse-proxy/table/ReverseProxyDestinationCell";
@@ -29,6 +29,7 @@ type Props = {
   targets: ReverseProxyFlatTarget[];
   isLoading?: boolean;
   hideResourceColumn?: boolean;
+  initialTargetId?: string;
   emptyTableTitle?: string;
   emptyTableDescription?: string;
 };
@@ -37,6 +38,7 @@ export const ReverseProxyFlatTargetsTable = ({
   targets,
   isLoading,
   hideResourceColumn,
+  initialTargetId,
   emptyTableTitle,
   emptyTableDescription,
 }: Props) => {
@@ -48,11 +50,13 @@ export const ReverseProxyFlatTargetsTable = ({
   const { openModal } = useReverseProxies();
   const params = useSearchParams();
   const router = useRouter();
-  const resourceId = params.get("target") ?? undefined;
+  const resourceId = initialTargetId ?? params.get("target") ?? undefined;
 
   const removeResourceParam = useCallback(() => {
     if (!resourceId) return;
-    const newParams = new URLSearchParams(params.toString());
+    const newParams = new URLSearchParams(
+      typeof window === "undefined" ? params.toString() : window.location.search,
+    );
     newParams.delete("target");
     router.replace(`?${newParams.toString()}`, { scroll: false });
   }, [resourceId, params, router]);
