@@ -441,6 +441,41 @@ export function DataTable<TData, TValue>({
     }
   }, [manualColumnFiltering, externalColumnFilters, table]);
 
+  useEffect(() => {
+    if (manualColumnFiltering || keepStateInLocalStorage) return;
+
+    const nextFilters = initialFilters ?? [];
+    if (isEqual(localColumnFilters, nextFilters)) return;
+
+    setLocalColumnFilters(nextFilters);
+    table.setPageIndex(0);
+  }, [
+    initialFilters,
+    keepStateInLocalStorage,
+    localColumnFilters,
+    manualColumnFiltering,
+    setLocalColumnFilters,
+    table,
+  ]);
+
+  useEffect(() => {
+    if (manualFiltering || keepStateInLocalStorage) return;
+
+    const nextSearch = initialSearch ?? "";
+    if (localGlobalSearch === nextSearch) return;
+
+    setLocalGlobalSearch(nextSearch);
+    table.setPageIndex(0);
+    setSearchKey((prev) => (prev === 0 ? 1 : 0));
+  }, [
+    initialSearch,
+    keepStateInLocalStorage,
+    localGlobalSearch,
+    manualFiltering,
+    setLocalGlobalSearch,
+    table,
+  ]);
+
   return (
     <div className={cn("relative table-fixed-scroll", className)}>
       {showSearchAndFilters && (

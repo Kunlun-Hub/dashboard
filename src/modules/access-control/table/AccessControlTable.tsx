@@ -286,7 +286,7 @@ export default function AccessControlTable({
         tableClassName={isGroupPage ? "mt-0 mb-2" : undefined}
         inset={false}
         minimal={isGroupPage}
-        keepStateInLocalStorage={!isGroupPage || !idParam}
+        keepStateInLocalStorage={!isGroupPage && !idParam}
         initialSearch={idParam ? "" : undefined}
         initialFilters={
           idParam

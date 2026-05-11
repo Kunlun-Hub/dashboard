@@ -12,6 +12,8 @@ import {
 } from "@components/DropdownMenu";
 import FullTooltip from "@components/FullTooltip";
 import InlineLink from "@components/InlineLink";
+import { SkeletonNetwork } from "@components/skeletons/SkeletonNetwork";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@components/Tabs";
 import useRedirect from "@hooks/useRedirect";
 import useFetchApi from "@utils/api";
 import { cn, singularize } from "@utils/helpers";
@@ -28,9 +30,16 @@ import {
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useMemo } from "react";
-import useUrlTab from "@/hooks/useUrlTab";
 import NetworkRoutesIcon from "@/assets/icons/NetworkRoutesIcon";
+import PeerIcon from "@/assets/icons/PeerIcon";
+import ReverseProxyIcon from "@/assets/icons/ReverseProxyIcon";
 import { usePermissions } from "@/contexts/PermissionsProvider";
+import ReverseProxiesProvider, {
+  flattenReverseProxies,
+  useReverseProxies,
+} from "@/contexts/ReverseProxiesProvider";
+import useUrlTab from "@/hooks/useUrlTab";
+import { useI18n } from "@/i18n/I18nProvider";
 import { Network, NetworkResource, NetworkRouter } from "@/interfaces/Network";
 import PageContainer from "@/layouts/PageContainer";
 import { NetworkInformationSquare } from "@/modules/networks/misc/NetworkInformationSquare";
@@ -41,30 +50,42 @@ import {
 } from "@/modules/networks/NetworkProvider";
 import { ResourcesTabContent } from "@/modules/networks/resources/ResourcesTabContent";
 import { NetworkRoutingPeersTabContent } from "@/modules/networks/routing-peers/NetworkRoutingPeersTabContent";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@components/Tabs";
-import PeerIcon from "@/assets/icons/PeerIcon";
-import ReverseProxyIcon from "@/assets/icons/ReverseProxyIcon";
 import { ReverseProxyFlatTargetsTabContent } from "@/modules/reverse-proxy/targets/flat/ReverseProxyFlatTargetsTabContent";
-import ReverseProxiesProvider, {
-  flattenReverseProxies,
-  useReverseProxies,
-} from "@/contexts/ReverseProxiesProvider";
-import { SkeletonNetwork } from "@components/skeletons/SkeletonNetwork";
-import { useI18n } from "@/i18n/I18nProvider";
+
+type NetworkDetailPageClientProps = {
+  networkId?: string;
+};
 
 export default function NetworkDetailPage() {
   const queryParameter = useSearchParams();
-  const networkId = queryParameter.get("id");
+  const networkId = queryParameter.get("id") ?? undefined;
+
+  return (
+    <NetworkDetailPageContent
+      key={networkId ?? "network"}
+      networkId={networkId}
+    />
+  );
+}
+
+function NetworkDetailPageContent({
+  networkId,
+}: Readonly<NetworkDetailPageClientProps>) {
   const { data: network, isLoading } = useFetchApi<Network>(
     `/networks/${networkId}`,
     true,
+    true,
+    !!networkId,
   );
 
   useRedirect("/networks", false, !networkId);
 
-  return network && !isLoading ? (
-    <ReverseProxiesProvider initialNetwork={network}>
-      <NetworkOverview network={network} />
+  const currentNetwork =
+    network && network.id === networkId && !isLoading ? network : undefined;
+
+  return currentNetwork ? (
+    <ReverseProxiesProvider initialNetwork={currentNetwork}>
+      <NetworkOverview network={currentNetwork} />
     </ReverseProxiesProvider>
   ) : (
     <SkeletonNetwork />

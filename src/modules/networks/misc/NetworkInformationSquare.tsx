@@ -5,6 +5,7 @@ import * as React from "react";
 
 type Props = {
   onClick?: () => void;
+  href?: string;
   name: string;
   description?: string;
   active?: boolean;
@@ -12,21 +13,21 @@ type Props = {
 };
 export const NetworkInformationSquare = ({
   onClick,
+  href,
   name,
   description,
   active = false,
   size = "md",
 }: Props) => {
-  return (
-    <button
-      className={cn(
-        "flex w-full items-center max-w-[450px] gap-4 dark:text-neutral-300 text-neutral-500 transition-all group/network rounded-md",
-        onClick
-          ? "hover:text-neutral-100 hover:bg-nb-gray-900/60 cursor-pointer py-2 pl-3 pr-14 relative"
-          : "cursor-default",
-      )}
-      onClick={onClick}
-    >
+  const hasAction = !!(onClick || href);
+  const className = cn(
+    "flex w-full items-center max-w-[450px] gap-4 dark:text-neutral-300 text-neutral-500 transition-all group/network rounded-md",
+    hasAction
+      ? "hover:text-neutral-100 hover:bg-nb-gray-900/60 cursor-pointer py-2 pl-3 pr-14 relative"
+      : "cursor-default",
+  );
+  const content = (
+    <>
       <div
         className={cn(
           "bg-nb-gray-800 text-nb-gray-100 rounded-md flex items-center justify-center font-medium relative",
@@ -45,8 +46,8 @@ export const NetworkInformationSquare = ({
         <div
           className={cn(
             "h-3 w-3 bg-nb-gray-950 rounded-tl-[8px] rounded-br absolute bottom-0 right-0 transition-all",
-            onClick && "group-hover/table-row:bg-nb-gray-940",
-            onClick && "group-hover/network:!bg-nb-gray-910",
+            hasAction && "group-hover/table-row:bg-nb-gray-940",
+            hasAction && "group-hover/network:!bg-nb-gray-910",
           )}
         ></div>
       </div>
@@ -65,7 +66,7 @@ export const NetworkInformationSquare = ({
           text={description}
         />
       </div>
-      {onClick && (
+      {hasAction && (
         <div
           className={
             "absolute right-0 top-0 h-full flex items-center pr-4 text-nb-gray-200 opacity-0 group-hover/network:opacity-100"
@@ -74,6 +75,20 @@ export const NetworkInformationSquare = ({
           <ArrowRightIcon size={18} />
         </div>
       )}
+    </>
+  );
+
+  if (href) {
+    return (
+      <a href={href} className={className}>
+        {content}
+      </a>
+    );
+  }
+
+  return (
+    <button className={className} onClick={onClick}>
+      {content}
     </button>
   );
 };
