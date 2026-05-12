@@ -719,14 +719,21 @@ function RouteSettingsModal({
     () => calculateRoutes(advertisedDraft, excludedDraft),
     [advertisedDraft, excludedDraft],
   );
-  const filteredRoutes = useMemo(() => {
-    const routes = tab === "preview" ? previewRoutes : currentRoutes;
+  const filteredEditableRoutes = useMemo(() => {
+    const routes = currentRoutes.map((route, index) => ({ route, index }));
     if (!search.trim()) return routes;
-    return routes.filter((route) =>
-      route.toLowerCase().includes(search.trim().toLowerCase()),
+    const normalizedSearch = search.trim().toLowerCase();
+    return routes.filter(({ route }) =>
+      route.toLowerCase().includes(normalizedSearch),
     );
-  }, [currentRoutes, previewRoutes, search, tab]);
-
+  }, [currentRoutes, search]);
+  const filteredPreviewRoutes = useMemo(() => {
+    if (!search.trim()) return previewRoutes;
+    const normalizedSearch = search.trim().toLowerCase();
+    return previewRoutes.filter((route) =>
+      route.toLowerCase().includes(normalizedSearch),
+    );
+  }, [previewRoutes, search]);
   const save = () => {
     const sanitizedAdvertisedRoutes = uniqueRoutes(advertisedDraft);
     const sanitizedExcludedRoutes = uniqueRoutes(excludedDraft);
@@ -829,7 +836,7 @@ function RouteSettingsModal({
 
             <TabsContent value={"advertised"} className={"pt-4"}>
               <EditableRouteList
-                routes={filteredRoutes}
+                routes={filteredEditableRoutes}
                 sourceRoutes={advertisedDraft}
                 bulkEdit={bulkEdit}
                 onBulkChange={(value) =>
@@ -842,7 +849,7 @@ function RouteSettingsModal({
             </TabsContent>
             <TabsContent value={"excluded"} className={"pt-4"}>
               <EditableRouteList
-                routes={filteredRoutes}
+                routes={filteredEditableRoutes}
                 sourceRoutes={excludedDraft}
                 bulkEdit={bulkEdit}
                 onBulkChange={(value) =>
@@ -855,7 +862,7 @@ function RouteSettingsModal({
             </TabsContent>
             <TabsContent value={"preview"} className={"pt-4"}>
               <RouteGrid
-                routes={filteredRoutes}
+                routes={filteredPreviewRoutes}
                 emptyLabel={t("peerRoutePreview.noCalculatedRoutes")}
               />
             </TabsContent>
@@ -895,7 +902,7 @@ function EditableRouteList({
   onRemove,
   emptyLabel,
 }: Readonly<{
-  routes: string[];
+  routes: Array<{ route: string; index: number }>;
   sourceRoutes: string[];
   bulkEdit: boolean;
   onBulkChange: (value: string) => void;
@@ -920,16 +927,15 @@ function EditableRouteList({
 
   return (
     <div className={"flex flex-col gap-2"}>
-      {routes.map((route) => {
-        const sourceIndex = sourceRoutes.indexOf(route);
+      {routes.map(({ route, index }) => {
         return (
           <div
-            key={`${route}-${sourceIndex}`}
+            key={index}
             className={"grid grid-cols-[1fr_auto_auto] gap-3"}
           >
             <Input
               value={route}
-              onChange={(event) => onChange(sourceIndex, event.target.value)}
+              onChange={(event) => onChange(index, event.target.value)}
               error={route && !cidr.isValidAddress(route) ? route : undefined}
             />
             <Button variant={"secondary"} className={"!px-3"}>
@@ -938,7 +944,7 @@ function EditableRouteList({
             <Button
               variant={"secondary"}
               className={"!px-3 text-red-500"}
-              onClick={() => onRemove(sourceIndex)}
+              onClick={() => onRemove(index)}
             >
               <MinusIcon size={16} />
             </Button>
