@@ -33,7 +33,11 @@ function useNetworkRouterColumns(): ColumnDef<NetworkRouter>[] {
       id: "name",
       accessorKey: "id",
       header: ({ column }) => {
-        return <DataTableHeader column={column}>{t("networkRouting.peer")}</DataTableHeader>;
+        return (
+          <DataTableHeader column={column}>
+            {t("networkRouting.peer")}
+          </DataTableHeader>
+        );
       },
       sortingFn: "text",
       cell: ({ row }) => <NetworkRoutingPeerName router={row.original} />,
@@ -42,15 +46,52 @@ function useNetworkRouterColumns(): ColumnDef<NetworkRouter>[] {
       id: "enabled",
       accessorKey: "enabled",
       header: ({ column }) => {
-        return <DataTableHeader column={column}>{t("table.active")}</DataTableHeader>;
+        return (
+          <DataTableHeader column={column}>{t("table.active")}</DataTableHeader>
+        );
       },
       cell: ({ row }) => <RoutingPeersEnabledCell router={row.original} />,
+    },
+    {
+      id: "advertised_routes",
+      accessorFn: (router) => router.advertised_routes?.join(" ") ?? "",
+      header: ({ column }) => {
+        return (
+          <DataTableHeader column={column}>
+            {t("networkRouting.advertisedRoutes")}
+          </DataTableHeader>
+        );
+      },
+      cell: ({ row }) => (
+        <RouteListCell
+          routes={row.original.advertised_routes}
+          emptyLabel={t("networkRouting.defaultRoutes")}
+        />
+      ),
+    },
+    {
+      id: "excluded_routes",
+      accessorFn: (router) => router.excluded_routes?.join(" ") ?? "",
+      header: ({ column }) => {
+        return (
+          <DataTableHeader column={column}>
+            {t("networkRouting.excludedRoutes")}
+          </DataTableHeader>
+        );
+      },
+      cell: ({ row }) => (
+        <RouteListCell routes={row.original.excluded_routes} emptyLabel={"-"} />
+      ),
     },
     {
       id: "metric",
       accessorKey: "metric",
       header: ({ column }) => {
-        return <DataTableHeader column={column}>{t("networkRouting.metric")}</DataTableHeader>;
+        return (
+          <DataTableHeader column={column}>
+            {t("networkRouting.metric")}
+          </DataTableHeader>
+        );
       },
       cell: ({ row }) => (
         <RouteMetricCell metric={row.original.metric} useHoverStyle={false} />
@@ -60,7 +101,11 @@ function useNetworkRouterColumns(): ColumnDef<NetworkRouter>[] {
       id: "masquerade",
       accessorKey: "masquerade",
       header: ({ column }) => {
-        return <DataTableHeader column={column}>{t("networkRouting.masquerade")}</DataTableHeader>;
+        return (
+          <DataTableHeader column={column}>
+            {t("networkRouting.masquerade")}
+          </DataTableHeader>
+        );
       },
       cell: ({ row }) => <RoutingPeersMasqueradeCell router={row.original} />,
     },
@@ -79,6 +124,23 @@ function useNetworkRouterColumns(): ColumnDef<NetworkRouter>[] {
       filterFn: "fuzzy",
     },
   ];
+}
+
+function RouteListCell({
+  routes,
+  emptyLabel,
+}: Readonly<{ routes?: string[]; emptyLabel: string }>) {
+  if (!routes || routes.length === 0) {
+    return <span className={"text-nb-gray-400 text-xs"}>{emptyLabel}</span>;
+  }
+
+  const firstRoute = routes[0];
+  return (
+    <span className={"text-xs text-nb-gray-600 dark:text-nb-gray-300"}>
+      {firstRoute}
+      {routes.length > 1 ? ` +${routes.length - 1}` : ""}
+    </span>
+  );
 }
 
 export default function NetworkRoutingPeersTable({

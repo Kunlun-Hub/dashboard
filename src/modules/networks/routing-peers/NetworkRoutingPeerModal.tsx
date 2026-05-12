@@ -19,9 +19,11 @@ import { PeerGroupSelector } from "@components/PeerGroupSelector";
 import { PeerSelector } from "@components/PeerSelector";
 import { SegmentedTabs } from "@components/SegmentedTabs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@components/Tabs";
+import { Textarea } from "@components/Textarea";
 import { getOperatingSystem } from "@hooks/useOperatingSystem";
 import useFetchApi, { useApiCall } from "@utils/api";
 import { cn } from "@utils/helpers";
+import cidr from "ip-cidr";
 import { uniqBy } from "lodash";
 import {
   ArrowDownWideNarrow,
@@ -38,13 +40,13 @@ import {
 import React, { useEffect, useMemo, useState } from "react";
 import { useSWRConfig } from "swr";
 import { useDialog } from "@/contexts/DialogProvider";
+import { useI18n } from "@/i18n/I18nProvider";
 import { Network, NetworkRouter } from "@/interfaces/Network";
 import { OperatingSystem } from "@/interfaces/OperatingSystem";
 import { Peer } from "@/interfaces/Peer";
 import { SetupKey } from "@/interfaces/SetupKey";
 import useGroupHelper from "@/modules/groups/useGroupHelper";
 import { RoutingPeerMasqueradeSwitch } from "@/modules/networks/routing-peers/RoutingPeerMasqueradeSwitch";
-import { useI18n } from "@/i18n/I18nProvider";
 import SetupModal from "@/modules/setup-netbird-modal/SetupModal";
 
 type Props = {
@@ -130,6 +132,36 @@ function RoutingPeerModalContent({
   const [metric, setMetric] = useState(
     router?.metric ? router.metric.toString() : "9999",
   );
+  const [advertisedRoutes, setAdvertisedRoutes] = useState(
+    (router?.advertised_routes ?? []).join("\n"),
+  );
+  const [excludedRoutes, setExcludedRoutes] = useState(
+    (router?.excluded_routes ?? []).join("\n"),
+  );
+
+  const parseRouteList = (value: string) =>
+    value
+      .split(/[\n,]+/)
+      .map((route) => route.trim())
+      .filter(Boolean);
+
+  const advertisedRouteList = useMemo(
+    () => parseRouteList(advertisedRoutes),
+    [advertisedRoutes],
+  );
+  const excludedRouteList = useMemo(
+    () => parseRouteList(excludedRoutes),
+    [excludedRoutes],
+  );
+
+  const invalidAdvertisedRoute = useMemo(
+    () => advertisedRouteList.find((route) => !cidr.isValidAddress(route)),
+    [advertisedRouteList],
+  );
+  const invalidExcludedRoute = useMemo(
+    () => excludedRouteList.find((route) => !cidr.isValidAddress(route)),
+    [excludedRouteList],
+  );
 
   const isNonLinuxRoutingPeer = useMemo(() => {
     if (!routingPeer) return false;
@@ -163,6 +195,8 @@ function RoutingPeerModalContent({
         metric: parseInt(metric),
         enabled,
         masquerade: isRoutingPeer && isNonLinuxRoutingPeer ? true : masquerade,
+        advertised_routes: advertisedRouteList,
+        excluded_routes: excludedRouteList,
       }).then((r) => {
         onCreated?.(r);
       }),
@@ -192,6 +226,8 @@ function RoutingPeerModalContent({
         metric: parseInt(metric),
         enabled,
         masquerade: isRoutingPeer && isNonLinuxRoutingPeer ? true : masquerade,
+        advertised_routes: advertisedRouteList,
+        excluded_routes: excludedRouteList,
       }).then((r) => {
         onUpdated?.(r);
       }),
@@ -204,8 +240,14 @@ function RoutingPeerModalContent({
     <ModalContent maxWidthClass={"max-w-xl"}>
       <ModalHeader
         icon={<Share2Icon size={16} />}
-        title={router ? t("networkRoutingPeers.updateTitle") : t("networkRoutingPeers.addTitle")}
-        description={t("networkRoutingPeers.description", { name: network.name })}
+        title={
+          router
+            ? t("networkRoutingPeers.updateTitle")
+            : t("networkRoutingPeers.addTitle")
+        }
+        description={t("networkRoutingPeers.description", {
+          name: network.name,
+        })}
         color={"netbird"}
       />
 
@@ -306,9 +348,7 @@ function RoutingPeerModalContent({
                   {t("networkRoutingPeers.enable")}
                 </>
               }
-              helpText={
-                t("networkRoutingPeers.enableHelp")
-              }
+              helpText={t("networkRoutingPeers.enableHelp")}
             />
 
             <RoutingPeerMasqueradeSwitch
@@ -341,6 +381,38 @@ function RoutingPeerModalContent({
                     className={"text-nb-gray-300"}
                   />
                 }
+              />
+            </div>
+
+            <div className={"flex flex-col gap-2"}>
+              <div>
+                <Label>{t("networkRoutingPeers.advertisedRoutes")}</Label>
+                <HelpText>
+                  {t("networkRoutingPeers.advertisedRoutesHelp")}
+                </HelpText>
+              </div>
+              <Textarea
+                value={advertisedRoutes}
+                onChange={(e) => setAdvertisedRoutes(e.target.value)}
+                placeholder={"10.202.10.0/24"}
+                error={invalidAdvertisedRoute}
+                rows={4}
+              />
+            </div>
+
+            <div className={"flex flex-col gap-2"}>
+              <div>
+                <Label>{t("networkRoutingPeers.excludedRoutes")}</Label>
+                <HelpText>
+                  {t("networkRoutingPeers.excludedRoutesHelp")}
+                </HelpText>
+              </div>
+              <Textarea
+                value={excludedRoutes}
+                onChange={(e) => setExcludedRoutes(e.target.value)}
+                placeholder={"10.202.10.65/32"}
+                error={invalidExcludedRoute}
+                rows={4}
               />
             </div>
           </div>
@@ -384,7 +456,9 @@ function RoutingPeerModalContent({
               <Button
                 variant={"primary"}
                 disabled={
-                  routingPeer == undefined && routingPeerGroups.length <= 0
+                  (routingPeer == undefined && routingPeerGroups.length <= 0) ||
+                  !!invalidAdvertisedRoute ||
+                  !!invalidExcludedRoute
                 }
                 onClick={router ? updateRouter : addRouter}
               >

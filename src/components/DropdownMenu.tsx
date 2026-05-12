@@ -104,6 +104,7 @@ const DropdownMenuItem = React.forwardRef<
       inset,
       variant = "default",
       onClick,
+      onSelect,
       href,
       target,
       rel,
@@ -111,6 +112,16 @@ const DropdownMenuItem = React.forwardRef<
     },
     ref,
   ) => {
+    const handleSelect = (event: Event) => {
+      if (href) return;
+      onSelect?.(event);
+      if (event.defaultPrevented) return;
+
+      window.setTimeout(() => {
+        onClick?.(event as unknown as React.MouseEvent<HTMLDivElement>);
+      }, 0);
+    };
+
     return (
       <DropdownMenuPrimitive.Item
         ref={ref}
@@ -123,10 +134,9 @@ const DropdownMenuItem = React.forwardRef<
         )}
         onClick={(e) => {
           if (href) return;
-          e.preventDefault();
           e.stopPropagation();
-          onClick && onClick(e);
         }}
+        onSelect={handleSelect}
         {...props}
       >
         {href ? (

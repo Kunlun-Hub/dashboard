@@ -1679,6 +1679,9 @@ export const messages = {
     "routeTable.emptyTitleDescription":
       "It looks like you don't have any routes. Access LANs and VPC by adding a network route.",
     "networkRouting.peer": "Peer",
+    "networkRouting.advertisedRoutes": "Advertised Routes",
+    "networkRouting.excludedRoutes": "Excluded Routes",
+    "networkRouting.defaultRoutes": "Resource routes",
     "networkRouting.metric": "Metric",
     "networkRouting.masquerade": "Masquerade",
     "networkRouting.searchPlaceholder": "Search by peer name, group name...",
@@ -2241,6 +2244,12 @@ export const messages = {
     "networkRoutingPeers.metric": "Metric",
     "networkRoutingPeers.metricHelp":
       "A lower metric indicates higher priority routing peers.",
+    "networkRoutingPeers.advertisedRoutes": "Advertised Routes",
+    "networkRoutingPeers.advertisedRoutesHelp":
+      "Traffic to these CIDR ranges will be announced through this routing peer. Leave empty to use this network's resource ranges.",
+    "networkRoutingPeers.excludedRoutes": "Excluded Routes",
+    "networkRoutingPeers.excludedRoutesHelp":
+      "CIDR ranges that should remain locally reachable and not be forwarded through Cloink.",
     "networkRoutingPeers.createSetupKeyTitle": "Create a Setup Key?",
     "networkRoutingPeers.createSetupKeyDescription":
       "If you continue, a one-off setup key will be automatically created and you will be able to install Cloink.",
@@ -4484,6 +4493,9 @@ export const messages = {
     "routeTable.emptyTitleDescription":
       "看起来你还没有任何路由。添加网络路由即可访问局域网和 VPC。",
     "networkRouting.peer": "设备",
+    "networkRouting.advertisedRoutes": "宣告路由",
+    "networkRouting.excludedRoutes": "排除路由",
+    "networkRouting.defaultRoutes": "资源路由",
     "networkRouting.metric": "度量值",
     "networkRouting.masquerade": "地址伪装",
     "networkRouting.searchPlaceholder": "按设备名称、分组名称搜索...",
@@ -4973,6 +4985,12 @@ export const messages = {
     "networkRoutingPeers.enableHelp": "使用此开关可启用或禁用此路由设备。",
     "networkRoutingPeers.metric": "跃点数 (Metric)",
     "networkRoutingPeers.metricHelp": "较小的跃点数表示较高的路由优先级。",
+    "networkRoutingPeers.advertisedRoutes": "宣告路由",
+    "networkRoutingPeers.advertisedRoutesHelp":
+      "通告前往这些 CIDR 地址的流量通过此路由设备转发。留空则使用此网络的资源地址。",
+    "networkRoutingPeers.excludedRoutes": "排除路由",
+    "networkRoutingPeers.excludedRoutesHelp":
+      "这些 CIDR 地址可在本地直接访问，不会通过 Cloink 隧道中转。",
     "networkRoutingPeers.createSetupKeyTitle": "创建安装密钥？",
     "networkRoutingPeers.createSetupKeyDescription":
       "如果继续，将自动创建一个一次性安装密钥，你随后就可以安装 Cloink。",

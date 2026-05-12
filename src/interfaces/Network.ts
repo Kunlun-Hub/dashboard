@@ -14,6 +14,8 @@ export interface NetworkRouter {
   id: string;
   peer?: string;
   peer_groups?: string[];
+  advertised_routes?: string[];
+  excluded_routes?: string[];
   metric: number;
   masquerade: boolean;
   enabled: boolean;
