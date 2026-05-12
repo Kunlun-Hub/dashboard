@@ -37,10 +37,12 @@ import {
   History,
   ListIcon,
   MapPin,
+  MapPinnedIcon,
   MonitorSmartphoneIcon,
   NetworkIcon,
   PencilIcon,
   RadioTowerIcon,
+  RouteIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -56,26 +58,30 @@ import ReverseProxyIcon from "@/assets/icons/ReverseProxyIcon";
 import { useCountries } from "@/contexts/CountryProvider";
 import PeerProvider, { usePeer } from "@/contexts/PeerProvider";
 import { usePermissions } from "@/contexts/PermissionsProvider";
+import ReverseProxiesProvider, {
+  flattenReverseProxies,
+  useReverseProxies,
+} from "@/contexts/ReverseProxiesProvider";
 import RoutesProvider from "@/contexts/RoutesProvider";
 import { useHasChanges } from "@/hooks/useHasChanges";
+import { useI18n } from "@/i18n/I18nProvider";
 import type { Group } from "@/interfaces/Group";
 import type { Peer } from "@/interfaces/Peer";
 import PageContainer from "@/layouts/PageContainer";
 import useGroupHelper from "@/modules/groups/useGroupHelper";
 import { AccessiblePeersSection } from "@/modules/peer/AccessiblePeersSection";
+import {
+  PeerAdvertisedRoutesSection,
+  PeerRoutePreviewSection,
+} from "@/modules/peer/PeerAdvertisedRoutesSection";
+import { PeerEditIPModal } from "@/modules/peer/PeerEditIPModal";
+import { PeerExpirationSettings } from "@/modules/peer/PeerExpirationSettings";
 import { PeerNetworkRoutesSection } from "@/modules/peer/PeerNetworkRoutesSection";
 import { PeerRemoteJobsSection } from "@/modules/peer/PeerRemoteJobsSection";
-import ReverseProxiesProvider, {
-  flattenReverseProxies,
-  useReverseProxies,
-} from "@/contexts/ReverseProxiesProvider";
-import { ReverseProxyFlatTargetsTabContent } from "@/modules/reverse-proxy/targets/flat/ReverseProxyFlatTargetsTabContent";
-import { PeerEditIPModal } from "@/modules/peer/PeerEditIPModal";
 import { PeerSSHToggle } from "@/modules/peer/PeerSSHToggle";
 import { RDPButton } from "@/modules/remote-access/rdp/RDPButton";
 import { SSHButton } from "@/modules/remote-access/ssh/SSHButton";
-import { PeerExpirationSettings } from "@/modules/peer/PeerExpirationSettings";
-import { useI18n } from "@/i18n/I18nProvider";
+import { ReverseProxyFlatTargetsTabContent } from "@/modules/reverse-proxy/targets/flat/ReverseProxyFlatTargetsTabContent";
 
 export default function PeerPage() {
   const { t } = useI18n();
@@ -354,6 +360,20 @@ const PeerOverviewTabs = () => {
           </TabsTrigger>
         )}
 
+        {permission.networks.read && (
+          <TabsTrigger value={"advertised-routes"}>
+            <MapPinnedIcon size={16} />
+            {t("peerRouteSettings.title")}
+          </TabsTrigger>
+        )}
+
+        {permission.networks.read && (
+          <TabsTrigger value={"route-preview"}>
+            <RouteIcon size={16} />
+            {t("peerDetails.routePreview")}
+          </TabsTrigger>
+        )}
+
         {peer?.id && permission.peers.read && (
           <TabsTrigger value={"accessible-peers"}>
             <MonitorSmartphoneIcon size={16} />
@@ -386,6 +406,18 @@ const PeerOverviewTabs = () => {
       {permission.routes.read && (
         <TabsContent value={"network-routes"} className={"pb-8"}>
           <PeerNetworkRoutesSection peer={peer} />
+        </TabsContent>
+      )}
+
+      {permission.networks.read && (
+        <TabsContent value={"advertised-routes"} className={"pb-8"}>
+          <PeerAdvertisedRoutesSection peer={peer} />
+        </TabsContent>
+      )}
+
+      {permission.networks.read && (
+        <TabsContent value={"route-preview"} className={"pb-8"}>
+          <PeerRoutePreviewSection peer={peer} />
         </TabsContent>
       )}
 

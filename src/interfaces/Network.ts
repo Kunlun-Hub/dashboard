@@ -12,6 +12,7 @@ export interface Network {
 
 export interface NetworkRouter {
   id: string;
+  network_id: string;
   peer?: string;
   peer_groups?: string[];
   advertised_routes?: string[];

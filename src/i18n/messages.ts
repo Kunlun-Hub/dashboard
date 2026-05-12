@@ -1943,6 +1943,8 @@ export const messages = {
     "peerDetails.saved": "Peer was successfully saved",
     "peerDetails.saving": "Saving the peer...",
     "peerDetails.overview": "Overview",
+    "peerDetails.advertisedRoutes": "Advertised Routes",
+    "peerDetails.routePreview": "Route Preview",
     "peerDetails.accessiblePeers": "Accessible Peers",
     "peerDetails.noServicesTitle": "This peer has no services",
     "peerDetails.noServicesDescription":
@@ -1970,6 +1972,49 @@ export const messages = {
     "peerDetails.justNow": "just now",
     "peerDetails.agentVersion": "Agent Version",
     "peerDetails.uiVersion": "UI Version",
+    "peerAdvertisedRoutes.description":
+      "Quickly configure the CIDR ranges this peer advertises as a network router, and the local ranges that should be excluded from Cloink forwarding.",
+    "peerAdvertisedRoutes.emptyTitle": "This peer is not a network router",
+    "peerAdvertisedRoutes.emptyDescription":
+      "Add this peer as a routing device in a network before configuring advertised and excluded routes here.",
+    "peerAdvertisedRoutes.unknownNetwork": "Unknown network",
+    "peerAdvertisedRoutes.networkHelp":
+      "These settings are saved on this peer's network router entry.",
+    "peerAdvertisedRoutes.saved": "Advertised routes were saved.",
+    "peerAdvertisedRoutes.saving": "Saving advertised routes...",
+    "peerRoutePreview.description":
+      "Review the access control policies that reference networks using this routing device.",
+    "peerRoutePreview.emptyTitle": "No policies to show",
+    "peerRoutePreview.emptyDescription":
+      "No access policies currently reference networks that use this routing device.",
+    "peerRoutePreview.unknownNetwork": "Unknown network",
+    "peerRoutePreview.calculatedHelp":
+      "These prefixes are calculated from advertised and excluded CIDR ranges.",
+    "peerRoutePreview.routes": "routes",
+    "peerRoutePreview.noCalculatedRoutes": "No route prefixes remain.",
+    "peerRoutePreview.enabled": "Enabled",
+    "peerRoutePreview.disabled": "Disabled",
+    "peerRoutePreview.accessControl": "Access Control",
+    "peerRoutePreview.accessControlStatus": "Access Control Status",
+    "peerRoutePreview.resourceStatus": "Resource Status",
+    "peerRoutePreview.resourceGroups": "Resource Groups",
+    "peerRoutePreview.syncedAccessControl":
+      "Linked synchronized access control",
+    "peerRoutePreview.noSources": "-",
+    "peerRoutePreview.updating": "Updating...",
+    "peerRouteSettings.title": "Route Settings",
+    "peerRouteSettings.connector": "Connector",
+    "peerRouteSettings.connectorHelp":
+      "The connector announces physical network routes for this peer.",
+    "peerRouteSettings.connectorModalHelp":
+      "Forward traffic to devices that do not have a client installed.",
+    "peerRouteSettings.setRoutes": "Set Routes",
+    "peerRouteSettings.editTitle": "Edit device route settings",
+    "peerRouteSettings.addRoute": "Add Route",
+    "peerRouteSettings.bulkEdit": "Bulk Edit",
+    "peerRouteSettings.searchRoutes": "Search routes",
+    "peerRouteSettings.noAdvertisedRoutes": "No advertised routes configured.",
+    "peerRouteSettings.noExcludedRoutes": "No excluded routes configured.",
     "peerDetails.editNameTitle": "Edit Peer Name",
     "peerDetails.editNameDescription":
       "Set an easily identifiable name for your peer.",
@@ -4742,6 +4787,8 @@ export const messages = {
     "peerDetails.saved": "设备已成功保存",
     "peerDetails.saving": "正在保存设备...",
     "peerDetails.overview": "概览",
+    "peerDetails.advertisedRoutes": "宣告路由",
+    "peerDetails.routePreview": "路由展示",
     "peerDetails.accessiblePeers": "可访问设备",
     "peerDetails.noServicesTitle": "此设备暂无服务",
     "peerDetails.noServicesDescription":
@@ -4767,6 +4814,47 @@ export const messages = {
     "peerDetails.justNow": "刚刚",
     "peerDetails.agentVersion": "Agent 版本",
     "peerDetails.uiVersion": "UI 版本",
+    "peerAdvertisedRoutes.description":
+      "快捷配置此设备作为路由设备时宣告的 CIDR 范围，以及不需要通过 Cloink 转发的本地排除范围。",
+    "peerAdvertisedRoutes.emptyTitle": "此设备还不是路由设备",
+    "peerAdvertisedRoutes.emptyDescription":
+      "请先在网络中将此设备添加为路由设备，然后再在这里配置宣告路由和排除路由。",
+    "peerAdvertisedRoutes.unknownNetwork": "未知网络",
+    "peerAdvertisedRoutes.networkHelp":
+      "这些设置会保存到此设备对应的网络路由设备配置中。",
+    "peerAdvertisedRoutes.saved": "宣告路由已保存。",
+    "peerAdvertisedRoutes.saving": "正在保存宣告路由...",
+    "peerRoutePreview.description":
+      "查看引用了此路由设备所在网络的访问控制策略。",
+    "peerRoutePreview.emptyTitle": "暂无可展示策略",
+    "peerRoutePreview.emptyDescription":
+      "当前没有访问策略引用此路由设备所在的网络。",
+    "peerRoutePreview.unknownNetwork": "未知网络",
+    "peerRoutePreview.calculatedHelp":
+      "这些前缀由宣告 CIDR 和排除 CIDR 自动计算得出。",
+    "peerRoutePreview.routes": "条路由",
+    "peerRoutePreview.noCalculatedRoutes": "没有剩余的路由前缀。",
+    "peerRoutePreview.enabled": "已启用",
+    "peerRoutePreview.disabled": "已禁用",
+    "peerRoutePreview.accessControl": "访问控制",
+    "peerRoutePreview.accessControlStatus": "访问控制启用状态",
+    "peerRoutePreview.resourceStatus": "启用状态",
+    "peerRoutePreview.resourceGroups": "资源分组",
+    "peerRoutePreview.syncedAccessControl": "关联同步访问控制",
+    "peerRoutePreview.noSources": "-",
+    "peerRoutePreview.updating": "正在更新...",
+    "peerRouteSettings.title": "路由设置",
+    "peerRouteSettings.connector": "连接器",
+    "peerRouteSettings.connectorHelp": "连接器用于为此设备宣告物理网络路由。",
+    "peerRouteSettings.connectorModalHelp":
+      "将流量转发到没有安装客户端的设备。",
+    "peerRouteSettings.setRoutes": "设置路由",
+    "peerRouteSettings.editTitle": "编辑设备路由设置",
+    "peerRouteSettings.addRoute": "添加路由",
+    "peerRouteSettings.bulkEdit": "批量编辑",
+    "peerRouteSettings.searchRoutes": "搜索路由",
+    "peerRouteSettings.noAdvertisedRoutes": "暂无宣告路由。",
+    "peerRouteSettings.noExcludedRoutes": "暂无排除路由。",
     "peerDetails.editNameTitle": "编辑设备名称",
     "peerDetails.editNameDescription": "为你的设备设置一个更容易识别的名称。",
     "peerDetails.namePlaceholder": "例如：AWS Servers",
