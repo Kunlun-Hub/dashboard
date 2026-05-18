@@ -63,6 +63,7 @@ export interface Account {
     local_auth_disabled?: boolean;
     login_method?: "all" | "email" | "wechatwork";
     enabled_login_options?: string[];
+    local_mfa_enabled?: boolean;
     ipv6_enabled_groups?: string[];
     network_range_v6?: string;
   };

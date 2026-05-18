@@ -4,6 +4,7 @@ import HelpText from "@components/HelpText";
 import Button from "@components/Button";
 import { Input } from "@components/Input";
 import cidr from "ip-cidr";
+import { isIPv6 } from "@utils/ip";
 import {
   FlagIcon,
   MinusCircleIcon,
@@ -154,7 +155,11 @@ function validateRule(
 ): string {
   if (rule.type === "country" || !rule.value) return "";
   if (rule.type === "ip") {
-    const val = rule.value.includes("/") ? rule.value : `${rule.value}/32`;
+    let val = rule.value;
+    if (!val.includes("/")) {
+      const suffix = isIPv6(val) ? 128 : 32;
+      val = `${val}/${suffix}`;
+    }
     if (!cidr.isValidAddress(val)) {
       return t("reverseProxy.validIpAddress");
     }

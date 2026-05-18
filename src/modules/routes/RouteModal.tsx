@@ -26,6 +26,7 @@ import InputDomain, { domainReducer } from "@components/ui/InputDomain";
 import { getOperatingSystem } from "@hooks/useOperatingSystem";
 import { IconDirectionSign } from "@tabler/icons-react";
 import { cn } from "@utils/helpers";
+import { normalizeHostCIDR } from "@utils/ip";
 import cidr from "ip-cidr";
 import { uniqBy } from "lodash";
 import {
@@ -310,7 +311,7 @@ export function RouteModalContent({
         enabled: enabled,
         peer: useSinglePeer ? routingPeer?.id : undefined,
         peer_groups: useSinglePeer ? undefined : peerGroups || undefined,
-        network: routeType === "ip-range" ? networkRange : undefined,
+        network: routeType === "ip-range" ? normalizeHostCIDR(networkRange) : undefined,
         domains: domainRouteNames,
         keep_route: useKeepRoute,
         metric: Number(metric) || 9999,

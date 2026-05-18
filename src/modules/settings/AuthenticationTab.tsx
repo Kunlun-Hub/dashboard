@@ -11,6 +11,7 @@ import { notify } from "@components/Notification";
 import Paragraph from "@components/Paragraph";
 import { Popover, PopoverContent, PopoverTrigger } from "@components/Popover";
 import { ScrollArea } from "@components/ScrollArea";
+import { SmallBadge } from "@components/ui/SmallBadge";
 import {
   Select,
   SelectContent,
@@ -28,6 +29,7 @@ import {
   CalendarClock,
   ChevronsUpDown,
   ExternalLinkIcon,
+  KeyRound,
   ShieldIcon,
   ShieldUserIcon,
   TimerResetIcon,
@@ -278,6 +280,15 @@ export default function AuthenticationTab({ account }: Readonly<Props>) {
     },
   );
 
+  // Local MFA (UI only, not wired to the backend yet)
+  const [isLocalMFAEnabled, setIsLocalMFAEnabled] = useState<boolean>(() => {
+    try {
+      return account?.settings?.local_mfa_enabled || false;
+    } catch (error) {
+      return false;
+    }
+  });
+
   // Peer Expiration
   const [
     loginExpiration,
@@ -319,6 +330,7 @@ export default function AuthenticationTab({ account }: Readonly<Props>) {
     peerInactivityExpirationEnabled,
     peerInactivityExpiresIn,
     peerInactivityExpireInterval,
+    isLocalMFAEnabled,
   ]);
 
   const saveChanges = async () => {
@@ -345,6 +357,7 @@ export default function AuthenticationTab({ account }: Readonly<Props>) {
               peer_approval_enabled: peerApproval,
               user_approval_required: userApprovalRequired,
             },
+            local_mfa_enabled: isLocalMFAEnabled
           },
         } as Account)
         .then(() => {
@@ -455,6 +468,39 @@ export default function AuthenticationTab({ account }: Readonly<Props>) {
               disabled={!permission.settings.update}
             />
           </div>
+
+          {!account.settings.local_auth_disabled && account.settings.embedded_idp_enabled ?
+            (
+              <div className={"flex flex-col"}>
+                <FancyToggleSwitch
+                  value={isLocalMFAEnabled}
+                  onChange={setIsLocalMFAEnabled}
+                  dataCy={"local-mfa-enabled"}
+                  label={
+                    <>
+                      <KeyRound size={15} />
+                      Enable Local MFA
+                      <SmallBadge
+                        text={"Beta"}
+                        variant={"sky"}
+                        className={"text-[9px] leading-none py-[3px] px-[5px]"}
+                        textClassName={"top-0"}
+                      />
+                    </>
+                  }
+                  helpText={
+                    <>
+                      Require multi-factor authentication for users
+                      <br />
+                      authenticating with local credentials.
+                    </>
+                  }
+                  disabled={!permission.settings.update}
+                />
+              </div>
+            ) : null
+          }
+
 
           <div className={"flex flex-col"}>
             <FancyToggleSwitch

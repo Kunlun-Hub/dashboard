@@ -2,6 +2,7 @@
 
 import Badge from "@components/Badge";
 import Button from "@components/Button";
+import { wrapIPv6 } from "@utils/ip";
 import { PlusCircle, Server } from "lucide-react";
 import * as React from "react";
 import { usePermissions } from "@/contexts/PermissionsProvider";
@@ -24,7 +25,7 @@ export default function ReverseProxyTargetsCell({
   if (isL4Mode(reverseProxy.mode)) {
     const target = reverseProxy?.targets?.[0];
     const address = target.host
-      ? `${target.host}:${target.port}`
+      ? `${wrapIPv6(target.host)}:${target.port}`
       : `:${target.port}`;
 
     return (

@@ -11,6 +11,7 @@ import { useReverseProxies } from "@/contexts/ReverseProxiesProvider";
 import { useI18n } from "@/i18n/I18nProvider";
 import { ReverseProxyDomainType } from "@/interfaces/ReverseProxy";
 import { isNetBirdHosted } from "@utils/netbird";
+import TruncatedText from "@components/ui/TruncatedText";
 
 interface DomainSelectorProps {
   value: string;
@@ -26,7 +27,7 @@ export function CustomDomainSelector({
   className,
 }: DomainSelectorProps) {
   const router = useRouter();
-  const { domains } = useReverseProxies();
+  const { domains, isSelfHostedCluster } = useReverseProxies();
   const { t } = useI18n();
 
   const options: SelectOption[] = useMemo(() => {
@@ -36,15 +37,20 @@ export function CustomDomainSelector({
     domains
       ?.filter((d) => d.type === ReverseProxyDomainType.FREE)
       .forEach((domain) => {
+        const isSelfHosted = isSelfHostedCluster(
+          domain?.target_cluster ?? domain?.domain,
+        );
         opts.push({
           value: domain.domain,
           label: `.${domain.domain}`,
           renderItem: () => (
             <div className="flex items-center gap-2 w-full text-sm justify-between">
               <div className="flex items-center gap-2">
-                <span>.{domain.domain}</span>
+                <TruncatedText text={`.${domain.domain}`} maxWidth={"260px"} />
               </div>
-              {isNetBirdHosted() ? (
+              {isSelfHosted ? (
+                <SmallBadge text="Self-hosted" variant="sky" size="md" />
+              ) : isNetBirdHosted() ? (
                 <SmallBadge text={t("reverseProxy.freeBadge")} variant="green" size="md" />
               ) : (
                 <SmallBadge text={t("reverseProxy.clusterBadge")} variant="green" size="md" />
@@ -85,7 +91,7 @@ export function CustomDomainSelector({
     });
 
     return opts;
-  }, [domains, t]);
+  }, [domains, isSelfHostedCluster, t]);
 
   const handleChange = (selectedValue: string) => {
     if (selectedValue === "add_custom") {
@@ -100,7 +106,7 @@ export function CustomDomainSelector({
       value={value}
       onChange={handleChange}
       options={options}
-      popoverWidth={335}
+      popoverWidth={380}
       showSearch={true}
       searchPlaceholder={t("reverseProxy.searchDomains")}
       disabled={disabled}

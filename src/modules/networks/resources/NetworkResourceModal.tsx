@@ -19,6 +19,7 @@ import { HelpTooltip } from "@components/HelpTooltip";
 import { PeerGroupSelector } from "@components/PeerGroupSelector";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@components/Tabs";
 import { useApiCall } from "@utils/api";
+import { normalizeHostCIDR } from "@utils/ip";
 import { useDialog } from "@/contexts/DialogProvider";
 import { usePolicies } from "@/contexts/PoliciesProvider";
 import { useI18n } from "@/i18n/I18nProvider";
@@ -178,7 +179,7 @@ export function ResourceModalContent({
     const promise = create({
       name,
       description,
-      address,
+      address: normalizeHostCIDR(address),
       groups: savedGroups ? savedGroups.map((g) => g.id) : undefined,
       enabled,
     }).then(async (r) => {
@@ -202,7 +203,7 @@ export function ResourceModalContent({
     const promise = update({
       name,
       description,
-      address,
+      address: normalizeHostCIDR(address),
       groups: savedGroups ? savedGroups.map((g) => g.id) : undefined,
       enabled,
     }).then(async (r) => {

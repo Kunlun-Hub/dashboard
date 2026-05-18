@@ -21,8 +21,10 @@ export function useReverseProxyAddress(target: Target | undefined) {
     if (!resourceAddress) return false;
     if (!cidr.isValidCIDR(resourceAddress)) return false;
     const parts = resourceAddress.split("/");
-    const mask = parts.length === 2 ? parseInt(parts[1], 10) : 32;
-    return mask < 32;
+    if (parts.length !== 2) return false;
+    const mask = parseInt(parts[1], 10);
+    const hostMask = resourceAddress.includes(":") ? 128 : 32;
+    return mask < hostMask;
   }, [target?.type, resourceAddress]);
 
   const cidrInfo = useMemo(() => {
@@ -91,7 +93,7 @@ export default function ReverseProxyAddressInput({
       value={target?.host ?? ""}
       onChange={(e) => {
         const host = isHostEditable
-          ? e.target.value.replace(/[^0-9.]/g, "")
+          ? e.target.value.replace(/[^0-9a-fA-F.:]/g, "")
           : e.target.value;
         onChange((prev) => prev && { ...prev, host });
       }}
