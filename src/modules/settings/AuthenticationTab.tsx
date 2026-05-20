@@ -11,7 +11,6 @@ import { notify } from "@components/Notification";
 import Paragraph from "@components/Paragraph";
 import { Popover, PopoverContent, PopoverTrigger } from "@components/Popover";
 import { ScrollArea } from "@components/ScrollArea";
-import { SmallBadge } from "@components/ui/SmallBadge";
 import {
   Select,
   SelectContent,
@@ -19,12 +18,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@components/Select";
+import { SmallBadge } from "@components/ui/SmallBadge";
 import { useExpirationState } from "@hooks/useExpirationState";
 import { convertToSeconds } from "@hooks/useTimeFormatter";
 import * as Tabs from "@radix-ui/react-tabs";
-import { Command, CommandGroup, CommandList } from "cmdk";
 import { useApiCall } from "@utils/api";
 import { cn } from "@utils/helpers";
+import { Command, CommandGroup, CommandList } from "cmdk";
 import {
   CalendarClock,
   ChevronsUpDown,
@@ -39,12 +39,12 @@ import React, { useState } from "react";
 import { useSWRConfig } from "swr";
 import SettingsIcon from "@/assets/icons/SettingsIcon";
 import { usePermissions } from "@/contexts/PermissionsProvider";
-import { useHasChanges } from "@/hooks/useHasChanges";
+import { useElementSize } from "@/hooks/useElementSize";
 import { useEmbeddedIdentityProviders } from "@/hooks/useEmbeddedIdentityProviders";
+import { useHasChanges } from "@/hooks/useHasChanges";
 import { useI18n } from "@/i18n/I18nProvider";
 import { Account } from "@/interfaces/Account";
 import { getSSOIdentityProviderLabelByType } from "@/interfaces/IdentityProvider";
-import { useElementSize } from "@/hooks/useElementSize";
 
 type Props = {
   account: Account;
@@ -345,7 +345,7 @@ export default function AuthenticationTab({ account }: Readonly<Props>) {
           settings: {
             ...account.settings,
             login_method: loginMethod,
-            enabled_login_options: enabledLoginOptions.length > 0 ? enabledLoginOptions : undefined,
+            enabled_login_options: enabledLoginOptions,
             peer_login_expiration_enabled: loginExpiration,
             peer_login_expiration: loginExpiration ? expiration : 86400,
             peer_inactivity_expiration_enabled: loginExpiration
