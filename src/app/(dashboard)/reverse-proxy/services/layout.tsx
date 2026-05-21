@@ -3,6 +3,6 @@ import type { Metadata } from "next";
 import BlankLayout from "@/layouts/BlankLayout";
 
 export const metadata: Metadata = {
-  title: `Services - Reverse Proxy - ${globalMetaTitle}`,
+  title: `服务 - 反向代理 - ${globalMetaTitle}`,
 };
 export default BlankLayout;

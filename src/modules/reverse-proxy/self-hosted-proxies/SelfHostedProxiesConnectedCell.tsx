@@ -1,5 +1,6 @@
 import Badge from "@components/Badge";
 import { Server } from "lucide-react";
+import { useI18n } from "@/i18n/I18nProvider";
 import { ReverseProxyCluster } from "@/interfaces/ReverseProxy";
 
 type Props = {
@@ -9,6 +10,7 @@ type Props = {
 export default function SelfHostedProxiesConnectedCell({
   cluster,
 }: Readonly<Props>) {
+  const { t } = useI18n();
   const count = cluster.connected_proxies;
   return (
     <div className="flex items-center w-full">
@@ -16,7 +18,7 @@ export default function SelfHostedProxiesConnectedCell({
         <Server size={11} className={"relative -top-[0.5px]"} />
         <div>
           <span className="font-medium text-xs">
-            {count > 0 ? count : "No Proxies Connected"}
+            {count > 0 ? count : t("reverseProxy.noProxiesConnected")}
           </span>
         </div>
       </Badge>

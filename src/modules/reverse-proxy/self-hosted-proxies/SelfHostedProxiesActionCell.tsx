@@ -6,6 +6,7 @@ import * as React from "react";
 import { useSWRConfig } from "swr";
 import { useDialog } from "@/contexts/DialogProvider";
 import { usePermissions } from "@/contexts/PermissionsProvider";
+import { useI18n } from "@/i18n/I18nProvider";
 import { ReverseProxyCluster } from "@/interfaces/ReverseProxy";
 
 type Props = {
@@ -19,14 +20,14 @@ export default function SelfHostedProxiesActionCell({
   const request = useApiCall<ReverseProxyCluster>("/reverse-proxies/clusters");
   const { mutate } = useSWRConfig();
   const { permission } = usePermissions();
+  const { t } = useI18n();
 
   const handleDelete = async () => {
     const choice = await confirm({
-      title: `Delete '${cluster.address}'?`,
-      description:
-        "Are you sure you want to delete this proxy cluster? This action cannot be undone.",
-      confirmText: "Delete",
-      cancelText: "Cancel",
+      title: t("reverseProxy.deleteClusterTitle", { name: cluster.address }),
+      description: t("reverseProxy.deleteClusterDescription"),
+      confirmText: t("actions.delete"),
+      cancelText: t("actions.cancel"),
       type: "danger",
       maxWidthClass: "max-w-md",
     });
@@ -34,13 +35,13 @@ export default function SelfHostedProxiesActionCell({
 
     notify({
       title: cluster.address,
-      description: "Proxy cluster was successfully deleted",
+      description: t("reverseProxy.clusterDeleted"),
       promise: request
         .del({}, `/${encodeURIComponent(cluster.address)}`)
         .then(() => {
           mutate("/reverse-proxies/clusters");
         }),
-      loadingMessage: "Deleting the proxy cluster...",
+      loadingMessage: t("reverseProxy.clusterDeleting"),
     });
   };
 
@@ -53,7 +54,7 @@ export default function SelfHostedProxiesActionCell({
         disabled={!permission?.services?.delete}
       >
         <Trash2 size={16} />
-        Delete
+        {t("actions.delete")}
       </Button>
     </div>
   );

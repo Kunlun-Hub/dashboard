@@ -1,5 +1,6 @@
 import Button from "@components/Button";
 import { Callout } from "@components/Callout";
+import HelpText from "@components/HelpText";
 import InlineLink from "@components/InlineLink";
 import { Input } from "@components/Input";
 import { Label } from "@components/Label";
@@ -11,6 +12,11 @@ import {
 } from "@components/modal/Modal";
 import ModalHeader from "@components/modal/ModalHeader";
 import Paragraph from "@components/Paragraph";
+import {
+  SelectDropdown,
+  SelectOption,
+} from "@components/select/SelectDropdown";
+import Separator from "@components/Separator";
 import { validator } from "@utils/helpers";
 import { ExternalLinkIcon, GlobeIcon, ServerIcon } from "lucide-react";
 import * as React from "react";
@@ -22,13 +28,7 @@ import {
   REVERSE_PROXY_CUSTOM_DOMAINS_DOCS_LINK,
   ReverseProxyDomainType,
 } from "@/interfaces/ReverseProxy";
-import HelpText from "@components/HelpText";
-import Separator from "@components/Separator";
 import { isNetBirdHosted } from "@/utils/netbird";
-import {
-  SelectDropdown,
-  SelectOption,
-} from "@components/select/SelectDropdown";
 
 type Props = {
   open: boolean;
@@ -112,8 +112,8 @@ export const CustomDomainModal = ({
                   {t("reverseProxy.netbirdStatus")}
                 </InlineLink>{" "}
                 {t("reverseProxy.customDomainNoClusterHostedSuffix")}{" "}
-                <InlineLink href={"mailto:support@netbird.io"}>
-                  support@netbird.io
+                <InlineLink href={"mailto:support@cloink.4w.ink"}>
+                  support@cloink.4w.ink
                 </InlineLink>
               </Callout>
             ) : (
@@ -149,9 +149,7 @@ export const CustomDomainModal = ({
 
               <div>
                 <Label>{t("reverseProxy.targetProxyCluster")}</Label>
-                <HelpText>
-                  {t("reverseProxy.targetProxyClusterHelp")}
-                </HelpText>
+                <HelpText>{t("reverseProxy.targetProxyClusterHelp")}</HelpText>
                 <SelectDropdown
                   showSearch={false}
                   value={selectedCluster}

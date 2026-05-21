@@ -31,6 +31,7 @@ export const messages = {
     "common.delete": "Delete",
     "common.disabled": "Disabled",
     "common.none": "None",
+    "common.all": "All",
     "common.moreCount": "+ {count} more",
     "common.remove": "Remove",
     "common.learnMorePrefix": "Learn more about",
@@ -65,8 +66,21 @@ export const messages = {
     "nav.proxyEvents": "Proxy Events",
     "nav.networkLogs": "Network Logs",
     "nav.dnsLogs": "DNS Logs",
+    "nav.relays": "Relays",
     "nav.settings": "Settings",
     "nav.documentation": "Documentation",
+    "relays.title": "Relays",
+    "relays.description":
+      "Monitor the relay nodes distributed to clients, their reachability, and the number of clients currently registered on each node.",
+    "relays.address": "Relay Address",
+    "relays.registeredClients": "Registered Clients",
+    "relays.lastChecked": "Last Checked",
+    "relays.searchPlaceholder": "Search by relay address or status...",
+    "relays.online": "Online",
+    "relays.offline": "Offline",
+    "relays.emptyTitle": "No relays configured",
+    "relays.emptyDescription":
+      "Configure relay addresses in the management server to improve connectivity for restrictive networks.",
     "overview.title": "Overview",
     "overview.deviceDistribution": "Network Device Distribution",
     "overview.deviceTypeDistribution": "Device Type Distribution",
@@ -682,6 +696,45 @@ export const messages = {
       "Cloink's Reverse Proxy is currently in beta and available at no cost during this period. Features, functionality, and pricing are subject to change upon release.",
     "reverseProxy.betaSelfHosted":
       "Cloink's Reverse Proxy is currently in beta. Features and functionality are subject to change upon release.",
+    "reverseProxy.selfHostedProxies": "Self-Hosted Proxies",
+    "reverseProxy.selfHostedDescription":
+      "Set up self-hosted proxies on your own infrastructure for full control over traffic and geographic location.",
+    "reverseProxy.selfHostedSearchPlaceholder":
+      "Search by proxy cluster domain...",
+    "reverseProxy.selfHostedEmptyTitle":
+      "Set Up Your Own Self-Hosted Proxy Cluster",
+    "reverseProxy.setupProxy": "Set Up Proxy",
+    "reverseProxy.setupProxyDescription": "Set up a self-hosted reverse proxy",
+    "reverseProxy.proxyCluster": "Proxy Cluster",
+    "reverseProxy.connectedProxies": "Connected Proxies",
+    "reverseProxy.noProxiesConnected": "No Proxies Connected",
+    "reverseProxy.deleteClusterTitle": "Delete '{name}'?",
+    "reverseProxy.deleteClusterDescription":
+      "Are you sure you want to delete this proxy cluster? This action cannot be undone.",
+    "reverseProxy.clusterDeleted": "Proxy cluster was successfully deleted",
+    "reverseProxy.clusterDeleting": "Deleting the proxy cluster...",
+    "reverseProxy.proxyToken": "Proxy Token",
+    "reverseProxy.proxyTokenFailed": "Failed to generate proxy token",
+    "reverseProxy.proxyTokenGenerating": "Generating proxy token...",
+    "reverseProxy.runProxy": "Run the Proxy",
+    "reverseProxy.selfHostedDomainHelp":
+      "Enter a domain name that will be used for your proxy.",
+    "reverseProxy.selfHostedDomainPlaceholder": "e.g., proxy.company.com",
+    "reverseProxy.selfHostedRequirements":
+      "In order to run the proxy, please make sure your machine meets the following requirements:",
+    "reverseProxy.publiclyAccessibleIp": "Publicly accessible IP address",
+    "reverseProxy.dockerInstalled": "installed and running",
+    "reverseProxy.ports80And443": "Port 80 and 443",
+    "reverseProxy.portsOpen": "open and not in use",
+    "reverseProxy.configureDns": "Configure DNS",
+    "reverseProxy.configureDnsHelp":
+      "Add the following DNS records pointing to your machine's public IP address.",
+    "reverseProxy.aRecord": "A Record",
+    "reverseProxy.yourMachineIp": "Your machine's IP",
+    "reverseProxy.runProxyWithDocker": "Run the Proxy with Docker",
+    "reverseProxy.runProxyWithDockerHelp":
+      "Run the following command on your machine to start the proxy.",
+    "reverseProxy.finishSetup": "Finish Setup",
     "networks.title": "Networks",
     "networks.description":
       "Networks allow you to access internal resources in LANs and VPCs without installing Cloink on every machine.",
@@ -1736,6 +1789,7 @@ export const messages = {
     "peerSsh.desktopClient": "Desktop Client",
     "peerSsh.cliStepIntro":
       "If you are using Cloink via CLI, you can enable SSH by running",
+    "peerSsh.cliDownComment": "if Cloink is already running",
     "peerSsh.desktopStepPrefix":
       "If you are using Cloink via the Desktop Client, click the Cloink tray icon, go to",
     "peerSsh.settings": "Settings",
@@ -3014,6 +3068,7 @@ export const messages = {
     "common.delete": "删除",
     "common.disabled": "已禁用",
     "common.none": "无",
+    "common.all": "全部",
     "common.moreCount": "+ 另外 {count} 项",
     "common.learnMorePrefix": "了解更多关于",
     "common.inDocumentationSuffix": "的内容，请查看我们的文档。",
@@ -3047,8 +3102,21 @@ export const messages = {
     "nav.proxyEvents": "代理事件",
     "nav.networkLogs": "网络日志",
     "nav.dnsLogs": "DNS 日志",
+    "nav.relays": "中继",
     "nav.settings": "设置",
     "nav.documentation": "文档",
+    "relays.title": "中继",
+    "relays.description":
+      "查看下发给客户端的中继节点、节点可达状态，以及每个节点当前注册的客户端数量。",
+    "relays.address": "中继地址",
+    "relays.registeredClients": "注册客户端",
+    "relays.lastChecked": "最后检查",
+    "relays.searchPlaceholder": "按中继地址或状态搜索...",
+    "relays.online": "在线",
+    "relays.offline": "离线",
+    "relays.emptyTitle": "尚未配置中继",
+    "relays.emptyDescription":
+      "在管理服务中配置中继地址后，可提升受限网络环境下的连接成功率。",
     "overview.title": "总览",
     "overview.deviceDistribution": "全网设备分布",
     "overview.deviceTypeDistribution": "设备类型分布",
@@ -3607,6 +3675,42 @@ export const messages = {
       "Cloink 反向代理目前处于测试阶段，在此期间可免费使用。功能、能力以及定价在正式发布时都可能发生变化。",
     "reverseProxy.betaSelfHosted":
       "Cloink 反向代理目前处于测试阶段。功能与能力在正式发布时可能发生变化。",
+    "reverseProxy.selfHostedProxies": "自托管代理",
+    "reverseProxy.selfHostedDescription":
+      "在你自己的基础设施上部署自托管代理，完全掌控流量转发和地理位置。",
+    "reverseProxy.selfHostedSearchPlaceholder": "按代理集群域名搜索...",
+    "reverseProxy.selfHostedEmptyTitle": "设置你自己的自托管代理集群",
+    "reverseProxy.setupProxy": "设置代理",
+    "reverseProxy.setupProxyDescription": "设置一个自托管反向代理",
+    "reverseProxy.proxyCluster": "代理集群",
+    "reverseProxy.connectedProxies": "已连接代理",
+    "reverseProxy.noProxiesConnected": "暂无已连接代理",
+    "reverseProxy.deleteClusterTitle": "删除“{name}”？",
+    "reverseProxy.deleteClusterDescription":
+      "确定要删除这个代理集群吗？此操作无法撤销。",
+    "reverseProxy.clusterDeleted": "代理集群已成功删除",
+    "reverseProxy.clusterDeleting": "正在删除代理集群...",
+    "reverseProxy.proxyToken": "代理令牌",
+    "reverseProxy.proxyTokenFailed": "代理令牌生成失败",
+    "reverseProxy.proxyTokenGenerating": "正在生成代理令牌...",
+    "reverseProxy.runProxy": "运行代理",
+    "reverseProxy.selfHostedDomainHelp": "输入用于此代理的域名。",
+    "reverseProxy.selfHostedDomainPlaceholder": "例如：proxy.company.com",
+    "reverseProxy.selfHostedRequirements":
+      "运行代理前，请确认你的机器满足以下要求：",
+    "reverseProxy.publiclyAccessibleIp": "可公网访问的 IP 地址",
+    "reverseProxy.dockerInstalled": "已安装并正在运行",
+    "reverseProxy.ports80And443": "80 和 443 端口",
+    "reverseProxy.portsOpen": "已开放且未被占用",
+    "reverseProxy.configureDns": "配置 DNS",
+    "reverseProxy.configureDnsHelp":
+      "添加以下 DNS 记录，并指向你机器的公网 IP 地址。",
+    "reverseProxy.aRecord": "A 记录",
+    "reverseProxy.yourMachineIp": "你的机器 IP",
+    "reverseProxy.runProxyWithDocker": "使用 Docker 运行代理",
+    "reverseProxy.runProxyWithDockerHelp":
+      "在你的机器上运行以下命令来启动代理。",
+    "reverseProxy.finishSetup": "完成设置",
     "networks.title": "网络",
     "networks.description":
       "网络功能让你无需在每台机器上都安装 Cloink，也能访问局域网和 VPC 中的内部资源。",
@@ -4594,6 +4698,7 @@ export const messages = {
     "peerSsh.desktopClient": "桌面客户端",
     "peerSsh.cliStepIntro":
       "如果你通过 CLI 使用 Cloink，可以运行以下命令启用 SSH：",
+    "peerSsh.cliDownComment": "如果 Cloink 已在运行",
     "peerSsh.desktopStepPrefix":
       "如果你通过 Cloink 桌面客户端使用，请点击 Cloink 托盘图标，进入",
     "peerSsh.settings": "设置",

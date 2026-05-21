@@ -1,22 +1,27 @@
 import Button from "@components/Button";
 import { DropdownMenuItem } from "@components/DropdownMenu";
+import { getOperatingSystem } from "@hooks/useOperatingSystem";
 import { CircleHelpIcon, TerminalIcon } from "lucide-react";
 import * as React from "react";
 import { useState } from "react";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useI18n } from "@/i18n/I18nProvider";
+import { OperatingSystem } from "@/interfaces/OperatingSystem";
 import { Peer } from "@/interfaces/Peer";
 import { SSHCredentialsModal } from "@/modules/remote-access/ssh/SSHCredentialsModal";
 import { SSHTooltip } from "@/modules/remote-access/ssh/SSHTooltip";
-import { getOperatingSystem } from "@hooks/useOperatingSystem";
-import { OperatingSystem } from "@/interfaces/OperatingSystem";
 
 type Props = {
   peer: Peer;
   isDropdown?: boolean;
+  onOpenCredentials?: () => void;
 };
 
-export const SSHButton = ({ peer, isDropdown = false }: Props) => {
+export const SSHButton = ({
+  peer,
+  isDropdown = false,
+  onOpenCredentials,
+}: Props) => {
   const [modal, setModal] = useState(false);
   const { permission } = usePermissions();
   const { t } = useI18n();
@@ -30,10 +35,18 @@ export const SSHButton = ({ peer, isDropdown = false }: Props) => {
   const os = getOperatingSystem(peer?.os);
   const isSSHSupported = os !== OperatingSystem.IOS;
 
+  const openCredentials = () => {
+    if (onOpenCredentials) {
+      onOpenCredentials();
+      return;
+    }
+    setModal(true);
+  };
+
   return (
     isSSHSupported && (
       <>
-        {modal && (
+        {!onOpenCredentials && modal && (
           <SSHCredentialsModal
             open={modal}
             onOpenChange={setModal}
@@ -49,7 +62,7 @@ export const SSHButton = ({ peer, isDropdown = false }: Props) => {
           >
             {isDropdown ? (
               <DropdownMenuItem
-                onClick={() => setModal(true)}
+                onClick={openCredentials}
                 disabled={disabled}
                 className={"w-full"}
               >
@@ -62,7 +75,7 @@ export const SSHButton = ({ peer, isDropdown = false }: Props) => {
               <Button
                 variant="secondary"
                 size="sm"
-                onClick={() => setModal(true)}
+                onClick={openCredentials}
                 disabled={disabled}
               >
                 <TerminalIcon size={16} />

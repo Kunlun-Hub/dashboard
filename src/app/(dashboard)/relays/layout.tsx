@@ -3,6 +3,6 @@ import type { Metadata } from "next";
 import BlankLayout from "@/layouts/BlankLayout";
 
 export const metadata: Metadata = {
-  title: `自定义域名 - 反向代理 - ${globalMetaTitle}`,
+  title: `Relays - ${globalMetaTitle}`,
 };
 export default BlankLayout;

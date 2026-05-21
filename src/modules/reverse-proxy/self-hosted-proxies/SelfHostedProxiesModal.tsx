@@ -1,21 +1,22 @@
 import Button from "@components/Button";
 import { Callout } from "@components/Callout";
-import { notify } from "@components/Notification";
 import CardTable from "@components/CardTable";
 import Code from "@components/Code";
 import HelpText from "@components/HelpText";
+import InlineLink from "@components/InlineLink";
 import { Input } from "@components/Input";
 import { Label } from "@components/Label";
-import InlineLink from "@components/InlineLink";
 import {
   Modal,
   ModalClose,
   ModalContent,
   ModalFooter,
 } from "@components/modal/Modal";
-import Paragraph from "@components/Paragraph";
 import ModalHeader from "@components/modal/ModalHeader";
+import { notify } from "@components/Notification";
+import Paragraph from "@components/Paragraph";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@components/Tabs";
+import { cn, validator } from "@utils/helpers";
 import {
   ExternalLinkIcon,
   GlobeIcon,
@@ -26,13 +27,13 @@ import {
 } from "lucide-react";
 import React, { useCallback, useMemo, useState } from "react";
 import { useSWRConfig } from "swr";
-import { useApiCall } from "@/utils/api";
-import { cn, validator } from "@utils/helpers";
-import { GRPC_API_ORIGIN, isNetBirdHosted } from "@/utils/netbird";
+import { useI18n } from "@/i18n/I18nProvider";
 import {
   REVERSE_PROXY_CLUSTERS_DOCS_LINK,
   ReverseProxyClusterToken,
 } from "@/interfaces/ReverseProxy";
+import { useApiCall } from "@/utils/api";
+import { GRPC_API_ORIGIN, isNetBirdHosted } from "@/utils/netbird";
 
 type Props = {
   open: boolean;
@@ -41,6 +42,7 @@ type Props = {
 
 export const SelfHostedProxiesModal = ({ open, onOpenChange }: Props) => {
   const { mutate } = useSWRConfig();
+  const { t } = useI18n();
   const [tab, setTab] = useState("domain");
   const [domain, setDomain] = useState("");
   const [token, setToken] = useState("");
@@ -58,10 +60,10 @@ export const SelfHostedProxiesModal = ({ open, onOpenChange }: Props) => {
       preventLeadingAndTrailingDots: true,
     });
     if (!isValid) {
-      return "Please enter a valid TLD domain, e.g., company.com";
+      return t("reverseProxy.customDomainError");
     }
     return "";
-  }, [domain]);
+  }, [domain, t]);
 
   const managementUrl = isNetBirdHosted()
     ? "https://api.netbird.io"
@@ -94,15 +96,15 @@ export const SelfHostedProxiesModal = ({ open, onOpenChange }: Props) => {
       });
 
     notify({
-      title: "Proxy Token",
-      description: "Failed to generate proxy token",
+      title: t("reverseProxy.proxyToken"),
+      description: t("reverseProxy.proxyTokenFailed"),
       promise,
-      loadingMessage: "Generating proxy token...",
+      loadingMessage: t("reverseProxy.proxyTokenGenerating"),
       showOnlyError: true,
       preventSuccessToast: true,
     });
     return promise;
-  }, [domain, tokenRequest]);
+  }, [domain, t, tokenRequest]);
 
   const goToInstall = useCallback(() => {
     setTab("install");
@@ -119,8 +121,8 @@ export const SelfHostedProxiesModal = ({ open, onOpenChange }: Props) => {
       <ModalContent maxWidthClass={"relative max-w-[600px]"} showClose={true}>
         <ModalHeader
           icon={<ServerIcon size={16} />}
-          title={"Setup Proxy"}
-          description={"Setup a self-hosted reverse proxy"}
+          title={t("reverseProxy.setupProxy")}
+          description={t("reverseProxy.setupProxyDescription")}
           color={"netbird"}
         />
 
@@ -131,34 +133,32 @@ export const SelfHostedProxiesModal = ({ open, onOpenChange }: Props) => {
           <TabsList justify={"start"} className={"px-8"}>
             <TabsTrigger value={"domain"}>
               <GlobeIcon size={14} />
-              Domain
+              {t("reverseProxy.domain")}
             </TabsTrigger>
             <TabsTrigger
               value={"dns"}
               disabled={!domain.trim() || !!domainError}
             >
               <ListIcon size={14} />
-              DNS Records
+              {t("dns.records")}
             </TabsTrigger>
             <TabsTrigger
               value={"install"}
               disabled={!domain.trim() || !!domainError}
             >
               <SquareTerminalIcon size={14} />
-              Run the Proxy
+              {t("reverseProxy.runProxy")}
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value={"domain"} className={"pb-8"}>
             <div className={"px-8 flex flex-col gap-6"}>
               <div>
-                <Label>Domain</Label>
-                <HelpText>
-                  Enter a domain name that will be used for your proxy.
-                </HelpText>
+                <Label>{t("reverseProxy.domain")}</Label>
+                <HelpText>{t("reverseProxy.selfHostedDomainHelp")}</HelpText>
                 <Input
                   autoFocus={true}
-                  placeholder={"e.g., proxy.company.com"}
+                  placeholder={t("reverseProxy.selfHostedDomainPlaceholder")}
                   value={domain}
                   error={domainError}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -167,23 +167,22 @@ export const SelfHostedProxiesModal = ({ open, onOpenChange }: Props) => {
                 />
               </div>
               <Callout variant={"info"}>
-                In order to run the proxy, please make sure your machine meets
-                the following requirements:
+                {t("reverseProxy.selfHostedRequirements")}
                 <ul className={"list-disc pl-4 mt-2 flex flex-col gap-1"}>
                   <li>
                     <span className={"text-white font-medium"}>
-                      Publicly accessible IP address
+                      {t("reverseProxy.publiclyAccessibleIp")}
                     </span>
                   </li>
                   <li>
                     <span className={"text-white font-medium"}>Docker</span>{" "}
-                    installed and running
+                    {t("reverseProxy.dockerInstalled")}
                   </li>
                   <li>
                     <span className={"text-white font-medium"}>
-                      Port 80 and 443
+                      {t("reverseProxy.ports80And443")}
                     </span>{" "}
-                    open and not in use
+                    {t("reverseProxy.portsOpen")}
                   </li>
                 </ul>
               </Callout>
@@ -193,35 +192,36 @@ export const SelfHostedProxiesModal = ({ open, onOpenChange }: Props) => {
           <TabsContent value={"dns"} className={"pb-8"}>
             <div className={"px-8 flex flex-col"}>
               <div>
-                <Label>Configure DNS</Label>
-                <HelpText>
-                  Add the following DNS records pointing to your machine&apos;s
-                  public IP address.
-                </HelpText>
+                <Label>{t("reverseProxy.configureDns")}</Label>
+                <HelpText>{t("reverseProxy.configureDnsHelp")}</HelpText>
               </div>
               <CardTable>
                 <CardTable.Header>
-                  <CardTable.HeaderCell width={120}>Type</CardTable.HeaderCell>
-                  <CardTable.HeaderCell>Name</CardTable.HeaderCell>
-                  <CardTable.HeaderCell>Content</CardTable.HeaderCell>
+                  <CardTable.HeaderCell width={120}>
+                    {t("table.type")}
+                  </CardTable.HeaderCell>
+                  <CardTable.HeaderCell>{t("table.name")}</CardTable.HeaderCell>
+                  <CardTable.HeaderCell>
+                    {t("table.content")}
+                  </CardTable.HeaderCell>
                 </CardTable.Header>
                 <CardTable.Body>
                   <CardTable.Row>
-                    <CardTable.Cell>A Record</CardTable.Cell>
+                    <CardTable.Cell>{t("reverseProxy.aRecord")}</CardTable.Cell>
                     <CardTable.Cell copy copyText={domain}>
                       {domain}
                     </CardTable.Cell>
                     <CardTable.Cell className={"italic"}>
-                      Your machine&apos;s IP
+                      {t("reverseProxy.yourMachineIp")}
                     </CardTable.Cell>
                   </CardTable.Row>
                   <CardTable.Row>
-                    <CardTable.Cell>A Record</CardTable.Cell>
+                    <CardTable.Cell>{t("reverseProxy.aRecord")}</CardTable.Cell>
                     <CardTable.Cell copy copyText={`*.${domain}`}>
                       {`*.${domain}`}
                     </CardTable.Cell>
                     <CardTable.Cell className={"italic"}>
-                      Your machine&apos;s IP
+                      {t("reverseProxy.yourMachineIp")}
                     </CardTable.Cell>
                   </CardTable.Row>
                 </CardTable.Body>
@@ -232,10 +232,8 @@ export const SelfHostedProxiesModal = ({ open, onOpenChange }: Props) => {
           <TabsContent value={"install"} className={"pb-8"}>
             <div className={"px-8 flex flex-col"}>
               <div>
-                <Label>Run the Proxy with Docker</Label>
-                <HelpText>
-                  Run the following command on your machine to start the proxy.
-                </HelpText>
+                <Label>{t("reverseProxy.runProxyWithDocker")}</Label>
+                <HelpText>{t("reverseProxy.runProxyWithDockerHelp")}</HelpText>
               </div>
               <Code
                 codeToCopy={dockerCommand}
@@ -248,7 +246,7 @@ export const SelfHostedProxiesModal = ({ open, onOpenChange }: Props) => {
                 {isGeneratingToken && (
                   <div className="absolute inset-0 z-10 flex items-center justify-center gap-2 text-nb-gray-100 bg-nb-gray-950/90">
                     <Loader2 size={16} className="animate-spin" />
-                    Generating proxy token...
+                    {t("reverseProxy.proxyTokenGenerating")}
                   </div>
                 )}
 
@@ -286,12 +284,12 @@ export const SelfHostedProxiesModal = ({ open, onOpenChange }: Props) => {
         <ModalFooter className={"items-center"}>
           <div className={"w-full"}>
             <Paragraph className={"text-sm mt-auto"}>
-              Learn more about
+              {t("common.learnMorePrefix")}
               <InlineLink
                 href={REVERSE_PROXY_CLUSTERS_DOCS_LINK}
                 target={"_blank"}
               >
-                Self-Hosted Proxies
+                {t("reverseProxy.selfHostedProxies")}
                 <ExternalLinkIcon size={12} />
               </InlineLink>
             </Paragraph>
@@ -300,34 +298,34 @@ export const SelfHostedProxiesModal = ({ open, onOpenChange }: Props) => {
             {tab === "domain" && (
               <>
                 <ModalClose asChild={true}>
-                  <Button variant={"secondary"}>Cancel</Button>
+                  <Button variant={"secondary"}>{t("actions.cancel")}</Button>
                 </ModalClose>
                 <Button
                   variant={"primary"}
                   onClick={() => setTab("dns")}
                   disabled={!domain.trim() || !!domainError}
                 >
-                  Continue
+                  {t("actions.continue")}
                 </Button>
               </>
             )}
             {tab === "dns" && (
               <>
                 <Button variant={"secondary"} onClick={() => setTab("domain")}>
-                  Back
+                  {t("actions.back")}
                 </Button>
                 <Button variant={"primary"} onClick={goToInstall}>
-                  Continue
+                  {t("actions.continue")}
                 </Button>
               </>
             )}
             {tab === "install" && (
               <>
                 <Button variant={"secondary"} onClick={() => setTab("dns")}>
-                  Back
+                  {t("actions.back")}
                 </Button>
                 <Button variant={"primary"} onClick={finishSetup}>
-                  Finish Setup
+                  {t("reverseProxy.finishSetup")}
                 </Button>
               </>
             )}

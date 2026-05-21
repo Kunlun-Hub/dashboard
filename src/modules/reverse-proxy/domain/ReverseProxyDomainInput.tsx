@@ -1,12 +1,12 @@
+import { Callout } from "@components/Callout";
 import HelpText from "@components/HelpText";
+import InlineLink from "@components/InlineLink";
 import { Input } from "@components/Input";
 import { Label } from "@components/Label";
-import { Callout } from "@components/Callout";
-import React from "react";
-import { CustomDomainSelector } from "./CustomDomainSelector";
 import { isNetBirdHosted } from "@utils/netbird";
-import InlineLink from "@components/InlineLink";
+import React from "react";
 import { useI18n } from "@/i18n/I18nProvider";
+import { CustomDomainSelector } from "./CustomDomainSelector";
 
 type Props = {
   subdomain: string;
@@ -81,8 +81,8 @@ export default function ReverseProxyDomainInput({
               {t("reverseProxy.netbirdStatus")}
             </InlineLink>{" "}
             {t("reverseProxy.clusterOfflineHostedMiddle")}{" "}
-            <InlineLink href={"mailto:support@netbird.io"}>
-              support@netbird.io
+            <InlineLink href={"mailto:support@cloink.4w.ink"}>
+              support@cloink.4w.ink
             </InlineLink>
           </Callout>
         ) : (

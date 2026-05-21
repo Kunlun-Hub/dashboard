@@ -10,6 +10,7 @@ import { ExternalLinkIcon } from "lucide-react";
 import React, { lazy, Suspense } from "react";
 import ReverseProxyIcon from "@/assets/icons/ReverseProxyIcon";
 import { usePermissions } from "@/contexts/PermissionsProvider";
+import { useI18n } from "@/i18n/I18nProvider";
 import { REVERSE_PROXY_CLUSTERS_DOCS_LINK } from "@/interfaces/ReverseProxy";
 import PageContainer from "@/layouts/PageContainer";
 
@@ -22,6 +23,7 @@ const SelfHostedProxiesTable = lazy(
 
 export default function ReverseProxyClustersPage() {
   const { permission } = usePermissions();
+  const { t } = useI18n();
 
   const { ref: headingRef, portalTarget } =
     usePortalElement<HTMLHeadingElement>();
@@ -32,31 +34,28 @@ export default function ReverseProxyClustersPage() {
         <Breadcrumbs>
           <Breadcrumbs.Item
             href={"/reverse-proxy/services"}
-            label={"Reverse Proxy"}
+            label={t("nav.reverseProxy")}
             icon={<ReverseProxyIcon size={16} />}
           />
           <Breadcrumbs.Item
             href={"/reverse-proxy/self-hosted-proxies"}
-            label={"Self-Hosted Proxies"}
+            label={t("reverseProxy.selfHostedProxies")}
             active={true}
           />
         </Breadcrumbs>
-        <h1 ref={headingRef}>Self-Hosted Proxies</h1>
+        <h1 ref={headingRef}>{t("reverseProxy.selfHostedProxies")}</h1>
+        <Paragraph>{t("reverseProxy.selfHostedDescription")}</Paragraph>
         <Paragraph>
-          Setup self-hosted proxies on your own infrastructure for full control
-          over traffic and geographic location.
-        </Paragraph>
-        <Paragraph>
-          Learn more about
+          {t("common.learnMorePrefix")}{" "}
           <InlineLink href={REVERSE_PROXY_CLUSTERS_DOCS_LINK} target={"_blank"}>
-            Self-Hosted Proxies
+            {t("reverseProxy.selfHostedProxies")}
             <ExternalLinkIcon size={12} />
-          </InlineLink>
-          in our documentation.
+          </InlineLink>{" "}
+          {t("common.inDocumentationSuffix")}
         </Paragraph>
       </div>
       <RestrictedAccess
-        page={"Self-Hosted Proxies"}
+        page={t("reverseProxy.selfHostedProxies")}
         hasAccess={permission?.services?.read}
       >
         <Suspense fallback={<SkeletonTable />}>

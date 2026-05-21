@@ -9,17 +9,21 @@ import {
 } from "@components/modal/Modal";
 import ModalHeader from "@components/modal/ModalHeader";
 import Paragraph from "@components/Paragraph";
+import { SegmentedTabs } from "@components/SegmentedTabs";
 import Separator from "@components/Separator";
 import Steps from "@components/Steps";
 import { Lightbox } from "@components/ui/Lightbox";
 import { Mark } from "@components/ui/Mark";
 import { cn } from "@utils/helpers";
-import { ExternalLinkIcon, PlusCircle, TerminalSquare } from "lucide-react";
+import {
+  ExternalLinkIcon,
+  MonitorCog,
+  PlusCircle,
+  TerminalSquare,
+} from "lucide-react";
 import * as React from "react";
 import { useState } from "react";
 import sshImage from "@/assets/ssh/ssh-client.png";
-import { SegmentedTabs } from "@components/SegmentedTabs";
-import NetBirdIcon from "@/assets/icons/NetBirdIcon";
 import { useI18n } from "@/i18n/I18nProvider";
 import { Peer } from "@/interfaces/Peer";
 import { PeerSSHPolicyModal } from "@/modules/peer/PeerSSHPolicyModal";
@@ -64,7 +68,7 @@ export const PeerSSHInstructions = ({
                 {t("peerSsh.cliClient")}
               </SegmentedTabs.Trigger>
               <SegmentedTabs.Trigger value={"gui"}>
-                <NetBirdIcon size={16} />
+                <MonitorCog size={16} />
                 {t("peerSsh.desktopClient")}
               </SegmentedTabs.Trigger>
             </SegmentedTabs.List>
@@ -73,21 +77,25 @@ export const PeerSSHInstructions = ({
           <Steps>
             {client === "cli" ? (
               <Steps.Step step={1}>
-                <p className={"font-normal"}>
-                  {t("peerSsh.cliStepIntro")}
-                </p>
-                <Code codeToCopy={"netbird down"}>
-                  <Code.Line>{`netbird down # if NetBird is already running`}</Code.Line>
+                <p className={"font-normal"}>{t("peerSsh.cliStepIntro")}</p>
+                <Code codeToCopy={"cloink down"}>
+                  <Code.Line>{`cloink down # ${t(
+                    "peerSsh.cliDownComment",
+                  )}`}</Code.Line>
                 </Code>
-                <Code>
-                  <Code.Line>{`netbird up --allow-server-ssh --enable-ssh-root`}</Code.Line>
+                <Code
+                  codeToCopy={"cloink up --allow-server-ssh --enable-ssh-root"}
+                >
+                  <Code.Line>{`cloink up --allow-server-ssh --enable-ssh-root`}</Code.Line>
                 </Code>
               </Steps.Step>
             ) : (
               <Steps.Step step={1}>
                 <p className={"font-normal"}>
-                  {t("peerSsh.desktopStepPrefix")} <Mark>{t("peerSsh.settings")}</Mark>{" "}
-                  {t("peerSsh.desktopStepMiddle")} <Mark>{t("peerSsh.allowSsh")}</Mark>.{" "}
+                  {t("peerSsh.desktopStepPrefix")}{" "}
+                  <Mark>{t("peerSsh.settings")}</Mark>{" "}
+                  {t("peerSsh.desktopStepMiddle")}{" "}
+                  <Mark>{t("peerSsh.allowSsh")}</Mark>.{" "}
                   {t("peerSsh.desktopStepAdvancedPrefix")}{" "}
                   <Mark>{t("peerSsh.advancedSettings")}</Mark>{" "}
                   {t("peerSsh.desktopStepAdvancedSuffix")}
@@ -113,7 +121,8 @@ export const PeerSSHInstructions = ({
             <Steps.Step step={3} line={false}>
               <p className={"font-normal"}>
                 {t("peerSsh.finishStepPrefix")} <br />
-                {t("peerSsh.finishStepMiddle")} <Mark>{t("peerSsh.confirmAndEnable")}</Mark>{" "}
+                {t("peerSsh.finishStepMiddle")}{" "}
+                <Mark>{t("peerSsh.confirmAndEnable")}</Mark>{" "}
                 {t("peerSsh.finishStepSuffix")}
               </p>
             </Steps.Step>

@@ -1,7 +1,9 @@
 "use client";
 
 import Button from "@components/Button";
+import { Callout } from "@components/Callout";
 import Card from "@components/Card";
+import InlineLink from "@components/InlineLink";
 import {
   Modal,
   ModalClose,
@@ -9,23 +11,21 @@ import {
   ModalFooter,
 } from "@components/modal/Modal";
 import ModalHeader from "@components/modal/ModalHeader";
+import Paragraph from "@components/Paragraph";
 import Steps from "@components/Steps";
 import { GradientFadedBackground } from "@components/ui/GradientFadedBackground";
 import { Mark } from "@components/ui/Mark";
 import { ExternalLinkIcon, GlobeIcon } from "lucide-react";
 import * as React from "react";
-import { Callout } from "@components/Callout";
 import { useReverseProxies } from "@/contexts/ReverseProxiesProvider";
+import { useI18n } from "@/i18n/I18nProvider";
 import {
   REVERSE_PROXY_CLUSTERS_DOCS_LINK,
   REVERSE_PROXY_DOMAIN_VERIFICATION_LINK,
   ReverseProxyDomain,
   ReverseProxyDomainType,
 } from "@/interfaces/ReverseProxy";
-import Paragraph from "@components/Paragraph";
-import InlineLink from "@components/InlineLink";
 import { isNetBirdHosted } from "@/utils/netbird";
-import { useI18n } from "@/i18n/I18nProvider";
 
 type Props = {
   open: boolean;
@@ -72,7 +72,9 @@ export const CustomDomainVerificationModal = ({
         <div className={"px-8 flex flex-col gap-0 pb-6"}>
           <Steps className={"pt-0 stepper-bg-variant"}>
             <Steps.Step step={1}>
-              <p className={"font-normal"}>{t("reverseProxy.verifyStepLogin")}</p>
+              <p className={"font-normal"}>
+                {t("reverseProxy.verifyStepLogin")}
+              </p>
             </Steps.Step>
             <Steps.Step step={2} line={false}>
               <p className={"font-normal"}>
@@ -99,14 +101,13 @@ export const CustomDomainVerificationModal = ({
                     {t("reverseProxy.netbirdStatus")}
                   </InlineLink>{" "}
                   {t("reverseProxy.customDomainNoClusterHostedSuffix")}{" "}
-                  <InlineLink href={"mailto:support@netbird.io"}>
-                    support@netbird.io
+                  <InlineLink href={"mailto:support@cloink.4w.ink"}>
+                    support@cloink.4w.ink
                   </InlineLink>
                 </Callout>
               ) : (
                 <Callout variant={"warning"}>
-                  {t("reverseProxy.customDomainNoClusterSelfHosted")}{" "}
-                  <br />
+                  {t("reverseProxy.customDomainNoClusterSelfHosted")} <br />
                   {t("common.learnMorePrefix")}{" "}
                   <InlineLink
                     href={REVERSE_PROXY_CLUSTERS_DOCS_LINK}
