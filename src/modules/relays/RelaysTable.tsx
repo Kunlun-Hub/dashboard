@@ -9,7 +9,7 @@ import { DataTableRowsPerPage } from "@components/table/DataTableRowsPerPage";
 import GetStartedTest from "@components/ui/GetStartedTest";
 import { SmallBadge } from "@components/ui/SmallBadge";
 import { ColumnDef, SortingState } from "@tanstack/react-table";
-import { PlusIcon, RadioTowerIcon } from "lucide-react";
+import { PlusIcon, RadioTowerIcon, Trash2Icon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import React, { useMemo } from "react";
 import { useSWRConfig } from "swr";
@@ -17,7 +17,7 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useI18n } from "@/i18n/I18nProvider";
 import { Relay } from "@/interfaces/Relay";
 import DeployRelayModal from "@/modules/relays/DeployRelayModal";
-import useFetchApi from "@/utils/api";
+import useFetchApi, { useApiCall } from "@/utils/api";
 
 type Props = {
   headingTarget?: HTMLHeadingElement | null;
@@ -28,6 +28,7 @@ export default function RelaysTable({ headingTarget }: Readonly<Props>) {
   const { mutate } = useSWRConfig();
   const path = usePathname();
   const [deployModal, setDeployModal] = React.useState(false);
+  const deleteRelay = useApiCall<unknown>("/relays", true).del;
   const { data: relays, isLoading } = useFetchApi<Relay[]>(
     "/relays",
     true,
@@ -104,6 +105,15 @@ export default function RelaysTable({ headingTarget }: Readonly<Props>) {
         },
       },
       {
+        accessorKey: "connected_clients",
+        header: ({ column }) => (
+          <DataTableHeader column={column}>
+            {t("relays.connectedClients")}
+          </DataTableHeader>
+        ),
+        cell: ({ row }) => row.original.connected_clients ?? "-",
+      },
+      {
         accessorKey: "registered_clients",
         header: ({ column }) => (
           <DataTableHeader column={column}>
@@ -131,8 +141,36 @@ export default function RelaysTable({ headingTarget }: Readonly<Props>) {
             row.address
           } ${row.status} ${row.error ?? ""}`,
       },
+      {
+        id: "actions",
+        cell: ({ row }) => {
+          const relay = row.original;
+          const canDelete = relay.registered && relay.id;
+          return (
+            <Button
+              variant={"danger-outline"}
+              size={"xs"}
+              disabled={!canDelete}
+              title={
+                canDelete
+                  ? t("relays.delete")
+                  : t("relays.staticRelayCannotDelete")
+              }
+              onClick={() => {
+                if (!relay.id) return;
+                if (!window.confirm(t("relays.deleteConfirm"))) return;
+                deleteRelay({}, "/" + encodeURIComponent(relay.id)).then(() => {
+                  mutate("/relays").then();
+                });
+              }}
+            >
+              <Trash2Icon size={14} />
+            </Button>
+          );
+        },
+      },
     ],
-    [t],
+    [deleteRelay, mutate, t],
   );
 
   const [sorting, setSorting] = useLocalStorage<SortingState>(
