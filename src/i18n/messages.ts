@@ -67,6 +67,8 @@ export const messages = {
     "nav.networkLogs": "Network Logs",
     "nav.dnsLogs": "DNS Logs",
     "nav.relays": "Relays",
+    "nav.relayOverview": "Relay Overview",
+    "nav.relayControl": "Relay Control",
     "nav.settings": "Settings",
     "nav.documentation": "Documentation",
     "relays.title": "Relays",
@@ -92,37 +94,58 @@ export const messages = {
     "relays.deployDescription":
       "Generate a TLS-enabled Docker command for a relay that registers itself with this management server.",
     "relays.relayIdLabel": "Relay ID",
-    "relays.relayIdHelp": "Use a stable ID to distinguish servers that share the same DNS name.",
+    "relays.relayIdHelp":
+      "Use a stable ID to distinguish servers that share the same DNS name.",
     "relays.relayNameLabel": "Remark",
     "relays.relayNameHelp": "Optional display name shown in the relay list.",
     "relays.relayNamePlaceholder": "Hong Kong 01",
     "relays.domainLabel": "Relay Domain",
     "relays.domainHelp": "The public domain or IP clients can reach.",
     "relays.portLabel": "Relay Port",
-    "relays.portHelp": "TLS relay port. Use 443 unless you have a specific port plan.",
+    "relays.portHelp":
+      "TLS relay port. Use 443 unless you have a specific port plan.",
     "relays.imageTagLabel": "Image Tag",
     "relays.imageTagHelp": "Docker image tag to deploy.",
     "relays.stunPortsLabel": "STUN Ports",
-    "relays.stunPortsHelp": "Comma-separated UDP ports published for embedded STUN.",
+    "relays.stunPortsHelp":
+      "Comma-separated UDP ports published for embedded STUN.",
     "relays.certificateRequirement":
       "Before running this command, create ./certs in the deployment directory and place the relay domain certificate as fullchain.pem and privkey.key. Relay deployment always uses rels/TLS.",
     "relays.managementUrlLabel": "Management URL",
-    "relays.managementUrlHelp": "Automatically detected from the current dashboard address.",
+    "relays.managementUrlHelp":
+      "Automatically detected from the current dashboard address.",
     "relays.installCommand": "Install Command",
-    "relays.installCommandHelp": "Expand to choose Docker or Docker Compose deployment.",
+    "relays.installCommandHelp":
+      "Expand to choose Docker or Docker Compose deployment.",
     "relays.dockerMode": "Docker",
     "relays.composeMode": "Docker Compose",
     "relays.downloadCompose": "Download Compose",
     "relays.composeWriteCommand": "Write compose file with EOF",
     "relays.composeFile": "docker-compose.yml",
     "relays.generatingToken": "Generating relay setup token...",
-    "relays.tokenReady": "Setup token is ready. Copy the command and run it on the relay server.",
+    "relays.tokenReady":
+      "Setup token is ready. Copy the command and run it on the relay server.",
     "relays.tokenNotReady": "Setup token has not been generated yet.",
     "relays.tokenError": "Failed to generate relay setup token.",
     "relays.delete": "Delete relay",
     "relays.deleteConfirm":
       "Delete this relay registration record? If the relay container is still running, it will register again on the next heartbeat.",
-    "relays.staticRelayCannotDelete": "Static configured relays cannot be deleted here.",
+    "relays.staticRelayCannotDelete":
+      "Static configured relays cannot be deleted here.",
+    "relays.controlTitle": "Relay Control",
+    "relays.controlDescription":
+      "Choose preferred relays for groups or individual devices. Device preferences override group preferences.",
+    "relays.groupPreferenceTitle": "Preferred relays by group",
+    "relays.groupPreferenceHelp":
+      "Devices in the selected group receive these relay addresses first.",
+    "relays.peerPreferenceTitle": "Preferred relays for this device",
+    "relays.peerPreferenceHelp":
+      "Device-level settings override group relay preferences.",
+    "relays.controlSaved": "Relay preferences were saved.",
+    "relays.controlSaving": "Saving relay preferences...",
+    "relays.noRelayForControl":
+      "Deploy at least one relay before setting preferences.",
+    "relays.noControlTargets": "No targets available.",
     "overview.title": "Overview",
     "overview.deviceDistribution": "Network Device Distribution",
     "overview.deviceTypeDistribution": "Device Type Distribution",
@@ -3145,6 +3168,8 @@ export const messages = {
     "nav.networkLogs": "网络日志",
     "nav.dnsLogs": "DNS 日志",
     "nav.relays": "中继",
+    "nav.relayOverview": "中继概览",
+    "nav.relayControl": "中继控制",
     "nav.settings": "设置",
     "nav.documentation": "文档",
     "relays.title": "中继",
@@ -3170,7 +3195,8 @@ export const messages = {
     "relays.deployDescription":
       "生成启用 TLS 的 Docker 部署命令，中继启动后会主动向当前管理端注册并持续上报心跳。",
     "relays.relayIdLabel": "中继 ID",
-    "relays.relayIdHelp": "用于区分同一个域名背后的不同服务器，例如 HK-01、SZ-02。",
+    "relays.relayIdHelp":
+      "用于区分同一个域名背后的不同服务器，例如 HK-01、SZ-02。",
     "relays.relayNameLabel": "备注",
     "relays.relayNameHelp": "可选，展示在中继列表里，方便识别服务器。",
     "relays.relayNamePlaceholder": "香港 01",
@@ -3181,13 +3207,15 @@ export const messages = {
     "relays.imageTagLabel": "镜像标签",
     "relays.imageTagHelp": "要部署的 Docker 镜像标签。",
     "relays.stunPortsLabel": "STUN 端口",
-    "relays.stunPortsHelp": "内置 STUN 对外发布的 UDP 端口，多个端口用英文逗号分隔。",
+    "relays.stunPortsHelp":
+      "内置 STUN 对外发布的 UDP 端口，多个端口用英文逗号分隔。",
     "relays.certificateRequirement":
       "运行命令前，必须先在部署目录创建 ./certs，并放置中继域名证书：fullchain.pem 和 privkey.key。中继部署固定使用 rels/TLS。",
     "relays.managementUrlLabel": "管理端地址",
     "relays.managementUrlHelp": "根据当前后台访问地址自动带入。",
     "relays.installCommand": "安装命令",
-    "relays.installCommandHelp": "展开后可选择 Docker 或 Docker Compose 部署方式。",
+    "relays.installCommandHelp":
+      "展开后可选择 Docker 或 Docker Compose 部署方式。",
     "relays.dockerMode": "Docker 模式",
     "relays.composeMode": "Docker Compose 模式",
     "relays.downloadCompose": "下载 Compose",
@@ -3201,6 +3229,17 @@ export const messages = {
     "relays.deleteConfirm":
       "要删除这条中继注册记录吗？如果中继容器仍在运行，它会在下一次心跳时重新注册。",
     "relays.staticRelayCannotDelete": "配置文件里的静态中继不能在这里删除。",
+    "relays.controlTitle": "中继控制",
+    "relays.controlDescription":
+      "为设备组或单个设备指定首选中继。单设备设置优先于组设置。",
+    "relays.groupPreferenceTitle": "按组设置首选中继",
+    "relays.groupPreferenceHelp": "属于该组的设备会优先收到这些中继地址。",
+    "relays.peerPreferenceTitle": "设备首选中继",
+    "relays.peerPreferenceHelp": "单设备设置会覆盖按组设置的首选中继。",
+    "relays.controlSaved": "中继偏好已保存。",
+    "relays.controlSaving": "正在保存中继偏好...",
+    "relays.noRelayForControl": "至少部署一个中继后才能设置首选中继。",
+    "relays.noControlTargets": "暂无可配置对象。",
     "overview.title": "总览",
     "overview.deviceDistribution": "全网设备分布",
     "overview.deviceTypeDistribution": "设备类型分布",

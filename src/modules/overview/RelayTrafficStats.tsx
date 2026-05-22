@@ -13,8 +13,6 @@ import * as d3 from "d3";
 import dayjs from "dayjs";
 import React, { useEffect, useId, useMemo, useRef, useState } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
-import { NetworkLog } from "@/interfaces/NetworkLog";
-import { Pagination } from "@/interfaces/Pagination";
 import { useOverviewRefresh } from "@/modules/overview/OverviewRefreshContext";
 
 type RangeValue = "6h" | "12h" | "24h" | "3d" | "7d";
@@ -27,10 +25,19 @@ type TrafficPoint = {
   downloadTotal: number;
 };
 
+type TrafficSummaryPoint = {
+  timestamp: string;
+  rx_bytes: number;
+  tx_bytes: number;
+};
+
+type TrafficSummaryResponse = {
+  data: TrafficSummaryPoint[];
+};
+
 const WIDTH = 1320;
 const HEIGHT = 380;
 const MARGIN = { top: 28, right: 24, bottom: 46, left: 64 };
-const PAGE_SIZE = 10000;
 const ROUTED_CONNECTION_TYPE = "ROUTED";
 
 const rangeOptions: Array<{ value: RangeValue; hours: number; labelKey: string }> = [
@@ -49,10 +56,6 @@ const bucketSecondsForHours = (hours: number) => {
   return 2 * 60 * 60;
 };
 
-const eventTimestamp = (log: NetworkLog) => {
-  return log.events?.[0]?.timestamp ?? "";
-};
-
 const formatRate = (bytesPerSecond: number) => {
   return `${formatBytes(bytesPerSecond, bytesPerSecond >= 1024 * 1024 ? 2 : 1)}/s`;
 };
@@ -63,7 +66,7 @@ export function RelayTrafficStats() {
   const { t } = useI18n();
   const [range, setRange] = useState<RangeValue>("6h");
   const [now, setNow] = useState(() => dayjs());
-  const [logs, setLogs] = useState<NetworkLog[]>([]);
+  const [summary, setSummary] = useState<TrafficSummaryPoint[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const selectedRange = rangeOptions.find((option) => option.value === range) ?? rangeOptions[0];
   const endDate = now;
@@ -77,7 +80,7 @@ export function RelayTrafficStats() {
   const zoomRef = useRef<any>(null);
   const chartClipId = useId().replaceAll(":", "-");
   const { refreshTrigger, refreshInterval } = useOverviewRefresh();
-  const networkTrafficApi = useApiCall<Pagination<NetworkLog[]>>("/events/network-traffic", true);
+  const networkTrafficApi = useApiCall<TrafficSummaryResponse>("/events/network-traffic/summary", true);
   const networkTrafficApiRef = useRef(networkTrafficApi);
 
   useEffect(() => {
@@ -100,39 +103,24 @@ export function RelayTrafficStats() {
 
   const queryParams = useMemo(() => {
     const params = new URLSearchParams();
-    params.set("page", "1");
-    params.set("page_size", String(PAGE_SIZE));
     params.set("start_date", startDate.toISOString());
     params.set("end_date", endDate.toISOString());
     params.set("connection_type", ROUTED_CONNECTION_TYPE);
-    params.set("sort_by", "timestamp");
-    params.set("sort_order", "asc");
+    params.set("bucket_seconds", String(bucketSecondsForHours(selectedRange.hours)));
     return params;
-  }, [endDate, startDate]);
+  }, [endDate, selectedRange.hours, startDate]);
 
   useEffect(() => {
     let cancelled = false;
 
     const fetchLogs = async () => {
       setIsLoading(true);
-      const allLogs: NetworkLog[] = [];
 
       try {
-        const firstPage = await networkTrafficApiRef.current.get(`?${queryParams.toString()}`);
+        const response = await networkTrafficApiRef.current.get(`?${queryParams.toString()}`);
         if (cancelled) return;
 
-        allLogs.push(...(firstPage?.data ?? []));
-
-        const totalPages = firstPage?.total_pages ?? 1;
-        for (let page = 2; page <= totalPages; page += 1) {
-          const pageParams = new URLSearchParams(queryParams);
-          pageParams.set("page", String(page));
-          const response = await networkTrafficApiRef.current.get(`?${pageParams.toString()}`);
-          if (cancelled) return;
-          allLogs.push(...(response?.data ?? []));
-        }
-
-        setLogs(allLogs);
+        setSummary(response?.data ?? []);
       } finally {
         if (!cancelled) {
           setIsLoading(false);
@@ -158,13 +146,13 @@ export function RelayTrafficStats() {
       buckets.set(ts, { upload: 0, download: 0 });
     }
 
-    for (const log of logs) {
-      const timestamp = dayjs(eventTimestamp(log));
+    for (const point of summary) {
+      const timestamp = dayjs(point.timestamp);
       if (!timestamp.isValid()) continue;
       const bucket = Math.floor(timestamp.valueOf() / bucketMs) * bucketMs;
       const current = buckets.get(bucket) ?? { upload: 0, download: 0 };
-      current.upload += log.tx_bytes ?? 0;
-      current.download += log.rx_bytes ?? 0;
+      current.upload += point.tx_bytes ?? 0;
+      current.download += point.rx_bytes ?? 0;
       buckets.set(bucket, current);
     }
 
@@ -199,7 +187,7 @@ export function RelayTrafficStats() {
       },
       scaleMaxRate: Math.max(1, uploadPeak, downloadPeak),
     };
-  }, [endDate, logs, selectedRange.hours, startDate]);
+  }, [endDate, selectedRange.hours, startDate, summary]);
 
   useEffect(() => {
     if (!gRef.current || points.length > 0) return;
