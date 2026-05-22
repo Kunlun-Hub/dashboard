@@ -75,7 +75,7 @@ export default function RelayPreferenceControl({
       description: t("relays.controlSaved"),
       promise: request.put(payload).then(() => {
         setDraft(null);
-        mutate("/relays/preferences").then();
+        void mutate("/relays/preferences");
       }),
       loadingMessage: t("relays.controlSaving"),
     });
@@ -119,7 +119,7 @@ export default function RelayPreferenceControl({
         <div className={"border-t border-nb-gray-900 p-4 flex justify-end"}>
           <Button variant={"primary"} size={"sm"} onClick={save}>
             <SaveIcon size={15} />
-            {t("actions.saveChanges")}
+            {t("relays.saveAndApply")}
           </Button>
         </div>
       </Card>
@@ -166,7 +166,7 @@ export default function RelayPreferenceControl({
       <div className={"flex justify-end mt-5"}>
         <Button variant={"primary"} onClick={save}>
           <SaveIcon size={16} />
-          {t("actions.saveChanges")}
+          {t("relays.saveAndApply")}
         </Button>
       </div>
     </div>

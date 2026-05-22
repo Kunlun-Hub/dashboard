@@ -145,8 +145,10 @@ export const messages = {
     "relays.peerPreferenceTitle": "Preferred relays for this device",
     "relays.peerPreferenceHelp":
       "Device-level settings override group relay preferences.",
-    "relays.controlSaved": "Relay preferences were saved.",
-    "relays.controlSaving": "Saving relay preferences...",
+    "relays.saveAndApply": "Save & Apply",
+    "relays.controlSaved":
+      "Relay preferences were saved and applied to affected online devices.",
+    "relays.controlSaving": "Saving and applying relay preferences...",
     "relays.noRelayForControl":
       "Deploy at least one relay before setting preferences.",
     "relays.noControlTargets": "No targets available.",
@@ -3244,8 +3246,9 @@ export const messages = {
     "relays.groupPreferenceHelp": "属于该组的设备会优先收到这些中继地址。",
     "relays.peerPreferenceTitle": "设备首选中继",
     "relays.peerPreferenceHelp": "单设备设置会覆盖按组设置的首选中继。",
-    "relays.controlSaved": "中继偏好已保存。",
-    "relays.controlSaving": "正在保存中继偏好...",
+    "relays.saveAndApply": "保存并生效",
+    "relays.controlSaved": "中继偏好已保存，并已下发给受影响的在线设备。",
+    "relays.controlSaving": "正在保存并下发中继偏好...",
     "relays.noRelayForControl": "至少部署一个中继后才能设置首选中继。",
     "relays.noControlTargets": "暂无可配置对象。",
     "overview.title": "总览",
