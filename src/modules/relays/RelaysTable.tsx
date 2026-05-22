@@ -1,6 +1,7 @@
 "use client";
 
 import Button from "@components/Button";
+import { notify } from "@components/Notification";
 import SquareIcon from "@components/SquareIcon";
 import { DataTable } from "@components/table/DataTable";
 import DataTableHeader from "@components/table/DataTableHeader";
@@ -9,7 +10,13 @@ import { DataTableRowsPerPage } from "@components/table/DataTableRowsPerPage";
 import GetStartedTest from "@components/ui/GetStartedTest";
 import { SmallBadge } from "@components/ui/SmallBadge";
 import { ColumnDef, SortingState } from "@tanstack/react-table";
-import { MapPinIcon, PlusIcon, RadioTowerIcon, Trash2Icon } from "lucide-react";
+import {
+  MapPinIcon,
+  PlusIcon,
+  RadioTowerIcon,
+  SendIcon,
+  Trash2Icon,
+} from "lucide-react";
 import { usePathname } from "next/navigation";
 import React, { useMemo } from "react";
 import { useSWRConfig } from "swr";
@@ -30,6 +37,7 @@ export default function RelaysTable({ headingTarget }: Readonly<Props>) {
   const path = usePathname();
   const [deployModal, setDeployModal] = React.useState(false);
   const deleteRelay = useApiCall<unknown>("/relays", true).del;
+  const applyRelayConfig = useApiCall<unknown>("/relays/apply", true).post;
   const { data: relays, isLoading } = useFetchApi<Relay[]>(
     "/relays",
     true,
@@ -181,6 +189,17 @@ export default function RelaysTable({ headingTarget }: Readonly<Props>) {
 
   const relayList = relays ?? [];
 
+  const applyConfig = () => {
+    notify({
+      title: t("relays.applyTitle"),
+      description: t("relays.applyReady"),
+      promise: applyRelayConfig({}).then(() => {
+        mutate("/relays").then();
+      }),
+      loadingMessage: t("relays.applyLoading"),
+    });
+  };
+
   return (
     <>
       <DataTable
@@ -195,7 +214,7 @@ export default function RelaysTable({ headingTarget }: Readonly<Props>) {
         data={relayList}
         searchPlaceholder={t("relays.searchPlaceholder")}
         columnVisibility={{ searchString: false }}
-      getStartedCard={
+        getStartedCard={
           <GetStartedTest
             icon={
               <SquareIcon
@@ -209,9 +228,9 @@ export default function RelaysTable({ headingTarget }: Readonly<Props>) {
             title={t("relays.emptyTitle")}
             description={t("relays.emptyDescription")}
           />
-      }
-      renderExpandedRow={(relay) => <RelayExpandedRow relay={relay} />}
-    >
+        }
+        renderExpandedRow={(relay) => <RelayExpandedRow relay={relay} />}
+      >
         {(table) => (
           <>
             <Button
@@ -221,6 +240,15 @@ export default function RelaysTable({ headingTarget }: Readonly<Props>) {
             >
               <PlusIcon size={16} />
               {t("relays.deployButton")}
+            </Button>
+            <Button
+              variant={"secondary"}
+              size={"sm"}
+              disabled={relayList.length === 0}
+              onClick={applyConfig}
+            >
+              <SendIcon size={16} />
+              {t("relays.applyButton")}
             </Button>
             <DataTableRowsPerPage
               table={table}

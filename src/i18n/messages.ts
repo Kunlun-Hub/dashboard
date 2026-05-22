@@ -90,6 +90,10 @@ export const messages = {
     "relays.emptyDescription":
       "Configure relay addresses in the management server to improve connectivity for restrictive networks.",
     "relays.deployButton": "Deploy Relay",
+    "relays.applyButton": "Apply Config",
+    "relays.applyTitle": "Global Relay Config",
+    "relays.applyLoading": "Sending relay config to all clients...",
+    "relays.applyReady": "Relay config was sent to online clients.",
     "relays.deployTitle": "Deploy Relay",
     "relays.deployDescription":
       "Generate a TLS-enabled Docker command for a relay that registers itself with this management server.",
@@ -3191,6 +3195,10 @@ export const messages = {
     "relays.emptyDescription":
       "在管理服务中配置中继地址后，可提升受限网络环境下的连接成功率。",
     "relays.deployButton": "部署中继",
+    "relays.applyButton": "配置生效",
+    "relays.applyTitle": "全局中继配置",
+    "relays.applyLoading": "正在下发中继配置到全部客户端...",
+    "relays.applyReady": "中继配置已下发给在线客户端。",
     "relays.deployTitle": "部署中继",
     "relays.deployDescription":
       "生成启用 TLS 的 Docker 部署命令，中继启动后会主动向当前管理端注册并持续上报心跳。",
