@@ -1,5 +1,11 @@
 "use client";
 
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@components/Accordion";
 import Button from "@components/Button";
 import Code from "@components/Code";
 import HelpText from "@components/HelpText";
@@ -8,7 +14,8 @@ import { Label } from "@components/Label";
 import { Modal, ModalContent, ModalFooter } from "@components/modal/Modal";
 import ModalHeader from "@components/modal/ModalHeader";
 import SquareIcon from "@components/SquareIcon";
-import { RadioTowerIcon } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@components/Tabs";
+import { DownloadIcon, RadioTowerIcon } from "lucide-react";
 import React, { useEffect, useMemo, useState } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useApiCall } from "@/utils/api";
@@ -60,15 +67,21 @@ export default function DeployRelayModal({
   const managementURL =
     typeof window === "undefined" ? "" : window.location.origin;
 
+  const stunPortList = useMemo(
+    () =>
+      stunPorts
+        .split(",")
+        .map((p) => p.trim())
+        .filter(Boolean),
+    [stunPorts],
+  );
+
   const installScript = useMemo(() => {
     const safeRelayName = relayName.trim();
     const relayNameLine = safeRelayName
       ? `  -e CL_RELAY_NAME="${safeRelayName}" \\\n`
       : "";
-    const stunPortLines = stunPorts
-      .split(",")
-      .map((p) => p.trim())
-      .filter(Boolean)
+    const stunPortLines = stunPortList
       .map((p) => `  -p ${p}:${p}/udp \\`)
       .join("\n");
     return `docker run -d --name cloink-relay --restart unless-stopped \\
@@ -99,8 +112,74 @@ ${relayNameLine}  -e CL_MANAGEMENT_URL="${managementURL}" \\
     relayName,
     setupToken?.relay_auth_secret,
     setupToken?.token,
+    stunPortList,
     stunPorts,
   ]);
+
+  const composeFile = useMemo(() => {
+    const relayNameLine = relayName.trim()
+      ? `      CL_RELAY_NAME: "${relayName.trim()}"\n`
+      : "";
+    const portLines = [
+      `      - "${port}:${port}/tcp"`,
+      `      - "${port}:${port}/udp"`,
+      ...stunPortList.map((p) => `      - "${p}:${p}/udp"`),
+    ].join("\n");
+    return `services:
+  cloink-relay:
+    image: ohoimager/cloink-relay:${imageTag || "latest"}
+    container_name: cloink-relay
+    restart: unless-stopped
+    volumes:
+      - ./certs:/certs:ro
+    ports:
+${portLines}
+    environment:
+      CL_SETUP_KEY: "${setupToken?.token || "SETUP_TOKEN"}"
+      CL_AUTH_SECRET: "${setupToken?.relay_auth_secret || "RELAY_AUTH_SECRET"}"
+      CL_RELAY_ID: "${relayID || "HK-01"}"
+${relayNameLine}      CL_MANAGEMENT_URL: "${managementURL}"
+      CL_RELAY_DOMAIN: "${domain || "relay.example.com"}"
+      CL_RELAY_PORT: "${port}"
+      CL_RELAY_SCHEME: "rels"
+      NB_LISTEN_ADDRESS: ":${port}"
+      NB_TLS_CERT_FILE: "/certs/fullchain.pem"
+      NB_TLS_KEY_FILE: "/certs/privkey.key"
+      NB_ENABLE_STUN: "true"
+      NB_STUN_PORTS: "${stunPorts || "3478,3479"}"
+      NB_HEALTH_LISTEN_ADDRESS: ":9000"
+`;
+  }, [
+    domain,
+    imageTag,
+    managementURL,
+    port,
+    relayID,
+    relayName,
+    setupToken?.relay_auth_secret,
+    setupToken?.token,
+    stunPortList,
+    stunPorts,
+  ]);
+
+  const composeEOFScript = useMemo(
+    () => `cat > docker-compose.yml <<'EOF'
+${composeFile}EOF
+docker compose up -d`,
+    [composeFile],
+  );
+
+  const downloadCompose = () => {
+    const blob = new Blob([composeFile], {
+      type: "application/x-yaml;charset=utf-8",
+    });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "docker-compose.yml";
+    link.click();
+    URL.revokeObjectURL(url);
+  };
 
   const inputClassName = "w-full min-w-0";
 
@@ -221,12 +300,82 @@ ${relayNameLine}  -e CL_MANAGEMENT_URL="${managementURL}" \\
             </div>
           )}
 
-          <div className={"min-w-0"}>
-            <Label>{t("relays.installCommand")}</Label>
-            <Code codeToCopy={installScript} dark={true} className={"text-xs"}>
-              <pre className={"whitespace-pre"}>{installScript}</pre>
-            </Code>
-          </div>
+          <Accordion type={"single"} collapsible className={"min-w-0"}>
+            <AccordionItem
+              value={"install"}
+              className={
+                "rounded-md border border-nb-gray-800 bg-nb-gray-930 px-4"
+              }
+            >
+              <AccordionTrigger className={"my-0 py-4"}>
+                <div className={"flex flex-col items-start gap-1"}>
+                  <span className={"text-sm text-nb-gray-100"}>
+                    {t("relays.installCommand")}
+                  </span>
+                  <span className={"text-xs text-nb-gray-400 font-normal"}>
+                    {t("relays.installCommandHelp")}
+                  </span>
+                </div>
+              </AccordionTrigger>
+              <AccordionContent>
+                <Tabs defaultValue={"docker"} className={"pb-4"}>
+                  <TabsList justify={"start"}>
+                    <TabsTrigger value={"docker"}>
+                      {t("relays.dockerMode")}
+                    </TabsTrigger>
+                    <TabsTrigger value={"compose"}>
+                      {t("relays.composeMode")}
+                    </TabsTrigger>
+                  </TabsList>
+                  <TabsContent value={"docker"} className={"min-w-0"}>
+                    <Code
+                      codeToCopy={installScript}
+                      dark={true}
+                      className={"text-xs"}
+                    >
+                      <pre className={"whitespace-pre"}>{installScript}</pre>
+                    </Code>
+                  </TabsContent>
+                  <TabsContent value={"compose"} className={"min-w-0"}>
+                    <div className={"flex justify-end mb-3"}>
+                      <Button
+                        variant={"secondary"}
+                        size={"xs"}
+                        onClick={downloadCompose}
+                      >
+                        <DownloadIcon size={14} />
+                        {t("relays.downloadCompose")}
+                      </Button>
+                    </div>
+                    <div className={"flex flex-col gap-4"}>
+                      <div>
+                        <Label>{t("relays.composeWriteCommand")}</Label>
+                        <Code
+                          codeToCopy={composeEOFScript}
+                          dark={true}
+                          className={"text-xs"}
+                        >
+                          <pre className={"whitespace-pre"}>
+                            {composeEOFScript}
+                          </pre>
+                        </Code>
+                      </div>
+                      <div>
+                        <Label>{t("relays.composeFile")}</Label>
+                        <Code
+                          codeToCopy={composeFile}
+                          dark={true}
+                          className={"text-xs"}
+                        >
+                          <pre className={"whitespace-pre"}>{composeFile}</pre>
+                        </Code>
+                      </div>
+                    </div>
+                  </TabsContent>
+                </Tabs>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </div>
         <ModalFooter className={"justify-end"}>
           <Button variant={"secondary"} onClick={() => onOpenChange(false)}>

@@ -9,10 +9,11 @@ import { DataTableRowsPerPage } from "@components/table/DataTableRowsPerPage";
 import GetStartedTest from "@components/ui/GetStartedTest";
 import { SmallBadge } from "@components/ui/SmallBadge";
 import { ColumnDef, SortingState } from "@tanstack/react-table";
-import { PlusIcon, RadioTowerIcon, Trash2Icon } from "lucide-react";
+import { MapPinIcon, PlusIcon, RadioTowerIcon, Trash2Icon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import React, { useMemo } from "react";
 import { useSWRConfig } from "swr";
+import RoundedFlag from "@/assets/countries/RoundedFlag";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useI18n } from "@/i18n/I18nProvider";
 import { Relay } from "@/interfaces/Relay";
@@ -194,7 +195,7 @@ export default function RelaysTable({ headingTarget }: Readonly<Props>) {
         data={relayList}
         searchPlaceholder={t("relays.searchPlaceholder")}
         columnVisibility={{ searchString: false }}
-        getStartedCard={
+      getStartedCard={
           <GetStartedTest
             icon={
               <SquareIcon
@@ -208,8 +209,9 @@ export default function RelaysTable({ headingTarget }: Readonly<Props>) {
             title={t("relays.emptyTitle")}
             description={t("relays.emptyDescription")}
           />
-        }
-      >
+      }
+      renderExpandedRow={(relay) => <RelayExpandedRow relay={relay} />}
+    >
         {(table) => (
           <>
             <Button
@@ -235,5 +237,63 @@ export default function RelaysTable({ headingTarget }: Readonly<Props>) {
       </DataTable>
       <DeployRelayModal open={deployModal} onOpenChange={setDeployModal} />
     </>
+  );
+}
+
+function RelayExpandedRow({ relay }: Readonly<{ relay: Relay }>) {
+  const { t } = useI18n();
+  const locationText =
+    relay.city_name && relay.country_code
+      ? `${relay.city_name}, ${relay.country_code}`
+      : relay.country_code || t("common.unknown");
+
+  const details = [
+    {
+      label: t("relays.publicIp"),
+      value: relay.public_ip || t("common.unknown"),
+    },
+    {
+      label: t("peerDetails.region"),
+      value: relay.country_code ? (
+        <span className={"inline-flex items-center gap-2"}>
+          <RoundedFlag country={relay.country_code} size={14} />
+          {locationText}
+        </span>
+      ) : (
+        locationText
+      ),
+    },
+    {
+      label: t("relays.connectedClients"),
+      value: relay.connected_clients ?? "-",
+    },
+    {
+      label: t("relays.registeredClients"),
+      value: relay.registered_clients,
+    },
+  ];
+
+  return (
+    <div className={"px-8 py-5 bg-nb-gray-940/50 border-t border-nb-gray-900"}>
+      <div className={"flex items-center gap-2 text-sm text-nb-gray-200 mb-4"}>
+        <MapPinIcon size={15} />
+        {t("relays.details")}
+      </div>
+      <div className={"grid grid-cols-1 md:grid-cols-3 gap-3"}>
+        {details.map((item) => (
+          <div
+            key={item.label}
+            className={
+              "rounded-md border border-nb-gray-800 bg-nb-gray-930 px-4 py-3"
+            }
+          >
+            <div className={"text-xs text-nb-gray-400 mb-1"}>{item.label}</div>
+            <div className={"text-sm text-nb-gray-100 font-medium"}>
+              {item.value}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
