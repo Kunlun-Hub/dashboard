@@ -23,7 +23,7 @@ import { useApiCall } from "@/utils/api";
 type RelaySetupToken = {
   token: string;
   relay_auth_secret: string;
-  expires_at: string;
+  expires_at?: string;
 };
 
 type Props = {
