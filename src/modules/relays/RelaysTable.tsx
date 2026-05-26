@@ -1,6 +1,10 @@
 "use client";
 
 import Button from "@components/Button";
+import { Input } from "@components/Input";
+import { Label } from "@components/Label";
+import { Modal, ModalContent, ModalFooter } from "@components/modal/Modal";
+import ModalHeader from "@components/modal/ModalHeader";
 import { notify } from "@components/Notification";
 import SquareIcon from "@components/SquareIcon";
 import { DataTable } from "@components/table/DataTable";
@@ -12,6 +16,7 @@ import { SmallBadge } from "@components/ui/SmallBadge";
 import { ColumnDef, SortingState } from "@tanstack/react-table";
 import {
   MapPinIcon,
+  PencilIcon,
   PlusIcon,
   RadioTowerIcon,
   SendIcon,
@@ -36,7 +41,10 @@ export default function RelaysTable({ headingTarget }: Readonly<Props>) {
   const { mutate } = useSWRConfig();
   const path = usePathname();
   const [deployModal, setDeployModal] = React.useState(false);
+  const [priorityRelay, setPriorityRelay] = React.useState<Relay | null>(null);
+  const [priorityDraft, setPriorityDraft] = React.useState("30");
   const deleteRelay = useApiCall<unknown>("/relays", true).del;
+  const updateRelay = useApiCall<unknown>("/relays", true).put;
   const applyRelayConfig = useApiCall<unknown>("/relays/apply", true).post;
   const { data: relays, isLoading } = useFetchApi<Relay[]>(
     "/relays",
@@ -46,6 +54,38 @@ export default function RelaysTable({ headingTarget }: Readonly<Props>) {
     {
       shouldRetryOnError: false,
     },
+  );
+
+  const openPriorityModal = React.useCallback((relay: Relay) => {
+    setPriorityRelay(relay);
+    setPriorityDraft(String(relay.priority ?? 30));
+  }, []);
+
+  const saveRelayPriority = React.useCallback(
+    (relay: Relay) => {
+      const relayID = relay.id;
+      if (!relayID) return;
+
+      const priority = Number(priorityDraft.trim());
+      if (!Number.isInteger(priority) || priority <= 0) {
+        window.alert(t("relays.priorityInvalid"));
+        return;
+      }
+
+      notify({
+        title: t("relays.priorityUpdateTitle"),
+        description: t("relays.priorityUpdated"),
+        promise: updateRelay(
+          { priority },
+          "/" + encodeURIComponent(relayID),
+        ).then(() => {
+          mutate("/relays").then();
+          setPriorityRelay(null);
+        }),
+        loadingMessage: t("relays.priorityUpdating"),
+      });
+    },
+    [mutate, priorityDraft, t, updateRelay],
   );
 
   const columns = useMemo<ColumnDef<Relay>[]>(
@@ -132,15 +172,6 @@ export default function RelaysTable({ headingTarget }: Readonly<Props>) {
         cell: ({ row }) => row.original.connected_clients ?? "-",
       },
       {
-        accessorKey: "registered_clients",
-        header: ({ column }) => (
-          <DataTableHeader column={column}>
-            {t("relays.registeredClients")}
-          </DataTableHeader>
-        ),
-        cell: ({ row }) => row.original.registered_clients,
-      },
-      {
         accessorKey: "last_checked",
         header: ({ column }) => (
           <DataTableHeader column={column}>
@@ -165,30 +196,42 @@ export default function RelaysTable({ headingTarget }: Readonly<Props>) {
           const relay = row.original;
           const canDelete = relay.registered && relay.id;
           return (
-            <Button
-              variant={"danger-outline"}
-              size={"xs"}
-              disabled={!canDelete}
-              title={
-                canDelete
-                  ? t("relays.delete")
-                  : t("relays.staticRelayCannotDelete")
-              }
-              onClick={() => {
-                if (!relay.id) return;
-                if (!window.confirm(t("relays.deleteConfirm"))) return;
-                deleteRelay({}, "/" + encodeURIComponent(relay.id)).then(() => {
-                  mutate("/relays").then();
-                });
-              }}
-            >
-              <Trash2Icon size={14} />
-            </Button>
+            <div className={"flex justify-end gap-2"}>
+              <Button
+                variant={"secondary"}
+                size={"xs"}
+                title={t("relays.editPriority")}
+                onClick={() => openPriorityModal(relay)}
+              >
+                <PencilIcon size={14} />
+              </Button>
+              <Button
+                variant={"danger-outline"}
+                size={"xs"}
+                disabled={!canDelete}
+                title={
+                  canDelete
+                    ? t("relays.delete")
+                    : t("relays.staticRelayCannotDelete")
+                }
+                onClick={() => {
+                  if (!relay.id) return;
+                  if (!window.confirm(t("relays.deleteConfirm"))) return;
+                  deleteRelay({}, "/" + encodeURIComponent(relay.id)).then(
+                    () => {
+                      mutate("/relays").then();
+                    },
+                  );
+                }}
+              >
+                <Trash2Icon size={14} />
+              </Button>
+            </div>
           );
         },
       },
     ],
-    [deleteRelay, mutate, t],
+    [deleteRelay, mutate, openPriorityModal, t],
   );
 
   const [sorting, setSorting] = useLocalStorage<SortingState>(
@@ -273,7 +316,66 @@ export default function RelaysTable({ headingTarget }: Readonly<Props>) {
         )}
       </DataTable>
       <DeployRelayModal open={deployModal} onOpenChange={setDeployModal} />
+      <RelayPriorityModal
+        relay={priorityRelay}
+        value={priorityDraft}
+        onValueChange={setPriorityDraft}
+        onOpenChange={(open) => {
+          if (!open) setPriorityRelay(null);
+        }}
+        onSave={() => {
+          if (priorityRelay) saveRelayPriority(priorityRelay);
+        }}
+      />
     </>
+  );
+}
+
+function RelayPriorityModal({
+  relay,
+  value,
+  onValueChange,
+  onOpenChange,
+  onSave,
+}: Readonly<{
+  relay: Relay | null;
+  value: string;
+  onValueChange: (value: string) => void;
+  onOpenChange: (open: boolean) => void;
+  onSave: () => void;
+}>) {
+  const { t } = useI18n();
+
+  return (
+    <Modal open={!!relay} onOpenChange={onOpenChange}>
+      <ModalContent maxWidthClass={"max-w-md"}>
+        <ModalHeader
+          icon={<PencilIcon size={18} />}
+          title={t("relays.editPriority")}
+          description={relay?.name || relay?.id || relay?.address || ""}
+          className={"px-6 pb-5 pt-6"}
+        />
+        <div className={"border-y border-nb-gray-900 px-6 py-5"}>
+          <Label>{t("relays.priority")}</Label>
+          <Input
+            variant={"darker"}
+            type={"number"}
+            min={1}
+            step={1}
+            value={value}
+            onChange={(event) => onValueChange(event.target.value)}
+          />
+        </div>
+        <ModalFooter className={"justify-end"}>
+          <Button variant={"secondary"} size={"sm"} onClick={() => onOpenChange(false)}>
+            {t("common.cancel")}
+          </Button>
+          <Button variant={"primary"} size={"sm"} onClick={onSave}>
+            {t("actions.save")}
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   );
 }
 
@@ -307,10 +409,6 @@ function RelayExpandedRow({ relay }: Readonly<{ relay: Relay }>) {
     {
       label: t("relays.connectedClients"),
       value: relay.connected_clients ?? "-",
-    },
-    {
-      label: t("relays.registeredClients"),
-      value: relay.registered_clients,
     },
   ];
 

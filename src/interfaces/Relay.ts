@@ -7,7 +7,6 @@ export interface Relay {
   priority: number;
   status: "online" | "offline";
   connected_clients?: number;
-  registered_clients: number;
   public_ip?: string;
   country_code?: string;
   city_name?: string;

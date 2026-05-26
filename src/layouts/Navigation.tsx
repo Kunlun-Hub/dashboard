@@ -142,25 +142,9 @@ export default function Navigation({
                   icon={<RadioTowerIcon size={16} />}
                   label={t("nav.relays")}
                   href={"/relays"}
-                  collapsible
                   exactPathMatch={false}
                   visible={permission?.settings?.read}
-                >
-                  <SidebarItem
-                    label={t("nav.relayOverview")}
-                    href={"/relays"}
-                    isChild
-                    exactPathMatch={true}
-                    visible={permission?.settings?.read}
-                  />
-                  <SidebarItem
-                    label={t("nav.relayControl")}
-                    href={"/relays/control"}
-                    isChild
-                    exactPathMatch={true}
-                    visible={permission?.settings?.read}
-                  />
-                </SidebarItem>
+                />
 
                 <SidebarItem
                   icon={<ReverseProxyIcon size={16} />}

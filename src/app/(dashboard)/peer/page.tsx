@@ -79,7 +79,6 @@ import { PeerExpirationSettings } from "@/modules/peer/PeerExpirationSettings";
 import { PeerNetworkRoutesSection } from "@/modules/peer/PeerNetworkRoutesSection";
 import { PeerRemoteJobsSection } from "@/modules/peer/PeerRemoteJobsSection";
 import { PeerSSHToggle } from "@/modules/peer/PeerSSHToggle";
-import RelayPreferenceControl from "@/modules/relays/RelayPreferenceControl";
 import { RDPButton } from "@/modules/remote-access/rdp/RDPButton";
 import { SSHButton } from "@/modules/remote-access/ssh/SSHButton";
 import { ReverseProxyFlatTargetsTabContent } from "@/modules/reverse-proxy/targets/flat/ReverseProxyFlatTargetsTabContent";
@@ -481,12 +480,6 @@ const PeerOverviewTabContent = () => {
           )}
 
           <PeerSSHToggle />
-
-          <div>
-            <Label>{t("relays.peerPreferenceTitle")}</Label>
-            <HelpText>{t("relays.peerPreferenceHelp")}</HelpText>
-            <RelayPreferenceControl peerId={peer.id} compact />
-          </div>
 
           {/* Remote Access Buttons */}
           <div>
