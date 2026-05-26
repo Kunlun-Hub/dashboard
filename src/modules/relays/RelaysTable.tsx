@@ -114,6 +114,15 @@ export default function RelaysTable({ headingTarget }: Readonly<Props>) {
         },
       },
       {
+        accessorKey: "priority",
+        header: ({ column }) => (
+          <DataTableHeader column={column}>
+            {t("relays.priority")}
+          </DataTableHeader>
+        ),
+        cell: ({ row }) => row.original.priority,
+      },
+      {
         accessorKey: "connected_clients",
         header: ({ column }) => (
           <DataTableHeader column={column}>
@@ -290,6 +299,10 @@ function RelayExpandedRow({ relay }: Readonly<{ relay: Relay }>) {
       ) : (
         locationText
       ),
+    },
+    {
+      label: t("relays.priority"),
+      value: relay.priority,
     },
     {
       label: t("relays.connectedClients"),

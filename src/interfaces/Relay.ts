@@ -4,6 +4,7 @@ export interface Relay {
   name?: string;
   observed_id?: string;
   registered?: boolean;
+  priority: number;
   status: "online" | "offline";
   connected_clients?: number;
   registered_clients: number;

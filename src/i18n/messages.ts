@@ -78,6 +78,9 @@ export const messages = {
     "relays.id": "Relay ID",
     "relays.observedId": "Observed ID",
     "relays.address": "Relay Address",
+    "relays.priority": "Priority",
+    "relays.priorityHelp":
+      "Higher values are preferred first. Device or group preferred relays are raised to at least 70.",
     "relays.connectedClients": "Current Connections",
     "relays.registeredClients": "Registered Clients",
     "relays.publicIp": "Public IP",
@@ -3197,6 +3200,8 @@ export const messages = {
     "relays.id": "中继 ID",
     "relays.observedId": "探测到的 ID",
     "relays.address": "中继地址",
+    "relays.priority": "优先级",
+    "relays.priorityHelp": "数值越高越优先。设备或组首选中继会提升到至少 70。",
     "relays.connectedClients": "当前连接",
     "relays.registeredClients": "注册客户端",
     "relays.publicIp": "出口 IP",
