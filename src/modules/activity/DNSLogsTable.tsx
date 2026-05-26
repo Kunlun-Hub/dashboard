@@ -35,6 +35,7 @@ type DNSLogRow = {
   source: string;
   destination: string;
   flowCount: number;
+  flowIds: Set<string>;
 };
 
 const DNS_PORTS = new Set([53, 5353, 22054]);
@@ -84,25 +85,11 @@ const portFromAddress = (address?: string | null) => {
 };
 
 const isDNSFlow = (log: NetworkLog) => {
-  if (
+  return Boolean(
     log.dns ||
-    log.dns_domain ||
-    log.dns_query ||
-    log.dns_query_name ||
-    log.dns_answers ||
-    log.dns_resolved_ips ||
-    log.dns_result
-  ) {
-    return true;
-  }
-
-  const sourcePort = log.source_port ?? portFromAddress(log.source.address);
-  const destinationPort =
-    log.destination_port ?? log.dest_port ?? portFromAddress(log.destination.address);
-
-  return log.protocol === 17 && (
-    (sourcePort !== undefined && DNS_PORTS.has(sourcePort)) ||
-    (destinationPort !== undefined && DNS_PORTS.has(destinationPort))
+      log.dns_domain ||
+      log.dns_query ||
+      log.dns_query_name
   );
 };
 
@@ -114,8 +101,6 @@ const dnsDomain = (log: NetworkLog) => {
     log.dns_domain ||
     log.dns_query ||
     log.dns_query_name ||
-    log.destination.dns_label ||
-    log.destination.name ||
     "-"
   );
 };
@@ -171,6 +156,7 @@ const toDNSRows = (logs?: NetworkLog[]) => {
       source: endpointAddress(log.source),
       destination: endpointAddress(log.destination),
       flowCount: 1,
+      flowIds: new Set([log.flow_id]),
     };
 
     const bucket = dayjs(timestamp).startOf("minute").minute(
@@ -191,7 +177,8 @@ const toDNSRows = (logs?: NetworkLog[]) => {
       continue;
     }
 
-    existing.flowCount += 1;
+    existing.flowIds.add(log.flow_id);
+    existing.flowCount = existing.flowIds.size;
     if (dayjs(timestamp).isAfter(dayjs(existing.timestamp))) {
       existing.timestamp = timestamp;
     }

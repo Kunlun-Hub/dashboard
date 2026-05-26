@@ -7,7 +7,7 @@ import DataTableHeader from "@components/table/DataTableHeader";
 import DataTableRefreshButton from "@components/table/DataTableRefreshButton";
 import { DataTableRowsPerPage } from "@components/table/DataTableRowsPerPage";
 import GetStartedTest from "@components/ui/GetStartedTest";
-import type { ColumnDef, SortingState, PaginationState } from "@tanstack/react-table";
+import type { ColumnDef, SortingState } from "@tanstack/react-table";
 import dayjs from "dayjs";
 import { ChevronDown, ChevronRightIcon } from "lucide-react";
 import React, { useCallback, useMemo, useState } from "react";
@@ -31,6 +31,10 @@ type NetworkLogClientGroup = {
   destinations: string[];
   logs: NetworkLog[];
 };
+
+const endpointTypePeer = "PEER";
+const endpointTypeHostResource = "HOST_RESOURCE";
+const dnsPorts = new Set([53, 5353, 22054]);
 
 const protocolName = (
   protocol: number,
@@ -67,14 +71,140 @@ const formatEndpoint = (endpoint: NetworkLogEndpoint) => {
   return endpoint.name ? `${endpoint.name} (${endpoint.address})` : endpoint.address;
 };
 
+const formatDirection = (direction?: string | null) => {
+  switch (direction?.toLowerCase()) {
+    case "egress":
+      return "out";
+    case "ingress":
+      return "in";
+    default:
+      return direction?.toLowerCase() || "-";
+  }
+};
+
+const stripPort = (address?: string | null) => {
+  if (!address) return "";
+  const ipv6Match = address.match(/^\[(.*)]:(\d+)$/);
+  if (ipv6Match) return ipv6Match[1];
+
+  const lastColon = address.lastIndexOf(":");
+  if (lastColon === -1) return address;
+
+  const port = Number(address.slice(lastColon + 1));
+  if (!Number.isFinite(port)) return address;
+
+  return address.slice(0, lastColon);
+};
+
+const portFromAddress = (address?: string | null) => {
+  if (!address) return undefined;
+  const ipv6Match = address.match(/^\[.*]:(\d+)$/);
+  if (ipv6Match) return Number(ipv6Match[1]);
+
+  const lastColon = address.lastIndexOf(":");
+  if (lastColon === -1) return undefined;
+
+  const port = Number(address.slice(lastColon + 1));
+  return Number.isFinite(port) ? port : undefined;
+};
+
+const isMulticastOrBroadcastAddress = (address?: string | null) => {
+  const host = stripPort(address).toLowerCase();
+  return (
+    host.startsWith("224.") ||
+    host.startsWith("239.") ||
+    host.startsWith("255.255.255.255") ||
+    host.startsWith("ff")
+  );
+};
+
+const hasDNSMetadata = (log: NetworkLog) => {
+  return Boolean(
+    log.dns ||
+      log.dns_domain ||
+      log.dns_query ||
+      log.dns_query_name ||
+      log.dns_answers ||
+      log.dns_resolved_ips ||
+      log.dns_result,
+  );
+};
+
+const isDNSPortFlow = (log: NetworkLog) => {
+  const sourcePort = log.source_port ?? portFromAddress(log.source.address);
+  const destinationPort =
+    log.destination_port ?? log.dest_port ?? portFromAddress(log.destination.address);
+
+  return (
+    log.protocol === 17 &&
+    ((sourcePort !== undefined && dnsPorts.has(sourcePort)) ||
+      (destinationPort !== undefined && dnsPorts.has(destinationPort)))
+  );
+};
+
+const isNetworkAccessFlow = (log: NetworkLog) => {
+  if (hasDNSMetadata(log) || isDNSPortFlow(log)) return false;
+  if (log.source.address === log.destination.address) return false;
+  if (log.source.id && log.destination.id && log.source.id === log.destination.id) return false;
+  if (
+    isMulticastOrBroadcastAddress(log.source.address) ||
+    isMulticastOrBroadcastAddress(log.destination.address)
+  ) {
+    return false;
+  }
+
+  const isPeerSource = log.source.type === endpointTypePeer;
+  const isPeerDestination = log.destination.type === endpointTypePeer;
+  const isResourceSource = log.source.type === endpointTypeHostResource;
+  const isResourceDestination = log.destination.type === endpointTypeHostResource;
+
+  return (
+    (isPeerSource && (isPeerDestination || isResourceDestination)) ||
+    (isPeerDestination && (isPeerSource || isResourceSource))
+  );
+};
+
 const latestEventTimestamp = (log: NetworkLog) => log.events[0]?.timestamp ?? "";
+
+const hasUser = (user: NetworkLog["user"]) => Boolean(user.name || user.email || user.id);
+
+const hasTraffic = (log: NetworkLog) =>
+  log.tx_packets > 0 || log.rx_packets > 0 || log.tx_bytes > 0 || log.rx_bytes > 0;
+
+const mergeFlowEvents = (logs?: NetworkLog[]) => {
+  const flows = new Map<string, NetworkLog>();
+
+  for (const log of logs ?? []) {
+    if (!isNetworkAccessFlow(log)) continue;
+
+    const existing = flows.get(log.flow_id);
+    if (!existing) {
+      flows.set(log.flow_id, {
+        ...log,
+        events: [...log.events].sort(
+          (a, b) => dayjs(b.timestamp).valueOf() - dayjs(a.timestamp).valueOf(),
+        ),
+      });
+      continue;
+    }
+
+    existing.events = [...existing.events, ...log.events].sort(
+      (a, b) => dayjs(b.timestamp).valueOf() - dayjs(a.timestamp).valueOf(),
+    );
+    existing.tx_bytes = Math.max(existing.tx_bytes, log.tx_bytes);
+    existing.rx_bytes = Math.max(existing.rx_bytes, log.rx_bytes);
+    existing.tx_packets = Math.max(existing.tx_packets, log.tx_packets);
+    existing.rx_packets = Math.max(existing.rx_packets, log.rx_packets);
+  }
+
+  return Array.from(flows.values()).filter(hasTraffic);
+};
 
 const groupLogsByClient = (logs?: NetworkLog[]): NetworkLogClientGroup[] => {
   const groups = new Map<string, NetworkLogClientGroup>();
 
-  for (const log of logs ?? []) {
-    // 按账户名和设备名称分组
-    const clientKey = `${log.user.name || log.user.email}-${log.source.name || log.source.address}`;
+  for (const log of mergeFlowEvents(logs)) {
+    const clientKey = log.source.id || log.source.name || log.source.address;
     const existing = groups.get(clientKey);
     const timestamp = latestEventTimestamp(log);
 
@@ -102,6 +232,10 @@ const groupLogsByClient = (logs?: NetworkLog[]): NetworkLogClientGroup[] => {
     existing.txPackets += log.tx_packets;
     existing.rxPackets += log.rx_packets;
     existing.logs.push(log);
+
+    if (!hasUser(existing.user) && hasUser(log.user)) {
+      existing.user = log.user;
+    }
 
     if (!existing.protocols.includes(log.protocol)) {
       existing.protocols.push(log.protocol);
@@ -182,7 +316,7 @@ function NetworkLogDetails({ group }: Readonly<{ group: NetworkLogClientGroup }>
                   {dayjs(latestEventTimestamp(log)).format("YYYY/MM/DD HH:mm:ss")}
                 </td>
                 <td className="px-4 py-3">{protocolName(log.protocol, t)}</td>
-                <td className="px-4 py-3">{log.direction || "-"}</td>
+                <td className="px-4 py-3">{formatDirection(log.direction)}</td>
                 <td className="px-4 py-3">{formatEndpoint(log.source)}</td>
                 <td className="px-4 py-3">{formatEndpoint(log.destination)}</td>
                 <td className="whitespace-nowrap px-4 py-3">
@@ -214,6 +348,10 @@ export default function NetworkLogsTable({ headingTarget }: Readonly<Props>) {
     mutate,
     setFilter,
     getFilter,
+    pagination,
+    onPaginationChange,
+    pageCount,
+    totalRecords,
   } = useServerPagination<NetworkLog[]>();
 
   const dateRange = useMemo<DateRange | undefined>(() => {
@@ -243,11 +381,6 @@ export default function NetworkLogsTable({ headingTarget }: Readonly<Props>) {
   const [sorting, setSorting] = useState<SortingState>([
     { id: "timestamp", desc: true },
   ]);
-  const [{ pageIndex, pageSize }, setPagination] = useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: 20,
-  });
-
   const groupedData = useMemo(() => groupLogsByClient(rawData), [rawData]);
   const columns = useMemo<ColumnDef<NetworkLogClientGroup>[]>(
     () => [
@@ -355,8 +488,6 @@ export default function NetworkLogsTable({ headingTarget }: Readonly<Props>) {
     [t],
   );
 
-  const pageCount = useMemo(() => Math.ceil(groupedData.length / pageSize), [groupedData.length, pageSize]);
-
   return (
     <DataTable
       data={groupedData}
@@ -367,12 +498,12 @@ export default function NetworkLogsTable({ headingTarget }: Readonly<Props>) {
       sorting={sorting}
       setSorting={setSorting}
       columns={columns}
-      pagination={{ pageIndex, pageSize }}
-      onPaginationChange={setPagination}
+      pagination={pagination}
+      onPaginationChange={onPaginationChange}
       pageCount={pageCount}
-      totalRecords={groupedData.length}
+      totalRecords={totalRecords}
       manualPagination={true}
-      serverSidePagination={false}
+      serverSidePagination={true}
       keepStateInLocalStorage={false}
       manualFiltering={false}
       hasServerSideFilters={false}

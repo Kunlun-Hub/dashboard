@@ -3,6 +3,7 @@
 import Breadcrumbs from "@components/Breadcrumbs";
 import Paragraph from "@components/Paragraph";
 import { RestrictedAccess } from "@components/ui/RestrictedAccess";
+import { usePortalElement } from "@hooks/usePortalElement";
 import dayjs from "dayjs";
 import React, { useMemo } from "react";
 import ActivityIcon from "@/assets/icons/ActivityIcon";
@@ -11,7 +12,6 @@ import ServerPaginationProvider from "@/contexts/ServerPaginationProvider";
 import { useI18n } from "@/i18n/I18nProvider";
 import PageContainer from "@/layouts/PageContainer";
 import NetworkLogsTable from "@/modules/activity/NetworkLogsTable";
-import { usePortalElement } from "@hooks/usePortalElement";
 
 export default function NetworkEventsPage() {
   const { permission } = usePermissions();
@@ -23,6 +23,8 @@ export default function NetworkEventsPage() {
     () => ({
       start_date: dayjs().subtract(5, "minute").toISOString(),
       end_date: dayjs().toISOString(),
+      network_only: "true",
+      aggregate_flows: "true",
       sort_by: "timestamp",
       sort_order: "desc",
     }),
@@ -55,7 +57,7 @@ export default function NetworkEventsPage() {
       >
         <ServerPaginationProvider
           url="/events/network-traffic"
-          defaultPageSize={10000}
+          defaultPageSize={20}
           defaultFilters={defaultFilters}
         >
           <NetworkLogsTable headingTarget={portalTarget} />

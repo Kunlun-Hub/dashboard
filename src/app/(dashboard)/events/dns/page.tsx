@@ -25,6 +25,7 @@ export default function DNSEventsPage() {
       start_date: dayjs().subtract(5, "minute").toISOString(),
       end_date: dayjs().toISOString(),
       dns: "true",
+      internal_dns: "true",
       sort_by: "timestamp",
       sort_order: "desc",
     }),
