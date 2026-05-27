@@ -73,16 +73,18 @@ export default function ActivityDescription({ event }: Props) {
   if (event.activity_code == "setupkey.group.delete")
     return (
       <div className={"inline"}>
-        Group <Value>{m.group}</Value> {t("activity.setupkeyGroupDelete")}{" "}
-        <Value>{m.setupkey}</Value> setup key
+        {t("group.title")} <Value>{m.group}</Value>{" "}
+        {t("activity.setupkeyGroupDelete")} <Value>{m.setupkey}</Value>{" "}
+        {t("activity.setupkey")}
       </div>
     );
 
   if (event.activity_code == "setupkey.group.add")
     return (
       <div className={"inline"}>
-        Group <Value>{m.group}</Value> {t("activity.setupkeyGroupAdd")}{" "}
-        <Value>{m.setupkey}</Value> setup key
+        {t("group.title")} <Value>{m.group}</Value>{" "}
+        {t("activity.setupkeyGroupAdd")} <Value>{m.setupkey}</Value>{" "}
+        {t("activity.setupkey")}
       </div>
     );
 
@@ -166,7 +168,8 @@ export default function ActivityDescription({ event }: Props) {
     return (
       <div className={"inline"}>
         {t("activity.peer")} <Value>{m.name}</Value> <PeerConnectionInfo meta={m} /> {t("activity.with")}
-        Cloink IP <Value>{m.ip}</Value> {t("activity.userPeerDelete")}
+        {t("activity.cloinkIp")} <Value>{m.ip}</Value>{" "}
+        {t("activity.userPeerDelete")}
       </div>
     );
 
@@ -182,7 +185,8 @@ export default function ActivityDescription({ event }: Props) {
     return (
       <div className={"inline"}>
         {t("activity.peer")} <Value>{m.name}</Value> <PeerConnectionInfo meta={m} /> {t("activity.with")}
-        Cloink IP <Value>{m.ip}</Value> {t("activity.userPeerUpdate")}
+        {t("activity.cloinkIp")} <Value>{m.ip}</Value>{" "}
+        {t("activity.userPeerUpdate")}
       </div>
     );
 
@@ -390,14 +394,16 @@ export default function ActivityDescription({ event }: Props) {
   if (event.activity_code == "peer.rename")
     return (
       <div className={"inline"}>
-        {t("activity.peer")} {t("activity.with")} Cloink IP <Value>{m.ip}</Value> {t("activity.peerRename")} <Value>{m.name}</Value>
+        {t("activity.peer")} {t("activity.with")} {t("activity.cloinkIp")}{" "}
+        <Value>{m.ip}</Value> {t("activity.peerRename")} <Value>{m.name}</Value>
       </div>
     );
 
   if (event.activity_code == "peer.approve")
     return (
       <div className={"inline"}>
-        {t("activity.peer")} {t("activity.with")} Cloink IP <Value>{m.ip}</Value> {t("activity.peerApprove")}
+        {t("activity.peer")} {t("activity.with")} {t("activity.cloinkIp")}{" "}
+        <Value>{m.ip}</Value> {t("activity.peerApprove")}
       </div>
     );
 

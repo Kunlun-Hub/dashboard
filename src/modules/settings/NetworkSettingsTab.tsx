@@ -282,15 +282,14 @@ function NetworkSettingsTabContent({ account }: Readonly<Props>) {
               }
             >
               <div className={"min-w-[330px]"}>
-                <Label>IPv6 Network Range</Label>
+                <Label>{t("networkSettings.ipv6NetworkRange")}</Label>
                 <HelpText>
-                  Specify a custom IPv6 range for your network in CIDR format.
-                  All peer IPv6 addresses will be re-allocated when changed.
+                  {t("networkSettings.ipv6NetworkRangeHelp")}
                 </HelpText>
               </div>
               <div className={"w-full"}>
                 <Input
-                  placeholder={"e.g. fd00:1234:5678::/64"}
+                  placeholder={t("networkSettings.ipv6NetworkRangePlaceholder")}
                   errorTooltip={true}
                   errorTooltipPosition={"top"}
                   error={networkRangeV6Error}
@@ -303,16 +302,14 @@ function NetworkSettingsTabContent({ account }: Readonly<Props>) {
           </div>
 
           <div>
-            <Label>IPv6 Enabled Groups</Label>
+            <Label>{t("networkSettings.ipv6EnabledGroups")}</Label>
             <HelpText>
-              Peers in the selected groups will receive IPv6 overlay addresses
-              (dual-stack). Remove all groups to disable IPv6. Changes apply on
-              save and will restart affected clients.
+              {t("networkSettings.ipv6EnabledGroupsHelp")}
             </HelpText>
             <PeerGroupSelector
               values={ipv6EnabledGroups}
               onChange={setIpv6EnabledGroups}
-              placeholder="Select groups to enable IPv6..."
+              placeholder={t("networkSettings.ipv6EnabledGroupsPlaceholder")}
               showResourceCounter={false}
               disabled={!permission.settings.update}
             />

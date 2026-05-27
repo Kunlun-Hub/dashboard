@@ -8,6 +8,7 @@ import { useGroups } from "@/contexts/GroupsProvider";
 import { Group } from "@/interfaces/Group";
 import { Policy, PolicyRuleResource, Protocol } from "@/interfaces/Policy";
 import { PostureCheck } from "@/interfaces/PostureCheck";
+import { useI18n } from "@/i18n/I18nProvider";
 import { usePostureCheck } from "@/modules/posture-checks/usePostureCheck";
 import {
   buildEditablePolicyRules,
@@ -87,6 +88,7 @@ export const useAccessControl = ({
   }, [initialPostureChecks]);
 
   const { updatePolicy } = usePolicies();
+  const { t } = useI18n();
 
   const initRules = useMemo((): RuleState[] => {
     return buildInitialRules({
@@ -227,9 +229,9 @@ export const useAccessControl = ({
       );
     } else {
       notify({
-        title: "Create Access Control Policy",
-        description: "Policy was created successfully.",
-        loadingMessage: "Creating your policy...",
+        title: t("accessControl.createdTitle"),
+        description: t("accessControl.createdDescription"),
+        loadingMessage: t("accessControl.creating"),
         promise: policyRequest.post(policyObj).then((policy) => {
           mutate("/policies");
           onSuccess && onSuccess(policy);

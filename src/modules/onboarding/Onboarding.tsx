@@ -206,11 +206,11 @@ export const Onboarding = ({
       return request.then(() => mutate("/policies"));
     } else {
       notify({
-        title: p.name + " Policy",
-        description: `Policy was successfully ${
-          !enabled ? "enabled" : "disabled"
-        }`,
-        loadingMessage: "Updating policy...",
+        title: t("onboarding.policyNamedTitle", { name: p.name }),
+        description: !enabled
+          ? t("onboarding.policyEnabled")
+          : t("onboarding.policyDisabled"),
+        loadingMessage: t("onboarding.policyUpdating"),
         promise: request.then(() => mutate("/policies")),
         duration: 800,
       });

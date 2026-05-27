@@ -524,12 +524,12 @@ function PeerInformationCard({ peer }: Readonly<{ peer: Peer }>) {
   const handleSaveIPv6 = (newIPv6: string) => {
     notify({
       title: peer.name,
-      description: "NetBird Peer IPv6 was successfully updated",
+      description: t("peerDetails.ipv6Updated"),
       promise: update({ ipv6: newIPv6 }).then(() => {
         mutate("/peers/" + peer.id);
         setShowEditIPv6Modal(false);
       }),
-      loadingMessage: "Updating peer IPv6...",
+      loadingMessage: t("peerDetails.updatingIpv6"),
     });
   };
 

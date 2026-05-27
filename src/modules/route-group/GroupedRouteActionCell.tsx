@@ -7,12 +7,14 @@ import { useSWRConfig } from "swr";
 import { useDialog } from "@/contexts/DialogProvider";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import { GroupedRoute, Route } from "@/interfaces/Route";
+import { useI18n } from "@/i18n/I18nProvider";
 
 type Props = {
   groupedRoute: GroupedRoute;
 };
 export default function GroupedRouteActionCell({ groupedRoute }: Props) {
   const { permission } = usePermissions();
+  const { t } = useI18n();
 
   const { confirm } = useDialog();
   const routeRequest = useApiCall<Route>("/routes");
@@ -26,22 +28,21 @@ export default function GroupedRouteActionCell({ groupedRoute }: Props) {
     });
 
     notify({
-      title: "Delete Network " + groupedRoute.network_id,
-      description: "Network was successfully removed",
+      title: t("routeGroup.deletingTitle", { networkId: groupedRoute.network_id }),
+      description: t("routeGroup.deletedDescription"),
       promise: Promise.all(batch).then(() => {
         mutate("/routes");
       }),
-      loadingMessage: "Deleting the network...",
+      loadingMessage: t("routeGroup.deleting"),
     });
   };
 
   const handleConfirm = async () => {
     const choice = await confirm({
-      title: `Delete network '${groupedRoute.network_id}'?`,
-      description:
-        "Are you sure you want to delete this network? All routes inside this network will be deleted. This action cannot be undone.",
-      confirmText: "Delete",
-      cancelText: "Cancel",
+      title: t("routeGroup.deleteTitle", { networkId: groupedRoute.network_id }),
+      description: t("routeGroup.deleteDescription"),
+      confirmText: t("common.delete"),
+      cancelText: t("common.cancel"),
       type: "danger",
     });
     if (!choice) return;
@@ -57,7 +58,7 @@ export default function GroupedRouteActionCell({ groupedRoute }: Props) {
         disabled={!permission.routes.delete}
       >
         <Trash2 size={16} />
-        Delete
+        {t("common.delete")}
       </Button>
     </div>
   );

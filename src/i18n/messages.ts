@@ -30,10 +30,14 @@ export const messages = {
     "common.close": "Close",
     "common.delete": "Delete",
     "common.disabled": "Disabled",
+    "common.exitNode": "Exit Node",
     "common.none": "None",
     "common.all": "All",
     "common.moreCount": "+ {count} more",
+    "common.resourceCount": "{count} Resources",
     "common.remove": "Remove",
+    "common.routingPeerCount": "{count} Routing Peer(s)",
+    "common.routingPeers": "Routing Peers",
     "common.learnMorePrefix": "Learn more about",
     "common.inDocumentationSuffix": "in our documentation.",
     "actions.save": "Save",
@@ -865,6 +869,21 @@ export const messages = {
     "users.noRegisteredPeersDescription":
       "Install Cloink and sign in as this user to register peers.",
     "users.allUsers": "All Users",
+    "users.status.disabled": "Disabled",
+    "users.status.pendingApproval": "Pending Approval",
+    "users.status.blocked": "Blocked",
+    "users.status.pending": "Pending",
+    "users.status.active": "Active",
+    "users.localAuthDisabledDescription":
+      "Local authentication is disabled. This user can no longer log in. Use your IdP for authentication.",
+    "users.pendingApprovalDescription":
+      "This user needs to be approved by an administrator before it can join your organization.",
+    "users.pendingApprovalSettingsPrefix":
+      "If you want to disable approval for new users, go to",
+    "users.pendingApprovalSettingsSuffix": "and disable",
+    "users.pendingApprovalRequired": "'User Approval Required'",
+    "users.pendingApprovalLearnMorePrefix": "Learn more about",
+    "users.pendingApprovalLearnMore": "User Approval",
     "users.userCount": "{count} User(s)",
     "users.system": "System",
     "users.searchByEmailOrName": "Search user by name or email...",
@@ -885,6 +904,30 @@ export const messages = {
     "setupKeys.groupEmptyDescription":
       "Assign this group when creating a new setup key to see them listed here.",
     "setupKeys.lastUsedOn": "Last used on",
+    "setupKeys.defaultName": "Setup Key",
+    "setupKeys.revokeTitle": "Revoke '{name}'?",
+    "setupKeys.revokeDescription":
+      "Are you sure you want to revoke the setup key? This action cannot be undone.",
+    "setupKeys.revokedDescription": "Setup key was successfully revoked",
+    "setupKeys.revoking": "Revoking the setup key...",
+    "setupKeys.deleteTitle": "Delete '{name}'?",
+    "setupKeys.deleteDescription":
+      "Are you sure you want to delete the setup key? This action cannot be undone.",
+    "setupKeys.deletedDescription": "Setup key was successfully deleted",
+    "setupKeys.deleting": "Deleting the setup key...",
+    "setupKeys.revoke": "Revoke",
+    "setupKeys.autoAssignedGroups": "Auto-assigned Groups",
+    "setupKeys.autoAssignedGroupsDescription":
+      "These groups will be automatically assigned to peers enrolled with this key",
+    "setupKeys.groupsSaved":
+      "Groups of the setup key were successfully saved",
+    "setupKeys.groupsSaving": "Saving the groups of the setup key...",
+    "setupKeys.extraDnsLabels": "Extra DNS Labels",
+    "setupKeys.extraDnsLabelsDescription":
+      "Allow multiple DNS labels in the peer name (e.g. host.europe.netbird.io.)",
+    "setupKeys.ephemeral": "Ephemeral",
+    "setupKeys.ephemeralDescription":
+      "Peers that are offline for over 10 minutes will be removed automatically.",
     "invite.passwordCopied": "Password was copied to your clipboard!",
     "invite.linkCopied": "Invite link was copied to your clipboard!",
     "invite.userCreatedSuccess": "User created successfully!",
@@ -1001,6 +1044,34 @@ export const messages = {
     "onboarding.checkTroubleshooting": "",
     "onboarding.troubleshootingGuide": "troubleshooting guide",
     "onboarding.itWorksContinue": "It works! - Continue",
+    "onboarding.rulesTitle": "Set the rules. You're in control",
+    "onboarding.networkPolicyDescription":
+      "Cloink makes it easy for admins to enforce least-privilege access with access control policies. We've already created one for your resource during onboarding.",
+    "onboarding.networkPolicyToggleHint":
+      "Flip the switch, then try pinging your resource again to see how it affects the connection.",
+    "onboarding.p2pPolicyDescription":
+      "With Cloink, you decide who gets access to what. We've already set up an access policy for your devices.",
+    "onboarding.p2pPolicyToggleHint":
+      "Flip the switch, then try pinging your other device again to see how it affects the connection.",
+    "onboarding.continue": "Continue",
+    "onboarding.testP2PDescription":
+      "Nice work connecting your devices! Now, let's have a little fun and test if they can talk to each other.",
+    "onboarding.runCommandFrom": "Run this command from",
+    "onboarding.toPing": "to ping",
+    "onboarding.testP2PResponseHint":
+      "You should receive a response if the connection is working.",
+    "onboarding.policyNamedTitle": "{name} Policy",
+    "onboarding.policyEnabled": "Policy was successfully enabled",
+    "onboarding.policyDisabled": "Policy was successfully disabled",
+    "onboarding.policyUpdating": "Updating policy...",
+    "onboarding.usersToResourcePolicyName": "Users to {name}",
+    "onboarding.usersToResourcePolicyDescription":
+      "Allows access to this resource {address}",
+    "onboarding.usersToSubnetPolicyDescription":
+      "Allows access to this subnet {address}",
+    "onboarding.usersToRoutingPeersPolicyName": "Users to Routing Peers",
+    "onboarding.usersToRoutingPeersPolicyDescription":
+      "Allows users to access routing peers",
     "onboarding.getFirstDeviceOnline": "Let's get your first device online",
     "onboarding.getFirstDeviceOnlineDescription":
       "To access other machines, install Cloink, sign in, and your device joins the network. Every device you add becomes a Cloink peer in your network. It's that simple.",
@@ -1950,6 +2021,39 @@ export const messages = {
     "reverseProxy.authMethodIpRestricted": "IP Restricted",
     "reverseProxy.authMethodCountryRestricted": "Country Restricted",
     "reverseProxy.authMethodGeoUnavailable": "Geo Unavailable",
+    "reverseProxy.ruleCount": "{count} Rule(s)",
+    "reverseProxy.allowedCountries": "Allowed Countries",
+    "reverseProxy.blockedCountries": "Blocked Countries",
+    "reverseProxy.allowedIp": "Allowed IP",
+    "reverseProxy.allowedIps": "Allowed IPs",
+    "reverseProxy.allowedCidr": "Allowed CIDR",
+    "reverseProxy.allowedCidrs": "Allowed CIDRs",
+    "reverseProxy.blockedIp": "Blocked IP",
+    "reverseProxy.blockedIps": "Blocked IPs",
+    "reverseProxy.blockedCidr": "Blocked CIDR",
+    "reverseProxy.blockedCidrs": "Blocked CIDRs",
+    "reverseProxy.crowdsecTitle": "CrowdSec IP Reputation",
+    "reverseProxy.crowdsecDescriptionPrefix":
+      "Detect malicious IPs with CrowdSec.",
+    "reverseProxy.crowdsecDescriptionMiddle": "to block them or",
+    "reverseProxy.crowdsecDescriptionSuffix":
+      "to only log without blocking.",
+    "reverseProxy.crowdsecEnforce": "Enforce",
+    "reverseProxy.crowdsecEnforceDescription":
+      "Blocked IPs are denied immediately. If the bouncer is not yet synced, connections are denied (fail-closed).",
+    "reverseProxy.crowdsecObserve": "Observe",
+    "reverseProxy.crowdsecObserveDescription":
+      "Blocked IPs are logged but not denied. Use this to evaluate CrowdSec before enforcing.",
+    "reverseProxy.crowdsecBan": "CrowdSec Ban",
+    "reverseProxy.crowdsecCaptcha": "CrowdSec Captcha",
+    "reverseProxy.crowdsecThrottle": "CrowdSec Throttle",
+    "reverseProxy.crowdsecUnavailable": "CrowdSec Unavailable",
+    "reverseProxy.crowdsecObserveLabel": "CrowdSec Observe",
+    "reverseProxy.download": "Download:",
+    "reverseProxy.noRules": "No Rules",
+    "reverseProxy.configureAccessControl": "Configure access control",
+    "reverseProxy.serviceSuffix": "Service",
+    "reverseProxy.upload": "Upload:",
     "reverseProxy.authNotSupported":
       "Auth methods are not supported for TCP/UDP and TLS passthrough services as they operate at the network layer.",
     "reverseProxy.authEnabledCount": "{count} Enabled",
@@ -2070,6 +2174,8 @@ export const messages = {
       "Connect directly to this peer via SSH or RDP.",
     "peerDetails.ipUpdated": "Peer IP was successfully updated",
     "peerDetails.ipUpdating": "Updating peer IP...",
+    "peerDetails.ipv6Updated": "Cloink peer IPv6 was successfully updated",
+    "peerDetails.updatingIpv6": "Updating peer IPv6...",
     "peerDetails.netbirdIpAddress": "Cloink IP Address",
     "peerDetails.publicIpAddress": "Public IP Address",
     "peerDetails.dnsLabel": "DNS label",
@@ -2275,6 +2381,11 @@ export const messages = {
       "Email login is disabled for this instance, so this option is unavailable.",
     "authenticationTab.loginMethodWeChatWorkDisabled":
       "Configure a WeChat Work identity provider first to use this option.",
+    "authenticationTab.localMfaLabel": "Enable Local MFA",
+    "authenticationTab.localMfaHelpLine1":
+      "Require multi-factor authentication for users",
+    "authenticationTab.localMfaHelpLine2":
+      "authenticating with local credentials.",
     "authenticationTab.requireLoginAfterDisconnect":
       "Require login after disconnect",
     "authenticationTab.requireLoginAfterDisconnectHelp":
@@ -2329,6 +2440,24 @@ export const messages = {
       "Leave empty to keep the existing secret, or enter a new one",
     "identityProviderModal.clientSecretPlaceholder": "Enter client secret",
     "identityProviderModal.clientSecretMaskedPlaceholder": "••••••••",
+    "identityProviderModal.agentId": "Agent ID",
+    "identityProviderModal.agentIdHelp":
+      "Enter the Agent ID of your WeCom application. The official login component uses this value to initialize the sign-in panel.",
+    "identityProviderModal.agentIdPlaceholder": "Enter WeCom Agent ID",
+    "identityProviderModal.wechatworkCorpId": "Corp ID",
+    "identityProviderModal.wechatworkCorpIdHelp":
+      "Enter your WeCom Corp ID.",
+    "identityProviderModal.wechatworkCorpIdPlaceholder":
+      "Enter WeCom Corp ID",
+    "identityProviderModal.wechatworkSecret": "Secret",
+    "identityProviderModal.wechatworkSecretHelp":
+      "Enter the secret of your self-built WeCom application.",
+    "identityProviderModal.wechatworkSecretKeepExisting":
+      "Leave empty to keep the existing WeCom application secret.",
+    "identityProviderModal.wechatworkSecretKeepPlaceholder":
+      "Leave empty to keep the current secret",
+    "identityProviderModal.wechatworkSecretPlaceholder":
+      "Enter WeCom application secret",
     "identityProviderModal.redirectUrl": "Redirect / Callback URL",
     "identityProviderModal.redirectUrlHelp":
       "Copy this URL to your identity provider configuration",
@@ -2538,6 +2667,16 @@ export const messages = {
     "networkSettings.networkRangeHelp":
       "Specify a custom IPv4 range for your network in CIDR format. All peer IPs will be re-allocated when changed.",
     "networkSettings.networkRangePlaceholder": "e.g. 100.64.0.0/16",
+    "networkSettings.ipv6NetworkRange": "IPv6 Network Range",
+    "networkSettings.ipv6NetworkRangeHelp":
+      "Specify a custom IPv6 range for your network in CIDR format. All peer IPv6 addresses will be re-allocated when changed.",
+    "networkSettings.ipv6NetworkRangePlaceholder":
+      "e.g. fd00:1234:5678::/64",
+    "networkSettings.ipv6EnabledGroups": "IPv6 Enabled Groups",
+    "networkSettings.ipv6EnabledGroupsHelp":
+      "Peers in the selected groups will receive IPv6 overlay addresses (dual-stack). Remove all groups to disable IPv6. Changes apply on save and will restart affected clients.",
+    "networkSettings.ipv6EnabledGroupsPlaceholder":
+      "Select groups to enable IPv6...",
     "networkSettings.enableDnsWildcardRouting": "Enable DNS Wildcard Routing",
     "networkSettings.enableDnsWildcardRoutingHelp":
       "Allow routing using DNS wildcards. This requires Cloink client v0.35 or higher. Changes will only take effect after restarting the clients.",
@@ -2878,6 +3017,12 @@ export const messages = {
     "policies.deleteTitle": "Delete '{name}'?",
     "policies.deleteDescription":
       "Are you sure you want to delete this access control policy? This action cannot be undone.",
+    "policies.namedTitle": "Access Control Policy {name}",
+    "policies.updatedDescription":
+      "The access control policy was successfully updated",
+    "policies.updating": "Updating policy...",
+    "policies.deletedDescription": "The policy was successfully deleted.",
+    "policies.deleting": "Deleting policy...",
     "notification.genericError": "Something went wrong...",
     "peerGroupSelector.addOrSelectGroups": "Add or select group(s)...",
     "peerGroupSelector.searchGroups":
@@ -2970,6 +3115,7 @@ export const messages = {
     "noResults.description":
       "We couldn't find any results. Please try a different search term or change your filters.",
     "noResults.resetFilters": "Reset Filters & Search",
+    "dataTable.resetFiltersAndSearch": "Reset Filters & Search",
     "pageNotFound.title": "The requested page was not found",
     "pageNotFound.description":
       "The page you are attempting to access cannot be found. Please verify the URL or return to the dashboard to continue browsing.",
@@ -3040,6 +3186,89 @@ export const messages = {
     "dialog.confirmationDescription":
       "Are you sure you want to continue? This action cannot be undone.",
     "dialog.confirm": "Confirm",
+    "modal.dialogTitle": "Dialog",
+    "modal.dialogDescription": "Modal dialog",
+    "loginExpiredBadge.title": "Login required",
+
+    "peer.deleteTitle": "Delete '{name}'?",
+    "peer.deleteDescription":
+      "Are you sure you want to delete this peer? This action cannot be undone.",
+    "peer.deleteSuccess": "Peer was successfully deleted",
+    "peer.deleteLoading": "Deleting peer...",
+    "peer.sshEnabled": "SSH Access successfully enabled",
+    "peer.sshDisabled": "SSH Access successfully disabled",
+    "peer.sshEnabling": "Enabling SSH Access...",
+    "peer.sshDisabling": "Disabling SSH Access...",
+    "peer.editIpTitle": "Edit Peer IP Address",
+    "peer.editIpDescription": "Update the Cloink IP address for this peer.",
+    "peer.editIpPlaceholder": "e.g., 100.64.0.15",
+    "peer.editIpError": "Please enter a valid IP, e.g., 100.64.0.15",
+    "peer.editIpv6Title": "Edit Peer IPv6 Address",
+    "peer.editIpv6Description":
+      "Update the Cloink IPv6 address for this peer.",
+    "peer.editIpv6Placeholder": "e.g., fd00:1234::1",
+    "peer.editIpv6Error":
+      "Please enter a valid IPv6 address, e.g., fd00:1234::1",
+    "peer.editIpReconnectInfo": "Changes take effect when the peer reconnects.",
+
+    "routes.namedTitle": "Network {networkId}-{network}",
+    "routes.updatedDescription": "The network route was successfully updated",
+    "routes.updating": "Updating route...",
+    "routes.createdDescription": "The network route was successfully created",
+    "routes.creating": "Creating route...",
+
+    "accessControl.createdTitle": "Create Access Control Policy",
+    "accessControl.createdDescription": "Policy was created successfully.",
+    "accessControl.creating": "Creating your policy...",
+
+    "globalSearch.networksHeading": "Networks ({count})",
+    "globalSearch.resourcesHeading": "Resources ({count})",
+    "globalSearch.resourceCount": "{count} Resource(s)",
+    "globalSearch.blankTitle": "Search for Networks and Resources",
+    "globalSearch.blankDescription":
+      "Quickly find networks and associated resources. Start typing to search by name, description or address.",
+    "globalSearch.notFoundTitle": "Could not find any results",
+    "globalSearch.notFoundDescription":
+      "We couldn't find any results. Please try a different search term.",
+    "globalSearch.navigate": "Navigate",
+    "globalSearch.open": "Open",
+    "globalSearch.close": "Close",
+
+    "setupKeys.revokeSelectedKeys": "Revoke {count} Key(s)",
+
+    "nameservers.updateToggleDescription":
+      "Nameserver was successfully {status}.",
+
+    "networkRoutes.deprecationInfo":
+      "Network Routes will be deprecated and replaced with Networks.",
+    "networkResources.exposeService": "Expose Service",
+    "networkResources.singleIp": "Single IP",
+    "networkResources.ipRange": "IP Range",
+
+    "routeGroup.deletingTitle": "Delete Network {networkId}",
+    "routeGroup.deleteTitle": "Delete network '{networkId}'?",
+    "routeGroup.deleteDescription":
+      "Are you sure you want to delete this network? All routes inside this network will be deleted. This action cannot be undone.",
+    "routeGroup.deletedDescription": "Network was successfully removed",
+    "routeGroup.deleting": "Deleting the network...",
+    "routeGroup.highAvailabilityDisabled":
+      "High availability is currently disabled for this route.",
+    "routeGroup.highAvailabilityEnabled":
+      "High availability is enabled for this route.",
+    "routeGroup.highAvailabilityAddPeers":
+      "Go ahead and add more routing peers to enable high availability for this network route.",
+    "routeGroup.highAvailabilityIncrease":
+      "You can add more peers to increase the availability of this network route.",
+    "routeGroup.highAvailabilityConfigureGroup":
+      "To configure, you must add more peers to a group in this route. You can do it in the Peers menu.",
+    "routeGroup.highAvailabilityGroupIncrease":
+      "You can add more peers to a group in this route by going to the peers page.",
+    "routeGroup.peerCount": "{count} Peer(s)",
+    "routeGroup.goToPeers": "Go to Peers",
+    "routeGroup.addPeer": "Add Peer",
+    "activity.cloinkIp": "Cloink IP",
+    "groups.usedInPrefix": "Group",
+    "groups.usedInMiddle": "is used in",
 
     "peerActionCell.sessionExpirationDisabled":
       "Session expiration is disabled",
@@ -3126,10 +3355,14 @@ export const messages = {
     "common.close": "关闭",
     "common.delete": "删除",
     "common.disabled": "已禁用",
+    "common.exitNode": "出口节点",
     "common.none": "无",
     "common.all": "全部",
     "common.moreCount": "+ 另外 {count} 项",
+    "common.resourceCount": "{count} 个资源",
+    "common.routingPeerCount": "{count} 个路由设备",
     "common.learnMorePrefix": "了解更多关于",
+    "common.routingPeers": "路由设备",
     "common.inDocumentationSuffix": "的内容，请查看我们的文档。",
     "actions.save": "保存",
     "actions.saveChanges": "保存更改",
@@ -3895,6 +4128,21 @@ export const messages = {
     "users.noRegisteredPeersDescription":
       "安装 Cloink 并以该用户身份登录后即可注册设备。",
     "users.allUsers": "所有用户",
+    "users.status.disabled": "已禁用",
+    "users.status.pendingApproval": "待审批",
+    "users.status.blocked": "已阻止",
+    "users.status.pending": "待处理",
+    "users.status.active": "已激活",
+    "users.localAuthDisabledDescription":
+      "本地认证已被禁用。该用户将无法再登录，请使用你的身份提供商进行认证。",
+    "users.pendingApprovalDescription":
+      "该用户需要管理员批准后才能加入你的组织。",
+    "users.pendingApprovalSettingsPrefix":
+      "如果你想关闭新用户审批，请前往",
+    "users.pendingApprovalSettingsSuffix": "并关闭",
+    "users.pendingApprovalRequired": "“需要用户审批”",
+    "users.pendingApprovalLearnMorePrefix": "了解更多关于",
+    "users.pendingApprovalLearnMore": "用户审批",
     "users.userCount": "{count} 个用户",
     "users.system": "系统",
     "users.searchByEmailOrName": "按名称或邮箱搜索用户...",
@@ -3914,6 +4162,29 @@ export const messages = {
     "setupKeys.groupEmptyDescription":
       "创建新的注册密钥时分配这个分组，就可以在这里看到它们。",
     "setupKeys.lastUsedOn": "最近使用于",
+    "setupKeys.defaultName": "注册密钥",
+    "setupKeys.revokeTitle": "撤销“{name}”？",
+    "setupKeys.revokeDescription":
+      "确定要撤销此注册密钥吗？此操作无法撤销。",
+    "setupKeys.revokedDescription": "注册密钥已成功撤销",
+    "setupKeys.revoking": "正在撤销注册密钥...",
+    "setupKeys.deleteTitle": "删除“{name}”？",
+    "setupKeys.deleteDescription":
+      "确定要删除此注册密钥吗？此操作无法撤销。",
+    "setupKeys.deletedDescription": "注册密钥已成功删除",
+    "setupKeys.deleting": "正在删除注册密钥...",
+    "setupKeys.revoke": "撤销",
+    "setupKeys.autoAssignedGroups": "自动分配的分组",
+    "setupKeys.autoAssignedGroupsDescription":
+      "使用此密钥注册的设备将自动分配到这些分组",
+    "setupKeys.groupsSaved": "注册密钥的分组已成功保存",
+    "setupKeys.groupsSaving": "正在保存注册密钥的分组...",
+    "setupKeys.extraDnsLabels": "额外 DNS 标签",
+    "setupKeys.extraDnsLabelsDescription":
+      "允许设备名称包含多个 DNS 标签（例如 host.europe.netbird.io.）。",
+    "setupKeys.ephemeral": "临时设备",
+    "setupKeys.ephemeralDescription":
+      "离线超过 10 分钟的设备将被自动移除。",
     "invite.passwordCopied": "密码已复制到剪贴板！",
     "invite.linkCopied": "邀请链接已复制到剪贴板！",
     "invite.userCreatedSuccess": "用户创建成功！",
@@ -4019,6 +4290,33 @@ export const messages = {
     "onboarding.checkTroubleshooting": "",
     "onboarding.troubleshootingGuide": "故障排查指南",
     "onboarding.itWorksContinue": "一切正常！- 继续",
+    "onboarding.rulesTitle": "设置规则，一切由你掌控",
+    "onboarding.networkPolicyDescription":
+      "Cloink 让管理员可以轻松通过访问控制策略落实最小权限原则。我们已经在引导过程中为你的资源创建好一条策略。",
+    "onboarding.networkPolicyToggleHint":
+      "切换这个开关后，再次 ping 你的资源，看看它如何影响连接。",
+    "onboarding.p2pPolicyDescription":
+      "在 Cloink 中，谁能访问什么完全由你决定。我们已经为你的设备预先配置好了一条访问策略。",
+    "onboarding.p2pPolicyToggleHint":
+      "切换这个开关后，再次 ping 你的另一台设备，看看它如何影响连接。",
+    "onboarding.continue": "继续",
+    "onboarding.testP2PDescription":
+      "设备连接得很好。现在我们来做个小测试，看看它们是否可以互相通信。",
+    "onboarding.runCommandFrom": "在",
+    "onboarding.toPing": "上运行此命令来 ping",
+    "onboarding.testP2PResponseHint": "如果连接正常，你应该会收到响应。",
+    "onboarding.policyNamedTitle": "{name} 策略",
+    "onboarding.policyEnabled": "策略已成功启用",
+    "onboarding.policyDisabled": "策略已成功禁用",
+    "onboarding.policyUpdating": "正在更新策略...",
+    "onboarding.usersToResourcePolicyName": "用户到 {name}",
+    "onboarding.usersToResourcePolicyDescription":
+      "允许访问该资源 {address}",
+    "onboarding.usersToSubnetPolicyDescription":
+      "允许访问该子网 {address}",
+    "onboarding.usersToRoutingPeersPolicyName": "用户到路由设备",
+    "onboarding.usersToRoutingPeersPolicyDescription":
+      "允许用户访问路由设备",
     "onboarding.getFirstDeviceOnline": "让我们让你的第一台设备上线",
     "onboarding.getFirstDeviceOnlineDescription":
       "要访问其他机器，安装 云链-Cloink，登录，你的设备就会加入网络。你添加的每台设备都会成为你网络中的 云链-Cloink 对等端。就这么简单。",
@@ -4907,6 +5205,38 @@ export const messages = {
     "reverseProxy.authMethodIpRestricted": "IP 限制",
     "reverseProxy.authMethodCountryRestricted": "国家限制",
     "reverseProxy.authMethodGeoUnavailable": "地理位置不可用",
+    "reverseProxy.ruleCount": "{count} 条规则",
+    "reverseProxy.allowedCountries": "允许的国家/地区",
+    "reverseProxy.blockedCountries": "已阻止的国家/地区",
+    "reverseProxy.allowedIp": "允许的 IP",
+    "reverseProxy.allowedIps": "允许的 IP",
+    "reverseProxy.allowedCidr": "允许的 CIDR",
+    "reverseProxy.allowedCidrs": "允许的 CIDR",
+    "reverseProxy.blockedIp": "已阻止的 IP",
+    "reverseProxy.blockedIps": "已阻止的 IP",
+    "reverseProxy.blockedCidr": "已阻止的 CIDR",
+    "reverseProxy.blockedCidrs": "已阻止的 CIDR",
+    "reverseProxy.crowdsecTitle": "CrowdSec IP 信誉",
+    "reverseProxy.crowdsecDescriptionPrefix":
+      "使用 CrowdSec 检测恶意 IP。",
+    "reverseProxy.crowdsecDescriptionMiddle": "可选择",
+    "reverseProxy.crowdsecDescriptionSuffix": "仅记录而不阻止。",
+    "reverseProxy.crowdsecEnforce": "强制阻止",
+    "reverseProxy.crowdsecEnforceDescription":
+      "被拦截的 IP 会立即拒绝访问。如果 bouncer 尚未同步，连接也会被拒绝（fail-closed）。",
+    "reverseProxy.crowdsecObserve": "仅观察",
+    "reverseProxy.crowdsecObserveDescription":
+      "被拦截的 IP 只会记录日志，不会拒绝访问。可先用此模式评估 CrowdSec 再决定是否强制启用。",
+    "reverseProxy.crowdsecBan": "CrowdSec 封禁",
+    "reverseProxy.crowdsecCaptcha": "CrowdSec 验证码",
+    "reverseProxy.crowdsecThrottle": "CrowdSec 限流",
+    "reverseProxy.crowdsecUnavailable": "CrowdSec 不可用",
+    "reverseProxy.crowdsecObserveLabel": "CrowdSec 观察",
+    "reverseProxy.download": "下载：",
+    "reverseProxy.noRules": "无规则",
+    "reverseProxy.configureAccessControl": "配置访问控制",
+    "reverseProxy.serviceSuffix": "服务",
+    "reverseProxy.upload": "上传：",
     "reverseProxy.authNotSupported":
       "TCP/UDP 和 TLS 透传服务工作在网络层，因此不支持认证方式。",
     "reverseProxy.authEnabledCount": "已启用 {count} 项",
@@ -5018,6 +5348,8 @@ export const messages = {
     "peerDetails.remoteAccessHelp": "通过 SSH 或 RDP 直接连接到此设备。",
     "peerDetails.ipUpdated": "设备 IP 已成功更新",
     "peerDetails.ipUpdating": "正在更新设备 IP...",
+    "peerDetails.ipv6Updated": "Cloink 设备 IPv6 已成功更新",
+    "peerDetails.updatingIpv6": "正在更新设备 IPv6...",
     "peerDetails.netbirdIpAddress": "Cloink IP 地址",
     "peerDetails.publicIpAddress": "公网 IP 地址",
     "peerDetails.dnsLabel": "DNS 标签",
@@ -5184,6 +5516,9 @@ export const messages = {
       "当前实例已禁用邮箱登录，因此这个选项不可用。",
     "authenticationTab.loginMethodWeChatWorkDisabled":
       "请先配置企业微信身份提供商后再使用此选项。",
+    "authenticationTab.localMfaLabel": "启用本地 MFA",
+    "authenticationTab.localMfaHelpLine1": "要求使用本地凭证登录的用户",
+    "authenticationTab.localMfaHelpLine2": "必须通过多因素认证。",
     "authenticationTab.requireLoginAfterDisconnect": "断开后需要重新登录",
     "authenticationTab.requireLoginAfterDisconnectHelp":
       "启用后，用户与管理连接断开 10 分钟后将需要重新认证。",
@@ -5227,6 +5562,23 @@ export const messages = {
       "留空可保留现有密钥，或输入新的密钥",
     "identityProviderModal.clientSecretPlaceholder": "输入客户端密钥",
     "identityProviderModal.clientSecretMaskedPlaceholder": "••••••••",
+    "identityProviderModal.agentId": "Agent ID",
+    "identityProviderModal.agentIdHelp":
+      "填写企业微信应用的 Agent ID，官方登录组件会使用该值初始化登录面板。",
+    "identityProviderModal.agentIdPlaceholder": "输入企业微信 Agent ID",
+    "identityProviderModal.wechatworkCorpId": "Corp ID",
+    "identityProviderModal.wechatworkCorpIdHelp": "填写企业微信的 Corp ID。",
+    "identityProviderModal.wechatworkCorpIdPlaceholder":
+      "输入企业微信 Corp ID",
+    "identityProviderModal.wechatworkSecret": "Secret",
+    "identityProviderModal.wechatworkSecretHelp":
+      "填写企业微信自建应用的 Secret。",
+    "identityProviderModal.wechatworkSecretKeepExisting":
+      "留空将保留现有企业微信应用 Secret。",
+    "identityProviderModal.wechatworkSecretKeepPlaceholder":
+      "留空则不修改 Secret",
+    "identityProviderModal.wechatworkSecretPlaceholder":
+      "输入企业微信应用 Secret",
     "identityProviderModal.redirectUrl": "重定向 / 回调 URL",
     "identityProviderModal.redirectUrlHelp":
       "将此 URL 复制到你的身份提供商配置中",
@@ -5416,6 +5768,16 @@ export const messages = {
     "networkSettings.networkRangeHelp":
       "以 CIDR 格式为你的网络指定自定义 IPv4 范围。修改后，所有设备 IP 都会重新分配。",
     "networkSettings.networkRangePlaceholder": "例如：100.64.0.0/16",
+    "networkSettings.ipv6NetworkRange": "IPv6 网络范围",
+    "networkSettings.ipv6NetworkRangeHelp":
+      "为你的网络指定自定义 IPv6 CIDR 范围。修改后，所有设备的 IPv6 地址都会重新分配。",
+    "networkSettings.ipv6NetworkRangePlaceholder":
+      "例如：fd00:1234:5678::/64",
+    "networkSettings.ipv6EnabledGroups": "启用 IPv6 的分组",
+    "networkSettings.ipv6EnabledGroupsHelp":
+      "所选分组中的设备将获得 IPv6 叠加地址（双栈）。移除全部分组即可禁用 IPv6。保存后更改会生效，并重启受影响的客户端。",
+    "networkSettings.ipv6EnabledGroupsPlaceholder":
+      "选择要启用 IPv6 的分组...",
     "networkSettings.enableDnsWildcardRouting": "启用 DNS 通配符路由",
     "networkSettings.enableDnsWildcardRoutingHelp":
       "允许使用 DNS 通配符进行路由。此功能要求 Cloink 客户端版本不低于 v0.35。修改后需要重启客户端才会生效。",
@@ -5736,6 +6098,11 @@ export const messages = {
     "policies.deleteTitle": "删除“{name}”？",
     "policies.deleteDescription":
       "你确定要删除这个访问控制策略吗？此操作无法撤销。",
+    "policies.namedTitle": "访问控制策略 {name}",
+    "policies.updatedDescription": "访问控制策略已成功更新",
+    "policies.updating": "正在更新策略...",
+    "policies.deletedDescription": "策略已成功删除。",
+    "policies.deleting": "正在删除策略...",
     "notification.genericError": "发生了一些问题...",
     "peerGroupSelector.addOrSelectGroups": "添加或选择分组...",
     "peerGroupSelector.searchGroups": '搜索分组或按 "Enter" 添加新分组...',
@@ -5818,6 +6185,7 @@ export const messages = {
     "noResults.title": "未找到任何结果",
     "noResults.description": "未找到任何结果。请尝试其他搜索词或更改筛选条件。",
     "noResults.resetFilters": "重置筛选和搜索",
+    "dataTable.resetFiltersAndSearch": "重置筛选和搜索",
     "pageNotFound.title": "请求的页面不存在",
     "pageNotFound.description":
       "您尝试访问的页面不存在。请检查 URL 或返回仪表板继续浏览。",
@@ -5886,6 +6254,83 @@ export const messages = {
     "dialog.confirmation": "确认",
     "dialog.confirmationDescription": "您确定要继续吗？此操作无法撤销。",
     "dialog.confirm": "确认",
+    "modal.dialogTitle": "对话框",
+    "modal.dialogDescription": "模态对话框",
+    "loginExpiredBadge.title": "需要登录",
+
+    "peer.deleteTitle": "删除“{name}”？",
+    "peer.deleteDescription": "确定要删除此设备吗？此操作无法撤销。",
+    "peer.deleteSuccess": "设备已成功删除",
+    "peer.deleteLoading": "正在删除设备...",
+    "peer.sshEnabled": "SSH 访问已成功启用",
+    "peer.sshDisabled": "SSH 访问已成功禁用",
+    "peer.sshEnabling": "正在启用 SSH 访问...",
+    "peer.sshDisabling": "正在禁用 SSH 访问...",
+    "peer.editIpTitle": "编辑设备 IP 地址",
+    "peer.editIpDescription": "更新该设备的 Cloink IP 地址。",
+    "peer.editIpPlaceholder": "例如：100.64.0.15",
+    "peer.editIpError": "请输入有效的 IP 地址，例如：100.64.0.15",
+    "peer.editIpv6Title": "编辑设备 IPv6 地址",
+    "peer.editIpv6Description": "更新该设备的 Cloink IPv6 地址。",
+    "peer.editIpv6Placeholder": "例如：fd00:1234::1",
+    "peer.editIpv6Error": "请输入有效的 IPv6 地址，例如：fd00:1234::1",
+    "peer.editIpReconnectInfo": "设备重新连接后更改才会生效。",
+
+    "routes.namedTitle": "网络 {networkId}-{network}",
+    "routes.updatedDescription": "网络路由已成功更新",
+    "routes.updating": "正在更新路由...",
+    "routes.createdDescription": "网络路由已成功创建",
+    "routes.creating": "正在创建路由...",
+
+    "accessControl.createdTitle": "创建访问控制策略",
+    "accessControl.createdDescription": "策略已创建成功。",
+    "accessControl.creating": "正在创建策略...",
+
+    "globalSearch.networksHeading": "网络（{count}）",
+    "globalSearch.resourcesHeading": "资源（{count}）",
+    "globalSearch.resourceCount": "{count} 个资源",
+    "globalSearch.blankTitle": "搜索网络和资源",
+    "globalSearch.blankDescription":
+      "快速查找网络及其关联资源。输入名称、描述或地址即可开始搜索。",
+    "globalSearch.notFoundTitle": "未找到任何结果",
+    "globalSearch.notFoundDescription":
+      "没有找到匹配结果。请尝试其他搜索词。",
+    "globalSearch.navigate": "导航",
+    "globalSearch.open": "打开",
+    "globalSearch.close": "关闭",
+
+    "setupKeys.revokeSelectedKeys": "撤销 {count} 个密钥",
+
+    "nameservers.updateToggleDescription": "域名服务器已成功切换为{status}。",
+
+    "networkRoutes.deprecationInfo":
+      "Network Routes 即将弃用，并由 Networks 替代。",
+    "networkResources.exposeService": "暴露服务",
+    "networkResources.singleIp": "单个 IP",
+    "networkResources.ipRange": "IP 范围",
+
+    "routeGroup.deletingTitle": "删除网络 {networkId}",
+    "routeGroup.deleteTitle": "删除网络“{networkId}”？",
+    "routeGroup.deleteDescription":
+      "确定要删除此网络吗？该网络中的所有路由都会被删除，此操作无法撤销。",
+    "routeGroup.deletedDescription": "网络已成功移除",
+    "routeGroup.deleting": "正在删除网络...",
+    "routeGroup.highAvailabilityDisabled": "该路由当前未启用高可用。",
+    "routeGroup.highAvailabilityEnabled": "该路由已启用高可用。",
+    "routeGroup.highAvailabilityAddPeers":
+      "继续添加更多路由设备即可为该网络路由启用高可用。",
+    "routeGroup.highAvailabilityIncrease":
+      "你可以继续添加更多设备，以提升该网络路由的可用性。",
+    "routeGroup.highAvailabilityConfigureGroup":
+      "要进行配置，你需要为此路由中的某个分组添加更多设备。可在设备页面完成。",
+    "routeGroup.highAvailabilityGroupIncrease":
+      "你可以前往设备页面，为此路由中的分组添加更多设备。",
+    "routeGroup.peerCount": "{count} 个设备",
+    "routeGroup.goToPeers": "前往设备",
+    "routeGroup.addPeer": "添加设备",
+    "activity.cloinkIp": "Cloink IP",
+    "groups.usedInPrefix": "分组",
+    "groups.usedInMiddle": "被用于",
 
     "peerActionCell.sessionExpirationDisabled": "会话过期已禁用",
     "peerActionCell.sessionExpirationEnabled": "会话过期已启用",

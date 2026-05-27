@@ -2,6 +2,7 @@ import { DomainListBadge } from "@components/ui/DomainListBadge";
 import { IconDirectionSign } from "@tabler/icons-react";
 import { InfoIcon } from "lucide-react";
 import * as React from "react";
+import { useI18n } from "@/i18n/I18nProvider";
 import { ExitNodeHelpTooltip } from "@/modules/exit-node/ExitNodeHelpTooltip";
 
 type Props = {
@@ -11,6 +12,7 @@ type Props = {
 export default function NetworkRangeCell({ network, domains }: Props) {
   const isExitNode = network === "0.0.0.0/0";
   const hasDomains = domains ? domains.length > 0 : false;
+  const { t } = useI18n();
 
   return hasDomains && domains ? (
     <DomainListBadge domains={domains} />
@@ -18,7 +20,7 @@ export default function NetworkRangeCell({ network, domains }: Props) {
     <ExitNodeHelpTooltip>
       <div className={"flex gap-2 items-center dark:text-nb-gray-300 group"}>
         <IconDirectionSign size={16} className={"text-yellow-400"} />
-        Exit Node{" "}
+        {t("common.exitNode")}{" "}
         <InfoIcon
           size={14}
           className={

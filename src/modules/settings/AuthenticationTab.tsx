@@ -479,9 +479,9 @@ export default function AuthenticationTab({ account }: Readonly<Props>) {
                   label={
                     <>
                       <KeyRound size={15} />
-                      Enable Local MFA
+                      {t("authenticationTab.localMfaLabel")}
                       <SmallBadge
-                        text={"Beta"}
+                        text={t("common.beta")}
                         variant={"sky"}
                         className={"text-[9px] leading-none py-[3px] px-[5px]"}
                         textClassName={"top-0"}
@@ -490,9 +490,9 @@ export default function AuthenticationTab({ account }: Readonly<Props>) {
                   }
                   helpText={
                     <>
-                      Require multi-factor authentication for users
+                      {t("authenticationTab.localMfaHelpLine1")}
                       <br />
-                      authenticating with local credentials.
+                      {t("authenticationTab.localMfaHelpLine2")}
                     </>
                   }
                   disabled={!permission.settings.update}

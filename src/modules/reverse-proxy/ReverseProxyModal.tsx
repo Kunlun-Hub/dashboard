@@ -434,7 +434,7 @@ export default function ReverseProxyModal({
       ? t("reverseProxy.modalEditPrefix")
       : t("reverseProxy.modalAddPrefix");
     const label = serviceMode
-      ? SERVICE_MODES[serviceMode].label
+      ? t(SERVICE_MODES[serviceMode].labelKey)
       : t("reverseProxy.modalDefaultLabel");
     return `${prefix} ${label}`;
   }, [reverseProxy, serviceMode, t]);

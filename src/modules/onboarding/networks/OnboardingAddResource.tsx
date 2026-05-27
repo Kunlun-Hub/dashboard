@@ -121,19 +121,25 @@ export const OnboardingAddResource = ({
     usersGroup: Group,
   ) => {
     const isSubnet = r.type === "subnet";
+    const policyName = t("onboarding.usersToResourcePolicyName", {
+      name: r.name,
+    });
+    const policyDescription = isSubnet
+      ? t("onboarding.usersToSubnetPolicyDescription", {
+          address: r.address,
+        })
+      : t("onboarding.usersToResourcePolicyDescription", {
+          address: r.address,
+        });
 
     await policyRequest.post({
-      name: `Users to ${r.name}`,
-      description: `Allows access to this ${
-        isSubnet ? `subnet ${r.address}` : `resource ${r.address}`
-      }`,
+      name: policyName,
+      description: policyDescription,
       enabled: true,
       rules: [
         {
-          name: `Users to ${r.name}`,
-          description: `Allows access to this ${
-            isSubnet ? `subnet ${r.address}` : `resource ${r.address}`
-          }`,
+          name: policyName,
+          description: policyDescription,
           enabled: true,
           action: "accept",
           bidirectional: true,
@@ -158,13 +164,13 @@ export const OnboardingAddResource = ({
   ) => {
     await policyRequest
       .post({
-        name: `Users to Routing Peers`,
-        description: `Allows users to access routing peers`,
+        name: t("onboarding.usersToRoutingPeersPolicyName"),
+        description: t("onboarding.usersToRoutingPeersPolicyDescription"),
         enabled: true,
         rules: [
           {
-            name: `Users to Routing Peers`,
-            description: `Allows users to access routing peers`,
+            name: t("onboarding.usersToRoutingPeersPolicyName"),
+            description: t("onboarding.usersToRoutingPeersPolicyDescription"),
             enabled: true,
             action: "accept",
             bidirectional: true,

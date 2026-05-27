@@ -3,6 +3,7 @@ import InlineLink from "@components/InlineLink";
 import { cn } from "@utils/helpers";
 import { ExternalLinkIcon, HelpCircle } from "lucide-react";
 import React from "react";
+import { useI18n } from "@/i18n/I18nProvider";
 import { User } from "@/interfaces/User";
 import { useAccount } from "@/modules/account/useAccount";
 
@@ -12,6 +13,7 @@ type Props = {
 
 export default function UserStatusCell({ user }: Readonly<Props>) {
   const account = useAccount();
+  const { t } = useI18n();
   const status = user.status;
   const isPendingApproval = user.pending_approval;
   const isLocalAuthDisabled =
@@ -20,29 +22,26 @@ export default function UserStatusCell({ user }: Readonly<Props>) {
 
   const getStatusDisplay = () => {
     if (isLocalAuthDisabled) {
-      return { text: "Disabled", color: "bg-gray-400" };
+      return { text: t("users.status.disabled"), color: "bg-gray-400" };
     }
     if (isPendingApproval) {
-      return { text: "Pending Approval", color: "bg-netbird" };
+      return { text: t("users.status.pendingApproval"), color: "bg-netbird" };
     }
     if (status === "blocked") {
-      return { text: "Blocked", color: "bg-red-500" };
+      return { text: t("users.status.blocked"), color: "bg-red-500" };
     }
     if (status === "invited") {
-      return { text: "Pending", color: "bg-yellow-400" };
+      return { text: t("users.status.pending"), color: "bg-yellow-400" };
     }
     if (status === "active") {
-      return { text: "Active", color: "bg-green-500" };
+      return { text: t("users.status.active"), color: "bg-green-500" };
     }
-    return { text: status || "Unknown", color: "bg-gray-400" };
+    return { text: status || t("common.unknown"), color: "bg-gray-400" };
   };
 
   const tooltipContent = isLocalAuthDisabled ? (
     <div className={"max-w-xs text-xs flex flex-col gap-2"}>
-      <div>
-        Local authentication is disabled. This user can no longer log in.
-        Use your IdP for authentication.
-      </div>
+      <div>{t("users.localAuthDisabledDescription")}</div>
       <div>
         <InlineLink
           href={
@@ -50,35 +49,32 @@ export default function UserStatusCell({ user }: Readonly<Props>) {
           }
           target={"_blank"}
         >
-          Learn more <ExternalLinkIcon size={12} />
+          {t("common.learnMore")} <ExternalLinkIcon size={12} />
         </InlineLink>
       </div>
     </div>
   ) : (
     <div className={"max-w-xs text-xs flex flex-col gap-2"}>
-      <div>
-        This user needs to be approved by an administrator before it can
-        join your organization.
-      </div>
+      <div>{t("users.pendingApprovalDescription")}</div>
 
       <div>
-        If you want to disable approval for new users, go to{" "}
+        {t("users.pendingApprovalSettingsPrefix")}{" "}
         <InlineLink href={"/settings?tab=authentication"}>
-          Settings
+          {t("settings.title")}
         </InlineLink>{" "}
-        and disable{" "}
+        {t("users.pendingApprovalSettingsSuffix")}{" "}
         <span className={"font-medium text-white"}>
-          {"'User Approval Required'"}
+          {t("users.pendingApprovalRequired")}
         </span>
         .
       </div>
       <div>
-        Learn more about{" "}
+        {t("users.pendingApprovalLearnMorePrefix")}{" "}
         <InlineLink
           href={"https://docs.netbird.io/how-to/approve-users"}
           target={"_blank"}
         >
-          User Approval <ExternalLinkIcon size={12} />
+          {t("users.pendingApprovalLearnMore")} <ExternalLinkIcon size={12} />
         </InlineLink>
       </div>
     </div>

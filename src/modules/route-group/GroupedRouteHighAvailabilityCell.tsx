@@ -8,6 +8,7 @@ import * as React from "react";
 import { useMemo } from "react";
 import PeerIcon from "@/assets/icons/PeerIcon";
 import { GroupedRoute } from "@/interfaces/Route";
+import { useI18n } from "@/i18n/I18nProvider";
 import { useAddRoutingPeer } from "@/modules/routes/RouteAddRoutingPeerProvider";
 
 type Props = {
@@ -17,30 +18,19 @@ export default function GroupedRouteHighAvailabilityCell({
   groupedRoute,
 }: Props) {
   const router = useRouter();
+  const { t } = useI18n();
   const isActive = useMemo(() => {
     return groupedRoute.high_availability_count > 1;
   }, [groupedRoute.high_availability_count]);
 
   const disabledText = useMemo(
-    () => (
-      <>
-        High availability is currently{" "}
-        <span className={"text-red-500 font-medium"}>disabled</span> for this
-        route.
-      </>
-    ),
-    [],
+    () => t("routeGroup.highAvailabilityDisabled"),
+    [t],
   );
 
   const enabledText = useMemo(
-    () => (
-      <>
-        High availability is{" "}
-        <span className={"text-green-500 font-medium"}>enabled</span> for this
-        route.
-      </>
-    ),
-    [],
+    () => t("routeGroup.highAvailabilityEnabled"),
+    [t],
   );
 
   const { openAddRoutingPeerModal } = useAddRoutingPeer();
@@ -52,37 +42,33 @@ export default function GroupedRouteHighAvailabilityCell({
         <div className={"max-w-xs text-xs"}>
           {!isActive && !groupedRoute.is_using_route_groups && (
             <>
-              {disabledText}
+              <div>{disabledText}</div>
               <div className={"inline-flex mt-2"}>
-                Go ahead and add more routing peers to enable high availability
-                for this network route.
+                {t("routeGroup.highAvailabilityAddPeers")}
               </div>
             </>
           )}
           {isActive && !groupedRoute.is_using_route_groups && (
             <>
-              {enabledText}
+              <div>{enabledText}</div>
               <div className={"inline-flex mt-2"}>
-                You can add more peers to increase the availability of this
-                network route.
+                {t("routeGroup.highAvailabilityIncrease")}
               </div>
             </>
           )}
           {!isActive && groupedRoute.is_using_route_groups && (
             <>
-              {disabledText}
+              <div>{disabledText}</div>
               <div className={"inline-flex mt-2"}>
-                To configure, you must add more peers to a group in this route.
-                You can do it in the Peers menu.
+                {t("routeGroup.highAvailabilityConfigureGroup")}
               </div>
             </>
           )}
           {isActive && groupedRoute.is_using_route_groups && (
             <>
-              {enabledText}
+              <div>{enabledText}</div>
               <div className={"inline-flex mt-2"}>
-                You can add more peers to a group in this route by going to the
-                peers page.
+                {t("routeGroup.highAvailabilityGroupIncrease")}
               </div>
             </>
           )}
@@ -101,12 +87,14 @@ export default function GroupedRouteHighAvailabilityCell({
           {isActive ? (
             <>
               <div className={"h-2 w-2 rounded-full bg-green-500"}></div>
-              {groupedRoute.high_availability_count} Peer(s)
+              {t("routeGroup.peerCount", {
+                count: groupedRoute.high_availability_count,
+              })}
             </>
           ) : (
             <>
               <div className={"h-2 w-2 rounded-full bg-nb-gray-700"}></div>
-              Disabled
+              {t("common.disabled")}
             </>
           )}
           <HelpCircle size={12} />
@@ -118,10 +106,8 @@ export default function GroupedRouteHighAvailabilityCell({
             className={"min-w-[130px]"}
             onClick={() => router.push("/peers")}
           >
-            <>
-              <PeerIcon size={12} />
-              Go to Peers
-            </>
+            <PeerIcon size={12} />
+            {t("routeGroup.goToPeers")}
           </Button>
         )}
         {!groupedRoute.is_using_route_groups && (
@@ -132,7 +118,7 @@ export default function GroupedRouteHighAvailabilityCell({
             onClick={() => openAddRoutingPeerModal(groupedRoute)}
           >
             <PlusCircle size={12} />
-            Add Peer
+            {t("routeGroup.addPeer")}
           </Button>
         )}{" "}
       </div>

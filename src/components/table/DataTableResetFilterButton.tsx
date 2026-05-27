@@ -4,6 +4,7 @@ import { Table } from "@tanstack/react-table";
 import { FilterX } from "lucide-react";
 import * as React from "react";
 import { useState } from "react";
+import { useI18n } from "@/i18n/I18nProvider";
 
 interface Props<TData> {
   table: Table<TData>;
@@ -17,6 +18,7 @@ export default function DataTableResetFilterButton<TData>({
   hasServerSideFilters = undefined,
 }: Props<TData>) {
   const [hovered, setHovered] = useState(false);
+  const { t } = useI18n();
 
   const hasClientSideFilters =
     table.getState().globalFilter !== "" ||
@@ -52,7 +54,7 @@ export default function DataTableResetFilterButton<TData>({
           }}
         >
           <span className={"text-xs text-neutral-300"}>
-            Reset Filters & Search
+            {t("dataTable.resetFiltersAndSearch")}
           </span>
         </TooltipContent>
       </Tooltip>

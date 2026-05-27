@@ -3,6 +3,7 @@ import FullTooltip from "@components/FullTooltip";
 import { cn } from "@utils/helpers";
 import { useRouter } from "next/navigation";
 import React from "react";
+import { useI18n } from "@/i18n/I18nProvider";
 
 type Props = {
   icon: React.ReactNode;
@@ -21,6 +22,7 @@ export default function GroupsCountCell({
   hidden = false,
 }: Props) {
   const router = useRouter();
+  const { t } = useI18n();
 
   const handleClick = () => {
     href && router.push(href);
@@ -32,10 +34,10 @@ export default function GroupsCountCell({
         className={"w-full"}
         content={
           <div className={"text-xs"}>
-            Group{" "}
-            <span className={"text-netbird font-medium"}>{groupName}</span> is
-            used in <span className={"font-medium text-netbird"}>{count}</span>{" "}
-            {text}
+            {t("groups.usedInPrefix")}{" "}
+            <span className={"text-netbird font-medium"}>{groupName}</span>{" "}
+            {t("groups.usedInMiddle")}{" "}
+            <span className={"font-medium text-netbird"}>{count}</span> {text}
           </div>
         }
         disabled={count === 0}

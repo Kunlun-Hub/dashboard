@@ -5,6 +5,7 @@ import * as React from "react";
 import { useMemo } from "react";
 import CircleIcon from "@/assets/icons/CircleIcon";
 import { Network } from "@/interfaces/Network";
+import { useI18n } from "@/i18n/I18nProvider";
 import { navigateToNetwork } from "@/modules/networks/networkNavigation";
 
 type Props = {
@@ -14,6 +15,7 @@ type Props = {
 export const NetworkRoutingPeerCount = ({ network }: Props) => {
   const router = useRouter();
   const routerCount = network?.routing_peers_count ?? 0;
+  const { t } = useI18n();
 
   const routingPeerStatusColor = useMemo(() => {
     if (!network) return "bg-nb-gray-500";
@@ -36,7 +38,7 @@ export const NetworkRoutingPeerCount = ({ network }: Props) => {
         size={8}
         className={cn("shrink-0 block", routingPeerStatusColor)}
       />
-      {routerCount} Routing Peer(s)
+      {t("common.routingPeerCount", { count: routerCount })}
     </Button>
   );
 };

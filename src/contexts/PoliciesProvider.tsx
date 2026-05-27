@@ -8,6 +8,7 @@ import { useGroups } from "@/contexts/GroupsProvider";
 import { Group } from "@/interfaces/Group";
 import { NetworkResource } from "@/interfaces/Network";
 import { Policy } from "@/interfaces/Policy";
+import { useI18n } from "@/i18n/I18nProvider";
 import { AccessControlModalContent } from "@/modules/access-control/AccessControlModal";
 
 type Props = {
@@ -44,6 +45,7 @@ export default function PoliciesProvider({ children }: Props) {
   const [policyModal, setPolicyModal] = useState(false);
   const [currentPolicy, setCurrentPolicy] = useState<Policy>();
   const [initialPolicyTab, setInitialPolicyTab] = useState("");
+  const { t } = useI18n();
 
   const createPolicy = async (policy: Policy) => request.post(policy);
 
@@ -145,9 +147,8 @@ export default function PoliciesProvider({ children }: Props) {
       : policy.rules ?? [];
 
     notify({
-      title: "Access Control Policy " + policy.name,
-      description:
-        message || "The access control policy was successfully updated",
+      title: t("policies.namedTitle", { name: policy.name }),
+      description: message || t("policies.updatedDescription"),
       promise: request
         .put(
           {
@@ -170,7 +171,7 @@ export default function PoliciesProvider({ children }: Props) {
         .then((p) => {
           onSuccess && onSuccess(p);
         }),
-      loadingMessage: "Updating policy...",
+      loadingMessage: t("policies.updating"),
     });
   };
 
@@ -180,10 +181,10 @@ export default function PoliciesProvider({ children }: Props) {
       onSuccess?.();
     });
     notify({
-      title: "Access Control Policy " + policy.name,
-      description: "The policy was successfully deleted.",
+      title: t("policies.namedTitle", { name: policy.name }),
+      description: t("policies.deletedDescription"),
       promise,
-      loadingMessage: "Deleting policy...",
+      loadingMessage: t("policies.deleting"),
     });
     return promise;
   };

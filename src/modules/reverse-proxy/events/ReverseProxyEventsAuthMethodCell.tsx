@@ -76,22 +76,22 @@ export const ReverseProxyEventsAuthMethodCell = ({ event }: Props) => {
       case "crowdsec_ban":
         return {
           icon: <ShieldAlert size={12} />,
-          label: "CrowdSec Ban",
+          label: t("reverseProxy.crowdsecBan"),
         };
       case "crowdsec_captcha":
         return {
           icon: <ShieldAlert size={12} />,
-          label: "CrowdSec Captcha",
+          label: t("reverseProxy.crowdsecCaptcha"),
         };
       case "crowdsec_throttle":
         return {
           icon: <ShieldAlert size={12} />,
-          label: "CrowdSec Throttle",
+          label: t("reverseProxy.crowdsecThrottle"),
         };
       case "crowdsec_unavailable":
         return {
           icon: <ShieldOff size={12} />,
-          label: "CrowdSec Unavailable",
+          label: t("reverseProxy.crowdsecUnavailable"),
         };
       default:
         return {

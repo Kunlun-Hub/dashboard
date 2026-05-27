@@ -31,26 +31,34 @@ type ServiceModeConfig = {
 };
 
 type ServiceModeStaticConfig = {
-  label: string;
-  description: string;
+  labelKey:
+    | "reverseProxy.serviceModeHttp"
+    | "reverseProxy.serviceModeTls"
+    | "reverseProxy.serviceModeTcp"
+    | "reverseProxy.serviceModeUdp";
+  descriptionKey:
+    | "reverseProxy.serviceModeHttpDescription"
+    | "reverseProxy.serviceModeTlsDescription"
+    | "reverseProxy.serviceModeTcpDescription"
+    | "reverseProxy.serviceModeUdpDescription";
 };
 
 export const SERVICE_MODES: Record<ServiceMode, ServiceModeStaticConfig> = {
   [ServiceMode.HTTP]: {
-    label: "HTTP/S Service",
-    description: "Proxy HTTP and HTTPS requests to one or more targets.",
+    labelKey: "reverseProxy.serviceModeHttp",
+    descriptionKey: "reverseProxy.serviceModeHttpDescription",
   },
   [ServiceMode.TLS]: {
-    label: "TLS Passthrough",
-    description: "Pass encrypted TLS traffic directly to the target.",
+    labelKey: "reverseProxy.serviceModeTls",
+    descriptionKey: "reverseProxy.serviceModeTlsDescription",
   },
   [ServiceMode.TCP]: {
-    label: "TCP Service",
-    description: "Forward raw TCP traffic to a selected target and port.",
+    labelKey: "reverseProxy.serviceModeTcp",
+    descriptionKey: "reverseProxy.serviceModeTcpDescription",
   },
   [ServiceMode.UDP]: {
-    label: "UDP Service",
-    description: "Forward UDP traffic to a selected target and port.",
+    labelKey: "reverseProxy.serviceModeUdp",
+    descriptionKey: "reverseProxy.serviceModeUdpDescription",
   },
 };
 
@@ -64,23 +72,23 @@ export const ReverseProxyServiceModeSelector = ({
   const selected = value ?? ServiceMode.HTTP;
   const serviceModes: Record<ServiceMode, ServiceModeConfig> = {
     [ServiceMode.HTTP]: {
-      label: t("reverseProxy.serviceModeHttp"),
-      description: t("reverseProxy.serviceModeHttpDescription"),
+      label: t(SERVICE_MODES[ServiceMode.HTTP].labelKey),
+      description: t(SERVICE_MODES[ServiceMode.HTTP].descriptionKey),
       icon: <Globe size={14} />,
     },
     [ServiceMode.TLS]: {
-      label: t("reverseProxy.serviceModeTls"),
-      description: t("reverseProxy.serviceModeTlsDescription"),
+      label: t(SERVICE_MODES[ServiceMode.TLS].labelKey),
+      description: t(SERVICE_MODES[ServiceMode.TLS].descriptionKey),
       icon: <LockKeyhole size={14} />,
     },
     [ServiceMode.TCP]: {
-      label: t("reverseProxy.serviceModeTcp"),
-      description: t("reverseProxy.serviceModeTcpDescription"),
+      label: t(SERVICE_MODES[ServiceMode.TCP].labelKey),
+      description: t(SERVICE_MODES[ServiceMode.TCP].descriptionKey),
       icon: <ArrowRightFromLine size={14} />,
     },
     [ServiceMode.UDP]: {
-      label: t("reverseProxy.serviceModeUdp"),
-      description: t("reverseProxy.serviceModeUdpDescription"),
+      label: t(SERVICE_MODES[ServiceMode.UDP].labelKey),
+      description: t(SERVICE_MODES[ServiceMode.UDP].descriptionKey),
       icon: <ArrowRightFromLine size={14} />,
     },
   };

@@ -3,6 +3,7 @@ import FullTooltip from "@components/FullTooltip";
 import { GlobeIcon, HelpCircle, PowerOffIcon } from "lucide-react";
 import * as React from "react";
 import { SetupKey } from "@/interfaces/SetupKey";
+import { useI18n } from "@/i18n/I18nProvider";
 
 type Props = {
   setupKey: SetupKey;
@@ -17,19 +18,19 @@ export default function SetupKeyStatusCell({ setupKey }: Readonly<Props>) {
 }
 
 const AllowExtraDNSLabels = () => {
+  const { t } = useI18n();
   return (
     <FullTooltip
       interactive={false}
       content={
         <div className="max-w-xs text-xs">
-          Allow multiple DNS labels in the peer name (e.g. <br />
-          host.europe.netbird.io.)
+          {t("setupKeys.extraDnsLabelsDescription")}
         </div>
       }
     >
       <Badge variant="gray">
         <GlobeIcon size={12} className={"shrink-0"} />
-        Extra DNS Labels
+        {t("setupKeys.extraDnsLabels")}
         <HelpCircle size={12} />
       </Badge>
     </FullTooltip>
@@ -37,19 +38,19 @@ const AllowExtraDNSLabels = () => {
 };
 
 const Ephemeral = () => {
+  const { t } = useI18n();
   return (
     <FullTooltip
       interactive={false}
       content={
         <div className={"max-w-xs text-xs"}>
-          Peers that are offline for over 10 minutes will be removed
-          automatically.
+          {t("setupKeys.ephemeralDescription")}
         </div>
       }
     >
       <Badge variant={"gray"}>
         <PowerOffIcon size={12} className={"shrink-0 text-yellow-400"} />
-        Ephemeral
+        {t("setupKeys.ephemeral")}
         <HelpCircle size={12} />
       </Badge>
     </FullTooltip>

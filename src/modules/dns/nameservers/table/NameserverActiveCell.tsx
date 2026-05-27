@@ -4,6 +4,7 @@ import { useApiCall } from "@utils/api";
 import React, { useMemo } from "react";
 import { useSWRConfig } from "swr";
 import { usePermissions } from "@/contexts/PermissionsProvider";
+import { useI18n } from "@/i18n/I18nProvider";
 import { NameserverGroup } from "@/interfaces/Nameserver";
 
 type Props = {
@@ -13,15 +14,15 @@ export default function NameserverActiveCell({ ns }: Readonly<Props>) {
   const nsRequest = useApiCall<NameserverGroup>("/dns/nameservers");
   const { mutate } = useSWRConfig();
   const { permission } = usePermissions();
+  const { t } = useI18n();
 
   const update = async (enabled: boolean) => {
     notify({
       title: ns.name,
-      description:
-        "Nameserver was successfully" +
-        (enabled ? " enabled" : " disabled") +
-        ".",
-      loadingMessage: "Updating your nameserver...",
+      description: t("nameservers.updateToggleDescription", {
+        status: enabled ? t("common.on") : t("common.off"),
+      }),
+      loadingMessage: t("nameservers.updating"),
       promise: nsRequest
         .put(
           {

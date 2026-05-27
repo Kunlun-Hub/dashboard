@@ -6,18 +6,22 @@ import { SERVICE_MODES } from "@/modules/reverse-proxy/ReverseProxyServiceModeSe
 import Badge from "@components/Badge";
 import { cn } from "@utils/helpers";
 import { ArrowRightFromLineIcon, GlobeIcon, LockKeyhole } from "lucide-react";
+import { useI18n } from "@/i18n/I18nProvider";
 
 type Props = {
   reverseProxy?: ReverseProxy;
 };
 
 export const ReverseProxyTypeCell = ({ reverseProxy }: Props) => {
+  const { t } = useI18n();
   const serviceModeLabel = useMemo(() => {
     if (!reverseProxy?.mode) return "HTTP/S";
     const mode = SERVICE_MODES[reverseProxy.mode];
     if (!mode) return "HTTP/S";
-    return trim(mode.label.replace("Service", ""));
-  }, [reverseProxy]);
+    return trim(
+      t(mode.labelKey).replace(` ${t("reverseProxy.serviceSuffix")}`, ""),
+    );
+  }, [reverseProxy, t]);
 
   return (
     <div className={"flex"}>

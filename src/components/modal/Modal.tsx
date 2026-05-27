@@ -68,50 +68,53 @@ const ModalContent = React.forwardRef<
   ) => {
     const { t } = useI18n();
     return (
-    <ModalPortal>
-      <ModalOverlay>
-        <DialogPrimitive.Content
-          ref={ref}
-          className={cn(
-            "mx-auto relative top-0 z-[52] grid w-full focus:outline-0 border border-neutral-200 bg-white py-6 dark:shadow-lg shadow-sm duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1  data-[state=open]:slide-in-from-left-1 sm:rounded-lg md:w-full dark:border-nb-gray-900 dark:bg-nb-gray",
-            className,
-            maxWidthClass,
-          )}
-          onPointerDownOutside={(e) => {
-            // Prevent closing modal when clicking on toast notifications
-            try {
-              const target = e.target as HTMLElement;
-              if (target?.closest("[data-toast-notification]")) {
-                e.preventDefault();
-                return;
+      <ModalPortal>
+        <ModalOverlay>
+          <DialogPrimitive.Content
+            ref={ref}
+            className={cn(
+              "mx-auto relative top-0 z-[52] grid w-full focus:outline-0 border border-neutral-200 bg-white py-6 dark:shadow-lg shadow-sm duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1  data-[state=open]:slide-in-from-left-1 sm:rounded-lg md:w-full dark:border-nb-gray-900 dark:bg-nb-gray",
+              className,
+              maxWidthClass,
+            )}
+            onPointerDownOutside={(e) => {
+              try {
+                const target = e.target as HTMLElement;
+                if (target?.closest("[data-toast-notification]")) {
+                  e.preventDefault();
+                  return;
+                }
+              } catch {
+                // Ignore errors
               }
-            } catch {
-              // Ignore errors
-            }
-            onPointerDownOutside?.(e);
-          }}
-          {...props}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <VisuallyHidden asChild>
-            <DialogPrimitive.Title>Dialog</DialogPrimitive.Title>
-          </VisuallyHidden>
-          <VisuallyHidden asChild>
-            <DialogPrimitive.Description>Modal dialog</DialogPrimitive.Description>
-          </VisuallyHidden>
-          {children}
-          {showClose && (
-            <DialogPrimitive.Close
-              data-cy={"modal-close"}
-              className="absolute right-4 z-10 top-4 rounded-sm opacity-70 ring-offset-white transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-neutral-950 focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-neutral-100 data-[state=open]:text-neutral-500 dark:ring-offset-neutral-950 dark:focus:ring-neutral-300 dark:data-[state=open]:bg-neutral-800 dark:data-[state=open]:text-neutral-400"
-            >
-              <X className="h-4 w-4" />
-              <span className="sr-only">{t('common.close')}</span>
-            </DialogPrimitive.Close>
-          )}
-        </DialogPrimitive.Content>
-      </ModalOverlay>
-    </ModalPortal>
+              onPointerDownOutside?.(e);
+            }}
+            {...props}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <VisuallyHidden asChild>
+              <DialogPrimitive.Title>
+                {t("modal.dialogTitle")}
+              </DialogPrimitive.Title>
+            </VisuallyHidden>
+            <VisuallyHidden asChild>
+              <DialogPrimitive.Description>
+                {t("modal.dialogDescription")}
+              </DialogPrimitive.Description>
+            </VisuallyHidden>
+            {children}
+            {showClose && (
+              <DialogPrimitive.Close
+                data-cy={"modal-close"}
+                className="absolute right-4 z-10 top-4 rounded-sm opacity-70 ring-offset-white transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-neutral-950 focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-neutral-100 data-[state=open]:text-neutral-500 dark:ring-offset-neutral-950 dark:focus:ring-neutral-300 dark:data-[state=open]:bg-neutral-800 dark:data-[state=open]:text-neutral-400"
+              >
+                <X className="h-4 w-4" />
+                <span className="sr-only">{t("common.close")}</span>
+              </DialogPrimitive.Close>
+            )}
+          </DialogPrimitive.Content>
+        </ModalOverlay>
+      </ModalPortal>
     );
   },
 );
@@ -155,10 +158,14 @@ const SidebarModalContent = React.forwardRef<
             onClick={(e) => e.stopPropagation()}
           >
             <VisuallyHidden asChild>
-              <DialogPrimitive.Title>Dialog</DialogPrimitive.Title>
+              <DialogPrimitive.Title>
+                {t("modal.dialogTitle")}
+              </DialogPrimitive.Title>
             </VisuallyHidden>
             <VisuallyHidden asChild>
-              <DialogPrimitive.Description>Modal dialog</DialogPrimitive.Description>
+              <DialogPrimitive.Description>
+                {t("modal.dialogDescription")}
+              </DialogPrimitive.Description>
             </VisuallyHidden>
             {children}
             {showClose && (
@@ -167,7 +174,7 @@ const SidebarModalContent = React.forwardRef<
                 className="absolute right-4 z-10 top-4 rounded-sm opacity-70 ring-offset-white transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-neutral-950 focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-neutral-100 data-[state=open]:text-neutral-500 dark:ring-offset-neutral-950 dark:focus:ring-neutral-300 dark:data-[state=open]:bg-neutral-800 dark:data-[state=open]:text-neutral-400"
               >
                 <X className="h-4 w-4" />
-              <span className="sr-only">{t('common.close')}</span>
+                <span className="sr-only">{t("common.close")}</span>
               </DialogPrimitive.Close>
             )}
           </DialogPrimitive.Content>

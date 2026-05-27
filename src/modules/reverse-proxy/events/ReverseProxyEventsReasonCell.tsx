@@ -3,6 +3,7 @@ import FullTooltip from "@components/FullTooltip";
 import { ListItem } from "@components/ListItem";
 import { Info, ShieldAlert } from "lucide-react";
 import * as React from "react";
+import { useI18n } from "@/i18n/I18nProvider";
 import { ReverseProxyEvent } from "@/interfaces/ReverseProxy";
 
 const VERDICT_LABELS: Record<string, string> = {
@@ -16,6 +17,7 @@ type Props = {
 };
 
 export const ReverseProxyEventsReasonCell = ({ event }: Props) => {
+  const { t } = useI18n();
   const metadata = event.metadata;
   const verdict = metadata?.crowdsec_verdict;
 
@@ -49,7 +51,7 @@ export const ReverseProxyEventsReasonCell = ({ event }: Props) => {
         <div className="px-3 py-2">
           <Badge variant="gray" className="gap-1.5">
             <ShieldAlert size={12} className="text-yellow-500" />
-            CrowdSec Observe: {verdictLabel}
+            {t("reverseProxy.crowdsecObserveLabel")}: {verdictLabel}
           </Badge>
         </div>
       </FullTooltip>

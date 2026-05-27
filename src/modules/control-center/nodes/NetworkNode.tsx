@@ -3,9 +3,10 @@ import { cn } from "@utils/helpers";
 import { Handle, type Node, Position } from "@xyflow/react";
 import { NetworkIcon } from "lucide-react";
 import * as React from "react";
+import { DeviceCard } from "@components/DeviceCard";
 import CircleIcon from "@/assets/icons/CircleIcon";
 import { Network, NetworkResource } from "@/interfaces/Network";
-import { DeviceCard } from "@components/DeviceCard";
+import { useI18n } from "@/i18n/I18nProvider";
 
 type NetworkNodeType = {
   network: Network;
@@ -17,6 +18,7 @@ export const NetworkNode = ({ data }: NetworkNodeProps) => {
   const { data: networkResources } = useFetchApi<NetworkResource[]>(
     "/networks/resources",
   );
+  const { t } = useI18n();
 
   const n = data.network as Network;
   const routingPeersCount = n?.routing_peers_count ?? 0;
@@ -47,7 +49,7 @@ export const NetworkNode = ({ data }: NetworkNodeProps) => {
               {n?.name}
             </div>
             <div className={"text-nb-gray-400 whitespace-nowrap mt-0.5"}>
-              {resources?.length || 0} Resources
+              {t("common.resourceCount", { count: resources?.length || 0 })}
             </div>
           </div>
         </div>
@@ -61,7 +63,7 @@ export const NetworkNode = ({ data }: NetworkNodeProps) => {
               routingPeersCount > 1 && "bg-green-400",
             )}
           />
-          {routingPeersCount} Routing Peer(s)
+          {t("common.routingPeerCount", { count: routingPeersCount })}
         </div>
       </div>
 

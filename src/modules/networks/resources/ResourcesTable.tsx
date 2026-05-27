@@ -32,7 +32,11 @@ type Props = {
   isGroupPage?: boolean;
 };
 
-const NetworkResourceColumns: ColumnDef<NetworkResource>[] = [
+type Translate = ReturnType<typeof useI18n>["t"];
+
+const getNetworkResourceColumns = (
+  t: Translate,
+): ColumnDef<NetworkResource>[] => [
   {
     id: "id",
     accessorKey: "id",
@@ -41,12 +45,12 @@ const NetworkResourceColumns: ColumnDef<NetworkResource>[] = [
   {
     id: "name",
     accessorKey: "name",
-    header: ({ column }) => {
-      return <DataTableHeader column={column}>Resource</DataTableHeader>;
-    },
-    cell: ({ row }) => {
-      return <ResourceNameCell resource={row.original} />;
-    },
+    header: ({ column }) => (
+      <DataTableHeader column={column}>
+        {t("networkResources.resourceTab")}
+      </DataTableHeader>
+    ),
+    cell: ({ row }) => <ResourceNameCell resource={row.original} />,
   },
   {
     id: "description",
@@ -57,19 +61,17 @@ const NetworkResourceColumns: ColumnDef<NetworkResource>[] = [
   {
     id: "address",
     accessorKey: "address",
-    header: ({ column }) => {
-      return <DataTableHeader column={column}>Address</DataTableHeader>;
-    },
-    cell: ({ row }) => {
-      return <ResourceAddressCell resource={row.original} />;
-    },
+    header: ({ column }) => (
+      <DataTableHeader column={column}>{t("resourcesTable.address")}</DataTableHeader>
+    ),
+    cell: ({ row }) => <ResourceAddressCell resource={row.original} />,
   },
   {
     id: "enabled",
     accessorKey: "enabled",
-    header: ({ column }) => {
-      return <DataTableHeader column={column}>Active</DataTableHeader>;
-    },
+    header: ({ column }) => (
+      <DataTableHeader column={column}>{t("resourcesTable.active")}</DataTableHeader>
+    ),
     cell: ({ row }) => <ResourceEnabledCell resource={row.original} />,
   },
   {
@@ -78,38 +80,32 @@ const NetworkResourceColumns: ColumnDef<NetworkResource>[] = [
       let groups = (resource?.groups ?? []) as Group[];
       return groups.map((group) => group.name).join(", ");
     },
-    header: ({ column }) => {
-      return <DataTableHeader column={column}>Resource Groups</DataTableHeader>;
-    },
-    cell: ({ row }) => {
-      return <ResourceGroupCell resource={row.original} />;
-    },
+    header: ({ column }) => (
+      <DataTableHeader column={column}>
+        {t("networkResources.groupsLabel")}
+      </DataTableHeader>
+    ),
+    cell: ({ row }) => <ResourceGroupCell resource={row.original} />,
   },
   {
     id: "policies",
     accessorKey: "id",
-    header: ({ column }) => {
-      return <DataTableHeader column={column}>Policies</DataTableHeader>;
-    },
-    cell: ({ row }) => {
-      return <ResourcePolicyCell resource={row.original} />;
-    },
+    header: ({ column }) => (
+      <DataTableHeader column={column}>{t("nav.policies")}</DataTableHeader>
+    ),
+    cell: ({ row }) => <ResourcePolicyCell resource={row.original} />,
   },
   {
     id: "expose_service",
     accessorKey: "id",
     header: "",
-    cell: ({ row }) => {
-      return <ResourceExposeServiceCell resource={row.original} />;
-    },
+    cell: ({ row }) => <ResourceExposeServiceCell resource={row.original} />,
   },
   {
     id: "actions",
     accessorKey: "id",
     header: "",
-    cell: ({ row }) => {
-      return <ResourceActionCell resource={row.original} />;
-    },
+    cell: ({ row }) => <ResourceActionCell resource={row.original} />,
   },
 ];
 
@@ -155,61 +151,7 @@ export default function ResourcesTable({
       inset={false}
       tableClassName={"mt-0"}
       text={t("networkResources.linkLabel")}
-      columns={NetworkResourceColumns.map(
-        (column): ColumnDef<NetworkResource> => {
-        if (column.id === "name") {
-          return {
-            ...column,
-            header: ({ column: tableColumn }: { column: any }) => (
-              <DataTableHeader column={tableColumn}>
-                {t("networkResources.resourceTab")}
-              </DataTableHeader>
-            ),
-          } as ColumnDef<NetworkResource>;
-        }
-        if (column.id === "address") {
-          return {
-            ...column,
-            header: ({ column: tableColumn }: { column: any }) => (
-              <DataTableHeader column={tableColumn}>
-                {t("resourcesTable.address")}
-              </DataTableHeader>
-            ),
-          } as ColumnDef<NetworkResource>;
-        }
-        if (column.id === "enabled") {
-          return {
-            ...column,
-            header: ({ column: tableColumn }: { column: any }) => (
-              <DataTableHeader column={tableColumn}>
-                {t("resourcesTable.active")}
-              </DataTableHeader>
-            ),
-          } as ColumnDef<NetworkResource>;
-        }
-        if (column.id === "groups") {
-          return {
-            ...column,
-            header: ({ column: tableColumn }: { column: any }) => (
-              <DataTableHeader column={tableColumn}>
-                {t("networkResources.groupsLabel")}
-              </DataTableHeader>
-            ),
-          } as ColumnDef<NetworkResource>;
-        }
-        if (column.id === "policies") {
-          return {
-            ...column,
-            header: ({ column: tableColumn }: { column: any }) => (
-              <DataTableHeader column={tableColumn}>
-                {t("nav.policies")}
-              </DataTableHeader>
-            ),
-          } as ColumnDef<NetworkResource>;
-        }
-        return column as ColumnDef<NetworkResource>;
-        },
-      )}
+      columns={getNetworkResourceColumns(t)}
       keepStateInLocalStorage={false}
       initialFilters={
         resourceId ? [{ id: "id", value: resourceId }] : undefined

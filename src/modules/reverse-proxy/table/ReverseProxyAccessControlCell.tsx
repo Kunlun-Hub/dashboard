@@ -20,6 +20,7 @@ import { useMemo } from "react";
 import { useCountries } from "@/contexts/CountryProvider";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useReverseProxies } from "@/contexts/ReverseProxiesProvider";
+import { useI18n } from "@/i18n/I18nProvider";
 import { CrowdSecMode, ReverseProxy } from "@/interfaces/ReverseProxy";
 
 type RuleEntry = {
@@ -40,6 +41,7 @@ export default function ReverseProxyAccessControlCell({
   const { permission } = usePermissions();
   const { openModal, domains } = useReverseProxies();
   const { countries } = useCountries();
+  const { t } = useI18n();
 
   const canConfigure = !!permission?.services?.update;
   const restrictions = reverseProxy.access_restrictions;
@@ -71,7 +73,7 @@ export default function ReverseProxyAccessControlCell({
       >
         <ShieldCheck size={12} className="text-green-500" />
         <span className={"font-medium text-xs"}>
-          {ruleCount} {ruleCount === 1 ? "Rule" : "Rules"}
+          {t("reverseProxy.ruleCount", { count: ruleCount })}
         </span>
       </Badge>
     ) : null;
@@ -87,7 +89,7 @@ export default function ReverseProxyAccessControlCell({
     if (restrictions?.allowed_countries?.length) {
       entries.push({
         key: "allowed-countries",
-        label: "Allowed Countries",
+        label: t("reverseProxy.allowedCountries"),
         Icon: FlagIcon,
         value: restrictions.allowed_countries.map(getCountryName).join(", "),
       });
@@ -96,7 +98,7 @@ export default function ReverseProxyAccessControlCell({
     if (restrictions?.blocked_countries?.length) {
       entries.push({
         key: "blocked-countries",
-        label: "Blocked Countries",
+        label: t("reverseProxy.blockedCountries"),
         Icon: FlagIcon,
         value: restrictions.blocked_countries.map(getCountryName).join(", "),
         blocked: true,
@@ -117,7 +119,10 @@ export default function ReverseProxyAccessControlCell({
     if (allowedIps.length) {
       entries.push({
         key: "allowed-ips",
-        label: allowedIps.length === 1 ? "Allowed IP" : "Allowed IPs",
+        label:
+          allowedIps.length === 1
+            ? t("reverseProxy.allowedIp")
+            : t("reverseProxy.allowedIps"),
         Icon: WorkflowIcon,
         value: allowedIps.map((c) => c.replace(/\/(32|128)$/, "")).join(", "),
       });
@@ -126,7 +131,10 @@ export default function ReverseProxyAccessControlCell({
     if (allowedCidrs.length) {
       entries.push({
         key: "allowed-cidrs",
-        label: allowedCidrs.length === 1 ? "Allowed CIDR" : "Allowed CIDRs",
+        label:
+          allowedCidrs.length === 1
+            ? t("reverseProxy.allowedCidr")
+            : t("reverseProxy.allowedCidrs"),
         Icon: NetworkIcon,
         value: allowedCidrs.join(", "),
       });
@@ -135,7 +143,10 @@ export default function ReverseProxyAccessControlCell({
     if (blockedIps.length) {
       entries.push({
         key: "blocked-ips",
-        label: blockedIps.length === 1 ? "Blocked IP" : "Blocked IPs",
+        label:
+          blockedIps.length === 1
+            ? t("reverseProxy.blockedIp")
+            : t("reverseProxy.blockedIps"),
         Icon: WorkflowIcon,
         value: blockedIps.map((c) => c.replace(/\/(32|128)$/, "")).join(", "),
         blocked: true,
@@ -145,7 +156,10 @@ export default function ReverseProxyAccessControlCell({
     if (blockedCidrs.length) {
       entries.push({
         key: "blocked-cidrs",
-        label: blockedCidrs.length === 1 ? "Blocked CIDR" : "Blocked CIDRs",
+        label:
+          blockedCidrs.length === 1
+            ? t("reverseProxy.blockedCidr")
+            : t("reverseProxy.blockedCidrs"),
         Icon: NetworkIcon,
         value: blockedCidrs.join(", "),
         blocked: true,
@@ -155,17 +169,17 @@ export default function ReverseProxyAccessControlCell({
     if (hasCrowdSec) {
       entries.push({
         key: "crowdsec",
-        label: "CrowdSec",
+        label: t("reverseProxy.crowdsecTitle"),
         Icon: ShieldAlert,
         value:
           restrictions?.crowdsec_mode === CrowdSecMode.ENFORCE
-            ? "Enforce"
-            : "Observe",
+            ? t("reverseProxy.crowdsecEnforce")
+            : t("reverseProxy.crowdsecObserve"),
       });
     }
 
     return entries;
-  }, [restrictions, countries, hasCrowdSec]);
+  }, [restrictions, countries, hasCrowdSec, t]);
 
   const showRulesHover = ruleGroups.length > 0;
 
@@ -230,7 +244,9 @@ export default function ReverseProxyAccessControlCell({
             }
           >
             <ShieldOff size={12} className="text-red-500" />
-            <span className={"font-medium text-xs"}>No Rules</span>
+            <span className={"font-medium text-xs"}>
+              {t("reverseProxy.noRules")}
+            </span>
           </Badge>
         )}
         <Button
@@ -242,7 +258,7 @@ export default function ReverseProxyAccessControlCell({
             openModal({ proxy: reverseProxy, initialTab: "access-control" });
           }}
           disabled={!permission?.services?.update}
-          aria-label="Configure access control"
+          aria-label={t("reverseProxy.configureAccessControl")}
         >
           <Settings size={12} />
         </Button>

@@ -29,8 +29,8 @@ import { isL4Mode, ReverseProxy } from "@/interfaces/ReverseProxy";
 import FullTooltip from "@components/FullTooltip";
 
 const HEADER_AUTH_METHOD = {
-  label: "HTTP Headers",
-  hoverLabel: "HTTP Headers",
+  labelKey: "reverseProxy.authMethodHeaders" as const,
+  hoverLabelKey: "reverseProxy.authMethodHeaders" as const,
   Icon: FileCode2Icon,
 };
 
@@ -104,8 +104,8 @@ export default function ReverseProxyAuthCell({
         ? enabled[0]
       : {
           ...HEADER_AUTH_METHOD,
-          label: t("reverseProxy.authMethodHeaders"),
-          hoverLabel: t("reverseProxy.authMethodHeaders"),
+          label: t(HEADER_AUTH_METHOD.labelKey),
+          hoverLabel: t(HEADER_AUTH_METHOD.hoverLabelKey),
         }
       : null;
   const SingleAuthIcon = singleAuth?.Icon ?? null;
@@ -191,7 +191,7 @@ export default function ReverseProxyAuthCell({
                     <ListItem
                       className={"py-0.5"}
                       icon={<FileCode2Icon size={14} />}
-                      label={HEADER_AUTH_METHOD.hoverLabel}
+                      label={t(HEADER_AUTH_METHOD.hoverLabelKey)}
                       value={
                         <div className={"text-green-500"}>
                           {t("reverseProxy.headersEnabledCount", {

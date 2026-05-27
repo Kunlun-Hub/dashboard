@@ -249,17 +249,19 @@ export default function IdentityProviderModal({
 
           <div>
             <Label>
-              {isWeChatWork ? "Corp ID" : t("identityProviderModal.clientId")}
+              {isWeChatWork
+                ? t("identityProviderModal.wechatworkCorpId")
+                : t("identityProviderModal.clientId")}
             </Label>
             <HelpText>
               {isWeChatWork
-                ? "填写企业微信的 Corp ID。"
+                ? t("identityProviderModal.wechatworkCorpIdHelp")
                 : t("identityProviderModal.clientIdHelp")}
             </HelpText>
             <Input
               placeholder={
                 isWeChatWork
-                  ? "输入企业微信 Corp ID"
+                  ? t("identityProviderModal.wechatworkCorpIdPlaceholder")
                   : t("identityProviderModal.clientIdPlaceholder")
               }
               value={clientId}
@@ -270,13 +272,12 @@ export default function IdentityProviderModal({
 
           {isWeChatWork && (
             <div>
-              <Label>Agent ID</Label>
+              <Label>{t("identityProviderModal.agentId")}</Label>
               <HelpText>
-                填写企业微信应用的 Agent
-                ID，官方登录组件会使用该值初始化登录面板。
+                {t("identityProviderModal.agentIdHelp")}
               </HelpText>
               <Input
-                placeholder="输入企业微信 Agent ID"
+                placeholder={t("identityProviderModal.agentIdPlaceholder")}
                 value={agentId}
                 onChange={(e) => setAgentId(e.target.value)}
                 customPrefix={<IdCard size={16} className="text-nb-gray-300" />}
@@ -287,14 +288,14 @@ export default function IdentityProviderModal({
           <div>
             <Label>
               {isWeChatWork
-                ? "Secret"
+                ? t("identityProviderModal.wechatworkSecret")
                 : t("identityProviderModal.clientSecret")}
             </Label>
             <HelpText>
               {isWeChatWork
                 ? isEditing
-                  ? "留空将保留现有企业微信应用 Secret。"
-                  : "填写企业微信自建应用的 Secret。"
+                  ? t("identityProviderModal.wechatworkSecretKeepExisting")
+                  : t("identityProviderModal.wechatworkSecretHelp")
                 : isEditing
                 ? clientIdChanged
                   ? t("identityProviderModal.clientSecretChangedHelp")
@@ -306,8 +307,8 @@ export default function IdentityProviderModal({
               placeholder={
                 isWeChatWork
                   ? isEditing
-                    ? "留空则不修改 Secret"
-                    : "输入企业微信应用 Secret"
+                    ? t("identityProviderModal.wechatworkSecretKeepPlaceholder")
+                    : t("identityProviderModal.wechatworkSecretPlaceholder")
                   : isEditing
                   ? t("identityProviderModal.clientSecretMaskedPlaceholder")
                   : t("identityProviderModal.clientSecretPlaceholder")

@@ -7,6 +7,7 @@ import { useSWRConfig } from "swr";
 import { useDialog } from "@/contexts/DialogProvider";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import { SetupKey } from "@/interfaces/SetupKey";
+import { useI18n } from "@/i18n/I18nProvider";
 
 type Props = {
   setupKey: SetupKey;
@@ -16,24 +17,25 @@ export default function SetupKeyActionCell({ setupKey }: Readonly<Props>) {
   const request = useApiCall<SetupKey>("/setup-keys/" + setupKey.id);
   const { mutate } = useSWRConfig();
   const { permission } = usePermissions();
+  const { t } = useI18n();
+  const setupKeyName = setupKey?.name || t("setupKeys.defaultName");
 
   const handleRevoke = async () => {
     const choice = await confirm({
-      title: `Revoke '${setupKey?.name || "Setup Key"}'?`,
-      description:
-        "Are you sure you want to revoke the setup key? This action cannot be undone.",
-      confirmText: "Revoke",
-      cancelText: "Cancel",
+      title: t("setupKeys.revokeTitle", { name: setupKeyName }),
+      description: t("setupKeys.revokeDescription"),
+      confirmText: t("setupKeys.revoke"),
+      cancelText: t("common.cancel"),
       type: "danger",
     });
     if (!choice) return;
 
     notify({
-      title: setupKey?.name || "Setup Key",
-      description: "Setup key was successfully revoked",
+      title: setupKeyName,
+      description: t("setupKeys.revokedDescription"),
       promise: request
         .put({
-          name: setupKey?.name || "Setup Key",
+          name: setupKeyName,
           type: setupKey.type,
           expires_in: setupKey.expires_in,
           revoked: true,
@@ -46,29 +48,28 @@ export default function SetupKeyActionCell({ setupKey }: Readonly<Props>) {
           mutate("/setup-keys");
           mutate("/groups");
         }),
-      loadingMessage: "Revoking the setup key...",
+      loadingMessage: t("setupKeys.revoking"),
     });
   };
 
   const handleDelete = async () => {
     const choice = await confirm({
-      title: `Delete '${setupKey?.name || "Setup Key"}'?`,
-      description:
-        "Are you sure you want to delete the setup key? This action cannot be undone.",
-      confirmText: "Delete",
-      cancelText: "Cancel",
+      title: t("setupKeys.deleteTitle", { name: setupKeyName }),
+      description: t("setupKeys.deleteDescription"),
+      confirmText: t("common.delete"),
+      cancelText: t("common.cancel"),
       type: "danger",
     });
     if (!choice) return;
 
     notify({
-      title: setupKey?.name || "Setup Key",
-      description: "Setup key was successfully deleted",
+      title: setupKeyName,
+      description: t("setupKeys.deletedDescription"),
       promise: request.del().then(() => {
         mutate("/setup-keys");
         mutate("/groups");
       }),
-      loadingMessage: "Deleting the setup key...",
+      loadingMessage: t("setupKeys.deleting"),
     });
   };
 
@@ -83,7 +84,7 @@ export default function SetupKeyActionCell({ setupKey }: Readonly<Props>) {
         }
       >
         <Undo2Icon size={16} />
-        Revoke
+        {t("setupKeys.revoke")}
       </Button>
       <Button
         variant={"danger-outline"}
@@ -92,7 +93,7 @@ export default function SetupKeyActionCell({ setupKey }: Readonly<Props>) {
         disabled={!permission.setup_keys.delete}
       >
         <Trash2 size={16} />
-        Delete
+        {t("common.delete")}
       </Button>
     </div>
   );

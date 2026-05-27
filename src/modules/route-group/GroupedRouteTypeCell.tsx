@@ -5,12 +5,14 @@ import * as React from "react";
 import { useMemo } from "react";
 import { useGroups } from "@/contexts/GroupsProvider";
 import { GroupedRoute } from "@/interfaces/Route";
+import { useI18n } from "@/i18n/I18nProvider";
 
 type Props = {
   groupedRoute: GroupedRoute;
 };
 export default function GroupedRouteTypeCell({ groupedRoute }: Props) {
   const { groups } = useGroups();
+  const { t } = useI18n();
 
   const group = useMemo(() => {
     const firstRoute = groupedRoute.routes && groupedRoute.routes[0];
@@ -26,7 +28,7 @@ export default function GroupedRouteTypeCell({ groupedRoute }: Props) {
         <GroupBadge group={group} />
       ) : (
         <Badge variant={"gray"} className={"min-w-[130px]"}>
-          <MonitorSmartphoneIcon size={14} /> Routing Peers
+          <MonitorSmartphoneIcon size={14} /> {t("common.routingPeers")}
         </Badge>
       )}
     </div>
