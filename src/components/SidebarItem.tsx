@@ -112,7 +112,11 @@ export default function SidebarItem({
               )}
             >
               <span className="peer/icon" data-active={isActive} />
-              {icon}
+              {icon && (
+                <span className="flex h-4 w-4 shrink-0 items-center justify-center">
+                  {icon}
+                </span>
+              )}
 
               <span
                 className={cn(
