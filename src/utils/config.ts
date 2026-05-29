@@ -1,5 +1,8 @@
 import { StringMap } from "@axa-fr/react-oidc";
 import { validator } from "@utils/helpers";
+import localConfig from "@/config/local";
+import productionConfig from "@/config/production";
+import testConfig from "@/config/test";
 
 interface Config {
   auth0Auth: boolean;
@@ -20,21 +23,50 @@ interface Config {
   wasmPath: string;
 }
 
+type ConfigJson = {
+  auth0Auth?: string;
+  authAuthority?: string;
+  authClientId?: string;
+  authClientSecret?: string;
+  authScopesSupported?: string;
+  apiOrigin?: string;
+  grpcApiOrigin?: string;
+  authAudience?: string;
+  redirectURI?: string;
+  silentRedirectURI?: string;
+  tokenSource?: string;
+  dragQueryParams?: string;
+  hotjarTrackID?: string | number;
+  googleAnalyticsID?: string;
+  googleTagManagerID?: string;
+  wasmPath?: string;
+};
+
 /**
  * Load the config from the config.json file
  */
 const loadConfig = (): Config => {
-  let configJson: any;
+  let configJson: ConfigJson = productionConfig as ConfigJson;
   let redirectURI = "/#callback";
   let silentRedirectURI = "/#silent-callback";
   let tokenSource = "accessToken";
 
   if (process.env.APP_ENV === "test") {
-    configJson = require("@/config/test");
+    configJson = testConfig as ConfigJson;
   } else if (process.env.NODE_ENV === "development") {
-    configJson = require("@/config/local");
-  } else if (process.env.NODE_ENV === "production") {
-    configJson = require("@/config/production");
+    configJson = localConfig as ConfigJson;
+  }
+
+  if (typeof window !== "undefined") {
+    const runtimeConfig = (
+      window as Window & {
+        __NETBIRD_CONFIG__?: ConfigJson;
+      }
+    ).__NETBIRD_CONFIG__;
+
+    if (runtimeConfig) {
+      configJson = { ...configJson, ...runtimeConfig };
+    }
   }
 
   if (configJson.redirectURI) {
@@ -49,17 +81,17 @@ const loadConfig = (): Config => {
     tokenSource = configJson.tokenSource;
   }
 
-  const authority = configJson.authAuthority.replace(/\/+$/, "");
+  const authority = (configJson.authAuthority || "").replace(/\/+$/, "");
 
   return {
     auth0Auth: configJson.auth0Auth == "true", // Due to substitution we can't use boolean in the config
     authority: validator.isValidUrl(authority) ? authority : "http://localhost",
-    clientId: configJson.authClientId,
-    clientSecret: configJson.authClientSecret,
-    scopesSupported: configJson.authScopesSupported,
-    apiOrigin: configJson.apiOrigin,
-    grpcApiOrigin: configJson.grpcApiOrigin,
-    audience: configJson.authAudience,
+    clientId: configJson.authClientId || "",
+    clientSecret: configJson.authClientSecret || "",
+    scopesSupported: configJson.authScopesSupported || "",
+    apiOrigin: configJson.apiOrigin || "",
+    grpcApiOrigin: configJson.grpcApiOrigin || "",
+    audience: configJson.authAudience || "",
     redirectURI: redirectURI,
     silentRedirectURI: silentRedirectURI,
     tokenSource: tokenSource,

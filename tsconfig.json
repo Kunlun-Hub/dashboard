@@ -32,10 +32,12 @@
         "./config.json"
       ],
       "@/config/local": [
-        "./.local-config.json"
+        "./.local-config.json",
+        "./config.json"
       ],
       "@/config/test": [
-        "./.test-config.json"
+        "./.test-config.json",
+        "./config.json"
       ],
       "@components/*": [
         "./src/components/*"

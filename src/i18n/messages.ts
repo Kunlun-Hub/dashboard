@@ -144,6 +144,40 @@ export const messages = {
       "Delete this relay registration record? If the relay container is still running, it will register again on the next heartbeat.",
     "relays.staticRelayCannotDelete":
       "Static configured relays cannot be deleted here.",
+    "saasDiagnostics.tab": "Diagnostics",
+    "saasDiagnostics.title": "Connection Diagnostics",
+    "saasDiagnostics.description":
+      "Inspect this peer's connectivity signals and the relay pool available for fallback paths.",
+    "saasDiagnostics.managementState": "Management State",
+    "saasDiagnostics.online": "Online",
+    "saasDiagnostics.offline": "Offline",
+    "saasDiagnostics.publicIp": "Public IP",
+    "saasDiagnostics.ipv6": "IPv6 Overlay",
+    "saasDiagnostics.notAvailable": "Not available",
+    "saasDiagnostics.relayPool": "Relay Pool",
+    "saasDiagnostics.onlineRelayCount": "{count} online",
+    "saasDiagnostics.clientRoutes": "Client Routes",
+    "saasDiagnostics.firewall": "Client Firewall",
+    "saasDiagnostics.connectionFacts": "Connection Facts",
+    "saasDiagnostics.kernel": "Kernel",
+    "saasDiagnostics.recommendations": "Recommendations",
+    "saasDiagnostics.relayCandidates": "Relay Candidates",
+    "saasDiagnostics.recommendIpv6":
+      "Enable IPv6 where possible. Dual-stack peers usually have a higher direct-connection success rate.",
+    "saasDiagnostics.recommendRelay":
+      "Deploy at least one online relay close to this peer's region before relying on P2P fallback.",
+    "saasDiagnostics.recommendFirewall":
+      "The client firewall is disabled. Re-enable it before using policy diagnostics as an enforcement source.",
+    "saasDiagnostics.recommendReconnect":
+      "The peer is offline. Ask the client to reconnect before checking P2P behavior.",
+    "saasDiagnostics.recommendHealthy":
+      "No obvious local issues were found. Use network logs to inspect traffic-level behavior.",
+    "saasSshAudit.tab": "SSH Audit",
+    "saasSshAudit.title": "SSH Audit",
+    "saasSshAudit.description":
+      "Review recent audit events related to SSH enablement and access policy changes for this peer.",
+    "saasSshAudit.recentEvents": "Recent SSH Events",
+    "saasSshAudit.empty": "No SSH audit events were found for this peer.",
     "overview.title": "Overview",
     "overview.deviceDistribution": "Network Device Distribution",
     "overview.deviceTypeDistribution": "Device Type Distribution",
@@ -3464,6 +3498,40 @@ export const messages = {
     "relays.deleteConfirm":
       "要删除这条中继注册记录吗？如果中继容器仍在运行，它会在下一次心跳时重新注册。",
     "relays.staticRelayCannotDelete": "配置文件里的静态中继不能在这里删除。",
+    "saasDiagnostics.tab": "诊断",
+    "saasDiagnostics.title": "连接诊断",
+    "saasDiagnostics.description":
+      "查看该设备的连接信号，以及可用于兜底路径的中继池。",
+    "saasDiagnostics.managementState": "管理连接状态",
+    "saasDiagnostics.online": "在线",
+    "saasDiagnostics.offline": "离线",
+    "saasDiagnostics.publicIp": "公网 IP",
+    "saasDiagnostics.ipv6": "IPv6 Overlay",
+    "saasDiagnostics.notAvailable": "不可用",
+    "saasDiagnostics.relayPool": "中继池",
+    "saasDiagnostics.onlineRelayCount": "{count} 个在线",
+    "saasDiagnostics.clientRoutes": "客户端路由",
+    "saasDiagnostics.firewall": "客户端防火墙",
+    "saasDiagnostics.connectionFacts": "连接信息",
+    "saasDiagnostics.kernel": "内核",
+    "saasDiagnostics.recommendations": "建议",
+    "saasDiagnostics.relayCandidates": "中继候选",
+    "saasDiagnostics.recommendIpv6":
+      "尽量启用 IPv6。双栈设备通常有更高的直连建立成功率。",
+    "saasDiagnostics.recommendRelay":
+      "至少部署一个靠近该设备所在区域的在线中继，再依赖 P2P 兜底。",
+    "saasDiagnostics.recommendFirewall":
+      "客户端防火墙已禁用。将策略诊断作为执行依据前，建议重新启用。",
+    "saasDiagnostics.recommendReconnect":
+      "设备当前离线。请先让客户端重新连接，再检查 P2P 行为。",
+    "saasDiagnostics.recommendHealthy":
+      "未发现明显本地问题。可继续通过网络日志查看流量层行为。",
+    "saasSshAudit.tab": "SSH 审计",
+    "saasSshAudit.title": "SSH 审计",
+    "saasSshAudit.description":
+      "查看该设备最近与 SSH 开关、访问策略相关的审计事件。",
+    "saasSshAudit.recentEvents": "最近 SSH 事件",
+    "saasSshAudit.empty": "没有找到该设备相关的 SSH 审计事件。",
     "overview.title": "总览",
     "overview.deviceDistribution": "全网设备分布",
     "overview.deviceTypeDistribution": "设备类型分布",

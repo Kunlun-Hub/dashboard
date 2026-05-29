@@ -74,10 +74,12 @@ import {
   PeerAdvertisedRoutesSection,
   PeerRoutePreviewSection,
 } from "@/modules/peer/PeerAdvertisedRoutesSection";
+import { PeerConnectionDiagnostics } from "@/modules/peer/PeerConnectionDiagnostics";
 import { PeerEditIPModal } from "@/modules/peer/PeerEditIPModal";
 import { PeerExpirationSettings } from "@/modules/peer/PeerExpirationSettings";
 import { PeerNetworkRoutesSection } from "@/modules/peer/PeerNetworkRoutesSection";
 import { PeerRemoteJobsSection } from "@/modules/peer/PeerRemoteJobsSection";
+import { PeerSSHAuditPanel } from "@/modules/peer/PeerSSHAuditPanel";
 import { PeerSSHToggle } from "@/modules/peer/PeerSSHToggle";
 import { RDPButton } from "@/modules/remote-access/rdp/RDPButton";
 import { SSHButton } from "@/modules/remote-access/ssh/SSHButton";
@@ -375,6 +377,20 @@ const PeerOverviewTabs = () => {
         )}
 
         {peer?.id && permission.peers.read && (
+          <TabsTrigger value={"diagnostics"}>
+            <RadioTowerIcon size={16} />
+            {t("saasDiagnostics.tab")}
+          </TabsTrigger>
+        )}
+
+        {peer?.id && permission.events?.read && (
+          <TabsTrigger value={"ssh-audit"}>
+            <History size={16} />
+            {t("saasSshAudit.tab")}
+          </TabsTrigger>
+        )}
+
+        {peer?.id && permission.peers.read && (
           <TabsTrigger value={"accessible-peers"}>
             <MonitorSmartphoneIcon size={16} />
             {t("peerDetails.accessiblePeers")}
@@ -418,6 +434,18 @@ const PeerOverviewTabs = () => {
       {permission.networks.read && (
         <TabsContent value={"route-preview"} className={"pb-8"}>
           <PeerRoutePreviewSection peer={peer} />
+        </TabsContent>
+      )}
+
+      {peer?.id && permission.peers.read && (
+        <TabsContent value={"diagnostics"} className={"pb-8"}>
+          <PeerConnectionDiagnostics peer={peer} />
+        </TabsContent>
+      )}
+
+      {peer?.id && permission.events?.read && (
+        <TabsContent value={"ssh-audit"} className={"pb-8"}>
+          <PeerSSHAuditPanel peer={peer} />
         </TabsContent>
       )}
 
