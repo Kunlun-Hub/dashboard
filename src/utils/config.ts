@@ -1,8 +1,8 @@
 import { StringMap } from "@axa-fr/react-oidc";
 import { validator } from "@utils/helpers";
-import localConfig from "@/config/local";
-import productionConfig from "@/config/production";
-import testConfig from "@/config/test";
+import localConfig from "../../.local-config.json";
+import productionConfig from "../../config.json";
+import testConfig from "../../.test-config.json";
 
 interface Config {
   auth0Auth: boolean;

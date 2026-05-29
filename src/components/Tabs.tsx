@@ -88,10 +88,11 @@ const TabsTrigger = React.forwardRef<
     <TabsPrimitive.Trigger ref={ref} asChild={true} {...props}>
       <div
         className={cn(
-          "inline-flex items-center transition-all justify-center whitespace-nowrap px-3 pt-1.5 pb-3 text-sm font-normal",
-          "data-[state=active]:text-netbird cursor-pointer  dark:data-[state=active]:text-netbird group/trigger gap-2",
+          "inline-flex items-center justify-center whitespace-nowrap px-3 pt-1.5 pb-3 text-sm font-normal transition-all",
+          "cursor-pointer gap-2 text-neutral-500 dark:text-nb-gray-400",
+          "data-[state=active]:text-netbird dark:data-[state=active]:text-netbird group/trigger",
           "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-          "relative data-[state=inactive]:hover:text-neutral-900 dark:data-[state=inactive]:hover:text-nb-gray-500",
+          "relative data-[state=inactive]:hover:text-neutral-900 dark:data-[state=inactive]:hover:text-white",
           className,
         )}
       >

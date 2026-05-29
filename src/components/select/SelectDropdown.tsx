@@ -205,7 +205,7 @@ export function SelectDropdown({
         sideOffset={10}
       >
         <Command
-          className={"w-full flex"}
+          className={"w-full flex text-neutral-950 dark:text-neutral-50"}
           loop
           filter={() => 0}
           shouldFilter={false}

@@ -43,7 +43,12 @@ export default function AppLayout({
       <head>
         <GoogleTagManagerHeadScript />
       </head>
-      <body className={cn(inter.className)}>
+      <body
+        className={cn(
+          inter.className,
+          "bg-white text-neutral-900 dark:bg-nb-gray dark:text-nb-gray-100",
+        )}
+      >
         <Suspense fallback={<FullScreenLoading />}>
           <I18nProvider>
             <AnalyticsProvider>

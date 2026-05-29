@@ -33,6 +33,7 @@ const Table = React.forwardRef<
         ref={ref}
         className={cn(
           "caption-bottom text-sm min-w-full max-w-full w-full",
+          "text-neutral-900 dark:text-nb-gray-100",
           minimal ? "" : "border dark:border-zinc-700/40 border-l-0 border-r-0",
           className,
         )}
@@ -149,7 +150,7 @@ const TableCell = React.forwardRef<
   <td
     ref={ref}
     className={cn(
-      "align-middle [&:has([role=checkbox])]:pr-0",
+      "align-middle text-neutral-900 dark:text-nb-gray-100 [&:has([role=checkbox])]:pr-0",
       minimal ? "px-6 pt-2 pb-3" : "p-4",
       inset && "first:pl-[52px]",
       className,

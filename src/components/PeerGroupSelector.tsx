@@ -457,7 +457,11 @@ export function PeerGroupSelector({
         side={side}
         sideOffset={10}
       >
-        <Command className={"w-full flex"} loop shouldFilter={false}>
+        <Command
+          className={"w-full flex text-neutral-950 dark:text-neutral-50"}
+          loop
+          shouldFilter={false}
+        >
           <CommandList className={"w-full"}>
             <div className={"relative"}>
               <CommandInput
@@ -465,7 +469,7 @@ export function PeerGroupSelector({
                 className={cn(
                   "min-h-[42px] w-full relative",
                   "border-b-0 border-t-0 border-r-0 border-l-0 border-neutral-200 dark:border-nb-gray-700 items-center",
-                  "bg-transparent text-sm outline-none focus-visible:outline-none ring-0 focus-visible:ring-0",
+                  "bg-transparent text-sm text-neutral-900 outline-none focus-visible:outline-none ring-0 focus-visible:ring-0 dark:text-nb-gray-100",
                   "dark:placeholder:text-nb-gray-400 font-light placeholder:text-neutral-500 pl-10",
                 )}
                 ref={searchRef}

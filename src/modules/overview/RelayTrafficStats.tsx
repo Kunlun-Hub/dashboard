@@ -18,7 +18,9 @@ import { useOverviewRefresh } from "@/modules/overview/OverviewRefreshContext";
 type RangeValue = "6h" | "12h" | "24h" | "3d" | "7d";
 
 type TrafficPoint = {
-  timestamp: Date;
+  bucketStart: Date;
+  bucketEnd: Date;
+  coveredSeconds: number;
   uploadRate: number;
   downloadRate: number;
   uploadTotal: number;
@@ -26,7 +28,9 @@ type TrafficPoint = {
 };
 
 type TrafficSummaryPoint = {
-  timestamp: string;
+  timestamp?: string;
+  bucket_start?: string;
+  bucket_end?: string;
   rx_bytes: number;
   tx_bytes: number;
 };
@@ -38,6 +42,7 @@ type TrafficSummaryResponse = {
 const WIDTH = 1320;
 const HEIGHT = 380;
 const MARGIN = { top: 28, right: 24, bottom: 46, left: 64 };
+const CHART_GAP = 26;
 const ROUTED_CONNECTION_TYPE = "ROUTED";
 
 const rangeOptions: Array<{ value: RangeValue; hours: number; labelKey: string }> = [
@@ -61,6 +66,18 @@ const formatRate = (bytesPerSecond: number) => {
 };
 
 const formatTotal = (bytes: number) => formatBytes(bytes, bytes >= 1024 * 1024 ? 2 : 1);
+
+const formatBucketRange = (start: Date, end: Date) => {
+  const startText = dayjs(start).format("YYYY-MM-DD HH:mm");
+  const endText = dayjs(end).format("HH:mm");
+  return `${startText} - ${endText}`;
+};
+
+const parseSummaryDate = (value?: string) => {
+  if (!value) return null;
+  const parsed = dayjs(value);
+  return parsed.isValid() ? parsed.valueOf() : null;
+};
 
 export function RelayTrafficStats() {
   const { t } = useI18n();
@@ -135,36 +152,67 @@ export function RelayTrafficStats() {
     };
   }, [queryParams]);
 
-  const { points, totals, peaks, scaleMaxRate } = useMemo(() => {
+  const { points, totals, peaks, maxRates } = useMemo(() => {
     const bucketSeconds = bucketSecondsForHours(selectedRange.hours);
     const bucketMs = bucketSeconds * 1000;
-    const buckets = new Map<number, { upload: number; download: number }>();
+    const buckets = new Map<
+      number,
+      { upload: number; download: number; bucketEndMs: number }
+    >();
     const startMs = startDate.valueOf();
     const endMs = endDate.valueOf();
+    const firstBucketStart = Math.floor(startMs / bucketMs) * bucketMs;
+    const lastBucketStart =
+      Math.floor(Math.max(endMs - 1, startMs) / bucketMs) * bucketMs;
 
-    for (let ts = Math.floor(startMs / bucketMs) * bucketMs; ts <= endMs; ts += bucketMs) {
-      buckets.set(ts, { upload: 0, download: 0 });
+    for (let ts = firstBucketStart; ts <= lastBucketStart; ts += bucketMs) {
+      buckets.set(ts, {
+        upload: 0,
+        download: 0,
+        bucketEndMs: Math.min(ts + bucketMs, endMs),
+      });
     }
 
     for (const point of summary) {
-      const timestamp = dayjs(point.timestamp);
-      if (!timestamp.isValid()) continue;
-      const bucket = Math.floor(timestamp.valueOf() / bucketMs) * bucketMs;
-      const current = buckets.get(bucket) ?? { upload: 0, download: 0 };
+      const parsedBucketStart =
+        parseSummaryDate(point.bucket_start) ?? parseSummaryDate(point.timestamp);
+      if (parsedBucketStart === null) continue;
+
+      const bucketStartMs =
+        Math.floor(parsedBucketStart / bucketMs) * bucketMs;
+      const bucketEndMs =
+        parseSummaryDate(point.bucket_end) ?? bucketStartMs + bucketMs;
+      const current = buckets.get(bucketStartMs) ?? {
+        upload: 0,
+        download: 0,
+        bucketEndMs,
+      };
       current.upload += point.tx_bytes ?? 0;
       current.download += point.rx_bytes ?? 0;
-      buckets.set(bucket, current);
+      current.bucketEndMs = bucketEndMs;
+      buckets.set(bucketStartMs, current);
     }
 
     const chartPoints = Array.from(buckets.entries())
       .sort(([a], [b]) => a - b)
-      .map(([timestamp, value]) => ({
-        timestamp: new Date(timestamp),
-        uploadRate: value.upload / bucketSeconds,
-        downloadRate: value.download / bucketSeconds,
-        uploadTotal: value.upload,
-        downloadTotal: value.download,
-      }));
+      .map(([bucketStartMs, value]) => {
+        const visibleBucketStartMs = Math.max(bucketStartMs, startMs);
+        const visibleBucketEndMs = Math.min(value.bucketEndMs, endMs);
+        const coveredSeconds = Math.max(
+          (visibleBucketEndMs - visibleBucketStartMs) / 1000,
+          1,
+        );
+
+        return {
+          bucketStart: new Date(visibleBucketStartMs),
+          bucketEnd: new Date(visibleBucketEndMs),
+          coveredSeconds,
+          uploadRate: value.upload / coveredSeconds,
+          downloadRate: value.download / coveredSeconds,
+          uploadTotal: value.upload,
+          downloadTotal: value.download,
+        };
+      });
 
     const totalUpload = Array.from(buckets.values()).reduce(
       (sum, value) => sum + value.upload,
@@ -185,7 +233,10 @@ export function RelayTrafficStats() {
         upload: uploadPeak,
         download: downloadPeak,
       },
-      scaleMaxRate: Math.max(1, uploadPeak, downloadPeak),
+      maxRates: {
+        upload: Math.max(1, uploadPeak),
+        download: Math.max(1, downloadPeak),
+      },
     };
   }, [endDate, selectedRange.hours, startDate, summary]);
 
@@ -201,85 +252,111 @@ export function RelayTrafficStats() {
     const g = d3.select(gRef.current);
     g.selectAll("*").remove();
 
+    const plotTop = MARGIN.top;
+    const plotBottom = HEIGHT - MARGIN.bottom;
+    const plotHeight = plotBottom - plotTop;
+    const panelHeight = (plotHeight - CHART_GAP) / 2;
+    const uploadBounds = {
+      top: plotTop,
+      bottom: plotTop + panelHeight,
+    };
+    const downloadBounds = {
+      top: uploadBounds.bottom + CHART_GAP,
+      bottom: uploadBounds.bottom + CHART_GAP + panelHeight,
+    };
+
     const xScale = d3
       .scaleTime()
       .domain([startDate.toDate(), endDate.toDate()])
       .range([MARGIN.left, WIDTH - MARGIN.right]);
 
-    const yScale = d3
+    const uploadScale = d3
       .scaleLinear()
-      .domain([-scaleMaxRate * 1.12, scaleMaxRate * 1.12])
-      .range([HEIGHT - MARGIN.bottom, MARGIN.top]);
+      .domain([0, maxRates.upload * 1.12])
+      .range([uploadBounds.bottom, uploadBounds.top]);
 
-    const renderChart = (currentX: d3.ScaleTime<number, number>, currentY: d3.ScaleLinear<number, number>) => {
+    const downloadScale = d3
+      .scaleLinear()
+      .domain([0, maxRates.download * 1.12])
+      .range([downloadBounds.bottom, downloadBounds.top]);
+
+    const renderChart = (currentX: d3.ScaleTime<number, number>) => {
       g.selectAll("*").remove();
 
       const defs = g.append("defs");
       const clipPath = defs.append("clipPath").attr("id", chartClipId);
-      clipPath.append("rect")
+      clipPath
+        .append("rect")
         .attr("x", MARGIN.left)
-        .attr("y", MARGIN.top)
+        .attr("y", plotTop)
         .attr("width", WIDTH - MARGIN.left - MARGIN.right)
-        .attr("height", HEIGHT - MARGIN.top - MARGIN.bottom);
+        .attr("height", plotBottom - plotTop);
 
       const chartGroup = g.append("g").attr("clip-path", `url(#${chartClipId})`);
-
-      const yTicks = currentY.ticks(8);
       const xTicks = currentX.ticks(selectedRange.hours <= 12 ? 10 : 8);
       const timeFormat = selectedRange.hours <= 24 ? "MM-DD HH:mm" : "MM-DD";
-
       const gridGroup = g.append("g");
-      yTicks.forEach((tick) => {
-        gridGroup
-          .append("line")
-          .attr("x1", MARGIN.left)
-          .attr("x2", WIDTH - MARGIN.right)
-          .attr("y1", currentY(tick))
-          .attr("y2", currentY(tick))
-          .attr("stroke", "#e5e7eb");
-        
-        gridGroup
-          .append("text")
-          .attr("x", MARGIN.left - 8)
-          .attr("y", currentY(tick) + 4)
-          .attr("text-anchor", "end")
-          .attr("fill", "#6b7280")
-          .attr("font-size", "11px")
-          .text(tick === 0 ? "0" : formatRate(Math.abs(tick)));
-      });
+      const renderRateGrid = (
+        scale: d3.ScaleLinear<number, number>,
+        bounds: { top: number; bottom: number },
+        label: string,
+      ) => {
+        scale.ticks(4).forEach((tick) => {
+          gridGroup
+            .append("line")
+            .attr("x1", MARGIN.left)
+            .attr("x2", WIDTH - MARGIN.right)
+            .attr("y1", scale(tick))
+            .attr("y2", scale(tick))
+            .attr("stroke", "#e5e7eb");
 
-      g.append("line")
-        .attr("x1", MARGIN.left)
-        .attr("x2", WIDTH - MARGIN.right)
-        .attr("y1", currentY(0))
-        .attr("y2", currentY(0))
-        .attr("stroke", "#4b5563");
+          gridGroup
+            .append("text")
+            .attr("x", MARGIN.left - 8)
+            .attr("y", scale(tick) + 4)
+            .attr("text-anchor", "end")
+            .attr("fill", "#6b7280")
+            .attr("font-size", "11px")
+            .text(tick === 0 ? "0" : formatRate(tick));
+        });
+
+        g.append("text")
+          .attr("x", MARGIN.left)
+          .attr("y", bounds.top - 8)
+          .attr("fill", "#94a3b8")
+          .attr("font-size", "12px")
+          .attr("font-weight", 500)
+          .text(label);
+      };
+
+      renderRateGrid(uploadScale, uploadBounds, t("overview.uploadRate"));
+      renderRateGrid(downloadScale, downloadBounds, t("overview.downloadRate"));
 
       const uploadArea = d3
         .area<TrafficPoint>()
-        .x((point) => currentX(point.timestamp))
-        .y0(currentY(0))
-        .y1((point) => currentY(point.uploadRate))
-        .curve(d3.curveMonotoneX);
+        .x((point) => currentX(point.bucketStart))
+        .y0(uploadBounds.bottom)
+        .y1((point) => uploadScale(point.uploadRate))
+        .curve(d3.curveLinear);
 
       const downloadArea = d3
         .area<TrafficPoint>()
-        .x((point) => currentX(point.timestamp))
-        .y0(currentY(0))
-        .y1((point) => currentY(-point.downloadRate))
-        .curve(d3.curveMonotoneX);
+        .x((point) => currentX(point.bucketStart))
+        .y0(downloadBounds.bottom)
+        .y1((point) => downloadScale(point.downloadRate))
+        .curve(d3.curveLinear);
 
       const uploadLine = d3
         .line<TrafficPoint>()
-        .x((point) => currentX(point.timestamp))
-        .y((point) => currentY(point.uploadRate))
-        .curve(d3.curveMonotoneX);
+        .x((point) => currentX(point.bucketStart))
+        .y((point) => uploadScale(point.uploadRate))
+        .curve(d3.curveLinear);
 
       const downloadLine = d3
         .line<TrafficPoint>()
-        .x((point) => currentX(point.timestamp))
-        .y((point) => currentY(-point.downloadRate))
-        .curve(d3.curveMonotoneX);
+        .x((point) => currentX(point.bucketStart))
+        .y((point) => downloadScale(point.downloadRate))
+        .curve(d3.curveLinear);
 
       chartGroup.append("path")
         .attr("d", uploadArea(points) ?? "")
@@ -320,9 +397,9 @@ export function RelayTrafficStats() {
       const overlay = g.append("rect")
         .attr("class", "overlay")
         .attr("x", MARGIN.left)
-        .attr("y", MARGIN.top)
+        .attr("y", plotTop)
         .attr("width", WIDTH - MARGIN.left - MARGIN.right)
-        .attr("height", HEIGHT - MARGIN.top - MARGIN.bottom)
+        .attr("height", plotBottom - plotTop)
         .attr("fill", "transparent")
         .style("cursor", "crosshair");
 
@@ -330,8 +407,8 @@ export function RelayTrafficStats() {
 
       focus.append("line")
         .attr("class", "x-hover-line hover-line")
-        .attr("y1", MARGIN.top)
-        .attr("y2", HEIGHT - MARGIN.bottom)
+        .attr("y1", uploadBounds.top)
+        .attr("y2", downloadBounds.bottom)
         .attr("stroke", "#64748b")
         .attr("stroke-dasharray", "3,3")
         .attr("stroke-width", 1);
@@ -348,18 +425,23 @@ export function RelayTrafficStats() {
         .attr("font-size", "12px")
         .style("pointer-events", "none");
 
-      const bisect = d3.bisector<TrafficPoint, Date>((d) => d.timestamp).center;
+      const bisectByBucketStart = d3.bisector<TrafficPoint, Date>(
+        (d) => d.bucketStart,
+      ).center;
 
       const handleMouseMove = (event: MouseEvent) => {
         if (points.length === 0) return;
 
         const [mouseX] = d3.pointer(event);
         const x0 = currentX.invert(mouseX);
-        const i = bisect(points, x0);
+        const i = bisectByBucketStart(points, x0);
         const d0 = points[i - 1];
         const d1 = points[i];
         const d = d0 && d1
-          ? (x0.getTime() - d0.timestamp.getTime() > d1.timestamp.getTime() - x0.getTime() ? d1 : d0)
+          ? (x0.getTime() - d0.bucketStart.getTime() >
+            d1.bucketStart.getTime() - x0.getTime()
+              ? d1
+              : d0)
           : d0 ?? d1;
 
         if (!d) return;
@@ -369,11 +451,11 @@ export function RelayTrafficStats() {
         
         focus
           .select(".x-hover-line")
-          .attr("x1", currentX(d.timestamp))
-          .attr("x2", currentX(d.timestamp));
+          .attr("x1", currentX(d.bucketStart))
+          .attr("x2", currentX(d.bucketStart));
 
         const lines: string[] = [];
-        lines.push(dayjs(d.timestamp).format("YYYY-MM-DD HH:mm:ss"));
+        lines.push(formatBucketRange(d.bucketStart, d.bucketEnd));
         lines.push(`${t("overview.uploadRate")}: ${formatRate(d.uploadRate)}`);
         lines.push(`${t("overview.downloadRate")}: ${formatRate(d.downloadRate)}`);
         if (d.uploadTotal > 0) {
@@ -401,11 +483,11 @@ export function RelayTrafficStats() {
             .attr("height", bbox.height + 16);
         }
 
-        let tx = currentX(d.timestamp) + 15;
+        let tx = currentX(d.bucketStart) + 15;
         let ty = 20;
 
         if (tx > WIDTH / 2) {
-          tx = currentX(d.timestamp) - (bbox ? bbox.width + 35 : 100);
+          tx = currentX(d.bucketStart) - (bbox ? bbox.width + 35 : 100);
         }
 
         tooltip.attr("transform", `translate(${tx},${ty})`);
@@ -423,20 +505,28 @@ export function RelayTrafficStats() {
         .on("mousemove", handleMouseMove);
     };
 
-    renderChart(xScale, yScale);
+    renderChart(xScale);
 
     let zoomFrame: number | null = null;
 
     const zoom = d3
       .zoom()
-      .scaleExtent([0.5, 10])
+      .extent([
+        [MARGIN.left, MARGIN.top],
+        [WIDTH - MARGIN.right, HEIGHT - MARGIN.bottom],
+      ])
+      .translateExtent([
+        [MARGIN.left, MARGIN.top],
+        [WIDTH - MARGIN.right, HEIGHT - MARGIN.bottom],
+      ])
+      .scaleExtent([1, 10])
       .on("zoom", (event) => {
         if (zoomFrame !== null) {
           window.cancelAnimationFrame(zoomFrame);
         }
         zoomFrame = window.requestAnimationFrame(() => {
           const newX = event.transform.rescaleX(xScale);
-          renderChart(newX, yScale);
+          renderChart(newX);
           zoomFrame = null;
         });
       });
@@ -451,7 +541,7 @@ export function RelayTrafficStats() {
       svg.on(".zoom", null);
       g.selectAll("*").remove();
     };
-  }, [points, scaleMaxRate, startDate, endDate, selectedRange.hours, chartClipId, t]);
+  }, [points, maxRates, startDate, endDate, selectedRange.hours, chartClipId, t]);
 
   const resetZoom = () => {
     if (svgRef.current && zoomRef.current) {

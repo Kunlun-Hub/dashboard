@@ -14,7 +14,7 @@ function Card({ children, className, ...props }: Props) {
     <div
       {...props}
       className={cn(
-        "bg-nb-gray-940 rounded-md border border-nb-gray-900 w-1/2 overflow-hidden",
+        "w-1/2 overflow-hidden rounded-md border border-nb-gray-900 bg-nb-gray-940 text-nb-gray-300",
         className,
       )}
     >
@@ -55,7 +55,9 @@ function CardListItem({
         className,
       )}
     >
-      <div className={"flex gap-2.5 items-center text-[0.84rem]"}>{label}</div>
+      <div className={"flex items-center gap-2.5 text-[0.84rem] text-nb-gray-300"}>
+        {label}
+      </div>
       <div className={"flex flex-col gap-2"}>
         <CardTextItem
           label={label}

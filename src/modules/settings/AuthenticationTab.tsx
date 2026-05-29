@@ -123,7 +123,10 @@ function LoginMethodSelector({
         side={"bottom"}
         sideOffset={10}
       >
-        <Command className={"w-full flex"} loop>
+        <Command
+          className={"w-full flex text-neutral-950 dark:text-neutral-50"}
+          loop
+        >
           <CommandList className={"w-full"}>
             <ScrollArea
               className={

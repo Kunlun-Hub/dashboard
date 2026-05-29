@@ -48,7 +48,10 @@ export function DataTableRowsPerPage<TData>({
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-[200px] p-0" sideOffset={7}>
-          <Command value={`${table.getState().pagination.pageSize}`}>
+          <Command
+            value={`${table.getState().pagination.pageSize}`}
+            className={"text-neutral-950 dark:text-neutral-50"}
+          >
             <CommandGroup>
               {rowsSelection.map((val) => (
                 <CommandItem

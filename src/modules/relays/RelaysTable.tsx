@@ -184,6 +184,10 @@ export default function RelaysTable({ headingTarget }: Readonly<Props>) {
             : t("common.unknown"),
       },
       {
+        id: "address",
+        accessorKey: "address",
+      },
+      {
         id: "searchString",
         accessorFn: (row) =>
           `${row.name ?? ""} ${row.id ?? ""} ${row.observed_id ?? ""} ${
@@ -265,7 +269,7 @@ export default function RelaysTable({ headingTarget }: Readonly<Props>) {
         columns={columns}
         data={relayList}
         searchPlaceholder={t("relays.searchPlaceholder")}
-        columnVisibility={{ searchString: false }}
+        columnVisibility={{ address: false, searchString: false }}
         getStartedCard={
           <GetStartedTest
             icon={

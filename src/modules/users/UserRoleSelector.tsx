@@ -186,7 +186,7 @@ export function UserRoleSelector({
         sideOffset={10}
       >
         <Command
-          className={"w-full flex"}
+          className={"w-full flex text-neutral-950 dark:text-neutral-50"}
           loop
           filter={(value, search) => {
             const formatValue = trim(value.toLowerCase());
