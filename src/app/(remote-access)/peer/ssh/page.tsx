@@ -101,7 +101,8 @@ function SSHTerminal({ username, port, peer, ipVersion }: Props) {
         ? "netbird-ssh"
         : "tcp";
       const rules = [`${protocol}/${aclPort}`];
-      await client?.connectTemporary(peer.id, rules);
+      const clientConnected = await client?.connectTemporary(peer.id, rules);
+      if (!clientConnected) return;
       await ssh({
         hostname: sshHost,
         port: Number(port),
@@ -128,7 +129,11 @@ function SSHTerminal({ username, port, peer, ipVersion }: Props) {
           ? "netbird-ssh"
           : "tcp";
         const rules = [`${protocol}/${aclPort}`];
-        await client?.connectTemporary(peer.id, rules);
+        const clientConnected = await client?.connectTemporary(peer.id, rules);
+        if (!clientConnected) {
+          connected.current = false;
+          return;
+        }
         const res = await ssh({
           hostname: sshHost,
           port: Number(port),
@@ -139,7 +144,8 @@ function SSHTerminal({ username, port, peer, ipVersion }: Props) {
           sshConnectedOnce.current = true;
         }
       } catch (error) {
-        console.error("Connection error:", error);
+        console.warn("Connection error:", error);
+        connected.current = false;
       }
     };
 
