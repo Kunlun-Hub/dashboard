@@ -35,12 +35,19 @@ export const applyD3ForceLayout = (nodes: Node[], edges: Edge[]) => {
         .distance(60) // Reduced distance to minimize crossings
         .strength(0.05), // Reduced strength to maintain radial structure
     )
-    .force("collision", d3.forceCollide().radius(300));
+    .force(
+      "collision",
+      d3.forceCollide().radius(simulationNodes.length > 120 ? 220 : 300),
+    );
 
-  // Run simulation for fewer iterations to preserve radial structure
-  for (let i = 0; i < 1000; i++) {
+  const tickCount = getForceTickCount(simulationNodes.length);
+  for (let i = 0; i < tickCount; i++) {
     simulation.tick();
   }
+
+  const simulationNodeMap = new Map(
+    simulationNodes.map((node) => [node.id, node] as const),
+  );
 
   const updatedNodes: Node[] = simulationNodes.map((node) => ({
     ...node,
@@ -51,8 +58,8 @@ export const applyD3ForceLayout = (nodes: Node[], edges: Edge[]) => {
   }));
 
   const updatedEdges: Edge[] = edges.map((edge) => {
-    const sourceNode = simulationNodes.find((n) => n.id === edge.source);
-    const targetNode = simulationNodes.find((n) => n.id === edge.target);
+    const sourceNode = simulationNodeMap.get(edge.source);
+    const targetNode = simulationNodeMap.get(edge.target);
 
     return {
       ...edge,
@@ -115,12 +122,13 @@ export const applyD3HierarchicalLayout = (
   const resourceNodes = simulationNodes.filter(
     (n) => n.type === "resourceNode",
   );
+  const summaryNodes = simulationNodes.filter((n) => n.type === "summaryNode");
   const peerNodes = simulationNodes.filter((n) => n.type === "peerNode");
   const expandedGroupPeers = simulationNodes.filter(
     (n) => n.type === "expandedGroupPeer",
   );
 
-  let networkAndResourceNodes = [...networkNodes, ...resourceNodes];
+  let networkAndResourceNodes = [...networkNodes, ...resourceNodes, ...summaryNodes];
 
   if (view === "group") {
     networkAndResourceNodes = [...networkAndResourceNodes, ...peerNodes];
@@ -204,9 +212,14 @@ export const applyD3HierarchicalLayout = (
     });
   });
 
-  for (let i = 0; i < 100; i++) {
+  const tickCount = getHierarchicalTickCount(simulationNodes.length);
+  for (let i = 0; i < tickCount; i++) {
     simulation.tick();
   }
+
+  const simulationNodeMap = new Map(
+    simulationNodes.map((node) => [node.id, node] as const),
+  );
 
   const updatedNodes: Node[] = simulationNodes.map((node) => ({
     ...node,
@@ -217,8 +230,8 @@ export const applyD3HierarchicalLayout = (
   }));
 
   const updatedEdges: Edge[] = edges.map((edge) => {
-    const sourceNode = simulationNodes.find((n) => n.id === edge.source);
-    const targetNode = simulationNodes.find((n) => n.id === edge.target);
+    const sourceNode = simulationNodeMap.get(edge.source);
+    const targetNode = simulationNodeMap.get(edge.target);
 
     return {
       ...edge,
@@ -238,6 +251,22 @@ export const applyD3HierarchicalLayout = (
   simulation.stop();
 
   return { updatedNodes, updatedEdges };
+};
+
+const getForceTickCount = (nodeCount: number) => {
+  if (nodeCount <= 20) return 260;
+  if (nodeCount <= 60) return 180;
+  if (nodeCount <= 140) return 120;
+  if (nodeCount <= 260) return 90;
+  return 60;
+};
+
+const getHierarchicalTickCount = (nodeCount: number) => {
+  if (nodeCount <= 20) return 60;
+  if (nodeCount <= 60) return 45;
+  if (nodeCount <= 140) return 32;
+  if (nodeCount <= 260) return 24;
+  return 18;
 };
 
 const centerNodesVertically = (

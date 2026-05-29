@@ -1,4 +1,3 @@
-import useFetchApi from "@utils/api";
 import { cn } from "@utils/helpers";
 import { Handle, type Node, Position } from "@xyflow/react";
 import { NetworkIcon } from "lucide-react";
@@ -10,21 +9,19 @@ import { useI18n } from "@/i18n/I18nProvider";
 
 type NetworkNodeType = {
   network: Network;
+  resources: NetworkResource[];
+  hiddenResourceCount: number;
 };
 
 type NetworkNodeProps = Node<NetworkNodeType, "networkNode">;
 
 export const NetworkNode = ({ data }: NetworkNodeProps) => {
-  const { data: networkResources } = useFetchApi<NetworkResource[]>(
-    "/networks/resources",
-  );
   const { t } = useI18n();
 
   const n = data.network as Network;
   const routingPeersCount = n?.routing_peers_count ?? 0;
-  const resourceIds = n?.resources || [];
-  const resources =
-    networkResources?.filter((r) => resourceIds.includes(r?.id || "")) || [];
+  const resources = data.resources || [];
+  const hiddenResourceCount = data.hiddenResourceCount ?? 0;
 
   return (
     <div
@@ -74,6 +71,11 @@ export const NetworkNode = ({ data }: NetworkNodeProps) => {
               return <DeviceCard resource={r} key={r.id} />;
             })}
           </div>
+          {hiddenResourceCount > 0 && (
+            <div className="absolute bottom-3 right-3 z-20 rounded-md border border-nb-gray-800 bg-nb-gray-930/95 px-2 py-1 text-[11px] font-medium text-nb-gray-200 shadow-sm">
+              +{hiddenResourceCount} {t("controlCenter.more")}
+            </div>
+          )}
           <div
             className={cn(
               "absolute w-full h-full bg-gradient-to-b from-transparent via-nb-gray-940/20 to-nb-gray-940 z-10 left-0 top-0 pointer-events-none",

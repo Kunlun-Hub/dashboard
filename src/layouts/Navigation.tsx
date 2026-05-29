@@ -80,17 +80,7 @@ export default function Navigation({
 
                 <SidebarItem
                   icon={<ControlCenterIcon size={16} />}
-                  label={
-                    <div className={"flex items-center gap-2"}>
-                      {t("nav.controlCenter")}
-                      <SmallBadge
-                        text={t("common.beta")}
-                        variant={"sky"}
-                        className={"text-[8px] leading-none py-[3px] px-[5px]"}
-                        textClassName={"top-0"}
-                      />
-                    </div>
-                  }
+                  label={t("nav.controlCenter")}
                   href={"/control-center"}
                   visible={permission.policies.read}
                 />

@@ -6,6 +6,7 @@ import { ResourceNode } from "@/modules/control-center/nodes/ResourceNode";
 import { SelectGroupNode } from "@/modules/control-center/nodes/SelectGroupNode";
 import { SelectPeerNode } from "@/modules/control-center/nodes/SelectPeerNode";
 import { SelectUserNode } from "@/modules/control-center/nodes/SelectUserNode";
+import { SummaryNode } from "@/modules/control-center/nodes/SummaryNode";
 
 export const NODE_TYPES = {
   groupNode: GroupNode,
@@ -15,6 +16,7 @@ export const NODE_TYPES = {
 
   networkNode: NetworkNode,
   resourceNode: ResourceNode,
+  summaryNode: SummaryNode,
   policyNode: PolicyNode,
 
   peerNode: PeerNode,

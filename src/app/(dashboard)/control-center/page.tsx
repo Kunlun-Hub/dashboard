@@ -10,7 +10,6 @@ import {
 } from "@components/select/SelectDropdown";
 import SquareIcon from "@components/SquareIcon";
 import GetStartedTest from "@components/ui/GetStartedTest";
-import { SmallBadge } from "@components/ui/SmallBadge";
 import useFetchApi from "@utils/api";
 import {
   Background,
@@ -23,14 +22,17 @@ import {
   useEdgesState,
   useNodesState,
   useReactFlow,
+  useViewport,
 } from "@xyflow/react";
 import { forEach, orderBy, sortBy } from "lodash";
 import {
   ArrowLeftIcon,
   ExternalLinkIcon,
   LayoutGridIcon,
-  MessageSquareShareIcon,
+  LocateFixedIcon,
+  MinusIcon,
   NetworkIcon,
+  PlusIcon,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
@@ -47,6 +49,10 @@ import { Policy } from "@/interfaces/Policy";
 import { User } from "@/interfaces/User";
 import PageContainer from "@/layouts/PageContainer";
 import { AccessControlUpdateModal } from "@/modules/access-control/AccessControlModal";
+import {
+  ControlCenterDetailsPanel,
+  ControlCenterInspectTarget,
+} from "@/modules/control-center/ControlCenterDetailsPanel";
 import { FlowSelector, FlowView } from "@/modules/control-center/FlowSelector";
 import { NetworkRoutingPeerCount } from "@/modules/control-center/NetworkRoutingPeerCount";
 import { ControlCenterCurrentUserBadge } from "@/modules/control-center/user/ControlCenterCurrentUserBadge";
@@ -63,6 +69,18 @@ import {
   DEFAULT_MIN_ZOOM,
 } from "@/modules/control-center/utils/layouts";
 import { NODE_TYPES } from "@/modules/control-center/utils/nodes";
+import { GroupBadgeIcon } from "@components/ui/GroupBadgeIcon";
+import { OSLogo } from "@/modules/peers/PeerOSCell";
+
+const MAX_EXPANDED_DESTINATION_PEERS = 6;
+const MAX_EXPANDED_DESTINATION_RESOURCES = 6;
+
+type ExpandedDestinationContent = {
+  visiblePeers: Peer[];
+  visibleResources: NetworkResource[];
+  hiddenPeerCount: number;
+  hiddenResourceCount: number;
+};
 
 export default function ControlCenter() {
   return (
@@ -79,8 +97,8 @@ function ControlCenterView() {
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const reactFlow = useReactFlow();
+  const { zoom } = useViewport();
   const [layoutInitialized, setLayoutInitialized] = useState(false);
-  const [forceLayoutChange, setForceLayoutChange] = useState(false);
   const { loggedInUser } = useLoggedInUser();
 
   const queryParams = useSearchParams();
@@ -125,6 +143,9 @@ function ControlCenterView() {
 
   const [selectedPolicy, setSelectedPolicy] = useState("");
   const [selectedDestinationGroup, setSelectedDestinationGroup] = useState("");
+  const [inspectedTarget, setInspectedTarget] =
+    useState<ControlCenterInspectTarget | null>(null);
+  const [detailsCollapsed, setDetailsCollapsed] = useState(false);
 
   const [policyModalOpen, setPolicyModalOpen] = useState(false);
 
@@ -149,12 +170,184 @@ function ControlCenterView() {
     return allNetworks;
   }, [networks, t]);
 
+  const peerFilterUserId =
+    currentView === FlowView.PEERS && previousSelectedUser
+      ? previousSelectedUser
+      : undefined;
+
+  const peerOptions: SelectOption[] = useMemo(
+    () =>
+      orderBy(
+        (peers ?? [])
+          .filter((peer) => !peerFilterUserId || peer.user_id === peerFilterUserId)
+          .map(
+            (peer) =>
+              ({
+                value: peer.id || "",
+                label: peer.name,
+                searchValue: `${peer.id}${peer.name}${peer.ip}${peer.hostname}${peer.user?.name || ""}`,
+                icon: () => (
+                  <div className="flex h-4 w-4 items-center justify-center grayscale brightness-[100%] contrast-[40%]">
+                    <OSLogo os={peer.os} />
+                  </div>
+                ),
+              }) as SelectOption,
+          ),
+        ["label", "value"],
+        ["asc", "asc"],
+      ),
+    [peerFilterUserId, peers],
+  );
+
+  const groupOptions: SelectOption[] = useMemo(
+    () =>
+      orderBy(
+        (groups ?? []).map(
+          (group) =>
+            ({
+              value: group.id || "",
+              label: group.name,
+              searchValue: `${group.id}${group.name}`,
+              icon: () => (
+                <GroupBadgeIcon
+                  id={group?.id}
+                  issued={group?.issued}
+                  size={14}
+                />
+              ),
+            }) as SelectOption,
+        ),
+        ["label", "value"],
+        ["asc", "asc"],
+      ),
+    [groups],
+  );
+
+  const userOptions: SelectOption[] = useMemo(
+    () =>
+      orderBy(
+        (users ?? []).map(
+          (user) =>
+            ({
+              value: user.id || "",
+              label: user.name || user.email || user.id || "",
+              searchValue: `${user.id}${user.email}${user.name}`,
+            }) as SelectOption,
+        ),
+        ["label", "value"],
+        ["asc", "asc"],
+      ),
+    [users],
+  );
+
+  const getPeersAndResourcesForGroup = useCallback(
+    (groupId: string) => {
+      const resources =
+        networkResources?.filter((resource) => {
+          const resourceGroupIds =
+            resource.groups?.map((group) =>
+              typeof group === "string" ? group : group.id,
+            ) || [];
+          return resourceGroupIds.includes(groupId);
+        }) || [];
+
+      const groupPeers =
+        peers?.filter((peer) => {
+          const peerGroupIds = peer.groups?.map((group) => group.id) || [];
+          return peerGroupIds.includes(groupId);
+        }) || [];
+
+      return { resources, peers: groupPeers };
+    },
+    [networkResources, peers],
+  );
+
+  const getExpandedDestinationContent = useCallback(
+    (groupId: string): ExpandedDestinationContent => {
+      const { resources, peers: groupPeers } = getPeersAndResourcesForGroup(groupId);
+
+      return {
+        visiblePeers: groupPeers.slice(0, MAX_EXPANDED_DESTINATION_PEERS),
+        visibleResources: resources.slice(0, MAX_EXPANDED_DESTINATION_RESOURCES),
+        hiddenPeerCount: Math.max(
+          groupPeers.length - MAX_EXPANDED_DESTINATION_PEERS,
+          0,
+        ),
+        hiddenResourceCount: Math.max(
+          resources.length - MAX_EXPANDED_DESTINATION_RESOURCES,
+          0,
+        ),
+      };
+    },
+    [getPeersAndResourcesForGroup],
+  );
+
+  const createDestinationSummaryNode = useCallback(
+    (
+      groupId: string,
+      hiddenPeerCount: number,
+      hiddenResourceCount: number,
+      position: { x: number; y: number },
+      enabled = true,
+    ): Node | null => {
+      const hiddenTotal = hiddenPeerCount + hiddenResourceCount;
+      if (!hiddenTotal) return null;
+
+      const parts: string[] = [];
+      if (hiddenPeerCount > 0) {
+        parts.push(
+          t("controlCenter.hiddenPeerCount", { count: hiddenPeerCount }),
+        );
+      }
+      if (hiddenResourceCount > 0) {
+        parts.push(
+          t("controlCenter.hiddenResourceCount", {
+            count: hiddenResourceCount,
+          }),
+        );
+      }
+
+      return {
+        id: `summary-${groupId}`,
+        type: "summaryNode",
+        data: {
+          title: t("controlCenter.moreCount", { count: hiddenTotal }),
+          subtitle: parts.join(", "),
+          enabled,
+        },
+        position,
+      };
+    },
+    [t],
+  );
+
+  const createDestinationSummaryEdge = useCallback(
+    (groupId: string, enabled = true): Edge => ({
+      id: `group-summary-${groupId}`,
+      source: `group-${groupId}`,
+      target: `summary-${groupId}`,
+      type: "simple",
+      data: { enabled },
+    }),
+    [],
+  );
+
   const onDestinationGroupSelect = useCallback(
     (groupId: string) => {
       const isTogglingSameGroup = selectedDestinationGroup === groupId;
       const newSelectedGroup = isTogglingSameGroup ? "" : groupId;
 
       setSelectedDestinationGroup(newSelectedGroup);
+      if (newSelectedGroup) setDetailsCollapsed(false);
+      setInspectedTarget(
+        newSelectedGroup
+          ? {
+              kind: "group",
+              groupId: newSelectedGroup,
+              role: "destination",
+            }
+          : null,
+      );
 
       if (
         currentView !== FlowView.PEERS &&
@@ -165,25 +358,13 @@ function ControlCenterView() {
         return;
       }
 
-      const getPeersAndResources = (groupId: string) => {
-        const resources =
-          networkResources?.filter((n) => {
-            const resourceGroupIds =
-              n.groups?.map((g) => (g as Group)?.id) || [];
-            return resourceGroupIds.includes(groupId);
-          }) || [];
-
-        const groupPeers =
-          peers?.filter((p) => {
-            const peerGroupIds = p.groups?.map((g) => g.id) || [];
-            return peerGroupIds.includes(groupId);
-          }) || [];
-
-        return { resources, peers: groupPeers };
-      };
-
       const addExpandedNodes = (groupId: string, baseNodes: Node[]) => {
-        const { resources, peers } = getPeersAndResources(groupId);
+        const {
+          visiblePeers,
+          visibleResources,
+          hiddenPeerCount,
+          hiddenResourceCount,
+        } = getExpandedDestinationContent(groupId);
         const destinationGroupNode = baseNodes.find(
           (node) => node.id === `group-${groupId}`,
         );
@@ -193,7 +374,10 @@ function ControlCenterView() {
         const baseX = destinationGroupNode.position.x + 300;
         const groupCenterY = destinationGroupNode.position.y;
         const nodeSpacing = 80;
-        const totalNodes = peers.length + resources.length;
+        const totalNodes =
+          visiblePeers.length +
+          visibleResources.length +
+          (hiddenPeerCount + hiddenResourceCount > 0 ? 1 : 0);
         const totalHeight = (totalNodes - 1) * nodeSpacing;
         const startY = groupCenterY - totalHeight / 2;
 
@@ -201,7 +385,7 @@ function ControlCenterView() {
         let currentY = startY;
 
         // Add peer nodes
-        peers.forEach((peer) => {
+        visiblePeers.forEach((peer) => {
           newNodes.push({
             id: `peer-${peer.id}`,
             type:
@@ -213,7 +397,7 @@ function ControlCenterView() {
         });
 
         // Add resource nodes
-        resources.forEach((resource) => {
+        visibleResources.forEach((resource) => {
           newNodes.push({
             id: `resource-${resource.id}`,
             type: "resourceNode",
@@ -223,15 +407,28 @@ function ControlCenterView() {
           currentY += nodeSpacing;
         });
 
+        const summaryNode = createDestinationSummaryNode(
+          groupId,
+          hiddenPeerCount,
+          hiddenResourceCount,
+          { x: baseX, y: currentY },
+        );
+        if (summaryNode) newNodes.push(summaryNode);
+
         return newNodes;
       };
 
       const addExpandedEdges = (groupId: string) => {
-        const { resources, peers } = getPeersAndResources(groupId);
+        const {
+          visiblePeers,
+          visibleResources,
+          hiddenPeerCount,
+          hiddenResourceCount,
+        } = getExpandedDestinationContent(groupId);
         const newEdges: Edge[] = [];
 
         // Add peer edges
-        peers.forEach((peer) => {
+        visiblePeers.forEach((peer) => {
           newEdges.push({
             id: `group-peer-${groupId}-${peer.id}`,
             source: `group-${groupId}`,
@@ -242,7 +439,7 @@ function ControlCenterView() {
         });
 
         // Add resource edges
-        resources.forEach((resource) => {
+        visibleResources.forEach((resource) => {
           newEdges.push({
             id: `group-resource-${groupId}-${resource.id}`,
             source: `group-${groupId}`,
@@ -252,6 +449,10 @@ function ControlCenterView() {
           });
         });
 
+        if (hiddenPeerCount + hiddenResourceCount > 0) {
+          newEdges.push(createDestinationSummaryEdge(groupId));
+        }
+
         return newEdges;
       };
 
@@ -260,14 +461,19 @@ function ControlCenterView() {
         // Remove previous nodes
         const baseNodes = prevNodes.filter(
           (node) =>
-            !node.id.startsWith(`peer-`) && !node.id.startsWith(`resource-`),
+            !node.id.startsWith(`peer-`) &&
+            !node.id.startsWith(`dest-peer-`) &&
+            !node.id.startsWith(`resource-`),
+        );
+        const nodesWithoutSummary = baseNodes.filter(
+          (node) => !node.id.startsWith(`summary-`),
         );
         // If toggling a new group, add its nodes
         if (!isTogglingSameGroup) {
-          const expandedNodes = addExpandedNodes(groupId, baseNodes);
-          return [...baseNodes, ...expandedNodes];
+          const expandedNodes = addExpandedNodes(groupId, nodesWithoutSummary);
+          return [...nodesWithoutSummary, ...expandedNodes];
         }
-        return baseNodes;
+        return nodesWithoutSummary;
       });
 
       // Update edges
@@ -276,7 +482,8 @@ function ControlCenterView() {
         const baseEdges = prevEdges.filter(
           (edge) =>
             !edge.id.includes(`group-peer-`) &&
-            !edge.id.includes(`group-resource-`),
+            !edge.id.includes(`group-resource-`) &&
+            !edge.id.includes(`group-summary-`),
         );
         // If expanding a new group, add its edges
         if (!isTogglingSameGroup) {
@@ -291,8 +498,9 @@ function ControlCenterView() {
       currentView,
       setNodes,
       setEdges,
-      networkResources,
-      peers,
+      getExpandedDestinationContent,
+      createDestinationSummaryNode,
+      createDestinationSummaryEdge,
     ],
   );
 
@@ -304,6 +512,18 @@ function ControlCenterView() {
 
     const allNodes: Node[] = [];
     const allEdges: Edge[] = [];
+    const sourceGroup = groups.find((group) => group.id === groupId);
+    if (!sourceGroup) return;
+
+    allNodes.push({
+      id: `source-group-${groupId}`,
+      type: "sourceGroupNode",
+      data: {
+        group: sourceGroup,
+        hoverable: false,
+      },
+      position: { x: 0, y: 0 },
+    });
 
     const groupPolicies = sortBy(
       policies.filter((policy) => {
@@ -336,7 +556,7 @@ function ControlCenterView() {
       if (!edgeExists) {
         allEdges.push({
           id: `group-policy-${groupId}-${policy.id}`,
-          source: `select-group-node`,
+          source: `source-group-${groupId}`,
           target: `policy-${policy.id}`,
           type: "in",
           data: { enabled, type: "bezier" },
@@ -364,18 +584,14 @@ function ControlCenterView() {
           });
 
           if (selectedDestinationGroup == destination.id) {
-            const resources = networkResources.filter((n) => {
-              const resourceGroupIds =
-                n.groups?.map((g) => (g as Group)?.id) || [];
-              return resourceGroupIds.includes(destination.id);
-            });
+            const {
+              visiblePeers,
+              visibleResources,
+              hiddenPeerCount,
+              hiddenResourceCount,
+            } = getExpandedDestinationContent(destination.id || "");
 
-            const destinationPeers = peers?.filter((p) => {
-              const peerGroupIds = p.groups?.map((g) => g.id) || [];
-              return peerGroupIds.includes(destination.id);
-            });
-
-            destinationPeers?.forEach((peer) => {
+            visiblePeers.forEach((peer) => {
               const peerNodeId = `peer-${peer.id}`;
               const peerNodeExists = allNodes.some((n) => n.id === peerNodeId);
               if (!peerNodeExists) {
@@ -419,7 +635,7 @@ function ControlCenterView() {
             });
 
             // add resource nodes
-            resources.forEach((resource) => {
+            visibleResources.forEach((resource) => {
               const resourceNodeId = `resource-${resource.id}`;
               const resourceNodeExists = allNodes.some(
                 (n) => n.id === resourceNodeId,
@@ -719,72 +935,72 @@ function ControlCenterView() {
     if (!networks || isNetworksLoading) return;
     if (!networkResources || isResourcesLoading) return;
 
-    // Skip layout updates if already initialized
-    if (layoutInitialized) {
-      return; // Exit early for initialized layouts
-    }
+    if (layoutInitialized) return;
 
     const allNodes: Node[] = [];
     const allEdges: Edge[] = [];
     const hidePolicies = !selectedNetwork;
 
-    // Process networks
     networks.forEach((network) => {
+      const resourceIds = new Set(network.resources || []);
+      const resources =
+        networkResources?.filter((resource) =>
+          resourceIds.has(resource?.id || ""),
+        ) || [];
+      const visibleResources = resources.slice(0, 6);
+
       allNodes.push({
         id: `network-${network.id}`,
         type: "networkNode",
         data: {
           network,
-          selectedNetwork,
+          resources: visibleResources,
+          hiddenResourceCount: Math.max(
+            resources.length - visibleResources.length,
+            0,
+          ),
         },
         draggable: true,
         position: { x: 0, y: 0 },
       });
 
-      const networkPolicies = network.policies || [];
-      if (networkPolicies.length > 0) {
-        forEach(networkPolicies, (p) => {
-          const policy = policies.find((policyItem) => policyItem.id === p);
-          if (policy) {
-            const enabled = policy.rules?.[0]?.enabled;
+      (network.policies || []).forEach((policyId) => {
+        const policy = policies.find((item) => item.id === policyId);
+        if (!policy) return;
 
-            const rule = policy.rules?.[0];
-            if (rule) {
-              const ruleSourceGroups = (rule.sources as Group[]) || [];
+        const enabled = policy.rules?.[0]?.enabled;
+        const rule = policy.rules?.[0];
+        if (!rule) return;
 
-              ruleSourceGroups.forEach((group) => {
-                if (!allNodes.find((node) => node.id === `group-${group.id}`)) {
-                  allNodes.push({
-                    id: `group-${group.id}`,
-                    type: "groupNode",
-                    data: {
-                      group,
-                      enabled,
-                      onClick: () => forceSingleGroupView(group.id || ""),
-                    },
-                    position: { x: 0, y: 0 },
-                  });
-                }
+        const ruleSourceGroups = (rule.sources as Group[]) || [];
+        ruleSourceGroups.forEach((group) => {
+          if (!allNodes.find((node) => node.id === `group-${group.id}`)) {
+            allNodes.push({
+              id: `group-${group.id}`,
+              type: "groupNode",
+              data: {
+                group,
+                enabled,
+                onClick: () => forceSingleGroupView(group.id || ""),
+              },
+              position: { x: 0, y: 0 },
+            });
+          }
 
-                const edge2Exists = allEdges.find(
-                  (edge) =>
-                    edge.id === `group-${group.id}-network-${network.id}`,
-                );
-                if (!edge2Exists && hidePolicies) {
-                  const label = getPolicyProtocolAndPortText(policy);
-                  allEdges.push({
-                    id: `group-${group.id}-network-${network.id}`,
-                    source: `group-${group.id}`,
-                    target: `network-${network.id}`,
-                    type: "floating-straight",
-                    data: { label: label },
-                  });
-                }
-              });
-            }
+          const edgeExists = allEdges.some(
+            (edge) => edge.id === `group-${group.id}-network-${network.id}`,
+          );
+          if (!edgeExists && hidePolicies) {
+            allEdges.push({
+              id: `group-${group.id}-network-${network.id}`,
+              source: `group-${group.id}`,
+              target: `network-${network.id}`,
+              type: "floating-straight",
+              data: { label: getPolicyProtocolAndPortText(policy) },
+            });
           }
         });
-      }
+      });
     });
 
     return applyD3ForceLayout(allNodes, allEdges);
@@ -801,6 +1017,13 @@ function ControlCenterView() {
 
     const peer = peers?.find((p) => p.id === peerId);
     if (!peer) return;
+
+    allNodes.push({
+      id: `source-peer-${peer.id}`,
+      type: "sourcePeerNode",
+      data: { peer },
+      position: { x: 0, y: 0 },
+    });
 
     const peerGroups = peer.groups || [];
 
@@ -833,7 +1056,7 @@ function ControlCenterView() {
       if (!edgeExists) {
         allEdges.push({
           id: `peer-policy-${peer.id}-${policy.id}`,
-          source: `select-peer-node`,
+          source: `source-peer-${peer.id}`,
           target: `policy-${policy.id}`,
           type: "in",
           data: { enabled, type: "bezier" },
@@ -880,19 +1103,15 @@ function ControlCenterView() {
         }
 
         if (selectedDestinationGroup == destination.id) {
-          const resources = networkResources.filter((n) => {
-            const resourceGroupIds =
-              n.groups?.map((g) => (g as Group)?.id) || [];
-            return resourceGroupIds.includes(destination.id);
-          });
-
-          const destinationPeers = peers?.filter((p) => {
-            const peerGroupIds = p.groups?.map((g) => g.id) || [];
-            return peerGroupIds.includes(destination.id);
-          });
+          const {
+            visiblePeers,
+            visibleResources,
+            hiddenPeerCount,
+            hiddenResourceCount,
+          } = getExpandedDestinationContent(destination.id || "");
 
           // add peer nodes
-          destinationPeers?.forEach((peer) => {
+          visiblePeers.forEach((peer) => {
             const peerNodeId = `peer-${peer.id}`;
             const peerNodeExists = allNodes.some((n) => n.id === peerNodeId);
             if (!peerNodeExists) {
@@ -942,7 +1161,7 @@ function ControlCenterView() {
           });
 
           // add resource nodes
-          resources.forEach((resource) => {
+          visibleResources.forEach((resource) => {
             const resourceNodeId = `resource-${resource.id}`;
             const resourceNodeExists = allNodes.some(
               (n) => n.id === resourceNodeId,
@@ -994,6 +1213,43 @@ function ControlCenterView() {
               });
             }
           });
+
+          const summaryNode = createDestinationSummaryNode(
+            destination.id || "",
+            hiddenPeerCount,
+            hiddenResourceCount,
+            { x: 0, y: 0 },
+            enabled,
+          );
+          if (summaryNode) {
+            const existingSummaryNode = allNodes.find(
+              (node) => node.id === summaryNode.id,
+            );
+            if (!existingSummaryNode) {
+              allNodes.push(summaryNode);
+            } else {
+              existingSummaryNode.data = summaryNode.data;
+            }
+
+            const summaryEdgeId = `group-summary-${destination.id}`;
+            const summaryEdgeExists = allEdges.some(
+              (edge) => edge.id === summaryEdgeId,
+            );
+            if (!summaryEdgeExists) {
+              allEdges.push(
+                createDestinationSummaryEdge(destination.id || "", enabled),
+              );
+            } else {
+              allEdges.forEach((edge) => {
+                if (edge.id === summaryEdgeId) {
+                  edge.data = {
+                    ...edge.data,
+                    enabled,
+                  };
+                }
+              });
+            }
+          }
         }
       });
 
@@ -1108,14 +1364,6 @@ function ControlCenterView() {
         },
         position: { x: 0, y: 0 },
       });
-
-      allEdges.push({
-        id: `user-peer-${userId}-${peer.id}`,
-        source: `select-user-node`,
-        target: `source-peer-${peer.id}`,
-        type: "simple",
-        data: { enabled: true },
-      });
     });
 
     const allUserGroups = [
@@ -1199,19 +1447,15 @@ function ControlCenterView() {
 
         // Add expanded destination group content if selected
         if (selectedDestinationGroup === destination.id) {
-          const resources = networkResources.filter((n) => {
-            const resourceGroupIds =
-              n.groups?.map((g) => (g as Group)?.id) || [];
-            return resourceGroupIds.includes(destination.id);
-          });
-
-          const destinationPeers = peers?.filter((p) => {
-            const peerGroupIds = p.groups?.map((g) => g.id) || [];
-            return peerGroupIds.includes(destination.id);
-          });
+          const {
+            visiblePeers,
+            visibleResources,
+            hiddenPeerCount,
+            hiddenResourceCount,
+          } = getExpandedDestinationContent(destination.id || "");
 
           // Add peer nodes
-          destinationPeers?.forEach((peer, peerIndex) => {
+          visiblePeers.forEach((peer, peerIndex) => {
             const peerNodeId = `dest-peer-${peer.id}`;
             const peerNodeExists = allNodes.some((n) => n.id === peerNodeId);
             if (!peerNodeExists) {
@@ -1238,7 +1482,7 @@ function ControlCenterView() {
           });
 
           // Add resource nodes
-          resources.forEach((resource, resourceIndex) => {
+          visibleResources.forEach((resource, resourceIndex) => {
             const resourceNodeId = `resource-${resource.id}`;
             const resourceNodeExists = allNodes.some(
               (n) => n.id === resourceNodeId,
@@ -1252,7 +1496,7 @@ function ControlCenterView() {
                   x: 1200,
                   y:
                     policyIndex * 120 +
-                    (destinationPeers?.length || 0) * 80 +
+                    visiblePeers.length * 80 +
                     resourceIndex * 80,
                 },
               });
@@ -1271,6 +1515,37 @@ function ControlCenterView() {
               });
             }
           });
+
+          const summaryNode = createDestinationSummaryNode(
+            destination.id || "",
+            hiddenPeerCount,
+            hiddenResourceCount,
+            {
+              x: 1200,
+              y:
+                policyIndex * 120 +
+                (visiblePeers.length + visibleResources.length) * 80,
+            },
+            enabled,
+          );
+          if (summaryNode) {
+            const summaryNodeExists = allNodes.some(
+              (node) => node.id === summaryNode.id,
+            );
+            if (!summaryNodeExists) {
+              allNodes.push(summaryNode);
+            }
+
+            const summaryEdgeId = `group-summary-${destination.id}`;
+            const summaryEdgeExists = allEdges.some(
+              (edge) => edge.id === summaryEdgeId,
+            );
+            if (!summaryEdgeExists) {
+              allEdges.push(
+                createDestinationSummaryEdge(destination.id || "", enabled),
+              );
+            }
+          }
         }
       });
 
@@ -1298,160 +1573,69 @@ function ControlCenterView() {
   };
 
   const handleGroupChange = (id: string) => {
-    setNodes((prev) => {
-      const shouldRecalculate = selectedGroup !== id;
-      shouldRecalculate && setSelectedGroup(id);
-      let selectGroupNode;
-      const previousNodes = prev.map((node) => {
-        if (node.id === `select-group-node`) {
-          selectGroupNode = shouldRecalculate
-            ? {
-                ...node,
-                data: {
-                  ...node.data,
-                  currentGroup: id,
-                },
-              }
-            : node;
-          return selectGroupNode;
-        }
-        return node;
-      });
-      const result = applySingleGroupView(id);
-      if (result && selectGroupNode) {
-        let nodesWithCurrentGroup = result.updatedNodes;
-        nodesWithCurrentGroup.push(selectGroupNode);
-        setEdges(result.updatedEdges);
-        setLayoutInitialized(true);
-        shouldRecalculate && fitView(nodesWithCurrentGroup);
-        return nodesWithCurrentGroup;
-      } else {
-        return previousNodes;
-      }
-    });
+    if (selectedGroup !== id) setSelectedGroup(id);
+    setDetailsCollapsed(false);
+    setInspectedTarget({ kind: "group", groupId: id, role: "source" });
+    const result = applySingleGroupView(id);
+    if (result) {
+      setEdges(result.updatedEdges);
+      setNodes(result.updatedNodes);
+      setLayoutInitialized(true);
+      fitView(result.updatedNodes);
+    }
   };
 
   const handlePeerChange = (newPeerId: string) => {
-    setNodes((prev) => {
-      const shouldRecalculate = selectedPeer !== newPeerId;
-      shouldRecalculate && setSelectedPeer(newPeerId);
-
-      let selectPeerNode;
-      const previousNodes = prev.map((node) => {
-        if (node.id === `select-peer-node`) {
-          selectPeerNode = shouldRecalculate
-            ? {
-                ...node,
-                data: {
-                  ...node.data,
-                  currentPeer: newPeerId,
-                },
-              }
-            : node;
-          return selectPeerNode;
-        }
-        return node;
-      });
-      const result = applyPeerView(newPeerId);
-      if (result && selectPeerNode) {
-        let nodesWithCurrentPeer = result.updatedNodes;
-        nodesWithCurrentPeer.push(selectPeerNode);
-        setEdges(result.updatedEdges);
-        setLayoutInitialized(true);
-        shouldRecalculate && fitView(nodesWithCurrentPeer);
-        return nodesWithCurrentPeer;
-      } else {
-        return previousNodes;
-      }
-    });
+    if (selectedPeer !== newPeerId) setSelectedPeer(newPeerId);
+    setDetailsCollapsed(false);
+    setInspectedTarget({ kind: "peer", peerId: newPeerId });
+    const result = applyPeerView(newPeerId);
+    if (result) {
+      setEdges(result.updatedEdges);
+      setNodes(result.updatedNodes);
+      setLayoutInitialized(true);
+      fitView(result.updatedNodes);
+    }
   };
 
   const handleUserChange = (newUserId: string) => {
-    setNodes((prev) => {
-      const shouldRecalculate = selectedUser !== newUserId;
-      shouldRecalculate && setSelectedUser(newUserId);
-
-      let selectUserNode;
-      const previousNodes = prev.map((node) => {
-        if (node.id === `select-user-node`) {
-          selectUserNode = shouldRecalculate
-            ? {
-                ...node,
-                data: {
-                  ...node.data,
-                  currentUser: newUserId,
-                },
-              }
-            : node;
-          return selectUserNode;
-        }
-        return node;
-      });
-      const result = applyUserView(newUserId);
-      if (result && selectUserNode) {
-        let nodesWithCurrentUser = result.updatedNodes;
-        nodesWithCurrentUser.push(selectUserNode);
-        setEdges(result.updatedEdges);
-        setLayoutInitialized(true);
-        shouldRecalculate && fitView(nodesWithCurrentUser);
-        return nodesWithCurrentUser;
-      } else {
-        return previousNodes;
-      }
-    });
+    if (selectedUser !== newUserId) setSelectedUser(newUserId);
+    setDetailsCollapsed(false);
+    setInspectedTarget({ kind: "user", userId: newUserId });
+    const result = applyUserView(newUserId);
+    if (result) {
+      setEdges(result.updatedEdges);
+      setNodes(result.updatedNodes);
+      setLayoutInitialized(true);
+      fitView(result.updatedNodes);
+    }
   };
 
   const forceSingleGroupView = (groupId: string) => {
     setSelectedGroup(groupId);
     setSelectedNetwork("");
     setCurrentView(FlowView.GROUPS);
-    const selectGroupNode = {
-      id: `select-group-node`,
-      type: "selectGroupNode",
-      position: { x: 0, y: 0 },
-      data: {
-        currentGroup: groupId,
-        onChange: handleGroupChange,
-      },
-    };
-    setNodes([selectGroupNode]);
     const result = applySingleGroupView(groupId);
     if (result) {
-      let nodesWithCurrentGroup = result.updatedNodes;
-      nodesWithCurrentGroup.push(selectGroupNode);
       setEdges(result.updatedEdges);
-      setNodes(nodesWithCurrentGroup);
+      setNodes(result.updatedNodes);
       setLayoutInitialized(true);
-      fitView(nodesWithCurrentGroup);
+      fitView(result.updatedNodes);
     }
   };
 
   const forceSingleUserView = (userId: string) => {
     setSelectedPeer("");
-    setSelectedUser("");
+    setSelectedUser(userId);
     setPreviousSelectedUser("");
     setCurrentView(FlowView.USERS);
 
-    const selectUserNode = {
-      id: `select-user-node`,
-      type: "selectUserNode",
-      position: { x: -550, y: 0 },
-      data: {
-        currentUser: userId,
-        onUserChange: handleUserChange,
-      },
-    };
-
-    setNodes([selectUserNode]);
-
     const result = applyUserView(userId);
     if (result) {
-      let nodesWithUser = result.updatedNodes;
-      nodesWithUser.push(selectUserNode);
       setEdges(result.updatedEdges);
-      setNodes(nodesWithUser);
+      setNodes(result.updatedNodes);
       setLayoutInitialized(true);
-      fitView(nodesWithUser);
+      fitView(result.updatedNodes);
     }
   };
 
@@ -1459,27 +1643,14 @@ function ControlCenterView() {
     setSelectedPeer(peerId);
     setSelectedNetwork("");
     setSelectedUser("");
+    setPreviousSelectedUser(userId ?? "");
     setCurrentView(FlowView.PEERS);
-    const selectPeerNode = {
-      id: `select-peer-node`,
-      type: "selectPeerNode",
-      position: { x: 0, y: 0 },
-      data: {
-        currentPeer: peerId,
-        onPeerChange: handlePeerChange,
-        userId: userId,
-        placeholder: t("controlCenter.searchPeersOfUser"),
-      },
-    };
-    setNodes([selectPeerNode]);
     const result = applyPeerView(peerId);
     if (result) {
-      let nodesWithCurrentPeer = result.updatedNodes;
-      nodesWithCurrentPeer.push(selectPeerNode);
       setEdges(result.updatedEdges);
-      setNodes(nodesWithCurrentPeer);
+      setNodes(result.updatedNodes);
       setLayoutInitialized(true);
-      fitView(nodesWithCurrentPeer);
+      fitView(result.updatedNodes);
     }
   };
 
@@ -1501,17 +1672,6 @@ function ControlCenterView() {
           const userPeer = peers?.find((p) => p.user_id === loggedInUser?.id);
           const firstPeer = userPeer ?? peers?.[0];
           const initialPeerId = firstPeer?.id ?? "";
-          setNodes([
-            {
-              id: `select-peer-node`,
-              type: "selectPeerNode",
-              position: { x: 0, y: 0 },
-              data: {
-                currentPeer: initialPeerId,
-                onPeerChange: handlePeerChange,
-              },
-            },
-          ]);
           if (initialPeerId !== "") handlePeerChange(initialPeerId);
         } else {
           resetView();
@@ -1545,17 +1705,6 @@ function ControlCenterView() {
           }
 
           const initialUserId = initialUser?.id ?? "";
-          setNodes([
-            {
-              id: `select-user-node`,
-              type: "selectUserNode",
-              position: { x: -550, y: 0 },
-              data: {
-                currentUser: initialUserId,
-                onUserChange: handleUserChange,
-              },
-            },
-          ]);
           if (initialUserId !== "") handleUserChange(initialUserId);
         } else {
           resetView();
@@ -1567,17 +1716,6 @@ function ControlCenterView() {
         if (selectedGroup === "") {
           const firstGroup = getFirstGroup(groups, policies);
           const initialGroupId = firstGroup?.id ?? "";
-          setNodes([
-            {
-              id: `select-group-node`,
-              type: "selectGroupNode",
-              position: { x: 0, y: 0 },
-              data: {
-                currentGroup: initialGroupId,
-                onChange: handleGroupChange,
-              },
-            },
-          ]);
           if (initialGroupId !== "") {
             handleGroupChange(initialGroupId);
           }
@@ -1626,24 +1764,35 @@ function ControlCenterView() {
 
   const onNetworkSelect = useCallback((networkId: string) => {
     resetView();
+    setDetailsCollapsed(false);
     setCurrentView(FlowView.NETWORKS);
     setSelectedNetwork(networkId);
+    setInspectedTarget(
+      networkId
+        ? { kind: "network", networkId }
+        : { kind: "summary", view: FlowView.NETWORKS },
+    );
   }, []);
 
   const onGroupSelect = useCallback((groupId: string) => {
     resetView();
+    setDetailsCollapsed(false);
     setCurrentView(FlowView.GROUPS);
     setSelectedGroup(groupId);
+    setInspectedTarget({ kind: "group", groupId, role: "source" });
   }, []);
 
   const onViewChange = (view: FlowView) => {
     resetView();
+    setDetailsCollapsed(false);
     setSelectedDestinationGroup("");
     setSelectedPeer("");
     setSelectedGroup("");
     setSelectedNetwork("");
     setSelectedUser("");
+    setPreviousSelectedUser("");
     setCurrentView(view);
+    setInspectedTarget({ kind: "summary", view });
 
     try {
       const url = new URL(window.location.href);
@@ -1658,18 +1807,58 @@ function ControlCenterView() {
 
   const onNodeClick = useCallback(
     (_event: React.MouseEvent, _node: Node) => {
+      const nodeData = (_node.data || {}) as {
+        peer?: Peer;
+        group?: Group;
+        network?: Network;
+        policy?: Policy;
+        resource?: NetworkResource;
+      };
       const isNetworkNode = _node.type === "networkNode";
-      const isGroupNode =
-        _node.type === "groupNode" || _node.type === "sourceGroupNode";
+      const isSourceGroupNode = _node.type === "sourceGroupNode";
+      const isGroupNode = _node.type === "groupNode" || isSourceGroupNode;
       const isDestinationNode = _node.type === "destinationGroupNode";
       const isPolicyNode = _node.type === "policyNode";
+      const isPeerNode =
+        _node.type === "peerNode" ||
+        _node.type === "sourcePeerNode" ||
+        _node.type === "expandedGroupPeer";
+      const isResourceNode =
+        _node.type === "resourceNode" || _node.type === "destinationResourceNode";
 
-      const networkId = isNetworkNode ? _node.id.replace("network-", "") : "";
-      const groupId = isGroupNode ? _node.id.replace("group-", "") : "";
+      const networkId = isNetworkNode ? nodeData.network?.id || "" : "";
+      const groupId = isGroupNode ? nodeData.group?.id || "" : "";
       const destinationGroupId = isDestinationNode
-        ? _node.id.replace("group-", "")
+        ? nodeData.group?.id || ""
         : "";
-      const policyId = isPolicyNode ? _node.id.replace("policy-", "") : "";
+      const policyId = isPolicyNode ? nodeData.policy?.id || "" : "";
+      const peerId = isPeerNode ? nodeData.peer?.id || "" : "";
+      const resourceId = isResourceNode ? nodeData.resource?.id || "" : "";
+
+      if (peerId) {
+        setDetailsCollapsed(false);
+        setInspectedTarget({ kind: "peer", peerId });
+      }
+      if (resourceId) {
+        setDetailsCollapsed(false);
+        setInspectedTarget({ kind: "resource", resourceId });
+      }
+      if (groupId) {
+        setDetailsCollapsed(false);
+        setInspectedTarget({
+          kind: "group",
+          groupId,
+          role: isDestinationNode ? "destination" : "source",
+        });
+      }
+      if (networkId) {
+        setDetailsCollapsed(false);
+        setInspectedTarget({ kind: "network", networkId });
+      }
+      if (policyId) {
+        setDetailsCollapsed(false);
+        setInspectedTarget({ kind: "policy", policyId });
+      }
 
       if (networkId && currentView === FlowView.NETWORKS) {
         onNetworkSelect(networkId);
@@ -1694,6 +1883,30 @@ function ControlCenterView() {
     return policies?.find((p) => p.id === selectedPolicy);
   }, [policies, selectedPolicy]);
 
+  const detailTarget = useMemo<ControlCenterInspectTarget>(() => {
+    if (inspectedTarget) return inspectedTarget;
+    if (currentView === FlowView.PEERS && selectedPeer) {
+      return { kind: "peer", peerId: selectedPeer };
+    }
+    if (currentView === FlowView.USERS && selectedUser) {
+      return { kind: "user", userId: selectedUser };
+    }
+    if (currentView === FlowView.GROUPS && selectedGroup) {
+      return { kind: "group", groupId: selectedGroup, role: "source" };
+    }
+    if (currentView === FlowView.NETWORKS && selectedNetwork) {
+      return { kind: "network", networkId: selectedNetwork };
+    }
+    return { kind: "summary", view: currentView };
+  }, [
+    currentView,
+    inspectedTarget,
+    selectedGroup,
+    selectedNetwork,
+    selectedPeer,
+    selectedUser,
+  ]);
+
   const handlePolicyChange = () => {
     setTimeout(() => {
       setLayoutInitialized(false);
@@ -1704,9 +1917,29 @@ function ControlCenterView() {
 
   const { permission } = usePermissions();
   const router = useRouter();
+  const selectorClassName =
+    "!bg-nb-gray-920 !hover:bg-nb-gray-925 !text-nb-gray-300";
+
+  const handleZoomIn = useCallback(() => {
+    reactFlow.zoomIn({ duration: 200 });
+  }, [reactFlow]);
+
+  const handleZoomOut = useCallback(() => {
+    reactFlow.zoomOut({ duration: 200 });
+  }, [reactFlow]);
+
+  const handleResetViewport = useCallback(() => {
+    reactFlow.fitView({
+      nodes,
+      padding: 0.1,
+      duration: 750,
+      maxZoom: 0.8,
+      minZoom: DEFAULT_MIN_ZOOM,
+    });
+  }, [nodes, reactFlow]);
 
   return (
-    <PageContainer>
+    <PageContainer className="overflow-hidden">
       {currentPolicy && (
         <AccessControlUpdateModal
           policy={currentPolicy}
@@ -1715,7 +1948,10 @@ function ControlCenterView() {
           onOpenChange={setPolicyModalOpen}
         />
       )}
-      <div style={{ width: "100%", height: "100%" }} className={"relative"}>
+      <div
+        style={{ width: "100%", height: "100%" }}
+        className={"relative overflow-hidden"}
+      >
         {currentView === FlowView.PEERS &&
           !isPeersLoading &&
           peers?.length === 0 && (
@@ -1773,7 +2009,7 @@ function ControlCenterView() {
 
         <div className={"absolute left-0 top-0 z-10"}>
           <div className={"flex justify-between px-6 py-4 text-sm w-full"}>
-            <div className={"flex gap-4"}>
+            <div className={"flex flex-wrap items-center gap-3"}>
               {selectedNetwork !== "" && (
                 <Button
                   variant={"secondary"}
@@ -1803,11 +2039,61 @@ function ControlCenterView() {
                 </>
               )}
 
-              {selectedNetwork === "" && previousSelectedUser === "" && (
-                <FlowSelector value={currentView} onChange={onViewChange} />
+              <FlowSelector value={currentView} onChange={onViewChange} />
+
+              {currentView === FlowView.PEERS && peerOptions.length > 0 && (
+                <div className={"w-72"}>
+                  <SelectDropdown
+                    variant={"secondary"}
+                    value={selectedPeer}
+                    onChange={handlePeerChange}
+                    options={peerOptions}
+                    showSearch={true}
+                    searchPlaceholder={
+                      peerFilterUserId
+                        ? t("controlCenter.searchPeersOfUser")
+                        : t("groupPeers.searchPlaceholder")
+                    }
+                    className={selectorClassName}
+                    size={"xs"}
+                    truncate
+                  />
+                </div>
               )}
 
-              {currentView === "networks" && (
+              {currentView === FlowView.USERS && userOptions.length > 0 && (
+                <div className={"w-72"}>
+                  <SelectDropdown
+                    variant={"secondary"}
+                    value={selectedUser}
+                    onChange={handleUserChange}
+                    options={userOptions}
+                    showSearch={true}
+                    searchPlaceholder={t("users.searchByEmailOrName")}
+                    className={selectorClassName}
+                    size={"xs"}
+                    truncate
+                  />
+                </div>
+              )}
+
+              {currentView === FlowView.GROUPS && groupOptions.length > 0 && (
+                <div className={"w-72"}>
+                  <SelectDropdown
+                    variant={"secondary"}
+                    value={selectedGroup}
+                    onChange={handleGroupChange}
+                    options={groupOptions}
+                    showSearch={true}
+                    searchPlaceholder={t("groups.searchPlaceholder")}
+                    className={selectorClassName}
+                    size={"xs"}
+                    truncate
+                  />
+                </div>
+              )}
+
+              {currentView === FlowView.NETWORKS && (
                 <div className={"w-64"}>
                   <SelectDropdown
                     variant={"secondary"}
@@ -1815,9 +2101,7 @@ function ControlCenterView() {
                     onChange={onNetworkSelect}
                     options={networkOptions}
                     showSearch={true}
-                    className={
-                      "!bg-nb-gray-920  !hover:bg-nb-gray-925 !text-nb-gray-300"
-                    }
+                    className={selectorClassName}
                     size={"xs"}
                   />
                 </div>
@@ -1826,31 +2110,67 @@ function ControlCenterView() {
               {selectedNetwork && currentNetwork && (
                 <NetworkRoutingPeerCount network={currentNetwork} />
               )}
+
+              <div className="flex items-center gap-1 rounded-md border border-nb-gray-800 bg-nb-gray-930/95 p-1 shadow-sm backdrop-blur-sm">
+                <Button
+                  variant={"secondary"}
+                  size={"xs"}
+                  className={"!px-2.5 !py-2 !bg-transparent"}
+                  onClick={handleZoomOut}
+                  title={t("controlCenter.zoomOut")}
+                  aria-label={t("controlCenter.zoomOut")}
+                >
+                  <MinusIcon size={14} />
+                </Button>
+                <div className="min-w-[3.5rem] px-2 text-center text-xs font-medium text-nb-gray-300">
+                  {Math.round(zoom * 100)}%
+                </div>
+                <Button
+                  variant={"secondary"}
+                  size={"xs"}
+                  className={"!px-2.5 !py-2 !bg-transparent"}
+                  onClick={handleZoomIn}
+                  title={t("controlCenter.zoomIn")}
+                  aria-label={t("controlCenter.zoomIn")}
+                >
+                  <PlusIcon size={14} />
+                </Button>
+                <Button
+                  variant={"secondary"}
+                  size={"xs"}
+                  className={"!px-2.5 !py-2 !bg-transparent"}
+                  onClick={handleResetViewport}
+                  title={t("controlCenter.resetViewport")}
+                  aria-label={t("controlCenter.resetViewport")}
+                >
+                  <LocateFixedIcon size={14} />
+                </Button>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className={"absolute right-0 top-0 z-10"}>
-          <div className={"px-6 py-4"}>
-            <SmallBadge
-              text={t("common.beta")}
-              variant={"sky"}
-              className={"text-[12px] leading-none py-[3px] px-[6px]"}
-              textClassName={"top-0"}
-            />
-          </div>
-        </div>
-
-        <div className={"absolute right-0 bottom-0 z-10"}>
-          <div className={"px-6 py-4"}>
-            <a href={"https://forms.gle/MKJnVXCiUM1KtxLy6"} target={"_blank"}>
-              <Button variant={"secondary"} size={"xs"}>
-                <MessageSquareShareIcon size={12} />
-                {t("help.feedback")}
-              </Button>
-            </a>
-          </div>
-        </div>
+        <ControlCenterDetailsPanel
+          currentView={currentView}
+          target={detailTarget}
+          collapsed={detailsCollapsed}
+          onToggleCollapsed={() => setDetailsCollapsed((value) => !value)}
+          peers={peers || []}
+          groups={groups || []}
+          users={users || []}
+          networks={networks || []}
+          policies={policies || []}
+          resources={networkResources || []}
+          nodes={nodes}
+          edges={edges}
+          nodeCount={nodes.length}
+          edgeCount={edges.length}
+          onOpenPolicy={(policyId) => {
+            setSelectedPolicy(policyId);
+            setPolicyModalOpen(true);
+            setInspectedTarget({ kind: "policy", policyId });
+          }}
+        />
 
         <PeersProvider>
           <ReactFlow
@@ -1862,6 +2182,13 @@ function ControlCenterView() {
               hideAttribution: true,
             }}
             onNodeClick={onNodeClick}
+            onEdgeClick={(_event, edge) => {
+              setInspectedTarget({ kind: "connection", edgeId: edge.id });
+              setDetailsCollapsed(false);
+            }}
+            onPaneClick={() => {
+              setInspectedTarget({ kind: "summary", view: currentView });
+            }}
             nodeTypes={NODE_TYPES as unknown as NodeTypes} // TODO fix type
             edgeTypes={EDGE_TYPES as unknown as EdgeTypes} // TODO fix type
             fitView={false}

@@ -6,6 +6,7 @@ import {
   UsersIcon,
 } from "lucide-react";
 import * as React from "react";
+import { useI18n } from "@/i18n/I18nProvider";
 
 export enum FlowView {
   NETWORKS = "networks",
@@ -20,6 +21,8 @@ type Props = {
 };
 
 export const FlowSelector = ({ value, onChange }: Props) => {
+  const { t } = useI18n();
+
   return (
     <SegmentedTabs value={value} onChange={(v) => onChange?.(v as FlowView)}>
       <SegmentedTabs.List
@@ -32,28 +35,28 @@ export const FlowSelector = ({ value, onChange }: Props) => {
           className={"text-xs px-3 py-1"}
         >
           <MonitorSmartphoneIcon size={12} />
-          Peer
+          {t("peers.title")}
         </SegmentedTabs.Trigger>
         <SegmentedTabs.Trigger
           value={FlowView.USERS}
           className={"text-xs px-3 py-1"}
         >
           <UsersIcon size={12} />
-          User
+          {t("users.title")}
         </SegmentedTabs.Trigger>
         <SegmentedTabs.Trigger
           value={FlowView.GROUPS}
           className={"text-xs px-3 py-1"}
         >
           <FolderGit2 size={12} />
-          Group
+          {t("groups.title")}
         </SegmentedTabs.Trigger>
         <SegmentedTabs.Trigger
           value={FlowView.NETWORKS}
           className={"text-xs px-3 py-[0.45rem]"}
         >
           <NetworkIcon size={12} />
-          Networks
+          {t("networks.title")}
         </SegmentedTabs.Trigger>
       </SegmentedTabs.List>
     </SegmentedTabs>
