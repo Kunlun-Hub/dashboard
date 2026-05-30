@@ -54,7 +54,7 @@ export const useSSH = (client: any) => {
             SSH_DETECTION_TIMEOUT_MS,
           );
         } catch (detectionErr) {
-          console.warn(
+          console.error(
             "Detection failed, falling back to pubkey:",
             detectionErr,
           );
@@ -87,7 +87,7 @@ export const useSSH = (client: any) => {
         setStatus(SSHStatus.CONNECTED);
         return SSHStatus.CONNECTED;
       } catch (err) {
-        console.warn("Connection failed:", err);
+        console.error("Connection failed:", err);
         session.current = null;
         setStatus(SSHStatus.DISCONNECTED);
         setError(t("remoteAccess.sshConnectionFailed"));

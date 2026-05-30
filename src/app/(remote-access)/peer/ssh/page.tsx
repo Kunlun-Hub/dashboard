@@ -1,6 +1,10 @@
 "use client";
 
 import useFetchApi, { ErrorResponse } from "@utils/api";
+import {
+  isNativeSSHSupported,
+  isNetbirdSSHProtocolSupported,
+} from "@utils/version";
 import { CircleXIcon, InfoIcon, Loader2Icon } from "lucide-react";
 import React, { useEffect, useRef } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
@@ -12,10 +16,6 @@ import {
   NetBirdStatus,
   useNetBirdClient,
 } from "@/modules/remote-access/useNetBirdClient";
-import {
-  isNativeSSHSupported,
-  isNetbirdSSHProtocolSupported,
-} from "@utils/version";
 
 export default function SSHPage() {
   const { t } = useI18n();
@@ -89,7 +89,7 @@ function SSHTerminal({ username, port, peer, ipVersion }: Props) {
 
   useEffect(() => {
     document.title = `${username}@${sshHost} - ${peer.hostname}`;
-  }, [username, peer, client, sshHost]);
+  }, [username, peer.hostname, sshHost]);
 
   const handleReconnect = async () => {
     if (!peer?.id) return;
@@ -101,8 +101,7 @@ function SSHTerminal({ username, port, peer, ipVersion }: Props) {
         ? "netbird-ssh"
         : "tcp";
       const rules = [`${protocol}/${aclPort}`];
-      const clientConnected = await client?.connectTemporary(peer.id, rules);
-      if (!clientConnected) return;
+      await client?.connectTemporary(peer.id, rules);
       await ssh({
         hostname: sshHost,
         port: Number(port),
@@ -129,11 +128,7 @@ function SSHTerminal({ username, port, peer, ipVersion }: Props) {
           ? "netbird-ssh"
           : "tcp";
         const rules = [`${protocol}/${aclPort}`];
-        const clientConnected = await client?.connectTemporary(peer.id, rules);
-        if (!clientConnected) {
-          connected.current = false;
-          return;
-        }
+        await client?.connectTemporary(peer.id, rules);
         const res = await ssh({
           hostname: sshHost,
           port: Number(port),
@@ -144,8 +139,7 @@ function SSHTerminal({ username, port, peer, ipVersion }: Props) {
           sshConnectedOnce.current = true;
         }
       } catch (error) {
-        console.warn("Connection error:", error);
-        connected.current = false;
+        console.error("Connection error:", error);
       }
     };
 
@@ -155,7 +149,9 @@ function SSHTerminal({ username, port, peer, ipVersion }: Props) {
     isSSHConnected,
     isSSHConnecting,
     isClientConnecting,
+    client,
     peer.id,
+    peer.version,
     port,
     ssh,
     username,

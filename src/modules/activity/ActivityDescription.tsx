@@ -8,8 +8,8 @@ import { GlobeIcon } from "lucide-react";
 import React, { useMemo } from "react";
 import RoundedFlag from "@/assets/countries/RoundedFlag";
 import { useCountries } from "@/contexts/CountryProvider";
-import { ActivityEvent } from "@/interfaces/ActivityEvent";
 import { useI18n } from "@/i18n/I18nProvider";
+import { ActivityEvent } from "@/interfaces/ActivityEvent";
 
 type Props = {
   event: ActivityEvent;
@@ -374,36 +374,6 @@ export default function ActivityDescription({ event }: Props) {
     return (
       <div className={"inline"}>
         {t("activity.sshServer")} {t("activity.peerSshEnable")} <Value>{m.name}</Value>
-      </div>
-    );
-
-  if (event.activity_code.startsWith("peer.ssh.session.") || event.activity_code == "peer.ssh.auth.failed" || event.activity_code == "peer.ssh.policy.denied")
-    return (
-      <div className={"inline"}>
-        SSH <Value>{sshResultLabel(event.activity_code)}</Value>{" "}
-        {m.destination_peer_name || m.target_peer_name || m.name ? (
-          <>
-            {"-> "}
-            <Value>
-              {m.destination_peer_name || m.target_peer_name || m.name}
-            </Value>{" "}
-          </>
-        ) : null}
-        {m.destination_local_user || m.username ? (
-          <>
-            as <Value>{m.destination_local_user || m.username}</Value>{" "}
-          </>
-        ) : null}
-        {m.source_peer_name ? (
-          <>
-            from <Value>{m.source_peer_name}</Value>{" "}
-          </>
-        ) : null}
-        {m.reason ? (
-          <>
-            reason <Value>{m.reason}</Value>
-          </>
-        ) : null}
       </div>
     );
 
@@ -884,15 +854,6 @@ function Value({
       {children}
     </span>
   ) : null;
-}
-
-function sshResultLabel(code: string) {
-  if (code === "peer.ssh.session.start") return "session started";
-  if (code === "peer.ssh.session.end") return "session ended";
-  if (code === "peer.ssh.session.denied") return "session denied";
-  if (code === "peer.ssh.auth.failed") return "authentication failed";
-  if (code === "peer.ssh.policy.denied") return "policy denied";
-  return code;
 }
 
 function PeerConnectionInfo({ meta }: { meta: any }) {

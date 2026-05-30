@@ -172,12 +172,6 @@ export const messages = {
       "The peer is offline. Ask the client to reconnect before checking P2P behavior.",
     "saasDiagnostics.recommendHealthy":
       "No obvious local issues were found. Use network logs to inspect traffic-level behavior.",
-    "saasSshAudit.tab": "SSH Audit",
-    "saasSshAudit.title": "SSH Audit",
-    "saasSshAudit.description":
-      "Review recent audit events related to SSH enablement and access policy changes for this peer.",
-    "saasSshAudit.recentEvents": "Recent SSH Events",
-    "saasSshAudit.empty": "No SSH audit events were found for this peer.",
     "overview.title": "Overview",
     "overview.deviceDistribution": "Network Device Distribution",
     "overview.deviceTypeDistribution": "Device Type Distribution",
@@ -3561,12 +3555,6 @@ export const messages = {
       "设备当前离线。请先让客户端重新连接，再检查 P2P 行为。",
     "saasDiagnostics.recommendHealthy":
       "未发现明显本地问题。可继续通过网络日志查看流量层行为。",
-    "saasSshAudit.tab": "SSH 审计",
-    "saasSshAudit.title": "SSH 审计",
-    "saasSshAudit.description":
-      "查看该设备最近与 SSH 开关、访问策略相关的审计事件。",
-    "saasSshAudit.recentEvents": "最近 SSH 事件",
-    "saasSshAudit.empty": "没有找到该设备相关的 SSH 审计事件。",
     "overview.title": "总览",
     "overview.deviceDistribution": "全网设备分布",
     "overview.deviceTypeDistribution": "设备类型分布",

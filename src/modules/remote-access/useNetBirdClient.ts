@@ -61,12 +61,9 @@ class NetBirdStore {
 
 const netBirdStore = new NetBirdStore();
 
-let sharedNetBirdClient: any = null;
-let sharedConnectPromise: Promise<boolean> | null = null;
-
 export const useNetBirdClient = () => {
   const { t } = useI18n();
-  const netBirdClient = useRef<any>(sharedNetBirdClient);
+  const netBirdClient = useRef<any>(null);
   const state = useSyncExternalStore(
     netBirdStore.subscribe,
     netBirdStore.getState,
@@ -171,20 +168,6 @@ export const useNetBirdClient = () => {
     async (privateKey: string): Promise<boolean> => {
       await initialize();
 
-      if (
-        sharedNetBirdClient &&
-        netBirdStore.getState().status === NetBirdStatus.CONNECTED
-      ) {
-        netBirdClient.current = sharedNetBirdClient;
-        return true;
-      }
-
-      if (sharedConnectPromise) {
-        const connected = await sharedConnectPromise;
-        netBirdClient.current = sharedNetBirdClient;
-        return connected;
-      }
-
       if (typeof (window as any).NetBirdClient !== "function") {
         netBirdStore.setState({
           status: NetBirdStatus.DISCONNECTED,
@@ -195,50 +178,38 @@ export const useNetBirdClient = () => {
 
       netBirdStore.setState({ status: NetBirdStatus.CONNECTING });
 
-      sharedConnectPromise = (async () => {
-        try {
-          const client = await (window as any).NetBirdClient({
-            privateKey,
-            logLevel: "warn",
-            managementURL: config.apiOrigin,
-          });
+      try {
+        netBirdClient.current = await (window as any).NetBirdClient({
+          privateKey,
+          logLevel: "warn",
+          managementURL: config.apiOrigin,
+        });
 
-          await client.start();
-          sharedNetBirdClient = client;
-          netBirdClient.current = client;
-          (window as any).netbird = client;
-          netBirdStore.setState({ status: NetBirdStatus.CONNECTED });
-          return true;
-        } catch (error) {
-          sharedNetBirdClient = null;
-          netBirdClient.current = null;
-          netBirdStore.setState({
-            status: NetBirdStatus.DISCONNECTED,
-            error:
-              error instanceof Error
-                ? error.message
-                : t("remoteAccess.connectionFailed"),
-          });
-          return false;
-        } finally {
-          sharedConnectPromise = null;
-        }
-      })();
-
-      return sharedConnectPromise;
+        await netBirdClient.current.start();
+        (window as any).netbird = netBirdClient.current;
+        netBirdStore.setState({ status: NetBirdStatus.CONNECTED });
+        return true;
+      } catch (error) {
+        netBirdStore.setState({
+          status: NetBirdStatus.DISCONNECTED,
+          error:
+            error instanceof Error
+              ? error.message
+              : t("remoteAccess.connectionFailed"),
+        });
+        return false;
+      }
     },
     [initialize, t],
   );
 
   const disconnect = useCallback(async (): Promise<void> => {
-    const client = sharedNetBirdClient ?? netBirdClient.current;
-    if (!client?.stop) {
+    if (!netBirdClient.current?.stop) {
       throw new Error(t("remoteAccess.goClientNotReady"));
     }
 
     netBirdStore.setState({ status: NetBirdStatus.DISCONNECTED });
-    await client.stop();
-    sharedNetBirdClient = null;
+    await netBirdClient.current.stop();
     netBirdClient.current = null;
     delete (window as any).netbird;
     return Promise.resolve();
@@ -246,11 +217,10 @@ export const useNetBirdClient = () => {
 
   const detectSSHServerType = useCallback(
     async (host: string, port: number, timeoutMs: number): Promise<boolean> => {
-      const client = sharedNetBirdClient ?? netBirdClient.current;
-      if (!client?.detectSSHServerType) {
+      if (!netBirdClient.current?.detectSSHServerType) {
         throw new Error(t("remoteAccess.netbirdClientNotReady"));
       }
-      return client.detectSSHServerType(host, port, timeoutMs);
+      return netBirdClient.current.detectSSHServerType(host, port, timeoutMs);
     },
     [t],
   );
@@ -263,11 +233,10 @@ export const useNetBirdClient = () => {
       jwtToken?: string,
       ipVersion?: string,
     ): Promise<any> => {
-      const client = sharedNetBirdClient ?? netBirdClient.current;
-      if (!client?.createSSHConnection) {
+      if (!netBirdClient.current?.createSSHConnection) {
         throw new Error(t("remoteAccess.goClientNotReady"));
       }
-      return client.createSSHConnection(
+      return netBirdClient.current.createSSHConnection(
         host,
         port,
         username,
@@ -280,33 +249,30 @@ export const useNetBirdClient = () => {
 
   const makeRequest = useCallback(
     async (url: string): Promise<any> => {
-      const client = sharedNetBirdClient ?? netBirdClient.current;
-      if (!client?.makeRequest) {
+      if (!netBirdClient.current?.makeRequest) {
         throw new Error(t("remoteAccess.goClientNotReady"));
       }
-      return client.makeRequest(url);
+      return netBirdClient.current.makeRequest(url);
     },
     [t],
   );
 
   const proxyRequest = useCallback(
     async (request: any): Promise<any> => {
-      const client = sharedNetBirdClient ?? netBirdClient.current;
-      if (!client?.proxyRequest) {
+      if (!netBirdClient.current?.proxyRequest) {
         throw new Error(t("remoteAccess.goClientNotReady"));
       }
-      return client.proxyRequest(request);
+      return netBirdClient.current.proxyRequest(request);
     },
     [t],
   );
 
   const setupRDPProxy = useCallback(
     async (hostname: string, port: string): Promise<string> => {
-      const client = sharedNetBirdClient ?? netBirdClient.current;
-      if (!client?.setupRDPProxy) {
+      if (!netBirdClient.current?.setupRDPProxy) {
         throw new Error(t("remoteAccess.goClientNotReady"));
       }
-      return client.setupRDPProxy(hostname, port);
+      return netBirdClient.current.setupRDPProxy(hostname, port);
     },
     [t],
   );
@@ -345,9 +311,7 @@ export const useNetBirdClient = () => {
           },
           `/${peerId}/temporary-access`,
         );
-        const connected = await connect(keyPairs.privateKey);
-        netBirdClient.current = sharedNetBirdClient;
-        return connected;
+        return await connect(keyPairs.privateKey);
       } catch (error) {
         netBirdStore.setState({ status: NetBirdStatus.DISCONNECTED });
         throw error;
@@ -364,7 +328,7 @@ export const useNetBirdClient = () => {
     status,
     wasmStatus,
     error,
-    client: sharedNetBirdClient ?? netBirdClient.current,
+    client: netBirdClient.current,
     ironRDPBridge: rdpComponents.current.bridge,
     rdpCertificateHandler: rdpComponents.current.certificateHandler,
     initialize,
