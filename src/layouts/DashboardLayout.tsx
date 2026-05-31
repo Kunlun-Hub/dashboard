@@ -18,6 +18,7 @@ import GroupsProvider from "@/contexts/GroupsProvider";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import UsersProvider from "@/contexts/UsersProvider";
 import Navigation from "@/layouts/Navigation";
+import AccountBrandingTitle from "@/modules/account/AccountBrandingTitle";
 import { OnboardingProvider } from "@/modules/onboarding/OnboardingProvider";
 import Header, { headerHeight } from "./Header";
 
@@ -150,6 +151,7 @@ function DashboardPageContent({
               mass: 0.1,
             }}
           >
+            <AccountBrandingTitle />
             <Header />
             <div
               className={"flex flex-row flex-grow"}

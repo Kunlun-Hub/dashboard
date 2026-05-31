@@ -11,6 +11,7 @@ import {
   LockIcon,
   MonitorSmartphoneIcon,
   NetworkIcon,
+  PaletteIcon,
   ShieldIcon,
 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
@@ -21,13 +22,14 @@ import { useI18n } from "@/i18n/I18nProvider";
 import PageContainer from "@/layouts/PageContainer";
 import { useAccount } from "@/modules/account/useAccount";
 import AuthenticationTab from "@/modules/settings/AuthenticationTab";
+import BrandingSettingsTab from "@/modules/settings/BrandingSettingsTab";
 import ClientSettingsTab from "@/modules/settings/ClientSettingsTab";
 import DangerZoneTab from "@/modules/settings/DangerZoneTab";
 import FlowLogsSettingsTab from "@/modules/settings/FlowLogsSettingsTab";
+import GroupsSettings from "@/modules/settings/GroupsSettings";
 import IdentityProvidersTab from "@/modules/settings/IdentityProvidersTab";
 import NetworkSettingsTab from "@/modules/settings/NetworkSettingsTab";
 import PermissionsTab from "@/modules/settings/PermissionsTab";
-import GroupsSettings from "@/modules/settings/GroupsSettings";
 import VersionReleasesTab from "@/modules/settings/VersionReleasesTab";
 
 export default function NetBirdSettings() {
@@ -88,6 +90,10 @@ export default function NetBirdSettings() {
                 <ActivityIcon size={14} />
                 {t("settings.flowLogs")}
               </VerticalTabs.Trigger>
+              <VerticalTabs.Trigger value="branding">
+                <PaletteIcon size={14} />
+                {t("settings.branding")}
+              </VerticalTabs.Trigger>
               <VerticalTabs.Trigger value="version-releases">
                 <GlobeIcon size={14} />
                 版本发布
@@ -110,6 +116,7 @@ export default function NetBirdSettings() {
             {account && <NetworkSettingsTab account={account} />}
             {account && <ClientSettingsTab account={account} />}
             {account && <FlowLogsSettingsTab account={account} />}
+            {account && <BrandingSettingsTab account={account} />}
             {account && <VersionReleasesTab />}
             {account && <DangerZoneTab account={account} />}
           </div>

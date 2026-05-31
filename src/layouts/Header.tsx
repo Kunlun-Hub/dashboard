@@ -11,6 +11,11 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { useApplicationContext } from "@/contexts/ApplicationProvider";
 import { usePermissions } from "@/contexts/PermissionsProvider";
+import {
+  getAccountBrandingLogoDataURL,
+  getEffectiveBrandingTitle,
+} from "@/modules/account/accountBranding";
+import { useAccount } from "@/modules/account/useAccount";
 
 export const headerHeight = 65;
 
@@ -18,6 +23,9 @@ export default function NavbarWithDropdown() {
   const router = useRouter();
   const { toggleMobileNav } = useApplicationContext();
   const { isRestricted } = usePermissions();
+  const account = useAccount();
+  const brandingLogoDataURL = getAccountBrandingLogoDataURL(account);
+  const brandingTitle = getEffectiveBrandingTitle(account);
 
   return (
     <>
@@ -55,7 +63,10 @@ export default function NavbarWithDropdown() {
                 "cursor-pointer hover:opacity-70 transition-all mr-auto"
               }
             >
-              <NetBirdLogo />
+              <NetBirdLogo
+                customLogoSrc={brandingLogoDataURL}
+                alt={`${brandingTitle} Logo`}
+              />
             </button>
             <ToggleCollapsableNavigationButton />
           </div>

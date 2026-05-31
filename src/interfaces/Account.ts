@@ -27,6 +27,8 @@ export interface Account {
       flow_syslog_protocol?: string;
       flow_syslog_facility?: string;
       flow_syslog_tag?: string;
+      branding_logo_data_url?: string;
+      branding_tab_title?: string;
     };
     flow?: {
       enabled?: boolean;
