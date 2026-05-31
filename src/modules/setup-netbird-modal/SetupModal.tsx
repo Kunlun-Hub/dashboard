@@ -16,6 +16,7 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 import useOperatingSystem from "@/hooks/useOperatingSystem";
 import { useI18n } from "@/i18n/I18nProvider";
 import { OperatingSystem } from "@/interfaces/OperatingSystem";
+import { PublicBrandingLogo } from "@/modules/account/PublicBrandingProvider";
 import AndroidTab from "@/modules/setup-netbird-modal/AndroidTab";
 import DockerTab from "@/modules/setup-netbird-modal/DockerTab";
 import IOSTab from "@/modules/setup-netbird-modal/IOSTab";
@@ -100,6 +101,11 @@ export function SetupModalContent({
 
   return (
     <>
+      {isInstallPage && (
+        <div className={"flex justify-center pt-6"}>
+          <PublicBrandingLogo size={"large"} mobile={false} />
+        </div>
+      )}
       {header && (
         <div className={"text-center pb-5 pt-4 px-8"}>
           <h2
@@ -120,7 +126,15 @@ export function SetupModalContent({
         </div>
       )}
 
-      <Tabs defaultValue={String(setupKey ? OperatingSystem.LINUX : (isInstallPage ? OperatingSystem.WINDOWS : os))}>
+      <Tabs
+        defaultValue={String(
+          setupKey
+            ? OperatingSystem.LINUX
+            : isInstallPage
+            ? OperatingSystem.WINDOWS
+            : os,
+        )}
+      >
         <TabsList justify={tabAlignment} className={"pt-2 px-3"}>
           <TabsTrigger value={String(OperatingSystem.LINUX)}>
             <ShellIcon

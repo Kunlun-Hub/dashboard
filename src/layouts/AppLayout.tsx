@@ -21,6 +21,7 @@ import { GlobalThemeProvider } from "@/contexts/GlobalThemeProvider";
 import InstanceSetupProvider from "@/contexts/InstanceSetupProvider";
 import { NavigationEvents } from "@/contexts/NavigationEvents";
 import { I18nProvider } from "@/i18n/I18nProvider";
+import PublicBrandingProvider from "@/modules/account/PublicBrandingProvider";
 
 const inter = localFont({
   src: "../assets/fonts/Inter.ttf",
@@ -54,15 +55,17 @@ export default function AppLayout({
             <AnalyticsProvider>
               <DialogProvider>
                 <GlobalThemeProvider>
-                  <ErrorBoundaryProvider>
-                    <InstanceSetupProvider>
-                      <OIDCProvider>
-                        <TooltipProvider delayDuration={0}>
-                          {children}
-                        </TooltipProvider>
-                      </OIDCProvider>
-                    </InstanceSetupProvider>
-                  </ErrorBoundaryProvider>
+                  <PublicBrandingProvider>
+                    <ErrorBoundaryProvider>
+                      <InstanceSetupProvider>
+                        <OIDCProvider>
+                          <TooltipProvider delayDuration={0}>
+                            {children}
+                          </TooltipProvider>
+                        </OIDCProvider>
+                      </InstanceSetupProvider>
+                    </ErrorBoundaryProvider>
+                  </PublicBrandingProvider>
                 </GlobalThemeProvider>
               </DialogProvider>
               <Toaster

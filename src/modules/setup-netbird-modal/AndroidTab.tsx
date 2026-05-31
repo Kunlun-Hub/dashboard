@@ -1,26 +1,49 @@
 import Button from "@components/Button";
 import Code from "@components/Code";
+import {
+  SelectDropdown,
+  SelectOption,
+} from "@components/select/SelectDropdown";
 import Steps from "@components/Steps";
-import { SelectDropdown, SelectOption } from "@components/select/SelectDropdown";
 import TabsContentPadding, { TabsContent } from "@components/Tabs";
+import useFetchApi from "@utils/api";
 import { GRPC_API_ORIGIN } from "@utils/netbird";
 import { DownloadIcon, ShoppingBagIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
+import React, { useEffect, useState } from "react";
 import GooglePlayButton from "@/assets/google-play-badge.png";
 import { useI18n } from "@/i18n/I18nProvider";
 import { OperatingSystem } from "@/interfaces/OperatingSystem";
-import useFetchApi from "@utils/api";
 import { VersionRelease } from "@/modules/settings/VersionReleasesTab";
 
 export default function AndroidTab() {
+  const pathname = usePathname();
+
+  if (pathname === "/install") {
+    return <AndroidTabContent versions={[]} />;
+  }
+
+  return <AuthenticatedAndroidTab />;
+}
+
+function AuthenticatedAndroidTab() {
+  const { data: versions } = useFetchApi<VersionRelease[]>("/version-releases");
+
+  return <AndroidTabContent versions={versions || []} />;
+}
+
+function AndroidTabContent({
+  versions,
+}: Readonly<{ versions: VersionRelease[] }>) {
   const { t } = useI18n();
-  const { data: versions, isLoading } = useFetchApi<VersionRelease[]>("/version-releases");
   const [selectedVersion, setSelectedVersion] = useState<string>("");
 
-  const androidVersions = (versions || []).filter((v) => v.platform === "android");
-  
+  const androidVersions = (versions || []).filter(
+    (v) => v.platform === "android",
+  );
+
   // Only show published versions
   const versionOptions: SelectOption[] = androidVersions.map((v) => ({
     label: v.version + (v.isLatest ? " (最新)" : ""),
@@ -29,7 +52,8 @@ export default function AndroidTab() {
 
   useEffect(() => {
     if (androidVersions.length > 0) {
-      const latestVersion = androidVersions.find((v) => v.isLatest) || androidVersions[0];
+      const latestVersion =
+        androidVersions.find((v) => v.isLatest) || androidVersions[0];
       setSelectedVersion(latestVersion.downloadUrl);
     }
   }, [androidVersions]);
@@ -51,13 +75,19 @@ export default function AndroidTab() {
                 value={currentUrl}
                 className={"w-[170px]"}
                 onChange={setSelectedVersion}
-                placeholder={versionOptions.length === 0 ? "请先发布版本" : t("setupModal.selectArchitecture")}
+                placeholder={
+                  versionOptions.length === 0
+                    ? "请先发布版本"
+                    : t("setupModal.selectArchitecture")
+                }
                 options={versionOptions}
               />
               {versionOptions.length > 0 ? (
-                <Button 
-                  variant={"primary"} 
-                  onClick={() => window.open(currentUrl, "_blank", "noopener noreferrer")}
+                <Button
+                  variant={"primary"}
+                  onClick={() =>
+                    window.open(currentUrl, "_blank", "noopener noreferrer")
+                  }
                 >
                   <DownloadIcon size={14} />
                   {t("setupModal.downloadNetBird")}
@@ -71,7 +101,9 @@ export default function AndroidTab() {
             </div>
             <div className={"mt-2"}>
               <Link
-                href={"https://play.google.com/store/apps/details?id=io.netbird.client"}
+                href={
+                  "https://play.google.com/store/apps/details?id=io.netbird.client"
+                }
                 target={"_blank"}
               >
                 <Image

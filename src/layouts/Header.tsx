@@ -12,12 +12,14 @@ import React from "react";
 import { useApplicationContext } from "@/contexts/ApplicationProvider";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import {
+  getAccountBrandingDarkLogoDataURL,
+  getAccountBrandingIconDataURL,
   getAccountBrandingLogoDataURL,
   getEffectiveBrandingTitle,
 } from "@/modules/account/accountBranding";
 import { useAccount } from "@/modules/account/useAccount";
 
-export const headerHeight = 65;
+export const headerHeight = 65;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
 
 export default function NavbarWithDropdown() {
   const router = useRouter();
@@ -25,6 +27,8 @@ export default function NavbarWithDropdown() {
   const { isRestricted } = usePermissions();
   const account = useAccount();
   const brandingLogoDataURL = getAccountBrandingLogoDataURL(account);
+  const brandingDarkLogoDataURL = getAccountBrandingDarkLogoDataURL(account);
+  const brandingIconDataURL = getAccountBrandingIconDataURL(account);
   const brandingTitle = getEffectiveBrandingTitle(account);
 
   return (
@@ -56,15 +60,19 @@ export default function NavbarWithDropdown() {
               </div>
             </Button>
           </div>
-          <div className={"flex gap-4 mr-auto"}>
+          <div className={"flex gap-4 mr-auto min-w-0"}>
             <button
               onClick={() => router.push("/peers")}
+              aria-label={brandingTitle}
               className={
-                "cursor-pointer hover:opacity-70 transition-all mr-auto"
+                "cursor-pointer hover:opacity-70 transition-all mr-auto min-w-0 overflow-hidden"
               }
+              data-cy={"header-brand-logo"}
             >
               <NetBirdLogo
                 customLogoSrc={brandingLogoDataURL}
+                customDarkLogoSrc={brandingDarkLogoDataURL}
+                customIconSrc={brandingIconDataURL}
                 alt={`${brandingTitle} Logo`}
               />
             </button>

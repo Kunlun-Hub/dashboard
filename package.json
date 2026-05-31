@@ -16,7 +16,8 @@
     "start": "next start",
     "lint": "eslint .",
     "test:unit": "node --import tsx --test src/modules/access-control/useAccessControl.helpers.test.ts",
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "dependencies": {
     "@axa-fr/react-oidc": "^7.26.3",
@@ -96,6 +97,7 @@
     "@faker-js/faker": "^9.5.1",
     "@types/chroma-js": "^3.1.1",
     "@types/js-cookie": "^3.0.6",
+    "cypress": "^15.16.0",
     "eslint": "^9.39.1",
     "eslint-config-next": "^16.1.6",
     "postcss": "^8.5.12",

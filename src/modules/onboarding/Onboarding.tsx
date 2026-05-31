@@ -17,6 +17,13 @@ import { Group } from "@/interfaces/Group";
 import { Network, NetworkResource, NetworkRouter } from "@/interfaces/Network";
 import type { Peer } from "@/interfaces/Peer";
 import { Policy } from "@/interfaces/Policy";
+import {
+  getAccountBrandingDarkLogoDataURL,
+  getAccountBrandingIconDataURL,
+  getAccountBrandingLogoDataURL,
+  getEffectiveBrandingTitle,
+} from "@/modules/account/accountBranding";
+import { useAccount } from "@/modules/account/useAccount";
 import { OnboardingAddResource } from "@/modules/onboarding/networks/OnboardingAddResource";
 import { OnboardingAddRoutingPeer } from "@/modules/onboarding/networks/OnboardingAddRoutingPeer";
 import { OnboardingAddUserDevice } from "@/modules/onboarding/networks/OnboardingAddUserDevice";
@@ -100,6 +107,7 @@ export const Onboarding = ({
   domainCategory,
 }: Props) => {
   const { t } = useI18n();
+  const account = useAccount();
   const { data: networks } = useFetchApi<Network[]>("/networks", true, false);
   const { data: policies } = useFetchApi<Policy[]>("/policies", true);
 
@@ -115,6 +123,10 @@ export const Onboarding = ({
   const [firstRoutingPeer, setFirstRoutingPeer] = useState<Peer>();
   const [useCases, setUseCases] = useState("");
   const [isBusiness, setIsBusiness] = useState(false);
+  const brandingLogoDataURL = getAccountBrandingLogoDataURL(account);
+  const brandingDarkLogoDataURL = getAccountBrandingDarkLogoDataURL(account);
+  const brandingIconDataURL = getAccountBrandingIconDataURL(account);
+  const brandingTitle = getEffectiveBrandingTitle(account);
 
   const firstNetwork = useMemo(() => {
     return networks?.find((n) => n.name === "My First Network") ?? undefined;
@@ -307,7 +319,14 @@ export const Onboarding = ({
                 intent === Intent.NETWORKS && step === 7 && "max-w-5xl",
               )}
             >
-              <NetBirdLogo size={"large"} mobile={false} />
+              <NetBirdLogo
+                size={"large"}
+                mobile={false}
+                customLogoSrc={brandingLogoDataURL}
+                customDarkLogoSrc={brandingDarkLogoDataURL}
+                customIconSrc={brandingIconDataURL}
+                alt={`${brandingTitle} Logo`}
+              />
 
               <div
                 className={

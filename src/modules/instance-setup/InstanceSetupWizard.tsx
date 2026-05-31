@@ -1,17 +1,17 @@
 "use client";
 
+import Button from "@components/Button";
+import HelpText from "@components/HelpText";
+import { Input } from "@components/Input";
+import { Label } from "@components/Label";
+import { GradientFadedBackground } from "@components/ui/GradientFadedBackground";
 import { cn } from "@utils/helpers";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import React, { useCallback, useEffect, useState } from "react";
-import { ApiError, SetupRequest } from "@/interfaces/Instance";
-import { submitSetup } from "@/utils/unauthenticatedApi";
-import { NetBirdLogo } from "@components/NetBirdLogo";
-import Button from "@components/Button";
-import { Label } from "@components/Label";
-import { Input } from "@components/Input";
-import HelpText from "@components/HelpText";
-import { GradientFadedBackground } from "@components/ui/GradientFadedBackground";
 import { useI18n } from "@/i18n/I18nProvider";
+import { ApiError, SetupRequest } from "@/interfaces/Instance";
+import { PublicBrandingLogo } from "@/modules/account/PublicBrandingProvider";
+import { submitSetup } from "@/utils/unauthenticatedApi";
 
 interface FormData {
   email: string;
@@ -138,7 +138,7 @@ export default function InstanceSetupWizard() {
     return (
       <div className="mt-20">
         <div className={"flex items-center justify-center"}>
-          <NetBirdLogo size={"large"} mobile={false} />
+          <PublicBrandingLogo size={"large"} mobile={false} />
         </div>
         <Card className={"max-w-[360px] mt-8 mx-auto"}>
           <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center mb-4 mx-auto">
@@ -173,7 +173,7 @@ export default function InstanceSetupWizard() {
   return (
     <div className="mt-20">
       <div className={"flex items-center justify-center"}>
-        <NetBirdLogo size={"large"} mobile={false} />
+        <PublicBrandingLogo size={"large"} mobile={false} />
       </div>
       <Card className={"max-w-[420px] mt-8 mx-auto"}>
         <h1 className={"text-xl text-center z-10 relative"}>

@@ -5,6 +5,7 @@ import { Input } from "@components/Input";
 import Paragraph from "@components/Paragraph";
 import FullScreenLoading from "@components/ui/FullScreenLoading";
 import { acceptInvite, fetchInviteInfo } from "@utils/unauthenticatedApi";
+import dayjs from "dayjs";
 import {
   AlertCircle,
   CheckCircle2,
@@ -13,12 +14,11 @@ import {
   Mail,
   User2,
 } from "lucide-react";
-import dayjs from "dayjs";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useMemo, useState } from "react";
-import NetBirdIcon from "@/assets/icons/NetBirdIcon";
 import { useI18n } from "@/i18n/I18nProvider";
 import { UserInviteInfo } from "@/interfaces/User";
+import { PublicBrandingLogo } from "@/modules/account/PublicBrandingProvider";
 
 export default function InviteAcceptPage() {
   return (
@@ -74,7 +74,8 @@ function InviteAcceptContent() {
   const hasLowercase = /[a-z]/.test(password);
   const hasNumber = /[0-9]/.test(password);
   const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-  const passwordValid = hasMinLength && hasUppercase && hasLowercase && hasNumber && hasSpecialChar;
+  const passwordValid =
+    hasMinLength && hasUppercase && hasLowercase && hasNumber && hasSpecialChar;
   const canSubmit = passwordValid && passwordsMatch && !submitting;
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -215,7 +216,7 @@ function InviteAcceptContent() {
     <div className="min-h-screen flex items-center justify-center bg-nb-gray-950 p-4">
       <div className="max-w-md w-full">
         <div className="mb-8 flex justify-center">
-          <NetBirdIcon size={48} />
+          <PublicBrandingLogo size={"large"} mobile={false} />
         </div>
 
         <div className="text-center mb-8">
@@ -335,7 +336,9 @@ function PasswordRule({ met, text }: { met: boolean; text: string }) {
       ) : (
         <AlertCircle className="w-3 h-3 text-nb-gray-500" />
       )}
-      <span className={met ? "text-green-500" : "text-nb-gray-500"}>{text}</span>
+      <span className={met ? "text-green-500" : "text-nb-gray-500"}>
+        {text}
+      </span>
     </div>
   );
 }

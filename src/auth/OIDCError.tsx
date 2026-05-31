@@ -6,8 +6,8 @@ import { ArrowRightIcon } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import NetBirdIcon from "@/assets/icons/NetBirdIcon";
 import { useI18n } from "@/i18n/I18nProvider";
+import { PublicBrandingIcon } from "@/modules/account/PublicBrandingProvider";
 
 const config = loadConfig();
 
@@ -25,9 +25,7 @@ export const OIDCError = () => {
   useEffect(() => {
     if (accessDenied) {
       if (title === "account linked successfully") {
-        setTitle(
-          t("auth.accountLinkedSuccessfully"),
-        );
+        setTitle(t("auth.accountLinkedSuccessfully"));
       }
     } else {
       setTitle(t("auth.somethingWentWrong"));
@@ -45,7 +43,7 @@ export const OIDCError = () => {
           "bg-nb-gray-930 mb-3 border border-nb-gray-900 h-12 w-12 rounded-md flex items-center justify-center "
         }
       >
-        <NetBirdIcon size={23} />
+        <PublicBrandingIcon size={23} />
       </div>
       <h1 className={"text-center mt-2"}>{title}</h1>
 
@@ -78,11 +76,10 @@ export const OIDCError = () => {
         <>
           <Paragraph className={"text-center mt-2 block"}>
             {t("auth.errorLoggingIn")} <br />
-            {t("auth.error")}:{
-              invalidRequest && errorDescription
-                ? errorDescription
-                : oidcUserLoadingState
-            }
+            {t("auth.error")}:
+            {invalidRequest && errorDescription
+              ? errorDescription
+              : oidcUserLoadingState}
           </Paragraph>
           <Button
             variant={"primary"}

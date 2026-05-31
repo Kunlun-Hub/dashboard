@@ -6,23 +6,27 @@ import {
 } from "@components/Accordion";
 import Button from "@components/Button";
 import Code from "@components/Code";
+import {
+  SelectDropdown,
+  SelectOption,
+} from "@components/select/SelectDropdown";
 import Separator from "@components/Separator";
-import { SelectDropdown, SelectOption } from "@components/select/SelectDropdown";
 import Steps from "@components/Steps";
 import TabsContentPadding, { TabsContent } from "@components/Tabs";
 import { IconBrandUbuntu } from "@tabler/icons-react";
+import useFetchApi from "@utils/api";
 import { getNetBirdUpCommand } from "@utils/netbird";
 import { DownloadIcon, TerminalSquareIcon } from "lucide-react";
-import React, { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
+import React, { useEffect, useState } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { OperatingSystem } from "@/interfaces/OperatingSystem";
-import useFetchApi from "@utils/api";
+import { VersionRelease } from "@/modules/settings/VersionReleasesTab";
 import {
   HostnameParameter,
   RoutingPeerSetupKeyInfo,
   SetupKeyParameter,
 } from "@/modules/setup-netbird-modal/SetupModal";
-import { VersionRelease } from "@/modules/settings/VersionReleasesTab";
 
 type Props = {
   setupKey?: string;
@@ -30,13 +34,29 @@ type Props = {
   hostname?: string;
 };
 
-export default function LinuxTab({
+export default function LinuxTab(props: Readonly<Props>) {
+  const pathname = usePathname();
+
+  if (pathname === "/install") {
+    return <LinuxTabContent {...props} versions={[]} />;
+  }
+
+  return <AuthenticatedLinuxTab {...props} />;
+}
+
+function AuthenticatedLinuxTab(props: Readonly<Props>) {
+  const { data: versions } = useFetchApi<VersionRelease[]>("/version-releases");
+
+  return <LinuxTabContent {...props} versions={versions || []} />;
+}
+
+function LinuxTabContent({
   setupKey,
   showSetupKeyInfo = false,
   hostname,
-}: Readonly<Props>) {
+  versions,
+}: Readonly<Props & { versions: VersionRelease[] }>) {
   const { t } = useI18n();
-  const { data: versions, isLoading } = useFetchApi<VersionRelease[]>("/version-releases");
   const [selectedVersion, setSelectedVersion] = useState<string>("");
   const [currentOrigin, setCurrentOrigin] = useState<string>("");
 
@@ -47,7 +67,7 @@ export default function LinuxTab({
   }, []);
 
   const linuxVersions = (versions || []).filter((v) => v.platform === "linux");
-  
+
   // Only show published versions
   const versionOptions: SelectOption[] = linuxVersions.map((v) => ({
     label: v.version + (v.isLatest ? " (最新)" : ""),
@@ -56,13 +76,14 @@ export default function LinuxTab({
 
   useEffect(() => {
     if (linuxVersions.length > 0) {
-      const latestVersion = linuxVersions.find((v) => v.isLatest) || linuxVersions[0];
+      const latestVersion =
+        linuxVersions.find((v) => v.isLatest) || linuxVersions[0];
       setSelectedVersion(latestVersion.downloadUrl);
     }
   }, [linuxVersions]);
 
   const currentUrl = selectedVersion || "";
-  const oneLineInstallCommand = currentOrigin 
+  const oneLineInstallCommand = currentOrigin
     ? `curl -fsSL ${currentOrigin}/install.sh | bash -s -- ${currentOrigin}`
     : "";
 
@@ -76,7 +97,8 @@ export default function LinuxTab({
         <Steps>
           <Steps.Step step={1}>
             <p className="text-sm text-nb-gray-400 mb-2">
-              运行下面的命令一键安装 Cloink（支持主流 Linux 发行版：Ubuntu、Debian、CentOS、Fedora、Arch 等）
+              运行下面的命令一键安装 Cloink（支持主流 Linux
+              发行版：Ubuntu、Debian、CentOS、Fedora、Arch 等）
             </p>
             {oneLineInstallCommand && (
               <Code>
@@ -100,9 +122,9 @@ export default function LinuxTab({
           </Steps.Step>
         </Steps>
       </TabsContentPadding>
-      
+
       <Separator />
-      
+
       <TabsContentPadding>
         <Accordion type="single" collapsible>
           <AccordionItem value="manual">
@@ -119,13 +141,23 @@ export default function LinuxTab({
                       value={currentUrl}
                       className={"w-[170px]"}
                       onChange={setSelectedVersion}
-                      placeholder={versionOptions.length === 0 ? "请先发布版本" : t("setupModal.selectArchitecture")}
+                      placeholder={
+                        versionOptions.length === 0
+                          ? "请先发布版本"
+                          : t("setupModal.selectArchitecture")
+                      }
                       options={versionOptions}
                     />
                     {versionOptions.length > 0 ? (
-                      <Button 
-                        variant={"primary"} 
-                        onClick={() => window.open(currentUrl, "_blank", "noopener noreferrer")}
+                      <Button
+                        variant={"primary"}
+                        onClick={() =>
+                          window.open(
+                            currentUrl,
+                            "_blank",
+                            "noopener noreferrer",
+                          )
+                        }
                       >
                         <DownloadIcon size={14} />
                         下载
@@ -175,9 +207,12 @@ fi`}
                     <Code.Line>{`sudo chmod +x /usr/bin/cloink /usr/bin/cloink-ui 2>/dev/null || sudo chmod +x /usr/bin/cloink`}</Code.Line>
                     <Code.Comment># 安装 systemd 服务</Code.Comment>
                     <Code.Line>if [ -d systemd ]; then</Code.Line>
-                    <Code.Line>  sudo cp systemd/*.service /etc/systemd/system/</Code.Line>
-                    <Code.Line>  sudo systemctl daemon-reload</Code.Line>
-                    <Code.Line>  sudo systemctl enable --now cloink</Code.Line>
+                    <Code.Line>
+                      {" "}
+                      sudo cp systemd/*.service /etc/systemd/system/
+                    </Code.Line>
+                    <Code.Line> sudo systemctl daemon-reload</Code.Line>
+                    <Code.Line> sudo systemctl enable --now cloink</Code.Line>
                     <Code.Line>fi</Code.Line>
                   </Code>
                 </Steps.Step>
