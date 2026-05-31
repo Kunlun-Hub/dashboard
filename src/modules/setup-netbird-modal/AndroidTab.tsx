@@ -11,18 +11,17 @@ import { GRPC_API_ORIGIN } from "@utils/netbird";
 import { DownloadIcon, ShoppingBagIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import GooglePlayButton from "@/assets/google-play-badge.png";
 import { useI18n } from "@/i18n/I18nProvider";
 import { OperatingSystem } from "@/interfaces/OperatingSystem";
 import { VersionRelease } from "@/modules/settings/VersionReleasesTab";
 
-export default function AndroidTab() {
-  const pathname = usePathname();
-
-  if (pathname === "/install") {
-    return <AndroidTabContent versions={[]} />;
+export default function AndroidTab({
+  versions,
+}: Readonly<{ versions?: VersionRelease[] }>) {
+  if (versions) {
+    return <AndroidTabContent versions={versions} />;
   }
 
   return <AuthenticatedAndroidTab />;

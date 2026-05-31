@@ -5,7 +5,7 @@ import Paragraph from "@components/Paragraph";
 import { Tabs, TabsList, TabsTrigger } from "@components/Tabs";
 import { cn } from "@utils/helpers";
 import { usePathname } from "next/navigation";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import AndroidIcon from "@/assets/icons/AndroidIcon";
 import AppleIcon from "@/assets/icons/AppleIcon";
 import DockerIcon from "@/assets/icons/DockerIcon";
@@ -17,12 +17,14 @@ import useOperatingSystem from "@/hooks/useOperatingSystem";
 import { useI18n } from "@/i18n/I18nProvider";
 import { OperatingSystem } from "@/interfaces/OperatingSystem";
 import { PublicBrandingLogo } from "@/modules/account/PublicBrandingProvider";
+import { VersionRelease } from "@/modules/settings/VersionReleasesTab";
 import AndroidTab from "@/modules/setup-netbird-modal/AndroidTab";
 import DockerTab from "@/modules/setup-netbird-modal/DockerTab";
 import IOSTab from "@/modules/setup-netbird-modal/IOSTab";
 import LinuxTab from "@/modules/setup-netbird-modal/LinuxTab";
 import MacOSTab from "@/modules/setup-netbird-modal/MacOSTab";
 import WindowsTab from "@/modules/setup-netbird-modal/WindowsTab";
+import { fetchPublicVersionReleases } from "@/utils/unauthenticatedApi";
 
 type OidcUserInfo = {
   given_name?: string;
@@ -80,6 +82,26 @@ export function SetupModalContent({
   const [isFirstRun] = useLocalStorage<boolean>("netbird-first-run", true);
   const pathname = usePathname();
   const isInstallPage = pathname === "/install";
+  const [publicVersions, setPublicVersions] = useState<VersionRelease[]>([]);
+
+  useEffect(() => {
+    if (!isInstallPage) return;
+
+    let active = true;
+    fetchPublicVersionReleases()
+      .then((versions) => {
+        if (active) setPublicVersions(versions);
+      })
+      .catch(() => {
+        if (active) setPublicVersions([]);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [isInstallPage]);
+
+  const installVersions = isInstallPage ? publicVersions : undefined;
 
   const titleMessage = useMemo(() => {
     if (title) return title;
@@ -199,21 +221,24 @@ export function SetupModalContent({
           setupKey={setupKey}
           showSetupKeyInfo={showOnlyRoutingPeerOS}
           hostname={hostname}
+          versions={installVersions}
         />
         <WindowsTab
           setupKey={setupKey}
           showSetupKeyInfo={showOnlyRoutingPeerOS}
           hostname={hostname}
+          versions={installVersions}
         />
         <MacOSTab
           setupKey={setupKey}
           showSetupKeyInfo={showOnlyRoutingPeerOS}
           hostname={hostname}
+          versions={installVersions}
         />
 
         {!setupKey && (
           <>
-            <AndroidTab />
+            <AndroidTab versions={installVersions} />
             <IOSTab />
           </>
         )}

@@ -9,14 +9,10 @@ import TabsContentPadding, { TabsContent } from "@components/Tabs";
 import useFetchApi from "@utils/api";
 import { getNetBirdUpCommand, GRPC_API_ORIGIN } from "@utils/netbird";
 import { DownloadIcon, PackageOpenIcon } from "lucide-react";
-import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { OperatingSystem } from "@/interfaces/OperatingSystem";
-import {
-  PlatformType,
-  VersionRelease,
-} from "@/modules/settings/VersionReleasesTab";
+import { VersionRelease } from "@/modules/settings/VersionReleasesTab";
 import {
   HostnameParameter,
   RoutingPeerSetupKeyInfo,
@@ -27,13 +23,12 @@ type Props = {
   setupKey?: string;
   showSetupKeyInfo?: boolean;
   hostname?: string;
+  versions?: VersionRelease[];
 };
 
-export default function WindowsTab(props: Readonly<Props>) {
-  const pathname = usePathname();
-
-  if (pathname === "/install") {
-    return <WindowsTabContent {...props} versions={[]} />;
+export default function WindowsTab({ versions, ...props }: Readonly<Props>) {
+  if (versions) {
+    return <WindowsTabContent {...props} versions={versions} />;
   }
 
   return <AuthenticatedWindowsTab {...props} />;

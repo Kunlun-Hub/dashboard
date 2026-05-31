@@ -17,7 +17,6 @@ import { IconBrandUbuntu } from "@tabler/icons-react";
 import useFetchApi from "@utils/api";
 import { getNetBirdUpCommand } from "@utils/netbird";
 import { DownloadIcon, TerminalSquareIcon } from "lucide-react";
-import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { OperatingSystem } from "@/interfaces/OperatingSystem";
@@ -32,13 +31,12 @@ type Props = {
   setupKey?: string;
   showSetupKeyInfo?: boolean;
   hostname?: string;
+  versions?: VersionRelease[];
 };
 
-export default function LinuxTab(props: Readonly<Props>) {
-  const pathname = usePathname();
-
-  if (pathname === "/install") {
-    return <LinuxTabContent {...props} versions={[]} />;
+export default function LinuxTab({ versions, ...props }: Readonly<Props>) {
+  if (versions) {
+    return <LinuxTabContent {...props} versions={versions} />;
   }
 
   return <AuthenticatedLinuxTab {...props} />;

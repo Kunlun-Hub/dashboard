@@ -7,6 +7,7 @@ import {
 } from "@/interfaces/Instance";
 import { PublicBranding } from "@/interfaces/PublicBranding";
 import { UserInviteAcceptResponse, UserInviteInfo } from "@/interfaces/User";
+import type { VersionRelease } from "@/modules/settings/VersionReleasesTab";
 
 const config = loadConfig();
 
@@ -53,6 +54,13 @@ export async function fetchInstanceStatus(): Promise<InstanceStatus> {
 
 export async function fetchInstanceBranding(): Promise<PublicBranding> {
   return unauthenticatedRequest<PublicBranding>("GET", "/instance/branding");
+}
+
+export async function fetchPublicVersionReleases(): Promise<VersionRelease[]> {
+  return unauthenticatedRequest<VersionRelease[]>(
+    "GET",
+    "/version-releases/public",
+  );
 }
 
 export async function submitSetup(data: SetupRequest): Promise<SetupResponse> {

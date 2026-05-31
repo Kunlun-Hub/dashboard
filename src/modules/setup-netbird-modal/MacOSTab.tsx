@@ -23,7 +23,6 @@ import {
   TerminalSquareIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { OperatingSystem } from "@/interfaces/OperatingSystem";
@@ -38,13 +37,12 @@ type Props = {
   setupKey?: string;
   showSetupKeyInfo?: boolean;
   hostname?: string;
+  versions?: VersionRelease[];
 };
 
-export default function MacOSTab(props: Readonly<Props>) {
-  const pathname = usePathname();
-
-  if (pathname === "/install") {
-    return <MacOSTabContent {...props} versions={[]} />;
+export default function MacOSTab({ versions, ...props }: Readonly<Props>) {
+  if (versions) {
+    return <MacOSTabContent {...props} versions={versions} />;
   }
 
   return <AuthenticatedMacOSTab {...props} />;
