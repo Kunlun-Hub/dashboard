@@ -8,6 +8,7 @@ import {
   FingerprintIcon,
   FolderGit2Icon,
   GlobeIcon,
+  KeyRoundIcon,
   LockIcon,
   MonitorSmartphoneIcon,
   NetworkIcon,
@@ -30,6 +31,7 @@ import DangerZoneTab from "@/modules/settings/DangerZoneTab";
 import FlowLogsSettingsTab from "@/modules/settings/FlowLogsSettingsTab";
 import GroupsSettings from "@/modules/settings/GroupsSettings";
 import IdentityProvidersTab from "@/modules/settings/IdentityProvidersTab";
+import LicenseSettingsTab from "@/modules/settings/LicenseSettingsTab";
 import NetworkSettingsTab from "@/modules/settings/NetworkSettingsTab";
 import PermissionsTab from "@/modules/settings/PermissionsTab";
 import VersionReleasesTab from "@/modules/settings/VersionReleasesTab";
@@ -69,6 +71,10 @@ export default function NetBirdSettings() {
               <VerticalTabs.Trigger value="authentication">
                 <ShieldIcon size={14} />
                 {t("settings.authentication")}
+              </VerticalTabs.Trigger>
+              <VerticalTabs.Trigger value="license">
+                <KeyRoundIcon size={14} />
+                {t("settings.license")}
               </VerticalTabs.Trigger>
               {account?.settings?.embedded_idp_enabled &&
                 identityProvidersEnabled &&
@@ -123,6 +129,7 @@ export default function NetBirdSettings() {
         >
           <div className={"border-l border-nb-gray-930 w-full"}>
             {account && <AuthenticationTab account={account} />}
+            {account && <LicenseSettingsTab account={account} />}
             {account?.settings?.embedded_idp_enabled &&
               identityProvidersEnabled &&
               permission.identity_providers.read && <IdentityProvidersTab />}

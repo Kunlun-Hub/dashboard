@@ -5,6 +5,7 @@ import {
 } from "@axa-fr/react-oidc";
 import loadConfig from "@utils/config";
 import { sleep } from "@utils/helpers";
+import { getDashboardServerURL } from "@utils/license";
 import { usePathname } from "next/navigation";
 import { isExpired } from "react-jwt";
 import useSWR from "swr";
@@ -105,6 +106,10 @@ export function useNetBirdFetch(ignoreError: boolean = false): {
       Accept: "application/json",
       Authorization: `Bearer ${token}`,
     };
+    const dashboardServerURL = getDashboardServerURL();
+    if (dashboardServerURL) {
+      headers["X-Cloink-Dashboard-Host"] = dashboardServerURL;
+    }
 
     // don't set Content-Type for FormData (browser handles it automatically with boundary)
     if (!(init?.body instanceof FormData)) {

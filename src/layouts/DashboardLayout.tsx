@@ -19,6 +19,7 @@ import { usePermissions } from "@/contexts/PermissionsProvider";
 import UsersProvider from "@/contexts/UsersProvider";
 import Navigation from "@/layouts/Navigation";
 import AccountBrandingTitle from "@/modules/account/AccountBrandingTitle";
+import { LicenseDomainGuard } from "@/modules/account/LicenseDomainGuard";
 import { OnboardingProvider } from "@/modules/onboarding/OnboardingProvider";
 import Header, { headerHeight } from "./Header";
 
@@ -153,6 +154,7 @@ function DashboardPageContent({
           >
             <AccountBrandingTitle />
             <Header />
+            <LicenseDomainGuard />
             <div
               className={"flex flex-row flex-grow"}
               style={{
