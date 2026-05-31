@@ -18,12 +18,13 @@ import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useReverseProxies } from "@/contexts/ReverseProxiesProvider";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useI18n } from "@/i18n/I18nProvider";
+import { isL4Mode, ReverseProxy } from "@/interfaces/ReverseProxy";
 import {
-  isL4Mode,
-  ReverseProxy,
-} from "@/interfaces/ReverseProxy";
-import ReverseProxyActionCell from "@/modules/reverse-proxy/table/ReverseProxyActionCell";
+  ResourceLimitTooltip,
+  useResourceLimit,
+} from "@/modules/account/ResourceUsage";
 import ReverseProxyAccessControlCell from "@/modules/reverse-proxy/table/ReverseProxyAccessControlCell";
+import ReverseProxyActionCell from "@/modules/reverse-proxy/table/ReverseProxyActionCell";
 import ReverseProxyActiveCell from "@/modules/reverse-proxy/table/ReverseProxyActiveCell";
 import ReverseProxyAuthCell from "@/modules/reverse-proxy/table/ReverseProxyAuthCell";
 import ReverseProxyClusterCell from "@/modules/reverse-proxy/table/ReverseProxyClusterCell";
@@ -172,6 +173,9 @@ export default function ReverseProxyTable({ headingTarget }: Readonly<Props>) {
   const { reverseProxies, isLoading, openModal } = useReverseProxies();
   const { t } = useI18n();
   const columns = useReverseProxyColumns();
+  const serviceLimit = useResourceLimit("custom_rules");
+  const addServiceDisabled =
+    !permission?.services?.create || serviceLimit.exhausted;
 
   const [sorting, setSorting] = useLocalStorage<SortingState>(
     "netbird-table-sort" + path,
@@ -182,6 +186,32 @@ export default function ReverseProxyTable({ headingTarget }: Readonly<Props>) {
       },
     ],
   );
+
+  const addServiceButton = (className?: string) => {
+    const button = (
+      <Button
+        variant={"primary"}
+        className={serviceLimit.exhausted ? undefined : className}
+        onClick={() => {
+          if (!serviceLimit.exhausted) openModal();
+        }}
+        disabled={addServiceDisabled}
+      >
+        <PlusCircle size={16} />
+        {t("reverseProxy.addService")}
+      </Button>
+    );
+
+    if (serviceLimit.exhausted) {
+      return (
+        <ResourceLimitTooltip limitState={serviceLimit} className={className}>
+          {button}
+        </ResourceLimitTooltip>
+      );
+    }
+
+    return button;
+  };
 
   return (
     <DataTable
@@ -221,30 +251,13 @@ export default function ReverseProxyTable({ headingTarget }: Readonly<Props>) {
           }
           title={t("reverseProxy.emptyTitle")}
           description={t("reverseProxy.emptyDescription")}
-          button={
-            <Button
-              variant={"primary"}
-              onClick={() => openModal()}
-              disabled={!permission?.services?.create}
-            >
-              <PlusCircle size={16} />
-              {t("reverseProxy.addService")}
-            </Button>
-          }
+          button={addServiceButton()}
         />
       }
       rightSide={() => (
         <>
           {reverseProxies && reverseProxies.length > 0 && (
-            <Button
-              variant={"primary"}
-              className={"ml-auto"}
-              onClick={() => openModal()}
-              disabled={!permission?.services?.create}
-            >
-              <PlusCircle size={16} />
-              {t("reverseProxy.addService")}
-            </Button>
+            addServiceButton("ml-auto")
           )}
         </>
       )}

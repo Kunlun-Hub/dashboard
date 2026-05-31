@@ -10,6 +10,7 @@ import { usePermissions } from "@/contexts/PermissionsProvider";
 import ReverseProxiesProvider from "@/contexts/ReverseProxiesProvider";
 import { useI18n } from "@/i18n/I18nProvider";
 import PageContainer from "@/layouts/PageContainer";
+import { ResourceUsageInline } from "@/modules/account/ResourceUsage";
 
 const CustomDomainsTable = lazy(
   () => import("@/modules/reverse-proxy/domain/CustomDomainsTable"),
@@ -37,7 +38,17 @@ export default function ReverseProxyCustomDomainsPage() {
             active={true}
           />
         </Breadcrumbs>
-        <h1 ref={headingRef}>{t("customDomains.title")}</h1>
+        <div
+          className={
+            "flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"
+          }
+        >
+          <h1 ref={headingRef}>{t("customDomains.title")}</h1>
+          <ResourceUsageInline
+            limit={"custom_domains"}
+            className={"sm:min-w-[18rem]"}
+          />
+        </div>
       </div>
       <RestrictedAccess
         page={t("nav.customDomains")}

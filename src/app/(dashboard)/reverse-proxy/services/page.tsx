@@ -12,6 +12,7 @@ import { usePermissions } from "@/contexts/PermissionsProvider";
 import ReverseProxiesProvider from "@/contexts/ReverseProxiesProvider";
 import { useI18n } from "@/i18n/I18nProvider";
 import PageContainer from "@/layouts/PageContainer";
+import { ResourceUsageInline } from "@/modules/account/ResourceUsage";
 
 const ReverseProxyTable = lazy(
   () => import("@/modules/reverse-proxy/table/ReverseProxyTable"),
@@ -39,7 +40,17 @@ export default function ReverseProxyServicesPage() {
             active={true}
           />
         </Breadcrumbs>
-        <h1 ref={headingRef}>{t("reverseProxy.servicesTitle")}</h1>
+        <div
+          className={
+            "flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"
+          }
+        >
+          <h1 ref={headingRef}>{t("reverseProxy.servicesTitle")}</h1>
+          <ResourceUsageInline
+            limit={"custom_rules"}
+            className={"sm:min-w-[18rem]"}
+          />
+        </div>
 
         {isNetBirdHosted() ? (
           <Callout className={"max-w-xl mt-5"} variant={"info"}>

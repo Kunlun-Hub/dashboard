@@ -11,7 +11,6 @@ const defaultUsageItems: EntitlementLimit[] = [
   "users",
   "peers",
   "self_hosted_relays",
-  "reverse_proxy_servers",
   "custom_domains",
   "custom_rules",
 ];

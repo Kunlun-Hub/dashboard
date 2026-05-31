@@ -30,6 +30,10 @@ import {
   ReverseProxyDomain,
   ReverseProxyDomainType,
 } from "@/interfaces/ReverseProxy";
+import {
+  ResourceLimitTooltip,
+  useResourceLimit,
+} from "@/modules/account/ResourceUsage";
 import CustomDomainClusterCell from "@/modules/reverse-proxy/domain/CustomDomainClusterCell";
 import { CustomDomainModal } from "./CustomDomainModal";
 import { CustomDomainVerificationModal } from "./CustomDomainVerificationModal";
@@ -88,6 +92,9 @@ export default function CustomDomainsTable({ headingTarget }: Readonly<Props>) {
     useReverseProxies();
   const { t } = useI18n();
   const columns = useCustomDomainsColumns();
+  const domainLimit = useResourceLimit("custom_domains");
+  const addDomainDisabled =
+    !permission?.services?.create || domainLimit.exhausted;
 
   const [addModalOpen, setAddModalOpen] = useState(false);
   const [verificationModalOpen, setVerificationModalOpen] = useState(false);
@@ -109,6 +116,32 @@ export default function CustomDomainsTable({ headingTarget }: Readonly<Props>) {
     if (!domains) return [];
     return domains.filter((d) => d.type !== ReverseProxyDomainType.FREE);
   }, [domains]);
+
+  const addDomainButton = (className?: string) => {
+    const button = (
+      <Button
+        variant={"primary"}
+        className={domainLimit.exhausted ? undefined : className}
+        onClick={() => {
+          if (!domainLimit.exhausted) setAddModalOpen(true);
+        }}
+        disabled={addDomainDisabled}
+      >
+        <PlusCircle size={16} />
+        {t("reverseProxy.addDomain")}
+      </Button>
+    );
+
+    if (domainLimit.exhausted) {
+      return (
+        <ResourceLimitTooltip limitState={domainLimit} className={className}>
+          {button}
+        </ResourceLimitTooltip>
+      );
+    }
+
+    return button;
+  };
 
   return (
     <>
@@ -161,31 +194,13 @@ export default function CustomDomainsTable({ headingTarget }: Readonly<Props>) {
             }
             title={t("reverseProxy.customDomainsEmptyTitle")}
             description={t("reverseProxy.customDomainsEmptyDescription")}
-            button={
-              <Button
-                variant={"primary"}
-                className={""}
-                onClick={() => setAddModalOpen(true)}
-                disabled={!permission?.services?.create}
-              >
-                <PlusCircle size={16} />
-                {t("reverseProxy.addDomain")}
-              </Button>
-            }
+            button={addDomainButton()}
           />
         }
         rightSide={() => (
           <>
             {data && data.length > 0 && (
-              <Button
-                variant={"primary"}
-                className={"ml-auto"}
-                onClick={() => setAddModalOpen(true)}
-                disabled={!permission?.services?.create}
-              >
-                <PlusCircle size={16} />
-                {t("reverseProxy.addDomain")}
-              </Button>
+              addDomainButton("ml-auto")
             )}
           </>
         )}
