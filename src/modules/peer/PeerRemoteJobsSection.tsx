@@ -1,11 +1,7 @@
-import { ExternalLinkIcon } from "lucide-react";
 import React, { lazy, Suspense } from "react";
-import InlineLink from "@/components/InlineLink";
-import Paragraph from "@/components/Paragraph";
 import SkeletonTable, {
   SkeletonTableHeader,
 } from "@/components/skeletons/SkeletonTable";
-import { useI18n } from "@/i18n/I18nProvider";
 import { Job } from "@/interfaces/Job";
 import useFetchApi from "@/utils/api";
 
@@ -17,27 +13,11 @@ type Props = {
 };
 
 export const PeerRemoteJobsSection = ({ peerID }: Props) => {
-  const { t } = useI18n();
   const { data: jobs, isLoading } = useFetchApi<Job[]>(`/peers/${peerID}/jobs`);
 
   return (
     <div className="pb-10 px-8">
       <div className="">
-        <div className="flex justify-between items-center mb-5">
-          <div>
-            <Paragraph>
-              {t("remoteJobs.sectionDescription")}
-            </Paragraph>
-            <Paragraph>
-              {t("common.learnMorePrefix")}{" "}
-              <InlineLink href={"https://docs.netbird.io"} target={"_blank"}>
-                {t("jobs.title")} <ExternalLinkIcon size={12} />
-              </InlineLink>
-              {t("common.inDocumentationSuffix")}
-            </Paragraph>
-          </div>
-        </div>
-
         <Suspense
           fallback={
             <div>

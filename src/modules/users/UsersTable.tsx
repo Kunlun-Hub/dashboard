@@ -3,7 +3,6 @@
 import Button from "@components/Button";
 import Card from "@components/Card";
 import FullTooltip from "@components/FullTooltip";
-import InlineLink from "@components/InlineLink";
 import SquareIcon from "@components/SquareIcon";
 import { DataTable } from "@components/table/DataTable";
 import DataTableHeader from "@components/table/DataTableHeader";
@@ -21,7 +20,7 @@ import {
 import useFetchApi from "@utils/api";
 import { isNetBirdHosted } from "@utils/netbird";
 import dayjs from "dayjs";
-import { ExternalLinkIcon, Link2, MailPlus } from "lucide-react";
+import { Link2, MailPlus } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useMemo, useState } from "react";
 import { useSWRConfig } from "swr";
@@ -248,18 +247,6 @@ export default function UsersTable({
                 <InviteUserButton show={true} />
               </div>
             }
-            learnMore={
-              <>
-                {t("common.learnMorePrefix")}{" "}
-                <InlineLink
-                  href={"https://docs.netbird.io/how-to/add-users-to-your-network"}
-                  target={"_blank"}
-                >
-                  {t("users.title")}
-                  <ExternalLinkIcon size={12} />
-                </InlineLink>
-              </>
-            }
           />
         ) : (
           getStartedCard
@@ -353,18 +340,6 @@ export const InviteUserButton = ({
         content={
           <div className={"flex flex-col"}>
             <p className={"max-w-[200px] text-xs"}>{t("users.localAuthDisabled")}</p>
-            <div className={"text-xs mt-1.5"}>
-              <InlineLink
-                href={
-                  "https://docs.netbird.io/selfhosted/identity-providers/disable-local-authentication"
-                }
-                target={"_blank"}
-                className={"flex gap-1 items-center"}
-              >
-                {t("users.learnMoreShort")}
-                <ExternalLinkIcon size={12} />
-              </InlineLink>
-            </div>
           </div>
         }
       >

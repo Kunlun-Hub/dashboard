@@ -3,7 +3,6 @@ import { Callout } from "@components/Callout";
 import CardTable from "@components/CardTable";
 import Code from "@components/Code";
 import HelpText from "@components/HelpText";
-import InlineLink from "@components/InlineLink";
 import { Input } from "@components/Input";
 import { Label } from "@components/Label";
 import {
@@ -14,11 +13,9 @@ import {
 } from "@components/modal/Modal";
 import ModalHeader from "@components/modal/ModalHeader";
 import { notify } from "@components/Notification";
-import Paragraph from "@components/Paragraph";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@components/Tabs";
 import { cn, validator } from "@utils/helpers";
 import {
-  ExternalLinkIcon,
   GlobeIcon,
   ListIcon,
   Loader2,
@@ -28,10 +25,7 @@ import {
 import React, { useCallback, useMemo, useState } from "react";
 import { useSWRConfig } from "swr";
 import { useI18n } from "@/i18n/I18nProvider";
-import {
-  REVERSE_PROXY_CLUSTERS_DOCS_LINK,
-  ReverseProxyClusterToken,
-} from "@/interfaces/ReverseProxy";
+import { ReverseProxyClusterToken } from "@/interfaces/ReverseProxy";
 import { useApiCall } from "@/utils/api";
 import { GRPC_API_ORIGIN, isNetBirdHosted } from "@/utils/netbird";
 
@@ -282,18 +276,6 @@ export const SelfHostedProxiesModal = ({ open, onOpenChange }: Props) => {
         </Tabs>
 
         <ModalFooter className={"items-center"}>
-          <div className={"w-full"}>
-            <Paragraph className={"text-sm mt-auto"}>
-              {t("common.learnMorePrefix")}
-              <InlineLink
-                href={REVERSE_PROXY_CLUSTERS_DOCS_LINK}
-                target={"_blank"}
-              >
-                {t("reverseProxy.selfHostedProxies")}
-                <ExternalLinkIcon size={12} />
-              </InlineLink>
-            </Paragraph>
-          </div>
           <div className={"flex gap-3 w-full justify-end"}>
             {tab === "domain" && (
               <>

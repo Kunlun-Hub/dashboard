@@ -71,7 +71,7 @@ export const AnnouncementBanner = () => {
                 variants({ inlineLink: announcement.variant }),
               )}
             >
-              {announcement.linkText || t("common.learnMore")}
+              {announcement.linkText || t("globalSearch.open")}
               <ArrowRightIcon size={14} />
             </InlineLink>
           )}

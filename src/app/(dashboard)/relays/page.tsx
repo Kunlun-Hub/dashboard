@@ -1,7 +1,6 @@
 "use client";
 
 import Breadcrumbs from "@components/Breadcrumbs";
-import Paragraph from "@components/Paragraph";
 import SkeletonTable from "@components/skeletons/SkeletonTable";
 import { RestrictedAccess } from "@components/ui/RestrictedAccess";
 import { usePortalElement } from "@hooks/usePortalElement";
@@ -31,7 +30,6 @@ export default function RelaysPage() {
           />
         </Breadcrumbs>
         <h1 ref={headingRef}>{t("relays.title")}</h1>
-        <Paragraph>{t("relays.description")}</Paragraph>
       </div>
       <RestrictedAccess
         page={t("relays.title")}

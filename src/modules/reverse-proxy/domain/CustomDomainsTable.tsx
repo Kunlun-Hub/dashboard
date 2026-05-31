@@ -5,7 +5,6 @@ import Button from "@components/Button";
 import ButtonGroup from "@components/ButtonGroup";
 import CopyToClipboardText from "@components/CopyToClipboardText";
 import FullTooltip from "@components/FullTooltip";
-import InlineLink from "@components/InlineLink";
 import SquareIcon from "@components/SquareIcon";
 import { DataTable } from "@components/table/DataTable";
 import DataTableHeader from "@components/table/DataTableHeader";
@@ -14,7 +13,6 @@ import GetStartedTest from "@components/ui/GetStartedTest";
 import { ColumnDef, SortingState } from "@tanstack/react-table";
 import { cn } from "@utils/helpers";
 import {
-  ExternalLinkIcon,
   GlobeIcon,
   HelpCircle,
   PlusCircle,
@@ -29,7 +27,6 @@ import { useReverseProxies } from "@/contexts/ReverseProxiesProvider";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useI18n } from "@/i18n/I18nProvider";
 import {
-  REVERSE_PROXY_DOCS_LINK,
   ReverseProxyDomain,
   ReverseProxyDomainType,
 } from "@/interfaces/ReverseProxy";
@@ -174,15 +171,6 @@ export default function CustomDomainsTable({ headingTarget }: Readonly<Props>) {
                 <PlusCircle size={16} />
                 {t("reverseProxy.addDomain")}
               </Button>
-            }
-            learnMore={
-              <>
-                {t("common.learnMorePrefix")}
-                <InlineLink href={REVERSE_PROXY_DOCS_LINK} target={"_blank"}>
-                  {t("reverseProxy.customDomainsLearnMore")}
-                  <ExternalLinkIcon size={12} />
-                </InlineLink>
-              </>
             }
           />
         }

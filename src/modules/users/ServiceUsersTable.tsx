@@ -1,7 +1,6 @@
 "use client";
 
 import Button from "@components/Button";
-import InlineLink from "@components/InlineLink";
 import SquareIcon from "@components/SquareIcon";
 import { DataTable } from "@components/table/DataTable";
 import DataTableHeader from "@components/table/DataTableHeader";
@@ -11,7 +10,7 @@ import GetStartedTest from "@components/ui/GetStartedTest";
 import { IconSettings2 } from "@tabler/icons-react";
 import { ColumnDef, SortingState } from "@tanstack/react-table";
 import useFetchApi from "@utils/api";
-import { ExternalLinkIcon, PlusCircle } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useMemo } from "react";
 import { useSWRConfig } from "swr";
@@ -148,18 +147,6 @@ export default function ServiceUsersTable({
                 </ServiceUserModal>
               </div>
             </div>
-          }
-          learnMore={
-            <>
-              {t("common.learnMorePrefix")}{" "}
-              <InlineLink
-                href={"https://docs.netbird.io/how-to/access-netbird-public-api"}
-                target={"_blank"}
-              >
-                {t("serviceUsers.title")}
-                <ExternalLinkIcon size={12} />
-              </InlineLink>
-            </>
           }
         />
       }

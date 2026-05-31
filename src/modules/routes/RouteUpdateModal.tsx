@@ -3,7 +3,6 @@
 import Button from "@components/Button";
 import FancyToggleSwitch from "@components/FancyToggleSwitch";
 import HelpText from "@components/HelpText";
-import InlineLink from "@components/InlineLink";
 import { Input } from "@components/Input";
 import { Label } from "@components/Label";
 import {
@@ -25,7 +24,6 @@ import { cn } from "@utils/helpers";
 import { uniqBy } from "lodash";
 import {
   ArrowDownWideNarrow,
-  ExternalLinkIcon,
   Power,
   RouteIcon,
   Settings2,
@@ -505,20 +503,6 @@ function RouteUpdateModalContent({ onSuccess, route, cell }: ModalProps) {
       </Tabs>
 
       <ModalFooter className={"items-center"}>
-        <div className={"w-full"}>
-          <Paragraph className={"text-sm mt-auto"}>
-            {t("common.learnMorePrefix")}{" "}
-            <InlineLink
-              href={
-                "https://docs.netbird.io/how-to/routing-traffic-to-private-networks"
-              }
-              target={"_blank"}
-            >
-              {t("networkRoutesPage.title")}
-              <ExternalLinkIcon size={12} />
-            </InlineLink>
-          </Paragraph>
-        </div>
         <div className={"flex gap-3 w-full justify-end"}>
           <ModalClose asChild={true}>
             <Button variant={"secondary"}>{t("actions.cancel")}</Button>

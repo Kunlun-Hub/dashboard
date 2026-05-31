@@ -3,7 +3,6 @@
 import Button from "@components/Button";
 import ButtonGroup from "@components/ButtonGroup";
 import Card from "@components/Card";
-import InlineLink from "@components/InlineLink";
 import SquareIcon from "@components/SquareIcon";
 import { DataTable } from "@components/table/DataTable";
 import DataTableHeader from "@components/table/DataTableHeader";
@@ -11,7 +10,7 @@ import DataTableRefreshButton from "@components/table/DataTableRefreshButton";
 import { DataTableRowsPerPage } from "@components/table/DataTableRowsPerPage";
 import GetStartedTest from "@components/ui/GetStartedTest";
 import { ColumnDef, SortingState } from "@tanstack/react-table";
-import { ExternalLinkIcon, PlusCircle } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 import { usePathname } from "next/navigation";
 import React, { useMemo, useState } from "react";
 import { useSWRConfig } from "swr";
@@ -236,20 +235,6 @@ export default function NameserverGroupTable({
                     </NameserverTemplateModal>
                   </div>
                 </div>
-              }
-              learnMore={
-                <>
-                  {t("common.learnMorePrefix")}
-                  <InlineLink
-                    href={
-                      "https://docs.netbird.io/how-to/manage-dns-in-your-network"
-                    }
-                    target={"_blank"}
-                  >
-                    DNS
-                    <ExternalLinkIcon size={12} />
-                  </InlineLink>
-                </>
               }
             />
           )

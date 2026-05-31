@@ -5,10 +5,10 @@ import { cloneDeep } from "@utils/helpers";
 import React, { useState } from "react";
 import { useSWRConfig } from "swr";
 import { useGroups } from "@/contexts/GroupsProvider";
+import { useI18n } from "@/i18n/I18nProvider";
 import { Group } from "@/interfaces/Group";
 import { NetworkResource } from "@/interfaces/Network";
 import { Policy } from "@/interfaces/Policy";
-import { useI18n } from "@/i18n/I18nProvider";
 import { AccessControlModalContent } from "@/modules/access-control/AccessControlModal";
 
 type Props = {
@@ -143,7 +143,7 @@ export default function PoliciesProvider({ children }: Props) {
     message?: string,
   ) => {
     const rules = toUpdate.rules
-      ? serializeRules(toUpdate.rules, toUpdate.enabled ?? policy.enabled)
+      ? serializeRules(toUpdate.rules)
       : policy.rules ?? [];
 
     notify({

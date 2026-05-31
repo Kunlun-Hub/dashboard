@@ -1,16 +1,14 @@
 import Button from "@components/Button";
 import HelpText from "@components/HelpText";
-import InlineLink from "@components/InlineLink";
 import { Input } from "@components/Input";
 import { Label } from "@components/Label";
 import { Modal, ModalContent, ModalFooter } from "@components/modal/Modal";
 import ModalHeader from "@components/modal/ModalHeader";
-import Paragraph from "@components/Paragraph";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@components/Tabs";
 import { Textarea } from "@components/Textarea";
 import { cn } from "@utils/helpers";
 import { isEmpty } from "lodash";
-import { ExternalLinkIcon, LayoutList, ShieldCheck, Text } from "lucide-react";
+import { LayoutList, ShieldCheck, Text } from "lucide-react";
 import React, { useState } from "react";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useI18n } from "@/i18n/I18nProvider";
@@ -213,18 +211,6 @@ export default function PostureCheckModal({
           </Tabs>
 
           <ModalFooter className={"items-center"}>
-            <div className={"w-full"}>
-              <Paragraph className={"text-sm mt-auto"}>
-                {t("common.learnMorePrefix")}
-                <InlineLink
-                  href={"https://docs.netbird.io/how-to/manage-posture-checks"}
-                  target={"_blank"}
-                >
-                  {t("postureChecks.title")}
-                  <ExternalLinkIcon size={12} />
-                </InlineLink>
-              </Paragraph>
-            </div>
             <div className={"flex gap-3 w-full justify-end"}>
               <>
                 {tab == "checks" && (

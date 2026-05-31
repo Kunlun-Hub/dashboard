@@ -11,17 +11,14 @@ import {
   ModalFooter,
 } from "@components/modal/Modal";
 import ModalHeader from "@components/modal/ModalHeader";
-import Paragraph from "@components/Paragraph";
 import Steps from "@components/Steps";
 import { GradientFadedBackground } from "@components/ui/GradientFadedBackground";
 import { Mark } from "@components/ui/Mark";
-import { ExternalLinkIcon, GlobeIcon } from "lucide-react";
+import { GlobeIcon } from "lucide-react";
 import * as React from "react";
 import { useReverseProxies } from "@/contexts/ReverseProxiesProvider";
 import { useI18n } from "@/i18n/I18nProvider";
 import {
-  REVERSE_PROXY_CLUSTERS_DOCS_LINK,
-  REVERSE_PROXY_DOMAIN_VERIFICATION_LINK,
   ReverseProxyDomain,
   ReverseProxyDomainType,
 } from "@/interfaces/ReverseProxy";
@@ -107,15 +104,7 @@ export const CustomDomainVerificationModal = ({
                 </Callout>
               ) : (
                 <Callout variant={"warning"}>
-                  {t("reverseProxy.customDomainNoClusterSelfHosted")} <br />
-                  {t("common.learnMorePrefix")}{" "}
-                  <InlineLink
-                    href={REVERSE_PROXY_CLUSTERS_DOCS_LINK}
-                    target={"_blank"}
-                  >
-                    {t("reverseProxy.proxyClusters")}
-                    <ExternalLinkIcon size={12} />
-                  </InlineLink>
+                  {t("reverseProxy.customDomainNoClusterSelfHosted")}
                 </Callout>
               )
             ) : (
@@ -155,18 +144,6 @@ export const CustomDomainVerificationModal = ({
           </div>
         </div>
         <ModalFooter className={"items-center"}>
-          <div className={"w-full"}>
-            <Paragraph className={"text-sm mt-auto"}>
-              {t("common.learnMorePrefix")}
-              <InlineLink
-                href={REVERSE_PROXY_DOMAIN_VERIFICATION_LINK}
-                target={"_blank"}
-              >
-                {t("reverseProxy.domainVerification")}
-                <ExternalLinkIcon size={12} />
-              </InlineLink>
-            </Paragraph>
-          </div>
           <div className={"flex gap-3 w-full justify-end"}>
             <ModalClose asChild={true}>
               <Button variant={"secondary"}>

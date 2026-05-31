@@ -2,7 +2,6 @@ import Breadcrumbs from "@components/Breadcrumbs";
 import Button from "@components/Button";
 import FancyToggleSwitch from "@components/FancyToggleSwitch";
 import HelpText from "@components/HelpText";
-import InlineLink from "@components/InlineLink";
 import { Input } from "@components/Input";
 import { Label } from "@components/Label";
 import { notify } from "@components/Notification";
@@ -18,7 +17,6 @@ import { useApiCall } from "@utils/api";
 import { cn, validator } from "@utils/helpers";
 import {
   ClockFadingIcon,
-  ExternalLinkIcon,
   FlaskConicalIcon,
   MonitorSmartphoneIcon,
   AlertTriangle,
@@ -252,13 +250,6 @@ function ClientSettingsTabContent({ account }: Readonly<Props>) {
               {t("clientSettings.requiresAtLeast")}
               {` `}
               <span className={"text-neutral-900 dark:text-white font-medium"}>v0.61.0</span>.{" "}
-              <InlineLink
-                href={"https://docs.netbird.io/manage/peers/auto-update"}
-                target={"_blank"}
-              >
-                {t("clientSettings.learnMore")}
-                <ExternalLinkIcon size={12} />
-              </InlineLink>
             </HelpText>
             <div className={"gap-4 items-center grid grid-cols-2"}>
               <SelectDropdown
@@ -322,15 +313,6 @@ function ClientSettingsTabContent({ account }: Readonly<Props>) {
                 {t("clientSettings.requiresAtLeast")}
                 {` `}
                 <span className={"text-neutral-900 dark:text-white font-medium"}>v0.66.0</span>.{" "}
-                <InlineLink
-                  href={
-                    "https://docs.netbird.io/manage/reverse-proxy/expose-from-cli"
-                  }
-                  target={"_blank"}
-                >
-                  {t("clientSettings.learnMore")}
-                  <ExternalLinkIcon size={12} />
-                </InlineLink>
               </HelpText>
             </div>
 
@@ -374,14 +356,7 @@ function ClientSettingsTabContent({ account }: Readonly<Props>) {
             </Label>
 
             <HelpText>
-              {t("clientSettings.lazyConnectionsHelpPrefix")}{" "}
-              <InlineLink
-                href={"https://docs.netbird.io/how-to/lazy-connection"}
-                target={"_blank"}
-              >
-                {t("clientSettings.learnMore")}
-                <ExternalLinkIcon size={12} />
-              </InlineLink>
+              {t("clientSettings.lazyConnectionsHelpPrefix")}
             </HelpText>
             <FancyToggleSwitch
               className={"mt-2"}

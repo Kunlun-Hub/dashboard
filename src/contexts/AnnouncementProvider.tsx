@@ -76,6 +76,17 @@ const getAnnouncements = async (): Promise<AnnouncementInfo[]> => {
       raw = await response.json();
     }
 
+    raw = raw.map((announcement) =>
+      announcement.link?.includes("docs.netbird.io")
+        ? {
+            ...announcement,
+            link: undefined,
+            linkText: undefined,
+            isExternal: undefined,
+          }
+        : announcement,
+    );
+
     const isCloud = isNetBirdHosted();
     const filtered = raw.filter((a) => !a.isCloudOnly || isCloud);
     const hashes = new Set(filtered.map((a) => md5(a.text).toString()));

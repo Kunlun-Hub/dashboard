@@ -1,10 +1,8 @@
 import Button from "@components/Button";
 import Code from "@components/Code";
-import InlineLink from "@components/InlineLink";
 import { Modal, ModalContent } from "@components/modal/Modal";
 import Steps from "@components/Steps";
 import { cn } from "@utils/helpers";
-import { ExternalLinkIcon } from "lucide-react";
 import * as React from "react";
 import { useMemo, useState } from "react";
 import { NetworkResource } from "@/interfaces/Network";
@@ -72,16 +70,7 @@ export const OnboardingTestResource = ({
         </Steps.Step>
         <Steps.Step step={2} line={false} className={"pb-0"} disabled={!device}>
           <p className={"!text-nb-gray-300"}>
-            {t("onboarding.everythingWorking")}{" "}
-            {t("onboarding.checkTroubleshooting")}
-            <InlineLink
-              href={"https://docs.netbird.io/how-to/troubleshooting-client"}
-              target={"_blank"}
-              onClick={onTroubleshootingClick}
-            >
-              {t("onboarding.troubleshootingGuide")}
-              <ExternalLinkIcon size={12} />
-            </InlineLink>
+            {t("onboarding.everythingWorking")}
           </p>
           <div className={"mt-2"}>
             <Button

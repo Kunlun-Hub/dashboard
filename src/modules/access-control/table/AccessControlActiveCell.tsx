@@ -2,9 +2,10 @@ import { ToggleSwitch } from "@components/ToggleSwitch";
 import React, { useMemo } from "react";
 import { mutate } from "swr";
 import { usePermissions } from "@/contexts/PermissionsProvider";
-import { useI18n } from "@/i18n/I18nProvider";
 import { usePolicies } from "@/contexts/PoliciesProvider";
+import { useI18n } from "@/i18n/I18nProvider";
 import { Policy } from "@/interfaces/Policy";
+import { isPolicyEffectivelyEnabled } from "@/modules/access-control/table/accessControlTableHelpers";
 
 type Props = {
   policy: Policy;
@@ -15,7 +16,7 @@ export default function AccessControlActiveCell({ policy }: Readonly<Props>) {
   const { t } = useI18n();
 
   const isChecked = useMemo(() => {
-    return policy.enabled;
+    return isPolicyEffectivelyEnabled(policy);
   }, [policy]);
 
   const update = async (enabled: boolean) => {

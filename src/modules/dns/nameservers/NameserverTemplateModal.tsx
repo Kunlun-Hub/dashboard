@@ -1,7 +1,6 @@
-import InlineLink from "@components/InlineLink";
 import { Modal, ModalContent, ModalTrigger } from "@components/modal/Modal";
 import { cn } from "@utils/helpers";
-import { ExternalLinkIcon, GlobeIcon } from "lucide-react";
+import { GlobeIcon } from "lucide-react";
 import Image, { StaticImageData } from "next/image";
 import React, { useState } from "react";
 import CloudflareLogo from "@/assets/nameservers/cloudflare.svg";
@@ -74,21 +73,18 @@ export function NameserverTemplateModalContent({
             src={GoogleLogo}
             title={t("nameserverTemplate.google")}
             description={t("nameserverTemplate.googleDesc")}
-            href={"https://developers.google.com/speed/public-dns"}
           />
           <NameserverTemplate
             onClick={() => onePresetSelection(NameserverPresets.Cloudflare)}
             src={CloudflareLogo}
             title={t("nameserverTemplate.cloudflare")}
             description={t("nameserverTemplate.cloudflareDesc")}
-            href={"https://www.cloudflare.com/learning/dns/what-is-1.1.1.1/"}
           />
           <NameserverTemplate
             onClick={() => onePresetSelection(NameserverPresets.Quad9)}
             src={Quad9Logo}
             title={t("nameserverTemplate.quad9")}
             description={t("nameserverTemplate.quad9Desc")}
-            href={"https://quad9.net/"}
           />
           <NameserverTemplate
             onClick={() => onePresetSelection(NameserverPresets.Default)}
@@ -108,18 +104,13 @@ function NameserverTemplate({
   title,
   description,
   onClick,
-  href,
-  hrefTitle,
 }: Readonly<{
   src?: StaticImageData;
   icon?: React.ReactNode;
   title: string;
   description?: string;
   onClick?: () => void;
-  href?: string;
-  hrefTitle?: string;
 }>) {
-  const { t } = useI18n();
   return (
     <button
       className={
@@ -142,21 +133,6 @@ function NameserverTemplate({
         </div>
         {description && (
           <p className={"text-xs !text-nb-gray-300 mt-1"}>{description}</p>
-        )}
-        {href && (
-          <div className={"relative mt-auto"}>
-            <InlineLink
-              href={href}
-              className={"text-xs inline-flex"}
-              target={"_blank"}
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
-            >
-              {hrefTitle || t("nameserverTemplate.learnMore")}
-              <ExternalLinkIcon size={12} />
-            </InlineLink>
-          </div>
         )}
       </div>
     </button>

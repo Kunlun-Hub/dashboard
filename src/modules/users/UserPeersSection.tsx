@@ -1,17 +1,16 @@
-import * as React from "react";
-import { Suspense, useMemo } from "react";
-import { usePortalElement } from "@hooks/usePortalElement";
 import SkeletonTable, {
   SkeletonTableHeader,
 } from "@components/skeletons/SkeletonTable";
-import { User } from "@/interfaces/User";
-import useFetchApi from "@utils/api";
-import { Peer } from "@/interfaces/Peer";
-import MinimalPeersTable from "@/modules/peer/MinimalPeersTable";
 import NoResults from "@components/ui/NoResults";
+import { usePortalElement } from "@hooks/usePortalElement";
+import useFetchApi from "@utils/api";
+import * as React from "react";
+import { Suspense, useMemo } from "react";
 import PeerIcon from "@/assets/icons/PeerIcon";
-import Paragraph from "@components/Paragraph";
 import { useI18n } from "@/i18n/I18nProvider";
+import { Peer } from "@/interfaces/Peer";
+import { User } from "@/interfaces/User";
+import MinimalPeersTable from "@/modules/peer/MinimalPeersTable";
 
 type Props = {
   user: User;
@@ -39,7 +38,6 @@ export const UserPeersSection = ({ user }: Props) => {
         <div className={"flex justify-between items-center mb-5"}>
           <div>
             <h2 ref={headingRef}>{t("users.peersTitle")}</h2>
-            <Paragraph>{t("users.peersDescription")}</Paragraph>
           </div>
         </div>
 

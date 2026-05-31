@@ -105,17 +105,15 @@ export function useSourceGroupEnabled(sourceId: string) {
 }
 
 export function useAnySourceGroupEnabled(sourceId: string) {
-  const { getNodes, getEdges } = useReactFlow();
+  const { getEdges } = useReactFlow();
 
-  const nodes = getNodes();
   const edges = getEdges();
 
   const incomingEdges = edges.filter((e) => e.target === sourceId);
-  const sourceNodes = incomingEdges
-    .map((edge) => nodes.find((n) => n.id === edge.source))
-    .filter(Boolean);
+  if (incomingEdges.length === 0) return true;
+
   const sourceEnabledStates = incomingEdges.map((e) => e?.data?.enabled);
-  return sourceEnabledStates.some(Boolean);
+  return sourceEnabledStates.some((enabled) => enabled !== false);
 }
 
 export function getFirstGroup(groups?: Group[], policies?: Policy[]) {

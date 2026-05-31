@@ -95,9 +95,6 @@ function PeerRouteSettingsSection({ peer }: Readonly<Props>) {
   return (
     <div className={"px-8 pb-10"}>
       <div className={"flex items-start justify-between gap-4"}>
-        <div className={"max-w-6xl"}>
-          <Paragraph>{t("peerAdvertisedRoutes.description")}</Paragraph>
-        </div>
         <Button
           variant={"primary"}
           onClick={() => setModalOpen(true)}
@@ -275,10 +272,6 @@ function PeerRoutePoliciesSection({ peer }: Readonly<Props>) {
 
   return (
     <div className={"px-8 pb-10"}>
-      <div className={"max-w-6xl"}>
-        <Paragraph>{t("peerRoutePreview.description")}</Paragraph>
-      </div>
-
       <Card className={"mt-5 w-full p-5"}>
         {displayRows.length === 0 ? (
           <EmptyRoutesCard
@@ -784,7 +777,6 @@ function RouteSettingsModal({
           <h3 className={"text-2xl font-semibold text-neutral-900 dark:text-white"}>
             {t("peerRouteSettings.connector")}
           </h3>
-          <Paragraph>{t("peerRouteSettings.connectorModalHelp")}</Paragraph>
 
           <div className={"mt-5 flex flex-wrap gap-2"}>
             <Button

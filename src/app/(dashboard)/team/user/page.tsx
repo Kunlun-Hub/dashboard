@@ -300,7 +300,6 @@ function UserOverview({ user, initialGroups }: Readonly<Props>) {
                 <div className={"flex justify-between items-center"}>
                   <div>
                     <h2>{t("accessTokens.title")}</h2>
-                    <Paragraph>{t("userDetails.accessTokensDescription")}</Paragraph>
                   </div>
                   <div className={"inline-flex gap-4 justify-end"}>
                     <div>

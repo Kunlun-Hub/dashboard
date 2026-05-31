@@ -1,8 +1,6 @@
 import Button from "@components/Button";
 import Code from "@components/Code";
-import InlineLink from "@components/InlineLink";
 import Steps from "@components/Steps";
-import { ExternalLinkIcon } from "lucide-react";
 import * as React from "react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { Peer } from "@/interfaces/Peer";
@@ -53,15 +51,7 @@ export const OnboardingTestP2P = ({
         </Steps.Step>
         <Steps.Step step={2} line={false} className={"pb-0"}>
           <p className={"!text-nb-gray-300"}>
-            {t("onboarding.everythingWorking")}{" "}
-            <InlineLink
-              onClick={onTroubleshootingClick}
-              href={"https://docs.netbird.io/how-to/troubleshooting-client"}
-              target={"_blank"}
-            >
-              {t("onboarding.troubleshootingGuide")}
-              <ExternalLinkIcon size={12} />
-            </InlineLink>
+            {t("onboarding.everythingWorking")}
           </p>
           <div className={"mt-2"}>
             <Button

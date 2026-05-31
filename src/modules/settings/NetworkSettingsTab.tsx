@@ -2,7 +2,6 @@ import Breadcrumbs from "@components/Breadcrumbs";
 import Button from "@components/Button";
 import FancyToggleSwitch from "@components/FancyToggleSwitch";
 import HelpText from "@components/HelpText";
-import InlineLink from "@components/InlineLink";
 import { Input } from "@components/Input";
 import { Label } from "@components/Label";
 import { notify } from "@components/Notification";
@@ -13,7 +12,7 @@ import { useApiCall } from "@utils/api";
 import { validator } from "@utils/helpers";
 import { isNetBirdHosted } from "@utils/netbird";
 import cidr from "ip-cidr";
-import { ExternalLinkIcon, GlobeIcon, NetworkIcon } from "lucide-react";
+import { GlobeIcon, NetworkIcon } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import { useSWRConfig } from "swr";
 import SettingsIcon from "@/assets/icons/SettingsIcon";
@@ -328,17 +327,7 @@ function NetworkSettingsTabContent({ account }: Readonly<Props>) {
             }
             helpText={
               <>
-                {t("networkSettings.enableDnsWildcardRoutingHelp")}{" "}
-                <InlineLink
-                  href={
-                    "https://docs.netbird.io/how-to/accessing-entire-domains-within-networks#enabling-dns-wildcard-routing"
-                  }
-                  target={"_blank"}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  {t("clientSettings.learnMore")}
-                  <ExternalLinkIcon size={12} />
-                </InlineLink>
+                {t("networkSettings.enableDnsWildcardRoutingHelp")}
               </>
             }
             disabled={!permission.settings.update}

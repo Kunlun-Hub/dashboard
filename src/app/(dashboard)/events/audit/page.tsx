@@ -1,12 +1,10 @@
 "use client";
 
 import Breadcrumbs from "@components/Breadcrumbs";
-import InlineLink from "@components/InlineLink";
-import Paragraph from "@components/Paragraph";
 import { RestrictedAccess } from "@components/ui/RestrictedAccess";
 import { usePortalElement } from "@hooks/usePortalElement";
 import useFetchApi from "@utils/api";
-import { ExternalLinkIcon, LogsIcon } from "lucide-react";
+import { LogsIcon } from "lucide-react";
 import React from "react";
 import ActivityIcon from "@/assets/icons/ActivityIcon";
 import { usePermissions } from "@/contexts/PermissionsProvider";
@@ -41,18 +39,6 @@ export default function Activity() {
           />
         </Breadcrumbs>
         <h1 ref={headingRef}>{t("activity.auditEventsTitle")}</h1>
-        <Paragraph>{t("activity.auditEventsDescription")}</Paragraph>
-        <Paragraph>
-          {t("common.learnMorePrefix")}{" "}
-          <InlineLink
-            href={"https://docs.netbird.io/how-to/audit-events-logging"}
-            target={"_blank"}
-          >
-            {t("nav.auditEvents")}
-            <ExternalLinkIcon size={12} />
-          </InlineLink>
-          {" "}{t("common.inDocumentationSuffix")}
-        </Paragraph>
       </div>
       <RestrictedAccess page={t("nav.activity")} hasAccess={permission.events.read}>
         <ActivityTable

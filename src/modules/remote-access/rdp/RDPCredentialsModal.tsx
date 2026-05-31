@@ -5,22 +5,16 @@ import ModalHeader from "@components/modal/ModalHeader";
 import { Peer } from "@/interfaces/Peer";
 import {
   ChevronsLeftRightEllipsis,
-  ExternalLinkIcon,
   KeyRoundIcon,
   MonitorIcon,
   User2,
 } from "lucide-react";
 import Separator from "@components/Separator";
-import Paragraph from "@components/Paragraph";
-import InlineLink from "@components/InlineLink";
 import Button from "@components/Button";
 import { Label } from "@components/Label";
 import HelpText from "@components/HelpText";
 import { Input } from "@components/Input";
-import {
-  RDP_DOCS_LINK,
-  RDPCredentials,
-} from "@/modules/remote-access/rdp/useRemoteDesktop";
+import { RDPCredentials } from "@/modules/remote-access/rdp/useRemoteDesktop";
 import { IconLoader2 } from "@tabler/icons-react";
 import { useI18n } from "@/i18n/I18nProvider";
 
@@ -192,15 +186,6 @@ export const RDPCredentialsModal = ({
         </form>
 
         <ModalFooter className={"items-center"}>
-          <div className={"w-full"}>
-            <Paragraph className={"text-sm mt-auto"}>
-              {t("common.learnMorePrefix")}{" "}
-              <InlineLink href={RDP_DOCS_LINK} target={"_blank"}>
-                {t("remoteAccess.rdp")}
-                <ExternalLinkIcon size={12} />
-              </InlineLink>
-            </Paragraph>
-          </div>
           <div className={"flex gap-3 w-full justify-end"}>
             <Button
               type="submit"

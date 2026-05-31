@@ -1,7 +1,6 @@
 "use client";
 
 import ButtonGroup from "@components/ButtonGroup";
-import InlineLink from "@components/InlineLink";
 import SquareIcon from "@components/SquareIcon";
 import { DataTable } from "@components/table/DataTable";
 import DataTableHeader from "@components/table/DataTableHeader";
@@ -9,18 +8,13 @@ import DataTableRefreshButton from "@components/table/DataTableRefreshButton";
 import { DataTableRowsPerPage } from "@components/table/DataTableRowsPerPage";
 import GetStartedTest from "@components/ui/GetStartedTest";
 import type { ColumnDef, SortingState } from "@tanstack/react-table";
-import { ExternalLinkIcon } from "lucide-react";
 import ReverseProxyIcon from "@/assets/icons/ReverseProxyIcon";
 import dayjs from "dayjs";
 import React, { useCallback, useMemo, useState } from "react";
 import { DateRange } from "react-day-picker";
 import { DatePickerWithRange } from "@components/DatePickerWithRange";
 import { useServerPagination } from "@/contexts/ServerPaginationProvider";
-import {
-  REVERSE_PROXY_EVENTS_DOCS_LINK,
-  ReverseProxy,
-  ReverseProxyEvent,
-} from "@/interfaces/ReverseProxy";
+import { ReverseProxy, ReverseProxyEvent } from "@/interfaces/ReverseProxy";
 import useFetchApi from "@/utils/api";
 import { ReverseProxyEventsStatusCell } from "@/modules/reverse-proxy/events/ReverseProxyEventsStatusCell";
 import { ReverseProxyEventsUserCell } from "@/modules/reverse-proxy/events/ReverseProxyEventsUserCell";
@@ -262,18 +256,6 @@ export default function ReverseProxyEventsTable({
           }
           title={t("proxyEvents.emptyTitle")}
           description={t("proxyEvents.emptyDescription")}
-          learnMore={
-            <>
-              {t("common.learnMorePrefix")}{" "}
-              <InlineLink
-                href={REVERSE_PROXY_EVENTS_DOCS_LINK}
-                target={"_blank"}
-              >
-                {t("proxyEvents.title")}
-                <ExternalLinkIcon size={12} />
-              </InlineLink>
-            </>
-          }
         />
       }
     >

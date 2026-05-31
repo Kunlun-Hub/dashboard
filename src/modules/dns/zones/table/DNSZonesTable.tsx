@@ -4,7 +4,6 @@ import DNSZoneIcon from "@/assets/icons/DNSZoneIcon";
 import Button from "@components/Button";
 import ButtonGroup from "@components/ButtonGroup";
 import Card from "@components/Card";
-import InlineLink from "@components/InlineLink";
 import SquareIcon from "@components/SquareIcon";
 import { DataTable } from "@components/table/DataTable";
 import DataTableHeader from "@components/table/DataTableHeader";
@@ -13,7 +12,7 @@ import { DataTableRowsPerPage } from "@components/table/DataTableRowsPerPage";
 import GetStartedTest from "@components/ui/GetStartedTest";
 import NoResults from "@components/ui/NoResults";
 import { ColumnDef, SortingState } from "@tanstack/react-table";
-import { ExternalLinkIcon, PlusCircle } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 import { usePathname } from "next/navigation";
 import React, { useMemo } from "react";
 import { useSWRConfig } from "swr";
@@ -21,7 +20,7 @@ import { useGroups } from "@/contexts/GroupsProvider";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useI18n } from "@/i18n/I18nProvider";
-import { DNS_ZONE_DOCS_LINK, DNSZone } from "@/interfaces/DNS";
+import { DNSZone } from "@/interfaces/DNS";
 import { Group } from "@/interfaces/Group";
 import { useDNSZones } from "@/modules/dns/zones/DNSZonesProvider";
 import DNSRecordsTable from "@/modules/dns/zones/records/DNSRecordsTable";
@@ -209,15 +208,6 @@ export default function DNSZonesTable({
               <div className={"gap-x-4 flex items-center justify-center"}>
                 <AddZoneButton distributionGroups={distributionGroups} />
               </div>
-            }
-            learnMore={
-              <>
-                {t("common.learnMorePrefix")}
-                <InlineLink href={DNS_ZONE_DOCS_LINK} target={"_blank"}>
-                  {t("zones.learnMoreLink")}
-                  <ExternalLinkIcon size={12} />
-                </InlineLink>
-              </>
             }
           />
         )

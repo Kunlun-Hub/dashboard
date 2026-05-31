@@ -11,21 +11,18 @@ import {
   ModalFooter,
 } from "@components/modal/Modal";
 import ModalHeader from "@components/modal/ModalHeader";
-import Paragraph from "@components/Paragraph";
 import {
   SelectDropdown,
   SelectOption,
 } from "@components/select/SelectDropdown";
 import Separator from "@components/Separator";
 import { validator } from "@utils/helpers";
-import { ExternalLinkIcon, GlobeIcon, ServerIcon } from "lucide-react";
+import { GlobeIcon, ServerIcon } from "lucide-react";
 import * as React from "react";
 import { useMemo, useState } from "react";
 import { useReverseProxies } from "@/contexts/ReverseProxiesProvider";
 import { useI18n } from "@/i18n/I18nProvider";
 import {
-  REVERSE_PROXY_CLUSTERS_DOCS_LINK,
-  REVERSE_PROXY_CUSTOM_DOMAINS_DOCS_LINK,
   ReverseProxyDomainType,
 } from "@/interfaces/ReverseProxy";
 import { isNetBirdHosted } from "@/utils/netbird";
@@ -118,15 +115,7 @@ export const CustomDomainModal = ({
               </Callout>
             ) : (
               <Callout variant="warning">
-                {t("reverseProxy.customDomainNoClusterSelfHosted")} <br />
-                {t("common.learnMorePrefix")}{" "}
-                <InlineLink
-                  href={REVERSE_PROXY_CLUSTERS_DOCS_LINK}
-                  target={"_blank"}
-                >
-                  {t("reverseProxy.proxyClusters")}
-                  <ExternalLinkIcon size={12} />
-                </InlineLink>
+                {t("reverseProxy.customDomainNoClusterSelfHosted")}
               </Callout>
             )
           ) : (
@@ -162,18 +151,6 @@ export const CustomDomainModal = ({
           )}
         </div>
         <ModalFooter className={"items-center"}>
-          <div className={"w-full"}>
-            <Paragraph className={"text-sm mt-auto"}>
-              {t("common.learnMorePrefix")}
-              <InlineLink
-                href={REVERSE_PROXY_CUSTOM_DOMAINS_DOCS_LINK}
-                target={"_blank"}
-              >
-                {t("reverseProxy.customDomainsLearnMore")}
-                <ExternalLinkIcon size={12} />
-              </InlineLink>
-            </Paragraph>
-          </div>
           <div className={"flex gap-3 w-full justify-end"}>
             <ModalClose asChild={true}>
               <Button variant={"secondary"}>{t("actions.cancel")}</Button>

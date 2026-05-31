@@ -2,7 +2,6 @@
 
 import Button from "@components/Button";
 import ButtonGroup from "@components/ButtonGroup";
-import InlineLink from "@components/InlineLink";
 import SquareIcon from "@components/SquareIcon";
 import { DataTable } from "@components/table/DataTable";
 import DataTableHeader from "@components/table/DataTableHeader";
@@ -10,7 +9,7 @@ import DataTableRefreshButton from "@components/table/DataTableRefreshButton";
 import { DataTableRowsPerPage } from "@components/table/DataTableRowsPerPage";
 import GetStartedTest from "@components/ui/GetStartedTest";
 import { ColumnDef, SortingState } from "@tanstack/react-table";
-import { ExternalLinkIcon, PlusCircle } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 import { usePathname } from "next/navigation";
 import React, { useMemo } from "react";
 import { useSWRConfig } from "swr";
@@ -21,7 +20,6 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useI18n } from "@/i18n/I18nProvider";
 import {
   isL4Mode,
-  REVERSE_PROXY_DOCS_LINK,
   ReverseProxy,
 } from "@/interfaces/ReverseProxy";
 import ReverseProxyActionCell from "@/modules/reverse-proxy/table/ReverseProxyActionCell";
@@ -232,15 +230,6 @@ export default function ReverseProxyTable({ headingTarget }: Readonly<Props>) {
               <PlusCircle size={16} />
               {t("reverseProxy.addService")}
             </Button>
-          }
-          learnMore={
-            <>
-              {t("common.learnMorePrefix")}
-              <InlineLink href={REVERSE_PROXY_DOCS_LINK} target={"_blank"}>
-                {t("reverseProxy.servicesTitle")}
-                <ExternalLinkIcon size={12} />
-              </InlineLink>
-            </>
           }
         />
       }

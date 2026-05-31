@@ -3,7 +3,6 @@
 import Button from "@components/Button";
 import Code from "@components/Code";
 import HelpText from "@components/HelpText";
-import InlineLink from "@components/InlineLink";
 import { Input } from "@components/Input";
 import { Label } from "@components/Label";
 import {
@@ -23,7 +22,6 @@ import { trim } from "lodash";
 import {
   AlarmClock,
   CopyIcon,
-  ExternalLinkIcon,
   PlusCircle,
 } from "lucide-react";
 import React, { useMemo, useState } from "react";
@@ -208,18 +206,6 @@ export function AccessTokenModalContent({
       </div>
 
       <ModalFooter className={"items-center"}>
-        <div className={"w-full"}>
-          <Paragraph className={"text-sm mt-auto"}>
-            {t("common.learnMorePrefix")}
-            <InlineLink
-              href={"https://docs.netbird.io/how-to/access-netbird-public-api"}
-              target={"_blank"}
-            >
-              {t("accessTokens.title")}
-              <ExternalLinkIcon size={12} />
-            </InlineLink>
-          </Paragraph>
-        </div>
         <div className={"flex gap-3 w-full justify-end"}>
           <ModalClose asChild={true}>
             <Button variant={"secondary"}>{t("actions.cancel")}</Button>

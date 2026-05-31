@@ -1,13 +1,10 @@
 import Button from "@components/Button";
 import HelpText from "@components/HelpText";
-import InlineLink from "@components/InlineLink";
 import { Input } from "@components/Input";
 import { Label } from "@components/Label";
 import { ModalClose, ModalFooter } from "@components/modal/Modal";
-import Paragraph from "@components/Paragraph";
 import { validator } from "@utils/helpers";
 import { isEmpty } from "lodash";
-import { ExternalLinkIcon } from "lucide-react";
 import * as React from "react";
 import { useMemo, useState } from "react";
 import NetBirdIcon from "@/assets/icons/NetBirdIcon";
@@ -95,20 +92,6 @@ const CheckContent = ({ value, onChange, disabled }: Props) => {
         </div>
       </div>
       <ModalFooter className={"items-center"}>
-        <div className={"w-full"}>
-          <Paragraph className={"text-sm mt-auto"}>
-            {t("common.learnMorePrefix")}
-            <InlineLink
-              href={
-                "https://docs.netbird.io/how-to/manage-posture-checks#net-bird-client-version-check"
-              }
-              target={"_blank"}
-            >
-              {t("postureChecks.clientVersionCheck")}
-              <ExternalLinkIcon size={12} />
-            </InlineLink>
-          </Paragraph>
-        </div>
         <div className={"flex gap-3 w-full justify-end"}>
           <ModalClose asChild={true}>
             <Button variant={"secondary"}>{t("actions.cancel")}</Button>

@@ -1,7 +1,6 @@
 "use client";
 
 import Breadcrumbs from "@components/Breadcrumbs";
-import Paragraph from "@components/Paragraph";
 import { RestrictedAccess } from "@components/ui/RestrictedAccess";
 import { usePortalElement } from "@hooks/usePortalElement";
 import dayjs from "dayjs";
@@ -48,7 +47,6 @@ export default function NetworkEventsPage() {
         </Breadcrumbs>
 
         <h1 ref={headingRef}>{t("networkLogs.title")}</h1>
-        <Paragraph>{t("networkLogs.description")}</Paragraph>
       </div>
 
       <RestrictedAccess

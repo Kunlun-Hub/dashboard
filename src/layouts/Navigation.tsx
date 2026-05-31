@@ -9,7 +9,6 @@ import AccessControlIcon from "@/assets/icons/AccessControlIcon";
 import ActivityIcon from "@/assets/icons/ActivityIcon";
 import ControlCenterIcon from "@/assets/icons/ControlCenterIcon";
 import DNSIcon from "@/assets/icons/DNSIcon";
-import DocsIcon from "@/assets/icons/DocsIcon";
 import PeerIcon from "@/assets/icons/PeerIcon";
 import ReverseProxyIcon from "@/assets/icons/ReverseProxyIcon";
 import SettingsIcon from "@/assets/icons/SettingsIcon";
@@ -226,13 +225,6 @@ export default function Navigation({
                   href={"/settings"}
                   exactPathMatch={true}
                   visible={permission.settings.read}
-                />
-                <SidebarItem
-                  icon={<DocsIcon />}
-                  href={"https://docs.netbird.io/"}
-                  target={"_blank"}
-                  label={t("nav.documentation")}
-                  visible={true}
                 />
               </SidebarItemGroup>
             </div>

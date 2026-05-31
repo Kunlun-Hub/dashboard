@@ -1,12 +1,9 @@
 "use client";
 
-import InlineLink from "@components/InlineLink";
-import { ModalContent, ModalFooter } from "@components/modal/Modal";
+import { ModalContent } from "@components/modal/Modal";
 import Paragraph from "@components/Paragraph";
-import SmallParagraph from "@components/SmallParagraph";
 import { Tabs, TabsList, TabsTrigger } from "@components/Tabs";
 import { cn } from "@utils/helpers";
-import { ExternalLinkIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import React, { useMemo } from "react";
 import AndroidIcon from "@/assets/icons/AndroidIcon";
@@ -59,7 +56,6 @@ export default function SetupModal({
 type SetupModalContentProps = {
   user?: OidcUserInfo;
   header?: boolean;
-  footer?: boolean;
   tabAlignment?: "center" | "start" | "end";
   setupKey?: string;
   showOnlyRoutingPeerOS?: boolean;
@@ -71,7 +67,6 @@ type SetupModalContentProps = {
 export function SetupModalContent({
   user,
   header = true,
-  footer = true,
   tabAlignment = "center",
   setupKey,
   showOnlyRoutingPeerOS,
@@ -217,24 +212,6 @@ export function SetupModalContent({
           />
         )}
       </Tabs>
-      {footer && (
-        <ModalFooter variant={"setup"}>
-          <div>
-            <SmallParagraph>
-              {t("setupModal.footerDescription")}{" "}
-              <InlineLink
-                href={
-                  "https://docs.netbird.io/how-to/getting-started#installation"
-                }
-                target={"_blank"}
-              >
-                {t("peers.installationGuide")}
-                <ExternalLinkIcon size={12} />
-              </InlineLink>
-            </SmallParagraph>
-          </div>
-        </ModalFooter>
-      )}
     </>
   );
 }

@@ -1,7 +1,6 @@
 import Button from "@components/Button";
 import ButtonGroup from "@components/ButtonGroup";
 import Card from "@components/Card";
-import InlineLink from "@components/InlineLink";
 import SquareIcon from "@components/SquareIcon";
 import { DataTable } from "@components/table/DataTable";
 import DataTableHeader from "@components/table/DataTableHeader";
@@ -11,7 +10,7 @@ import GetStartedTest from "@components/ui/GetStartedTest";
 import NoResults from "@components/ui/NoResults";
 import { ColumnDef, SortingState } from "@tanstack/react-table";
 import { cloneDeep } from "lodash";
-import { ExternalLinkIcon, PlusCircle } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 import { useSWRConfig } from "swr";
@@ -259,20 +258,6 @@ export default function NetworkRoutesTable({
                     {t("routeActions.addRoute")}
                   </Button>
                 </div>
-              }
-              learnMore={
-                <>
-                  {t("common.learnMorePrefix")}{" "}
-                  <InlineLink
-                    href={
-                      "https://docs.netbird.io/how-to/routing-traffic-to-private-networks"
-                    }
-                    target={"_blank"}
-                  >
-                    {t("networkRoutesPage.title")}
-                    <ExternalLinkIcon size={12} />
-                  </InlineLink>
-                </>
               }
             />
           )

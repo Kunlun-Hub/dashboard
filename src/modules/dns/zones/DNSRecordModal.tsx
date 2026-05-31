@@ -2,7 +2,6 @@
 
 import Button from "@components/Button";
 import HelpText from "@components/HelpText";
-import InlineLink from "@components/InlineLink";
 import { Input } from "@components/Input";
 import { Label } from "@components/Label";
 import {
@@ -13,7 +12,6 @@ import {
   ModalTrigger,
 } from "@components/modal/Modal";
 import ModalHeader from "@components/modal/ModalHeader";
-import Paragraph from "@components/Paragraph";
 import {
   Select,
   SelectContent,
@@ -24,11 +22,10 @@ import {
 import Separator from "@components/Separator";
 import { validator } from "@utils/helpers";
 import { Address4, Address6 } from "ip-address";
-import { ClockIcon, ExternalLinkIcon, GlobeIcon } from "lucide-react";
+import { ClockIcon, GlobeIcon } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
 import {
-  DNS_RECORDS_DOCS_LINK,
   DNSRecord,
   DNSRecordType,
   DNSZone,
@@ -341,16 +338,6 @@ export function DNSRecordModalContent({
       </div>
 
       <ModalFooter className={"items-center"}>
-        <div className={"w-full"}>
-          <Paragraph className={"text-sm mt-auto"}>
-            {t("common.learnMorePrefix")}
-            <InlineLink href={DNS_RECORDS_DOCS_LINK} target={"_blank"}>
-              {t("zones.recordsLearnMore")}
-              <ExternalLinkIcon size={12} />
-            </InlineLink>
-          </Paragraph>
-        </div>
-
         <div className={"flex gap-3 w-full justify-end"}>
           <>
             <ModalClose asChild={true}>

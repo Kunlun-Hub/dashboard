@@ -1,13 +1,10 @@
 "use client";
 
 import Breadcrumbs from "@components/Breadcrumbs";
-import InlineLink from "@components/InlineLink";
-import Paragraph from "@components/Paragraph";
 import SkeletonTable from "@components/skeletons/SkeletonTable";
 import { RestrictedAccess } from "@components/ui/RestrictedAccess";
 import { usePortalElement } from "@hooks/usePortalElement";
 import useFetchApi from "@utils/api";
-import { ExternalLinkIcon } from "lucide-react";
 import React, { lazy, Suspense, useMemo } from "react";
 import SetupKeysIcon from "@/assets/icons/SetupKeysIcon";
 import { useGroups } from "@/contexts/GroupsProvider";
@@ -57,20 +54,6 @@ export default function SetupKeys() {
           />
         </Breadcrumbs>
         <h1 ref={headingRef}>{t("setupKeys.title")}</h1>
-        <Paragraph>{t("setupKeys.description")}</Paragraph>
-        <Paragraph>
-          {t("common.learnMorePrefix")}{" "}
-          <InlineLink
-            href={
-              "https://docs.netbird.io/how-to/register-machines-using-setup-keys"
-            }
-            target={"_blank"}
-          >
-            {t("setupKeys.title")}
-            <ExternalLinkIcon size={12} />
-          </InlineLink>
-          {t("common.inDocumentationSuffix")}
-        </Paragraph>
       </div>
       <RestrictedAccess
         page={t("setupKeys.title")}

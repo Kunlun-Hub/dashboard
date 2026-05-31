@@ -1,7 +1,6 @@
 "use client";
 
 import Button from "@components/Button";
-import InlineLink from "@components/InlineLink";
 import { Input } from "@components/Input";
 import {
   Modal,
@@ -12,11 +11,10 @@ import {
 } from "@components/modal/Modal";
 import ModalHeader from "@components/modal/ModalHeader";
 import { notify } from "@components/Notification";
-import Paragraph from "@components/Paragraph";
 import Separator from "@components/Separator";
 import { IconSettings2 } from "@tabler/icons-react";
 import { useApiCall } from "@utils/api";
-import { ExternalLinkIcon, PlusCircle, User2 } from "lucide-react";
+import { PlusCircle, User2 } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import { useSWRConfig } from "swr";
 import { Role, User } from "@/interfaces/User";
@@ -109,18 +107,6 @@ export function ServiceUserModalContent({ onSuccess }: Readonly<ModalProps>) {
       </div>
 
       <ModalFooter className={"items-center"}>
-        <div className={"w-full"}>
-          <Paragraph className={"text-sm mt-auto"}>
-            {t("common.learnMorePrefix")}{" "}
-            <InlineLink
-              href={"https://docs.netbird.io/how-to/access-netbird-public-api"}
-              target={"_blank"}
-            >
-              {t("serviceUsers.title")}
-              <ExternalLinkIcon size={12} />
-            </InlineLink>
-          </Paragraph>
-        </div>
         <div className={"flex gap-3 w-full justify-end"}>
           <ModalClose asChild={true}>
             <Button variant={"secondary"}>{t("actions.cancel")}</Button>

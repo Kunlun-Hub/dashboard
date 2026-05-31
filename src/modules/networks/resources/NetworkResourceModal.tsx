@@ -3,7 +3,7 @@
 import Button from "@components/Button";
 import { Callout } from "@components/Callout";
 import HelpText from "@components/HelpText";
-import InlineLink, { InlineButtonLink } from "@components/InlineLink";
+import { InlineButtonLink } from "@components/InlineLink";
 import { Input } from "@components/Input";
 import { Label } from "@components/Label";
 import {
@@ -14,7 +14,6 @@ import {
 } from "@components/modal/Modal";
 import ModalHeader from "@components/modal/ModalHeader";
 import { notify } from "@components/Notification";
-import Paragraph from "@components/Paragraph";
 import { HelpTooltip } from "@components/HelpTooltip";
 import { PeerGroupSelector } from "@components/PeerGroupSelector";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@components/Tabs";
@@ -25,7 +24,6 @@ import { usePolicies } from "@/contexts/PoliciesProvider";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useNetworksContext } from "@/modules/networks/NetworkProvider";
 import {
-  ExternalLinkIcon,
   PlusCircle,
   ShieldCheck,
   WorkflowIcon,
@@ -394,18 +392,6 @@ export function ResourceModalContent({
       </Tabs>
 
       <ModalFooter className={"items-center"}>
-        <div className={"w-full"}>
-          <Paragraph className={"text-sm mt-auto"}>
-            {t("common.learnMorePrefix")}
-            <InlineLink
-              href={"https://docs.netbird.io/how-to/networks#resources"}
-              target={"_blank"}
-            >
-              {t("networkResources.linkLabel")}
-              <ExternalLinkIcon size={12} />
-            </InlineLink>
-          </Paragraph>
-        </div>
         <div className={"flex gap-3 w-full justify-end"}>
           {!resource ? (
             <>

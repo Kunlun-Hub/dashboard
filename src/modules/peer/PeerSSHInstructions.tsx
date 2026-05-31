@@ -1,6 +1,5 @@
 import Button from "@components/Button";
 import Code from "@components/Code";
-import InlineLink from "@components/InlineLink";
 import {
   Modal,
   ModalClose,
@@ -8,7 +7,6 @@ import {
   ModalFooter,
 } from "@components/modal/Modal";
 import ModalHeader from "@components/modal/ModalHeader";
-import Paragraph from "@components/Paragraph";
 import { SegmentedTabs } from "@components/SegmentedTabs";
 import Separator from "@components/Separator";
 import Steps from "@components/Steps";
@@ -16,7 +14,6 @@ import { Lightbox } from "@components/ui/Lightbox";
 import { Mark } from "@components/ui/Mark";
 import { cn } from "@utils/helpers";
 import {
-  ExternalLinkIcon,
   MonitorCog,
   PlusCircle,
   TerminalSquare,
@@ -130,18 +127,6 @@ export const PeerSSHInstructions = ({
         </div>
 
         <ModalFooter className={"items-center"}>
-          <div className={"w-full"}>
-            <Paragraph className={"text-sm mt-auto"}>
-              {t("common.learnMorePrefix")}{" "}
-              <InlineLink
-                href={"https://docs.netbird.io/how-to/ssh"}
-                target={"_blank"}
-              >
-                {t("peerSsh.ssh")}
-                <ExternalLinkIcon size={12} />
-              </InlineLink>
-            </Paragraph>
-          </div>
           <div className={"flex gap-3 w-full justify-end"}>
             <ModalClose asChild={true}>
               <Button variant={"secondary"}>{t("common.cancel")}</Button>

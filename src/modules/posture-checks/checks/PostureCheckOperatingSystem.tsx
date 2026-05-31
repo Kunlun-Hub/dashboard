@@ -1,11 +1,9 @@
 import Button from "@components/Button";
 import FancyToggleSwitch from "@components/FancyToggleSwitch";
 import HelpText from "@components/HelpText";
-import InlineLink from "@components/InlineLink";
 import { Input } from "@components/Input";
 import { Label } from "@components/Label";
 import { ModalClose, ModalFooter } from "@components/modal/Modal";
-import Paragraph from "@components/Paragraph";
 import { RadioGroup, RadioGroupItem } from "@components/RadioGroup";
 import {
   SelectDropdown,
@@ -17,7 +15,6 @@ import { validator } from "@utils/helpers";
 import { isEmpty } from "lodash";
 import {
   Disc3Icon,
-  ExternalLinkIcon,
   FileCog,
   GalleryHorizontalEnd,
   ShieldCheck,
@@ -229,20 +226,6 @@ const CheckContent = ({ value, onChange, disabled }: Props) => {
       </Tabs>
       <div className={"h-6"}></div>
       <ModalFooter className={"items-center"}>
-        <div className={"w-full"}>
-          <Paragraph className={"text-sm mt-auto"}>
-            {t("common.learnMorePrefix")}
-            <InlineLink
-              href={
-                "https://docs.netbird.io/how-to/manage-posture-checks#operating-system-version-check"
-              }
-              target={"_blank"}
-            >
-              {t("postureChecks.operatingSystemCheck")}
-              <ExternalLinkIcon size={12} />
-            </InlineLink>
-          </Paragraph>
-        </div>
         <div className={"flex gap-3 w-full justify-end"}>
           <ModalClose asChild={true}>
             <Button variant={"secondary"}>{t("actions.cancel")}</Button>

@@ -4,15 +4,12 @@ import Breadcrumbs from "@components/Breadcrumbs";
 import Button from "@components/Button";
 import Card from "@components/Card";
 import HelpText from "@components/HelpText";
-import InlineLink from "@components/InlineLink";
 import { Label } from "@components/Label";
 import { notify } from "@components/Notification";
-import Paragraph from "@components/Paragraph";
 import { PeerGroupSelector } from "@components/PeerGroupSelector";
 import { RestrictedAccess } from "@components/ui/RestrictedAccess";
 import { IconSettings2 } from "@tabler/icons-react";
 import useFetchApi, { useApiCall } from "@utils/api";
-import { ExternalLinkIcon } from "lucide-react";
 import React from "react";
 import Skeleton from "react-loading-skeleton";
 import { useSWRConfig } from "swr";
@@ -54,18 +51,6 @@ export default function NameServerSettings() {
           />
         </Breadcrumbs>
         <h1>{t("dnsSettingsPage.title")}</h1>
-        <Paragraph>{t("dnsSettingsPage.description")}</Paragraph>
-        <Paragraph>
-          {t("common.learnMorePrefix")}{" "}
-          <InlineLink
-            href={"https://docs.netbird.io/how-to/manage-dns-in-your-network"}
-            target={"_blank"}
-          >
-            {t("dns.title")}
-            <ExternalLinkIcon size={12} />
-          </InlineLink>
-          {" "}{t("common.inDocumentationSuffix")}
-        </Paragraph>
         <RestrictedAccess
           page={t("nav.dnsSettings")}
           hasAccess={permission.dns.read}

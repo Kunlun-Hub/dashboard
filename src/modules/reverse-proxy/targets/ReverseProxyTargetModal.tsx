@@ -17,7 +17,6 @@ import { SelectDropdown } from "@components/select/SelectDropdown";
 import {
   AlertTriangle,
   ClockFadingIcon,
-  ExternalLinkIcon,
   PlusCircle,
   Server,
   ShieldXIcon,
@@ -28,7 +27,6 @@ import { useI18n } from "@/i18n/I18nProvider";
 import { Network, NetworkResource } from "@/interfaces/Network";
 import { Peer } from "@/interfaces/Peer";
 import {
-  REVERSE_PROXY_TARGETS_DOCS_LINK,
   ReverseProxy,
   ReverseProxyTarget,
   ReverseProxyTargetProtocol,
@@ -42,8 +40,6 @@ import {
 } from "@/contexts/ReverseProxiesProvider";
 import { cn } from "@utils/helpers";
 import { HelpTooltip } from "@components/HelpTooltip";
-import InlineLink from "@components/InlineLink";
-import Paragraph from "@components/Paragraph";
 import ReverseProxyTargetCustomHeaders from "@/modules/reverse-proxy/targets/ReverseProxyTargetCustomHeaders";
 import ReverseProxyTargetSelector, {
   Target,
@@ -511,18 +507,6 @@ export default function ReverseProxyTargetModal({
           </div>
 
           <ModalFooter className={"items-center"}>
-            <div className={"w-full"}>
-              <Paragraph className={"text-sm mt-auto"}>
-                {t("common.learnMorePrefix")}
-                <InlineLink
-                  href={REVERSE_PROXY_TARGETS_DOCS_LINK}
-                  target={"_blank"}
-                >
-                  {t("reverseProxy.targetsLearnMore")}
-                  <ExternalLinkIcon size={12} />
-                </InlineLink>
-              </Paragraph>
-            </div>
             <div className="flex gap-3 w-full justify-end">
               <Button variant="secondary" onClick={() => onOpenChange(false)}>
                 {t("common.cancel")}

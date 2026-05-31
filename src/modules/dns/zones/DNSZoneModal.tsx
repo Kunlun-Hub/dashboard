@@ -3,7 +3,6 @@
 import Button from "@components/Button";
 import FancyToggleSwitch from "@components/FancyToggleSwitch";
 import HelpText from "@components/HelpText";
-import InlineLink from "@components/InlineLink";
 import { Input } from "@components/Input";
 import { Label } from "@components/Label";
 import {
@@ -14,14 +13,13 @@ import {
   ModalTrigger,
 } from "@components/modal/Modal";
 import ModalHeader from "@components/modal/ModalHeader";
-import Paragraph from "@components/Paragraph";
 import { PeerGroupSelector } from "@components/PeerGroupSelector";
 import Separator from "@components/Separator";
 import { validator } from "@utils/helpers";
-import { ExternalLinkIcon, Power, ScanSearch } from "lucide-react";
+import { Power, ScanSearch } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
-import { DNS_ZONE_DOCS_LINK, DNSZone } from "@/interfaces/DNS";
+import { DNSZone } from "@/interfaces/DNS";
 import { useDNSZones } from "@/modules/dns/zones/DNSZonesProvider";
 import useGroupHelper from "@/modules/groups/useGroupHelper";
 import { Group } from "@/interfaces/Group";
@@ -193,15 +191,6 @@ export function DNSZoneModalContent({
       </div>
 
       <ModalFooter className={"items-center"}>
-        <div className={"w-full"}>
-          <Paragraph className={"text-sm mt-auto"}>
-            {t("common.learnMorePrefix")}
-            <InlineLink href={DNS_ZONE_DOCS_LINK} target={"_blank"}>
-              {t("zones.learnMoreLink")}
-              <ExternalLinkIcon size={12} />
-            </InlineLink>
-          </Paragraph>
-        </div>
         <div className={"flex gap-3 w-full justify-end"}>
           <ModalClose asChild={true}>
             <Button variant={"secondary"}>{t("actions.cancel")}</Button>

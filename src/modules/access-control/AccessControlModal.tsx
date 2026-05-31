@@ -4,7 +4,6 @@ import Button from "@components/Button";
 import { Callout } from "@components/Callout";
 import FancyToggleSwitch from "@components/FancyToggleSwitch";
 import HelpText from "@components/HelpText";
-import InlineLink from "@components/InlineLink";
 import { Input } from "@components/Input";
 import { Label } from "@components/Label";
 import {
@@ -15,7 +14,6 @@ import {
   ModalTrigger,
 } from "@components/modal/Modal";
 import ModalHeader from "@components/modal/ModalHeader";
-import Paragraph from "@components/Paragraph";
 import { PeerGroupSelector } from "@components/PeerGroupSelector";
 import { PortSelector } from "@components/PortSelector";
 import {
@@ -33,7 +31,6 @@ import { cn } from "@utils/helpers";
 import {
   AlertCircleIcon,
   ArrowRightLeft,
-  ExternalLinkIcon,
   FolderDown,
   FolderInput,
   PlusCircle,
@@ -647,18 +644,6 @@ export function AccessControlModalContent({
       </Tabs>
 
       <ModalFooter className={"items-center"}>
-        <div className="w-full">
-          <Paragraph className={"text-sm mt-auto"}>
-            {t("common.learnMorePrefix")}{" "}
-            <InlineLink
-              href={"https://docs.netbird.io/how-to/manage-network-access"}
-              target={"_blank"}
-            >
-              {t("accessControl.learnMoreLink")}
-              <ExternalLinkIcon size={12} />
-            </InlineLink>
-          </Paragraph>
-        </div>
         <div className="flex gap-3 w-full justify-end">
           {!policy ? (
             <>

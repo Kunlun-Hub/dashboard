@@ -23,9 +23,6 @@ export enum SSHStatus {
   CONNECTING = 2,
 }
 
-export const SSH_DOCS_LINK =
-  "https://docs.netbird.io/how-to/browser-client#ssh-connection";
-
 const SSH_DETECTION_TIMEOUT_MS = 20000;
 
 export const useSSH = (client: any) => {

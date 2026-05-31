@@ -24,7 +24,6 @@ export const messages = {
     "common.value": "Value",
     "common.savingChanges": "Saving Changes",
     "common.thisPage": "this page",
-    "common.learnMore": "Learn more",
     "common.installNetBird": "Install Cloink",
     "common.copiedToClipboard": "Copied to clipboard",
     "common.close": "Close",
@@ -38,8 +37,6 @@ export const messages = {
     "common.remove": "Remove",
     "common.routingPeerCount": "{count} Routing Peer(s)",
     "common.routingPeers": "Routing Peers",
-    "common.learnMorePrefix": "Learn more about",
-    "common.inDocumentationSuffix": "in our documentation.",
     "actions.save": "Save",
     "actions.saveChanges": "Save Changes",
     "actions.confirmChanges": "Confirm Changes",
@@ -72,7 +69,6 @@ export const messages = {
     "nav.dnsLogs": "DNS Logs",
     "nav.relays": "Relays",
     "nav.settings": "Settings",
-    "nav.documentation": "Documentation",
     "relays.title": "Relays",
     "relays.description":
       "Monitor the relay nodes distributed to clients, their reachability, and the number of clients currently registered on each node.",
@@ -212,7 +208,6 @@ export const messages = {
     "overview.refreshInterval.5m": "5m",
     "overview.refreshInterval.15m": "15m",
     "help.title": "Help and Support",
-    "help.documentation": "Documentation",
     "help.troubleshooting": "Troubleshooting",
     "help.forum": "Cloink Forum",
     "help.slack": "Cloink Slack",
@@ -281,12 +276,9 @@ export const messages = {
     "peers.title": "Peers",
     "peers.description":
       "A list of all machines and devices connected to your private network. Use this view to manage peers.",
-    "peers.learnMorePrefix": "Learn more about",
-    "peers.learnMoreLink": "Peers",
-    "peers.learnMoreSuffix": "in our documentation.",
     "peers.blockedTitle": "Add new device to your network",
     "peers.blockedDescription":
-      "To get started, install Cloink and log in using your email account. After that you should be connected. If you have further questions check out our",
+      "To get started, install Cloink and log in using your email account. After that you should be connected.",
     "peers.addPeer": "Add Peer",
     "peers.installationGuide": "Installation Guide",
     "setupKeys.title": "Setup Keys",
@@ -330,7 +322,6 @@ export const messages = {
     "accessControl.policiesTitle": "Access Control Policies",
     "accessControl.description":
       "Create rules to manage access in your network and define what peers can connect.",
-    "accessControl.learnMoreLink": "Access Controls",
     "dns.title": "DNS",
     "nameservers.title": "Nameservers",
     "nameservers.description":
@@ -348,7 +339,6 @@ export const messages = {
     "nameserverTemplate.custom": "Custom DNS",
     "nameserverTemplate.customDesc":
       "Use custom nameservers to resolve domains in your network. You can either use a public DNS or your own nameservers.",
-    "nameserverTemplate.learnMore": "Learn more",
     "nameservers.searchPlaceholder":
       "Search by name, domains or nameservers...",
     "nameservers.emptyGroupTitle":
@@ -408,7 +398,6 @@ export const messages = {
     "zones.pageTitle": "DNS Zones",
     "zones.description":
       "Manage DNS zones to control domain name resolution for your network.",
-    "zones.learnMoreLink": "DNS Zones",
     "zones.tableTitle": "DNS Zones",
     "zones.searchPlaceholder": "Search by domain, ip, content or group...",
     "zones.emptyGroupTitle": "This group is not used within any zones yet",
@@ -577,11 +566,9 @@ export const messages = {
     "reverseProxy.rewriteRedirectsHelp":
       "Rewrite Location headers in backend responses to use the public domain instead of the internal backend address.",
     "reverseProxy.statusGenericError":
-      "Something went wrong while setting up this service. See our",
+      "Something went wrong while setting up this service.",
     "reverseProxy.statusTunnelError":
-      "The tunnel to the target peer could not be established. See our",
-    "reverseProxy.statusTroubleshootingSuffix": "for more details.",
-    "reverseProxy.statusTroubleshootingLink": "Troubleshooting Docs",
+      "The tunnel to the target peer could not be established.",
     "reverseProxy.statusError": "Error",
     "reverseProxy.statusTunnelNotCreated": "Tunnel not created",
     "reverseProxy.statusIssuingCertificate": "Issuing certificate...",
@@ -922,7 +909,6 @@ export const messages = {
     "users.addUser": "Add User",
     "users.localAuthDisabled":
       "Local authentication is disabled. Use your IdP for authentication.",
-    "users.learnMoreShort": "Learn more",
     "users.pendingApproval": "Pending approval",
     "users.pendingApprovals": "Pending Approvals",
     "users.lastLoginOn": "Last login on",
@@ -945,8 +931,6 @@ export const messages = {
       "If you want to disable approval for new users, go to",
     "users.pendingApprovalSettingsSuffix": "and disable",
     "users.pendingApprovalRequired": "'User Approval Required'",
-    "users.pendingApprovalLearnMorePrefix": "Learn more about",
-    "users.pendingApprovalLearnMore": "User Approval",
     "users.userCount": "{count} User(s)",
     "users.system": "System",
     "users.searchByEmailOrName": "Search user by name or email...",
@@ -1103,7 +1087,7 @@ export const messages = {
     "onboarding.yourDevice": "your device",
     "onboarding.toPingResource": "to ping your resource.",
     "onboarding.everythingWorking":
-      "Everything working? Great! You can now continue with the onboarding. If something isn't right, please check our",
+      "Everything working? Great! You can now continue with the onboarding.",
     "onboarding.checkTroubleshooting": "",
     "onboarding.troubleshootingGuide": "troubleshooting guide",
     "onboarding.itWorksContinue": "It works! - Continue",
@@ -1339,7 +1323,6 @@ export const messages = {
     "userInvites.emptyTitle": "No Pending Invites",
     "userInvites.emptyDescription":
       "There are no pending invites. Create an invite to add users to your network.",
-    "userInvites.learnMoreAbout": "Learn more about",
     "userInvites.showUsers": "Show Users",
     "userInvites.regenerate": "Regenerate",
     "userInvites.resendTitle": "Resend Invite",
@@ -1474,8 +1457,6 @@ export const messages = {
     "activity.getStartedTitle": "Get Started with Cloink",
     "activity.getStartedDescription":
       "It looks like you don't have any connected machines.\nGet started by adding one to your network.",
-    "activity.learnMorePrefix": "Learn more in our",
-    "activity.learnMoreLink": "Getting Started Guide",
     "activity.netbirdUser": "Cloink",
     "activity.setupkeyRevoke": "was revoked",
     "activity.setupkeyDelete": "was deleted",
@@ -2141,7 +2122,7 @@ export const messages = {
     "onboarding.endTitleWithName": "Congratulations, {name}!",
     "onboarding.endSubtitle": "You've completed the onboarding.",
     "onboarding.endDescription":
-      "What's next? Check out these guides to get the most out of Cloink. To learn more, explore the dashboard, visit our documentation, or browse our YouTube channel.",
+      "What's next? Explore the dashboard or browse our YouTube channel to keep building your secure network.",
     "onboarding.videoAclTitle": "Access Control in Under 5 Minutes",
     "onboarding.videoAclDescription":
       "Learn how to manage access for your network resources effectively. Whether you want to restrict access to specific machines or allow certain users to connect.",
@@ -2150,7 +2131,7 @@ export const messages = {
       "Learn how to provision users and groups from your identity provider, such as Okta, Azure AD, or Google Workspace, to manage access control in Cloink and automate onboarding and offboarding processes.",
     "onboarding.videoHowTitle": "How Cloink Works",
     "onboarding.videoHowDescription":
-      "Learn more about how Cloink works, its architecture, and how it can help you build secure networks.",
+      "See how Cloink works, its architecture, and how it can help you build secure networks.",
     "onboarding.goToDashboard": "Go to Dashboard",
     "onboarding.firstNetworkName": "My First Network",
     "onboarding.createdDuringOnboarding": "Created during onboarding",
@@ -2684,7 +2665,6 @@ export const messages = {
     "clientSettings.automaticUpdatesHelpMiddle":
       "When enabled, users will be prompted to install the selected version.",
     "clientSettings.requiresAtLeast": "This requires at least Cloink",
-    "clientSettings.learnMore": "Learn more",
     "clientSettings.version": "Version",
     "clientSettings.versionPlaceholder": "e.g., 0.52.2",
     "clientSettings.forceAutomaticUpdates": "Force Automatic Updates",
@@ -3001,9 +2981,7 @@ export const messages = {
     "setupModal.appStoreAlt": "Download Cloink on the App Store",
     "setupModal.dockerInstallTitle": "Install with Docker",
     "setupModal.installDocker": "Install Docker",
-    "setupModal.officialDockerGuide": "Official Docker Installation Guide",
     "setupModal.runNetBirdContainer": "Run Cloink container",
-    "setupModal.readDocumentation": "Read our documentation",
     "setupModal.runningNetBirdDocker": "Running Cloink in Docker",
     "accessControl.modalUpdateTitle": "Update Access Control Policy",
     "accessControl.modalCreateTitle": "Create New Access Control Policy",
@@ -3171,9 +3149,7 @@ export const messages = {
     "noPeersGettingStarted.title": "Get Started with Cloink",
     "noPeersGettingStarted.description":
       "It looks like you don't have any connected machines. Get started by adding one to your network.",
-    "noPeersGettingStarted.learnMorePrefix": "Learn more in our",
     "noPeersGettingStarted.gettingStartedGuide": "Getting Started Guide",
-    "noPeersGettingStarted.learnMoreSuffix": "",
     "noResults.title": "Could not find any results",
     "noResults.description":
       "We couldn't find any results. Please try a different search term or change your filters.",
@@ -3412,7 +3388,6 @@ export const messages = {
     "reverseProxy.searchTargetsPlaceholder": "按 URL、目标地址或目标搜索...",
     "common.savingChanges": "正在保存更改",
     "common.thisPage": "当前页面",
-    "common.learnMore": "了解更多",
     "common.installNetBird": "安装 云链-Cloink",
     "common.copiedToClipboard": "已复制到剪贴板",
     "common.close": "关闭",
@@ -3424,9 +3399,7 @@ export const messages = {
     "common.moreCount": "+ 另外 {count} 项",
     "common.resourceCount": "{count} 个资源",
     "common.routingPeerCount": "{count} 个路由设备",
-    "common.learnMorePrefix": "了解更多关于",
     "common.routingPeers": "路由设备",
-    "common.inDocumentationSuffix": "的内容，请查看我们的文档。",
     "actions.save": "保存",
     "actions.saveChanges": "保存更改",
     "actions.confirmChanges": "确认更改",
@@ -3459,7 +3432,6 @@ export const messages = {
     "nav.dnsLogs": "DNS 日志",
     "nav.relays": "中继",
     "nav.settings": "设置",
-    "nav.documentation": "文档",
     "relays.title": "中继",
     "relays.description":
       "查看下发给客户端的中继节点、节点可达状态，以及每个节点当前注册的客户端数量。",
@@ -3595,7 +3567,6 @@ export const messages = {
     "overview.refreshInterval.5m": "5分钟",
     "overview.refreshInterval.15m": "15分钟",
     "help.title": "帮助与支持",
-    "help.documentation": "文档",
     "help.troubleshooting": "故障排查",
     "help.forum": "云链-Cloink 论坛",
     "help.slack": "云链-Cloink Slack",
@@ -3663,12 +3634,9 @@ export const messages = {
     "peers.title": "设备",
     "peers.description":
       "这里展示了连接到你的私有网络的所有机器和设备。你可以在这个页面中管理设备。",
-    "peers.learnMorePrefix": "了解更多关于",
-    "peers.learnMoreLink": "设备",
-    "peers.learnMoreSuffix": "的内容，请查看我们的文档。",
     "peers.blockedTitle": "将新设备加入你的网络",
     "peers.blockedDescription":
-      "开始使用前，请先安装 云链-Cloink，并使用你的邮箱账号登录。完成后设备应该就会连接成功。如果你还有问题，可以查看我们的",
+      "开始使用前，请先安装 云链-Cloink，并使用你的邮箱账号登录。完成后设备应该就会连接成功。",
     "peers.addPeer": "添加设备",
     "peers.installationGuide": "安装指南",
     "setupKeys.title": "注册密钥",
@@ -3710,7 +3678,6 @@ export const messages = {
     "accessControl.policiesTitle": "访问控制策略",
     "accessControl.description":
       "创建网络访问规则，并定义哪些设备之间可以建立连接。",
-    "accessControl.learnMoreLink": "访问控制",
     "dns.title": "DNS",
     "nameservers.title": "域名服务器",
     "nameservers.description":
@@ -3728,7 +3695,6 @@ export const messages = {
     "nameserverTemplate.custom": "自定义 DNS",
     "nameserverTemplate.customDesc":
       "使用自定义名称服务器来解析您的网络域名。您可以使用公共 DNS，也可以使用您自己的名称服务器。",
-    "nameserverTemplate.learnMore": "了解更多",
     "nameservers.searchPlaceholder": "按名称、域名或名称服务器搜索...",
     "nameservers.emptyGroupTitle": "这个分组还没有被任何域名服务器使用",
     "nameservers.emptyGroupDescription":
@@ -3780,7 +3746,6 @@ export const messages = {
     "zones.title": "区域",
     "zones.pageTitle": "DNS 区域",
     "zones.description": "管理 DNS 区域，以控制你网络中的域名解析行为。",
-    "zones.learnMoreLink": "DNS 区域",
     "zones.tableTitle": "DNS 区域",
     "zones.searchPlaceholder": "按域名、IP、内容或分组搜索...",
     "zones.emptyGroupTitle": "这个分组还没有被任何区域使用",
@@ -3940,11 +3905,8 @@ export const messages = {
     "reverseProxy.rewriteRedirectsHelp":
       "将后端响应中的 Location 头重写为公网域名，而不是内部后端地址。",
     "reverseProxy.statusGenericError":
-      "此服务在配置过程中出现问题。更多详情请查看我们的",
-    "reverseProxy.statusTunnelError":
-      "无法建立到目标对等端的隧道。更多详情请查看我们的",
-    "reverseProxy.statusTroubleshootingSuffix": "。",
-    "reverseProxy.statusTroubleshootingLink": "故障排查文档",
+      "此服务在配置过程中出现问题。",
+    "reverseProxy.statusTunnelError": "无法建立到目标对等端的隧道。",
     "reverseProxy.statusError": "错误",
     "reverseProxy.statusTunnelNotCreated": "隧道未创建",
     "reverseProxy.statusIssuingCertificate": "正在签发证书...",
@@ -4244,7 +4206,6 @@ export const messages = {
     "users.addUser": "添加用户",
     "users.localAuthDisabled":
       "本地认证已被禁用。请使用你的身份提供商进行认证。",
-    "users.learnMoreShort": "了解更多",
     "users.pendingApproval": "待审批",
     "users.pendingApprovals": "待审批用户",
     "users.lastLoginOn": "最近登录于",
@@ -4267,8 +4228,6 @@ export const messages = {
       "如果你想关闭新用户审批，请前往",
     "users.pendingApprovalSettingsSuffix": "并关闭",
     "users.pendingApprovalRequired": "“需要用户审批”",
-    "users.pendingApprovalLearnMorePrefix": "了解更多关于",
-    "users.pendingApprovalLearnMore": "用户审批",
     "users.userCount": "{count} 个用户",
     "users.system": "系统",
     "users.searchByEmailOrName": "按名称或邮箱搜索用户...",
@@ -4412,7 +4371,7 @@ export const messages = {
     "onboarding.yourDevice": "你的设备",
     "onboarding.toPingResource": "上运行此命令来 ping 你的资源。",
     "onboarding.everythingWorking":
-      "一切正常吗？太好了！你现在可以继续完成引导流程。如果有任何问题，请查看我们的",
+      "一切正常吗？太好了！你现在可以继续完成引导流程。",
     "onboarding.checkTroubleshooting": "",
     "onboarding.troubleshootingGuide": "故障排查指南",
     "onboarding.itWorksContinue": "一切正常！- 继续",
@@ -4651,7 +4610,6 @@ export const messages = {
     "userInvites.emptyTitle": "没有待处理邀请",
     "userInvites.emptyDescription":
       "当前没有待处理邀请。创建一个邀请以将用户加入你的网络。",
-    "userInvites.learnMoreAbout": "了解更多关于",
     "userInvites.showUsers": "查看用户",
     "userInvites.regenerate": "重新生成",
     "userInvites.resendTitle": "重新发送邀请",
@@ -4768,8 +4726,6 @@ export const messages = {
     "activity.getStartedTitle": "开始使用 Cloink",
     "activity.getStartedDescription":
       "看起来你还没有任何已连接的机器。\n从向你的网络中添加一台设备开始吧。",
-    "activity.learnMorePrefix": "更多说明请查看我们的",
-    "activity.learnMoreLink": "快速入门指南",
     "activity.netbirdUser": "Cloink",
     "activity.setupkeyRevoke": "被撤销",
     "activity.setupkeyDelete": "被删除",
@@ -5387,7 +5343,7 @@ export const messages = {
     "onboarding.endTitleWithName": "恭喜，{name}！",
     "onboarding.endSubtitle": "你已完成引导流程。",
     "onboarding.endDescription":
-      "接下来做什么？看看这些指南，充分发挥 Cloink 的能力。你也可以浏览仪表盘、查看文档或访问我们的 YouTube 频道了解更多。",
+      "接下来做什么？浏览仪表盘或访问我们的 YouTube 频道，继续完善你的安全网络。",
     "onboarding.videoAclTitle": "5 分钟快速了解访问控制",
     "onboarding.videoAclDescription":
       "学习如何高效管理你的网络资源访问。无论你是想限制对特定机器的访问，还是允许某些用户建立连接。",
@@ -5396,7 +5352,7 @@ export const messages = {
       "学习如何从身份提供商（如 Okta、Azure AD 或 Google Workspace）同步用户和分组，以便在 Cloink 中管理访问控制并自动化入离职流程。",
     "onboarding.videoHowTitle": "Cloink 的工作原理",
     "onboarding.videoHowDescription":
-      "进一步了解 Cloink 的工作方式、架构，以及它如何帮助你构建安全网络。",
+      "看看 Cloink 的工作方式、架构，以及它如何帮助你构建安全网络。",
     "onboarding.goToDashboard": "前往仪表盘",
     "onboarding.firstNetworkName": "我的第一个网络",
     "onboarding.createdDuringOnboarding": "在引导过程中创建",
@@ -5851,7 +5807,6 @@ export const messages = {
     "clientSettings.automaticUpdatesHelpMiddle":
       "启用后，用户会被提示安装所选版本。",
     "clientSettings.requiresAtLeast": "此功能至少需要 Cloink",
-    "clientSettings.learnMore": "了解更多",
     "clientSettings.version": "版本",
     "clientSettings.versionPlaceholder": "例如：0.52.2",
     "clientSettings.forceAutomaticUpdates": "强制自动更新",
@@ -6148,9 +6103,7 @@ export const messages = {
     "setupModal.appStoreAlt": "在 App Store 下载 Cloink",
     "setupModal.dockerInstallTitle": "通过 Docker 安装",
     "setupModal.installDocker": "安装 Docker",
-    "setupModal.officialDockerGuide": "Docker 官方安装指南",
     "setupModal.runNetBirdContainer": "运行 Cloink 容器",
-    "setupModal.readDocumentation": "阅读文档",
     "setupModal.runningNetBirdDocker": "在 Docker 中运行 Cloink",
     "accessControl.modalUpdateTitle": "更新访问控制策略",
     "accessControl.modalCreateTitle": "创建新的访问控制策略",
@@ -6305,9 +6258,7 @@ export const messages = {
     "noPeersGettingStarted.title": "开始使用 Cloink",
     "noPeersGettingStarted.description":
       "您似乎还没有任何已连接的机器。开始向您的网络添加一台设备。",
-    "noPeersGettingStarted.learnMorePrefix": "在我们的",
     "noPeersGettingStarted.gettingStartedGuide": "入门指南",
-    "noPeersGettingStarted.learnMoreSuffix": "中了解更多",
     "noResults.title": "未找到任何结果",
     "noResults.description": "未找到任何结果。请尝试其他搜索词或更改筛选条件。",
     "noResults.resetFilters": "重置筛选和搜索",

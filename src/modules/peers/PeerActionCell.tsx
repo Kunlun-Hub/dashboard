@@ -10,7 +10,6 @@ import FullTooltip from "@components/FullTooltip";
 import { notify } from "@components/Notification";
 import { IconInfoCircle } from "@tabler/icons-react";
 import {
-  ExternalLinkIcon,
   MonitorIcon,
   MoreVertical,
   TerminalSquare,
@@ -23,7 +22,6 @@ import { useSWRConfig } from "swr";
 import { usePeer } from "@/contexts/PeerProvider";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import { ExitNodeDropdownButton } from "@/modules/exit-node/ExitNodeDropdownButton";
-import InlineLink from "@components/InlineLink";
 import { useDialog } from "@/contexts/DialogProvider";
 import { useI18n } from "@/i18n/I18nProvider";
 
@@ -74,15 +72,7 @@ export default function PeerActionCell() {
       title: t("peerSsh.disableTitle"),
       description: (
         <div>
-          {t("peerSsh.disableDescription")}{" "}
-          <InlineLink
-            href={"https://docs.netbird.io/manage/peers/ssh"}
-            target={"_blank"}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {t("common.learnMore")}
-            <ExternalLinkIcon size={12} />
-          </InlineLink>
+          {t("peerSsh.disableDescription")}
         </div>
       ),
       confirmText: t("peerSsh.disable"),

@@ -1,6 +1,5 @@
 import Button from "@components/Button";
 import HelpText from "@components/HelpText";
-import InlineLink from "@components/InlineLink";
 import { Input } from "@components/Input";
 import { Label } from "@components/Label";
 import {
@@ -10,13 +9,11 @@ import {
   ModalFooter,
 } from "@components/modal/Modal";
 import ModalHeader from "@components/modal/ModalHeader";
-import Paragraph from "@components/Paragraph";
 import Separator from "@components/Separator";
 import { getOperatingSystem } from "@hooks/useOperatingSystem";
 import { isNativeSSHSupported } from "@utils/version";
 import {
   ChevronsLeftRightEllipsis,
-  ExternalLinkIcon,
   TerminalIcon,
   User2,
 } from "lucide-react";
@@ -25,7 +22,6 @@ import { useMemo, useState } from "react";
 import { OperatingSystem } from "@/interfaces/OperatingSystem";
 import { Peer } from "@/interfaces/Peer";
 import { useI18n } from "@/i18n/I18nProvider";
-import { SSH_DOCS_LINK } from "@/modules/remote-access/ssh/useSSH";
 
 type Props = {
   open: boolean;
@@ -125,15 +121,6 @@ export const SSHCredentialsModal = ({ open, onOpenChange, peer }: Props) => {
         </div>
 
         <ModalFooter className={"items-center"}>
-          <div className={"w-full"}>
-            <Paragraph className={"text-sm mt-auto"}>
-              {t("common.learnMorePrefix")}{" "}
-              <InlineLink href={SSH_DOCS_LINK} target={"_blank"}>
-                {t("remoteAccess.ssh")}
-                <ExternalLinkIcon size={12} />
-              </InlineLink>
-            </Paragraph>
-          </div>
           <div className={"flex gap-3 w-full justify-end"}>
             <ModalClose asChild={true}>
               <Button variant={"secondary"}>{t("actions.cancel")}</Button>

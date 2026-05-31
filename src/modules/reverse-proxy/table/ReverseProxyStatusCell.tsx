@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  REVERSE_PROXY_TROUBLESHOOTING_DOCS_LINK,
   ReverseProxy,
   ReverseProxyMeta,
   ReverseProxyStatus,
@@ -9,7 +8,6 @@ import {
 import useFetchApi from "@utils/api";
 import Badge from "@components/Badge";
 import FullTooltip from "@components/FullTooltip";
-import InlineLink from "@components/InlineLink";
 import { CircleAlert, Loader2 } from "lucide-react";
 import { useRef } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
@@ -70,14 +68,7 @@ export default function ReverseProxyStatusCell({
         <FullTooltip
           content={
             <div className={"text-xs max-w-xs"}>
-              {t("reverseProxy.statusGenericError")}{" "}
-              <InlineLink
-                href={REVERSE_PROXY_TROUBLESHOOTING_DOCS_LINK}
-                target={"_blank"}
-              >
-                {t("reverseProxy.statusTroubleshootingLink")}
-              </InlineLink>{" "}
-              {t("reverseProxy.statusTroubleshootingSuffix")}
+              {t("reverseProxy.statusGenericError")}
             </div>
           }
           align={"center"}
@@ -97,14 +88,7 @@ export default function ReverseProxyStatusCell({
         <FullTooltip
           content={
             <div className={"text-xs max-w-xs"}>
-              {t("reverseProxy.statusTunnelError")}{" "}
-              <InlineLink
-                href={REVERSE_PROXY_TROUBLESHOOTING_DOCS_LINK}
-                target={"_blank"}
-              >
-                {t("reverseProxy.statusTroubleshootingLink")}
-              </InlineLink>{" "}
-              {t("reverseProxy.statusTroubleshootingSuffix")}
+              {t("reverseProxy.statusTunnelError")}
             </div>
           }
           align={"center"}

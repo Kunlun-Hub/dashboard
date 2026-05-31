@@ -1,13 +1,10 @@
 "use client";
 
 import Breadcrumbs from "@components/Breadcrumbs";
-import InlineLink from "@components/InlineLink";
-import Paragraph from "@components/Paragraph";
 import SkeletonTable from "@components/skeletons/SkeletonTable";
 import { RestrictedAccess } from "@components/ui/RestrictedAccess";
 import { usePortalElement } from "@hooks/usePortalElement";
 import useFetchApi from "@utils/api";
-import { ExternalLinkIcon } from "lucide-react";
 import React, { lazy, Suspense } from "react";
 import DNSIcon from "@/assets/icons/DNSIcon";
 import { usePermissions } from "@/contexts/PermissionsProvider";
@@ -46,18 +43,6 @@ export default function NameServers() {
           />
         </Breadcrumbs>
         <h1 ref={headingRef}>{t("nameservers.title")}</h1>
-        <Paragraph>{t("nameservers.description")}</Paragraph>
-        <Paragraph>
-          {t("common.learnMorePrefix")}{" "}
-          <InlineLink
-            href={"https://docs.netbird.io/how-to/manage-dns-in-your-network"}
-            target={"_blank"}
-          >
-            {t("dns.title")}
-            <ExternalLinkIcon size={12} />
-          </InlineLink>
-          {t("common.inDocumentationSuffix")}
-        </Paragraph>
       </div>
 
       <RestrictedAccess

@@ -3,13 +3,11 @@ import HelpText from "@components/HelpText";
 import InlineLink from "@components/InlineLink";
 import { Label } from "@components/Label";
 import { ModalClose, ModalFooter } from "@components/modal/Modal";
-import Paragraph from "@components/Paragraph";
 import { RadioGroup, RadioGroupItem } from "@components/RadioGroup";
 import { CitySelector } from "@components/ui/CitySelector";
 import { CountrySelector } from "@components/ui/CountrySelector";
 import { isEmpty, uniqueId } from "lodash";
 import {
-  ExternalLinkIcon,
   FlagIcon,
   MinusCircleIcon,
   PlusCircle,
@@ -174,20 +172,6 @@ const CheckContent = ({ value, onChange, disabled }: Props) => {
       </div>
 
       <ModalFooter className={"items-center"}>
-        <div className={"w-full"}>
-          <Paragraph className={"text-sm mt-auto"}>
-            {t("common.learnMorePrefix")}
-            <InlineLink
-              href={
-                "https://docs.netbird.io/how-to/manage-posture-checks#geolocation-check"
-              }
-              target={"_blank"}
-            >
-              {t("postureChecks.countryRegionCheck")}
-              <ExternalLinkIcon size={12} />
-            </InlineLink>
-          </Paragraph>
-        </div>
         <div className={"flex gap-3 w-full justify-end"}>
           <ModalClose asChild={true}>
             <Button variant={"secondary"}>{t("actions.cancel")}</Button>

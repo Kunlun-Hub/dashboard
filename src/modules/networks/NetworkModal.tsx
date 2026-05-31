@@ -2,7 +2,6 @@
 
 import Button from "@components/Button";
 import HelpText from "@components/HelpText";
-import InlineLink from "@components/InlineLink";
 import { Input } from "@components/Input";
 import { Label } from "@components/Label";
 import {
@@ -13,11 +12,10 @@ import {
 } from "@components/modal/Modal";
 import ModalHeader from "@components/modal/ModalHeader";
 import { notify } from "@components/Notification";
-import Paragraph from "@components/Paragraph";
 import Separator from "@components/Separator";
 import { Textarea } from "@components/Textarea";
 import { useApiCall } from "@utils/api";
-import { ExternalLinkIcon, PlusCircle } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 import React, { useState } from "react";
 import NetworkRoutesIcon from "@/assets/icons/NetworkRoutesIcon";
 import { useI18n } from "@/i18n/I18nProvider";
@@ -124,18 +122,6 @@ const Content = ({ network, onCreated, onUpdated }: ContentProps) => {
       </div>
 
       <ModalFooter className={"items-center"}>
-        <div className={"w-full"}>
-          <Paragraph className={"text-sm mt-auto"}>
-            {t("common.learnMorePrefix")}{" "}
-            <InlineLink
-              href={"https://docs.netbird.io/how-to/networks"}
-              target={"_blank"}
-            >
-              {t("networks.title")}
-              <ExternalLinkIcon size={12} />
-            </InlineLink>
-          </Paragraph>
-        </div>
         <div className={"flex gap-3 w-full justify-end"}>
           <ModalClose asChild={true}>
             <Button variant={"secondary"}>{t("actions.cancel")}</Button>

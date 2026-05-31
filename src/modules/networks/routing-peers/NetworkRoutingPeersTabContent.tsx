@@ -1,18 +1,14 @@
 import SkeletonTable, {
   SkeletonTableHeader,
 } from "@components/skeletons/SkeletonTable";
+import useFetchApi from "@utils/api";
 import * as React from "react";
 import { Suspense, useMemo } from "react";
-import { NetworkRouter } from "@/interfaces/Network";
-import NetworkRoutingPeersTable from "@/modules/networks/routing-peers/NetworkRoutingPeersTable";
-import useFetchApi from "@utils/api";
 import { useGroups } from "@/contexts/GroupsProvider";
-import { Peer } from "@/interfaces/Peer";
 import { useUsers } from "@/contexts/UsersProvider";
-import Paragraph from "@components/Paragraph";
-import InlineLink from "@components/InlineLink";
-import { ExternalLinkIcon } from "lucide-react";
-import { useI18n } from "@/i18n/I18nProvider";
+import { NetworkRouter } from "@/interfaces/Network";
+import { Peer } from "@/interfaces/Peer";
+import NetworkRoutingPeersTable from "@/modules/networks/routing-peers/NetworkRoutingPeersTable";
 
 export const NetworkRoutingPeersTabContent = ({
   routers,
@@ -21,7 +17,6 @@ export const NetworkRoutingPeersTabContent = ({
   routers?: NetworkRouter[];
   isLoading: boolean;
 }) => {
-  const { t } = useI18n();
   const { groups } = useGroups();
   const { users } = useUsers();
   const { data: peers } = useFetchApi<Peer[]>(`/peers`);
@@ -43,24 +38,6 @@ export const NetworkRoutingPeersTabContent = ({
 
   return (
     <div className={"px-8"} id={"routing-peers"}>
-      <div className={"flex justify-between items-center mb-5"}>
-        <div>
-          <Paragraph>
-            {t("networkRouting.tabDescription")}
-          </Paragraph>
-          <Paragraph>
-            {t("common.learnMorePrefix")}{" "}
-            <InlineLink
-              href={"https://docs.netbird.io/manage/networks#routing-peers"}
-              target={"_blank"}
-            >
-              {t("networkDetails.routingPeers")}
-              <ExternalLinkIcon size={12} />
-            </InlineLink>
-            {t("common.inDocumentationSuffix")}
-          </Paragraph>
-        </div>
-      </div>
       <Suspense
         fallback={
           <div>

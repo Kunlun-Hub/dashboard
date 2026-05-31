@@ -1,21 +1,17 @@
 "use client";
 
 import Breadcrumbs from "@components/Breadcrumbs";
-import InlineLink from "@components/InlineLink";
-import Paragraph from "@components/Paragraph";
 import { RestrictedAccess } from "@components/ui/RestrictedAccess";
+import { usePortalElement } from "@hooks/usePortalElement";
 import dayjs from "dayjs";
-import { ExternalLinkIcon } from "lucide-react";
-import ReverseProxyIcon from "@/assets/icons/ReverseProxyIcon";
 import React, { useMemo } from "react";
 import ActivityIcon from "@/assets/icons/ActivityIcon";
+import ReverseProxyIcon from "@/assets/icons/ReverseProxyIcon";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import ServerPaginationProvider from "@/contexts/ServerPaginationProvider";
+import { useI18n } from "@/i18n/I18nProvider";
 import PageContainer from "@/layouts/PageContainer";
 import ReverseProxyEventsTable from "@/modules/reverse-proxy/events/ReverseProxyEventsTable";
-import { usePortalElement } from "@hooks/usePortalElement";
-import { REVERSE_PROXY_EVENTS_DOCS_LINK } from "@/interfaces/ReverseProxy";
-import { useI18n } from "@/i18n/I18nProvider";
 
 export default function ProxyEventsPage() {
   const { permission } = usePermissions();
@@ -50,16 +46,6 @@ export default function ProxyEventsPage() {
         </Breadcrumbs>
 
         <h1 ref={headingRef}>{t("proxyEvents.title")}</h1>
-
-        <Paragraph>{t("proxyEvents.description")}</Paragraph>
-
-        <Paragraph>
-          {t("common.learnMorePrefix")}{" "}
-          <InlineLink href={REVERSE_PROXY_EVENTS_DOCS_LINK} target="_blank">
-            {t("nav.proxyEvents")} <ExternalLinkIcon size={12} />
-          </InlineLink>{" "}
-          {t("common.inDocumentationSuffix")}
-        </Paragraph>
       </div>
 
       <RestrictedAccess

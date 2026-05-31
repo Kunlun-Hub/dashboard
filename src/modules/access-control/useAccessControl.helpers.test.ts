@@ -3,6 +3,7 @@ import test from "node:test";
 import type { Group } from "../../interfaces/Group";
 import type { PostureCheck } from "../../interfaces/PostureCheck";
 import {
+  buildPolicyPayload,
   buildPolicyRulePayload,
   createDefaultRule,
   mergeCreatedPostureChecks,
@@ -102,6 +103,20 @@ test("buildPolicyRulePayload clears SSH authorized groups for full SSH access", 
   );
 
   assert.deepEqual(payload.authorized_groups, {});
+});
+
+test("buildPolicyPayload preserves per-rule enabled state", () => {
+  const payload = buildPolicyPayload({
+    name: "Policy",
+    description: "",
+    enabled: true,
+    postureChecks: [],
+    rules: [rule({ enabled: false })],
+    groups,
+  });
+
+  assert.equal(payload.enabled, true);
+  assert.equal(payload.rules[0].enabled, false);
 });
 
 test("mergeCreatedPostureChecks replaces no-id checks with the created checks", () => {

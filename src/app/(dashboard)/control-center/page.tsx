@@ -2,7 +2,6 @@
 
 import "@xyflow/react/dist/style.css";
 import Button from "@components/Button";
-import InlineLink from "@components/InlineLink";
 import { NoPeersGettingStarted } from "@components/NoPeersGettingStarted";
 import {
   SelectDropdown,
@@ -28,7 +27,6 @@ import {
 import { forEach, orderBy, sortBy } from "lodash";
 import {
   ArrowLeftIcon,
-  ExternalLinkIcon,
   LayoutGridIcon,
   LocateFixedIcon,
   MinusIcon,
@@ -834,7 +832,7 @@ function ControlCenterView() {
 
       resourcePolicies.forEach((policy) => {
         const rule = policy.rules?.[0];
-        const enabled = policy.enabled;
+        const enabled = policy.enabled && (rule?.enabled ?? true);
         if (rule) {
           const ruleSourceGroups = (rule.sources as Group[]) || [];
           const ruleDestinationGroups = (rule.destinations as Group[]) || [];
@@ -1040,7 +1038,8 @@ function ControlCenterView() {
     );
 
     peerPolicies?.forEach((policy) => {
-      const enabled = policy.enabled;
+      const rule = policy.rules?.[0];
+      const enabled = policy.enabled && (rule?.enabled ?? true);
       const nodeExists = allNodes.some((n) => n.id === `policy-${policy.id}`);
       if (!nodeExists) {
         allNodes.push({
@@ -1271,7 +1270,7 @@ function ControlCenterView() {
     edges: Edge[],
   ) => {
     const destinationPolicyResource = policy?.rules?.[0].destinationResource;
-    const enabled = policy.enabled;
+    const enabled = policy.enabled && (policy.rules?.[0]?.enabled ?? true);
 
     if (destinationPolicyResource) {
       const type = destinationPolicyResource.type;
@@ -1383,7 +1382,8 @@ function ControlCenterView() {
 
     // Add policies and their connections
     userPolicies?.forEach((policy, policyIndex) => {
-      const enabled = policy.enabled;
+      const rule = policy.rules?.[0];
+      const enabled = policy.enabled && (rule?.enabled ?? true);
       const policyNodeId = `policy-${policy.id}`;
 
       allNodes.push({
@@ -1394,7 +1394,6 @@ function ControlCenterView() {
       });
 
       // Add peer to policy edges
-      const rule = policy.rules?.[0];
       const sourcesIds = (rule?.sources as Group[])?.map((g) => g.id) || [];
 
       userPeers.forEach((peer) => {
@@ -1993,18 +1992,6 @@ function ControlCenterView() {
                       {t("controlCenter.goToNetworks")}
                     </Button>
                   </div>
-                }
-                learnMore={
-                  <>
-                    {t("common.learnMorePrefix")}
-                    <InlineLink
-                      href={"https://docs.netbird.io/how-to/networks"}
-                      target={"_blank"}
-                    >
-                      {t("networks.title")}
-                      <ExternalLinkIcon size={12} />
-                    </InlineLink>
-                  </>
                 }
               />
             </div>

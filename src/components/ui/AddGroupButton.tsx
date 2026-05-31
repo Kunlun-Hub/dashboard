@@ -1,6 +1,5 @@
 import Button from "@components/Button";
 import HelpText from "@components/HelpText";
-import InlineLink from "@components/InlineLink";
 import { Input } from "@components/Input";
 import { Label } from "@components/Label";
 import {
@@ -10,7 +9,7 @@ import {
   ModalFooter,
   ModalTrigger,
 } from "@components/modal/Modal";
-import { ExternalLinkIcon, FolderGit2Icon, PlusCircle } from "lucide-react";
+import { FolderGit2Icon, PlusCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useSWRConfig } from "swr";
@@ -20,7 +19,6 @@ import { Group } from "@/interfaces/Group";
 import { useApiCall } from "@/utils/api";
 import ModalHeader from "../modal/ModalHeader";
 import { notify } from "../Notification";
-import Paragraph from "../Paragraph";
 import Separator from "../Separator";
 
 export const AddGroupButton = () => {
@@ -82,18 +80,6 @@ export const AddGroupButton = () => {
             </div>
           </div>
           <ModalFooter className={"items-center"}>
-            <div className={"w-full"}>
-              <Paragraph className={"text-sm mt-auto"}>
-                {t("common.learnMorePrefix")}{" "}
-                <InlineLink
-                  href={"https://docs.netbird.io/how-to/manage-network-access"}
-                  target={"_blank"}
-                >
-                  {t("groups.title")}
-                  <ExternalLinkIcon size={12} />
-                </InlineLink>
-              </Paragraph>
-            </div>
             <div className={"flex gap-3 w-full justify-end"}>
               <ModalClose asChild={true}>
                 <Button variant={"secondary"}>{t("common.cancel")}</Button>

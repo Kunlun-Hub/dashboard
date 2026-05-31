@@ -1,7 +1,6 @@
 "use client";
 
 import Button from "@components/Button";
-import InlineLink from "@components/InlineLink";
 import SquareIcon from "@components/SquareIcon";
 import { DataTable } from "@components/table/DataTable";
 import DataTableHeader from "@components/table/DataTableHeader";
@@ -10,7 +9,7 @@ import { DataTableRowsPerPage } from "@components/table/DataTableRowsPerPage";
 import GetStartedTest from "@components/ui/GetStartedTest";
 import { ColumnDef, SortingState } from "@tanstack/react-table";
 import { cn } from "@utils/helpers";
-import { ExternalLinkIcon, PlusCircle } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 import { usePathname } from "next/navigation";
 import React, { useMemo, useState } from "react";
 import { useSWRConfig } from "swr";
@@ -146,18 +145,6 @@ export default function NetworksTable({
                   <div className={"gap-x-4 flex items-center justify-center"}>
                     <AddNetworkButton />
                   </div>
-                }
-                learnMore={
-                  <>
-                    {t("common.learnMorePrefix")}{" "}
-                    <InlineLink
-                      href={"https://docs.netbird.io/how-to/networks"}
-                      target={"_blank"}
-                    >
-                      {t("networks.title")}
-                      <ExternalLinkIcon size={12} />
-                    </InlineLink>
-                  </>
                 }
               />
             }

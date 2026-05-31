@@ -1,7 +1,6 @@
 "use client";
 
 import Breadcrumbs from "@components/Breadcrumbs";
-import Paragraph from "@components/Paragraph";
 import { RestrictedAccess } from "@components/ui/RestrictedAccess";
 import { usePortalElement } from "@hooks/usePortalElement";
 import dayjs from "dayjs";
@@ -49,7 +48,6 @@ export default function DNSEventsPage() {
         </Breadcrumbs>
 
         <h1 ref={headingRef}>{t("dnsLogs.title")}</h1>
-        <Paragraph>{t("dnsLogs.description")}</Paragraph>
       </div>
 
       <RestrictedAccess

@@ -1,6 +1,5 @@
 import Button from "@components/Button";
 import Code from "@components/Code";
-import InlineLink from "@components/InlineLink";
 import { Modal, ModalContent, ModalFooter } from "@components/modal/Modal";
 import Paragraph from "@components/Paragraph";
 import SquareIcon from "@components/SquareIcon";
@@ -21,7 +20,6 @@ import {
   Cog,
   CopyIcon,
   CreditCardIcon,
-  ExternalLinkIcon,
   EyeIcon,
   Link2,
   MailPlus,
@@ -457,20 +455,6 @@ export default function UserInvitesTable({
             <div className={"flex flex-col items-center justify-center"}>
               <InviteUserButton show={true} />
             </div>
-          }
-          learnMore={
-            <>
-              {t("userInvites.learnMoreAbout")}
-              <InlineLink
-                href={
-                  "https://docs.netbird.io/how-to/add-users-to-your-network"
-                }
-                target={"_blank"}
-              >
-                {t("users.title")}
-                <ExternalLinkIcon size={12} />
-              </InlineLink>
-            </>
           }
         />
       }

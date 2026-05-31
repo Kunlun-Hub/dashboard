@@ -3,7 +3,6 @@
 import Button from "@components/Button";
 import FancyToggleSwitch from "@components/FancyToggleSwitch";
 import HelpText from "@components/HelpText";
-import InlineLink from "@components/InlineLink";
 import { Input } from "@components/Input";
 import { Label } from "@components/Label";
 import {
@@ -14,7 +13,6 @@ import {
 } from "@components/modal/Modal";
 import ModalHeader from "@components/modal/ModalHeader";
 import { notify } from "@components/Notification";
-import Paragraph from "@components/Paragraph";
 import { PeerGroupSelector } from "@components/PeerGroupSelector";
 import { PeerSelector } from "@components/PeerSelector";
 import { SegmentedTabs } from "@components/SegmentedTabs";
@@ -28,7 +26,6 @@ import { uniqBy } from "lodash";
 import {
   ArrowDownWideNarrow,
   DownloadIcon,
-  ExternalLinkIcon,
   FolderGit2,
   Loader2,
   MonitorSmartphoneIcon,
@@ -420,18 +417,6 @@ function RoutingPeerModalContent({
       </Tabs>
 
       <ModalFooter className={"items-center"}>
-        <div className={"w-full"}>
-          <Paragraph className={"text-sm mt-auto"}>
-            {t("common.learnMorePrefix")}{" "}
-            <InlineLink
-              href={"https://docs.netbird.io/how-to/networks#routing-peers"}
-              target={"_blank"}
-            >
-              {t("networkRoutingPeers.tabs.routingPeers")}
-              <ExternalLinkIcon size={12} />
-            </InlineLink>
-          </Paragraph>
-        </div>
         <div className={"flex gap-3 w-full justify-end"}>
           {tab == "router" && (
             <>

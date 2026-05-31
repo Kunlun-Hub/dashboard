@@ -1,13 +1,10 @@
 "use client";
 
 import Breadcrumbs from "@components/Breadcrumbs";
-import InlineLink from "@components/InlineLink";
-import Paragraph from "@components/Paragraph";
 import SkeletonTable from "@components/skeletons/SkeletonTable";
 import { RestrictedAccess } from "@components/ui/RestrictedAccess";
 import { usePortalElement } from "@hooks/usePortalElement";
 import useFetchApi from "@utils/api";
-import { ExternalLinkIcon } from "lucide-react";
 import React, { Suspense } from "react";
 import NetworkRoutesIcon from "@/assets/icons/NetworkRoutesIcon";
 import { usePermissions } from "@/contexts/PermissionsProvider";
@@ -34,18 +31,6 @@ export default function Networks() {
           />
         </Breadcrumbs>
         <h1 ref={headingRef}>{t("networks.title")}</h1>
-        <Paragraph>{t("networks.description")}</Paragraph>
-        <Paragraph>
-          {t("common.learnMorePrefix")}{" "}
-          <InlineLink
-            href={"https://docs.netbird.io/how-to/networks"}
-            target={"_blank"}
-          >
-            {t("networks.title")}
-            <ExternalLinkIcon size={12} />
-          </InlineLink>
-          {t("common.inDocumentationSuffix")}
-        </Paragraph>
       </div>
 
       <RestrictedAccess

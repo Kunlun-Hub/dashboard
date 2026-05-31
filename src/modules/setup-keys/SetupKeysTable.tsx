@@ -3,7 +3,6 @@
 import Button from "@components/Button";
 import ButtonGroup from "@components/ButtonGroup";
 import Card from "@components/Card";
-import InlineLink from "@components/InlineLink";
 import SquareIcon from "@components/SquareIcon";
 import { DataTable } from "@components/table/DataTable";
 import DataTableHeader from "@components/table/DataTableHeader";
@@ -13,7 +12,7 @@ import GetStartedTest from "@components/ui/GetStartedTest";
 import NoResults from "@components/ui/NoResults";
 import { ColumnDef, SortingState } from "@tanstack/react-table";
 import dayjs from "dayjs";
-import { ExternalLinkIcon, PlusCircle } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 import { usePathname } from "next/navigation";
 import React, { useMemo, useState } from "react";
 import { useSWRConfig } from "swr";
@@ -232,20 +231,6 @@ export default function SetupKeysTable({
                   <PlusCircle size={16} />
                   {t("setupKeys.createTitle")}
                 </Button>
-              }
-              learnMore={
-                <>
-                  {t("common.learnMorePrefix")}{" "}
-                  <InlineLink
-                    href={
-                      "https://docs.netbird.io/how-to/register-machines-using-setup-keys"
-                    }
-                    target={"_blank"}
-                  >
-                    {t("setupKeys.title")}
-                    <ExternalLinkIcon size={12} />
-                  </InlineLink>
-                </>
               }
             />
           )

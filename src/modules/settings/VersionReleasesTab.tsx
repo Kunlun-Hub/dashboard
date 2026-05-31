@@ -1,9 +1,14 @@
 import Breadcrumbs from "@components/Breadcrumbs";
 import Button from "@components/Button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@components/DropdownMenu";
 import { Input } from "@components/Input";
 import { Label } from "@components/Label";
 import { notify } from "@components/Notification";
-import Paragraph from "@components/Paragraph";
 import { SelectDropdown, SelectOption } from "@components/select/SelectDropdown";
 import SquareIcon from "@components/SquareIcon";
 import { DataTable } from "@components/table/DataTable";
@@ -12,8 +17,8 @@ import DataTableRefreshButton from "@components/table/DataTableRefreshButton";
 import { DataTableRowsPerPage } from "@components/table/DataTableRowsPerPage";
 import GetStartedTest from "@components/ui/GetStartedTest";
 import * as Tabs from "@radix-ui/react-tabs";
-import useFetchApi, { useApiCall } from "@utils/api";
 import { ColumnDef, SortingState } from "@tanstack/react-table";
+import useFetchApi, { useApiCall } from "@utils/api";
 import {
   DownloadIcon,
   GlobeIcon,
@@ -30,12 +35,6 @@ import { useDialog } from "@/contexts/DialogProvider";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useI18n } from "@/i18n/I18nProvider";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@components/DropdownMenu";
 import VersionModal from "./VersionModal";
 
 // 定义平台类型
@@ -255,7 +254,6 @@ export default function VersionReleasesTab() {
         <div className={"flex items-start justify-between"}>
           <div>
             <h1>版本发布</h1>
-            <Paragraph>管理和发布各平台安装包，提供下载链接</Paragraph>
           </div>
         </div>
       </div>

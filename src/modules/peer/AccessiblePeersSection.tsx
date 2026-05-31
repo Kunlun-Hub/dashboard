@@ -1,11 +1,9 @@
-import Paragraph from "@components/Paragraph";
 import SkeletonTable, {
   SkeletonTableHeader,
 } from "@components/skeletons/SkeletonTable";
 import useFetchApi from "@utils/api";
 import * as React from "react";
 import { lazy, Suspense } from "react";
-import { useI18n } from "@/i18n/I18nProvider";
 import { useUsers } from "@/contexts/UsersProvider";
 import type { Peer } from "@/interfaces/Peer";
 
@@ -17,7 +15,6 @@ type Props = {
   peerID: string;
 };
 export const AccessiblePeersSection = ({ peerID }: Props) => {
-  const { t } = useI18n();
   const { data: peers, isLoading } = useFetchApi<Peer[]>(
     `/peers/${peerID}/accessible-peers`,
   );
@@ -34,14 +31,6 @@ export const AccessiblePeersSection = ({ peerID }: Props) => {
   return (
     <div className={"pb-10 px-8"}>
       <div className={""}>
-        <div className={"flex justify-between items-center mb-5"}>
-          <div>
-            <Paragraph>
-              {t("peer.accessiblePeersDescription")}
-            </Paragraph>
-          </div>
-        </div>
-
         <Suspense
           fallback={
             <div>

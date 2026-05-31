@@ -4,11 +4,9 @@ import { Checkbox } from "@components/Checkbox";
 import { CommandItem } from "@components/Command";
 import FancyToggleSwitch from "@components/FancyToggleSwitch";
 import HelpText from "@components/HelpText";
-import InlineLink from "@components/InlineLink";
 import { Input } from "@components/Input";
 import { Label } from "@components/Label";
 import { notify } from "@components/Notification";
-import Paragraph from "@components/Paragraph";
 import { Popover, PopoverContent, PopoverTrigger } from "@components/Popover";
 import { ScrollArea } from "@components/ScrollArea";
 import {
@@ -28,7 +26,6 @@ import { Command, CommandGroup, CommandList } from "cmdk";
 import {
   CalendarClock,
   ChevronsUpDown,
-  ExternalLinkIcon,
   KeyRound,
   ShieldIcon,
   ShieldUserIcon,
@@ -401,18 +398,6 @@ export default function AuthenticationTab({ account }: Readonly<Props>) {
         <div className={"flex items-start justify-between"}>
           <div>
             <h1>{t("settings.authentication")}</h1>
-            <Paragraph>
-              {t("common.learnMorePrefix")}
-              <InlineLink
-                href={
-                  "https://docs.netbird.io/how-to/enforce-periodic-user-authentication"
-                }
-                target={"_blank"}
-              >
-                {t("settings.authentication")}
-                <ExternalLinkIcon size={12} />
-              </InlineLink>
-            </Paragraph>
           </div>
 
           <Button

@@ -1,19 +1,17 @@
 "use client";
 
 import Breadcrumbs from "@components/Breadcrumbs";
-import InlineLink from "@components/InlineLink";
-import Paragraph from "@components/Paragraph";
 import SkeletonTable from "@components/skeletons/SkeletonTable";
 import { RestrictedAccess } from "@components/ui/RestrictedAccess";
 import { usePortalElement } from "@hooks/usePortalElement";
 import useFetchApi from "@utils/api";
-import { ExternalLinkIcon, ShieldCheck } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 import React, { lazy, Suspense } from "react";
 import AccessControlIcon from "@/assets/icons/AccessControlIcon";
 import GroupsProvider from "@/contexts/GroupsProvider";
 import { usePermissions } from "@/contexts/PermissionsProvider";
-import { useI18n } from "@/i18n/I18nProvider";
 import PoliciesProvider from "@/contexts/PoliciesProvider";
+import { useI18n } from "@/i18n/I18nProvider";
 import { PostureCheck } from "@/interfaces/PostureCheck";
 import PageContainer from "@/layouts/PageContainer";
 
@@ -47,18 +45,6 @@ export default function PostureChecksPage() {
             />
           </Breadcrumbs>
           <h1 ref={headingRef}>{t("nav.postureChecks")}</h1>
-          <Paragraph>{t("postureChecks.pageDescription")}</Paragraph>
-          <Paragraph>
-            {t("common.learnMorePrefix")}{" "}
-            <InlineLink
-              href={"https://docs.netbird.io/how-to/manage-posture-checks"}
-              target={"_blank"}
-            >
-              {t("nav.postureChecks")}
-              <ExternalLinkIcon size={12} />
-            </InlineLink>
-            {" "}{t("common.inDocumentationSuffix")}
-          </Paragraph>
         </div>
 
         <RestrictedAccess

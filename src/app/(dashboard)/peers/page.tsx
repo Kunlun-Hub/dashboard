@@ -1,11 +1,9 @@
 "use client";
 
 import Breadcrumbs from "@components/Breadcrumbs";
-import InlineLink from "@components/InlineLink";
 import Paragraph from "@components/Paragraph";
 import SkeletonTable from "@components/skeletons/SkeletonTable";
 import { usePortalElement } from "@hooks/usePortalElement";
-import { ExternalLinkIcon } from "lucide-react";
 import React, { lazy, Suspense } from "react";
 import PeerIcon from "@/assets/icons/PeerIcon";
 import PeersProvider, { usePeers } from "@/contexts/PeersProvider";
@@ -59,18 +57,6 @@ function PeersView() {
           />
         </Breadcrumbs>
         <h1 ref={headingRef}>{t("peers.title")}</h1>
-        <Paragraph>{t("peers.description")}</Paragraph>
-        <Paragraph>
-          {t("peers.learnMorePrefix")}{" "}
-          <InlineLink
-            href={"https://docs.netbird.io/how-to/add-machines-to-your-network"}
-            target={"_blank"}
-          >
-            {t("peers.learnMoreLink")}
-            <ExternalLinkIcon size={12} />
-          </InlineLink>
-          {t("peers.learnMoreSuffix")}
-        </Paragraph>
       </div>
       <Suspense fallback={<SkeletonTable />}>
         <PeersTable
@@ -91,14 +77,7 @@ function PeersBlockedView() {
       <div className={"p-default py-6 max-w-3xl text-center"}>
         <h1>{t("peers.blockedTitle")}</h1>
         <Paragraph className={"inline"}>
-          {t("peers.blockedDescription")}{" "}
-          <InlineLink
-            href={"https://docs.netbird.io/how-to/getting-started#installation"}
-            target={"_blank"}
-          >
-            {t("peers.installationGuide")}
-            <ExternalLinkIcon size={12} />
-          </InlineLink>
+          {t("peers.blockedDescription")}
         </Paragraph>
       </div>
       <div className={"px-3 pt-1 pb-8 max-w-3xl w-full"}>
@@ -107,7 +86,7 @@ function PeersBlockedView() {
             "rounded-md border border-neutral-200 grid w-full bg-white stepper-bg-variant dark:border-nb-gray-900/70 dark:bg-nb-gray-930/40"
           }
         >
-          <SetupModalContent header={false} footer={false} />
+          <SetupModalContent header={false} />
         </div>
       </div>
     </div>

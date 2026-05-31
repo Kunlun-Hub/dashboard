@@ -1,6 +1,5 @@
 import Button from "@components/Button";
 import ButtonGroup from "@components/ButtonGroup";
-import InlineLink from "@components/InlineLink";
 import SquareIcon from "@components/SquareIcon";
 import { DataTable } from "@components/table/DataTable";
 import DataTableHeader from "@components/table/DataTableHeader";
@@ -11,7 +10,7 @@ import { useLocalStorage } from "@hooks/useLocalStorage";
 import { IconCirclePlus } from "@tabler/icons-react";
 import type { ColumnDef, SortingState } from "@tanstack/react-table";
 import useFetchApi from "@utils/api";
-import { ExternalLinkIcon, ShieldCheck } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 import { usePathname } from "next/navigation";
 import React, { useMemo, useState } from "react";
 import { useSWRConfig } from "swr";
@@ -198,20 +197,6 @@ export default function PostureCheckTable({
                   <IconCirclePlus size={16} />
                   {t("postureChecks.createButton")}
                 </Button>
-              }
-              learnMore={
-                <>
-                  {t("common.learnMorePrefix")}
-                  <InlineLink
-                    href={
-                      "https://docs.netbird.io/how-to/manage-posture-checks"
-                    }
-                    target={"_blank"}
-                  >
-                    {t("postureChecks.title")}
-                    <ExternalLinkIcon size={12} />
-                  </InlineLink>
-                </>
               }
             />
           }

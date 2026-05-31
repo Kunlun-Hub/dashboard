@@ -508,7 +508,7 @@ export function ControlCenterDetailsPanel({
           description={policyLabel}
           badge={
             <StateBadge
-              active={policy.enabled}
+              active={policy.enabled && (rule?.enabled ?? true)}
               activeText={t("common.on")}
               inactiveText={t("common.disabled")}
             />

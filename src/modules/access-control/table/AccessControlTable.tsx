@@ -4,7 +4,6 @@ import Button from "@components/Button";
 import ButtonGroup from "@components/ButtonGroup";
 import Card from "@components/Card";
 import FullTooltip from "@components/FullTooltip";
-import InlineLink from "@components/InlineLink";
 import SquareIcon from "@components/SquareIcon";
 import { DataTable } from "@components/table/DataTable";
 import DataTableHeader from "@components/table/DataTableHeader";
@@ -14,7 +13,7 @@ import GetStartedTest from "@components/ui/GetStartedTest";
 import NoResults from "@components/ui/NoResults";
 import type { ColumnDef, SortingState } from "@tanstack/react-table";
 import { removeAllSpaces } from "@utils/helpers";
-import { ClockFadingIcon, ExternalLinkIcon, PlusCircle } from "lucide-react";
+import { ClockFadingIcon, PlusCircle } from "lucide-react";
 import { usePathname, useSearchParams } from "next/navigation";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useSWRConfig } from "swr";
@@ -38,6 +37,7 @@ import AccessControlPostureCheckCell from "@/modules/access-control/table/Access
 import AccessControlProtocolCell from "@/modules/access-control/table/AccessControlProtocolCell";
 import { collectRuleEndpointItems } from "@/modules/access-control/table/AccessControlRuleEndpointCell";
 import AccessControlSourcesCell from "@/modules/access-control/table/AccessControlSourcesCell";
+import { isPolicyEffectivelyEnabled } from "@/modules/access-control/table/accessControlTableHelpers";
 import { parsePortsToStrings } from "@/modules/access-control/useAccessControl";
 
 type Props = {
@@ -75,7 +75,7 @@ function useAccessControlTableColumns(): ColumnDef<Policy>[] {
       {
         id: "enabled",
         accessorKey: "enabled",
-        accessorFn: (row) => row.enabled,
+        accessorFn: (row) => isPolicyEffectivelyEnabled(row),
         sortingFn: "basic",
         header: ({ column }) => {
           return (
@@ -365,20 +365,6 @@ export default function AccessControlTable({
                     </Button>
                   </AccessControlModal>
                 </div>
-              }
-              learnMore={
-                <>
-                  {t("common.learnMorePrefix")}{" "}
-                  <InlineLink
-                    href={
-                      "https://docs.netbird.io/how-to/manage-network-access"
-                    }
-                    target={"_blank"}
-                  >
-                    {t("accessControl.learnMoreLink")}
-                    <ExternalLinkIcon size={12} />
-                  </InlineLink>
-                </>
               }
             />
           )

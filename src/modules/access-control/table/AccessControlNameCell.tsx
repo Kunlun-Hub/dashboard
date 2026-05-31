@@ -1,6 +1,7 @@
 import DescriptionWithTooltip from "@components/ui/DescriptionWithTooltip";
 import React from "react";
 import { Policy } from "@/interfaces/Policy";
+import { isPolicyEffectivelyEnabled } from "@/modules/access-control/table/accessControlTableHelpers";
 import ActiveInactiveRow from "@/modules/common-table-rows/ActiveInactiveRow";
 
 type Props = {
@@ -10,7 +11,7 @@ type Props = {
 export default function AccessControlNameCell({ policy }: Readonly<Props>) {
   return (
     <ActiveInactiveRow
-      active={policy.enabled}
+      active={isPolicyEffectivelyEnabled(policy)}
       inactiveDot={"gray"}
       text={policy.name}
       dataCy={policy.name}

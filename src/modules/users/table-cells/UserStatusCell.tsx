@@ -1,7 +1,7 @@
 import FullTooltip from "@components/FullTooltip";
 import InlineLink from "@components/InlineLink";
 import { cn } from "@utils/helpers";
-import { ExternalLinkIcon, HelpCircle } from "lucide-react";
+import { HelpCircle } from "lucide-react";
 import React from "react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { User } from "@/interfaces/User";
@@ -42,16 +42,6 @@ export default function UserStatusCell({ user }: Readonly<Props>) {
   const tooltipContent = isLocalAuthDisabled ? (
     <div className={"max-w-xs text-xs flex flex-col gap-2"}>
       <div>{t("users.localAuthDisabledDescription")}</div>
-      <div>
-        <InlineLink
-          href={
-            "https://docs.netbird.io/selfhosted/identity-providers/disable-local-authentication"
-          }
-          target={"_blank"}
-        >
-          {t("common.learnMore")} <ExternalLinkIcon size={12} />
-        </InlineLink>
-      </div>
     </div>
   ) : (
     <div className={"max-w-xs text-xs flex flex-col gap-2"}>
@@ -67,15 +57,6 @@ export default function UserStatusCell({ user }: Readonly<Props>) {
           {t("users.pendingApprovalRequired")}
         </span>
         .
-      </div>
-      <div>
-        {t("users.pendingApprovalLearnMorePrefix")}{" "}
-        <InlineLink
-          href={"https://docs.netbird.io/how-to/approve-users"}
-          target={"_blank"}
-        >
-          {t("users.pendingApprovalLearnMore")} <ExternalLinkIcon size={12} />
-        </InlineLink>
       </div>
     </div>
   );

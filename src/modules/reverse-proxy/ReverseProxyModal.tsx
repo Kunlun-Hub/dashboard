@@ -3,7 +3,6 @@
 import Button from "@components/Button";
 import FancyToggleSwitch from "@components/FancyToggleSwitch";
 import HelpText from "@components/HelpText";
-import InlineLink from "@components/InlineLink";
 import { Input } from "@components/Input";
 import { Label } from "@components/Label";
 import {
@@ -13,14 +12,12 @@ import {
   ModalFooter,
 } from "@components/modal/Modal";
 import ModalHeader from "@components/modal/ModalHeader";
-import Paragraph from "@components/Paragraph";
 import SettingCard from "@components/SettingCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@components/Tabs";
 import {
   ArrowRight,
   Binary,
   ClockFadingIcon,
-  ExternalLinkIcon,
   FileCode2Icon,
   GlobeIcon,
   LockKeyhole,
@@ -44,10 +41,6 @@ import {
   AccessRestrictions,
   HeaderAuthConfig,
   isL4Mode as isL4ServiceMode,
-  REVERSE_PROXY_ACCESS_CONTROL_DOCS_LINK,
-  REVERSE_PROXY_AUTHENTICATION_DOCS_LINK,
-  REVERSE_PROXY_SERVICES_DOCS_LINK,
-  REVERSE_PROXY_SETTINGS_DOCS_LINK,
   ReverseProxy,
   ReverseProxyAuth,
   ReverseProxyDomain,
@@ -680,37 +673,6 @@ export default function ReverseProxyModal({
         </Tabs>
 
         <ModalFooter className={"items-center"}>
-          <div className={"w-full"}>
-            {(() => {
-              const docsLink = {
-                targets: {
-                  href: REVERSE_PROXY_SERVICES_DOCS_LINK,
-                  label: t("reverseProxy.servicesTitle"),
-                },
-                auth: {
-                  href: REVERSE_PROXY_AUTHENTICATION_DOCS_LINK,
-                  label: t("reverseProxy.tabAuthentication"),
-                },
-                "access-control": {
-                  href: REVERSE_PROXY_ACCESS_CONTROL_DOCS_LINK,
-                  label: t("reverseProxy.tabAccessControl"),
-                },
-                settings: {
-                  href: REVERSE_PROXY_SETTINGS_DOCS_LINK,
-                  label: t("settings.title"),
-                },
-              }[tab];
-              return docsLink ? (
-                <Paragraph className={"text-sm mt-auto"}>
-                  {t("common.learnMorePrefix")}
-                  <InlineLink href={docsLink.href} target={"_blank"}>
-                    {docsLink.label}
-                    <ExternalLinkIcon size={12} />
-                  </InlineLink>
-                </Paragraph>
-              ) : null;
-            })()}
-          </div>
           <div className={"flex gap-3 w-full justify-end"}>
             {!reverseProxy ? (
               <>

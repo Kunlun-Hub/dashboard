@@ -4,7 +4,6 @@ import Button from "@components/Button";
 import Code from "@components/Code";
 import FancyToggleSwitch from "@components/FancyToggleSwitch";
 import HelpText from "@components/HelpText";
-import InlineLink from "@components/InlineLink";
 import { Input } from "@components/Input";
 import { Label } from "@components/Label";
 import {
@@ -26,7 +25,6 @@ import { trim } from "lodash";
 import {
   AlarmClock,
   DownloadIcon,
-  ExternalLinkIcon,
   GlobeIcon,
   MonitorSmartphoneIcon,
   PlusCircle,
@@ -362,20 +360,6 @@ export function SetupKeyModalContent({
 
       {/* Footer */}
       <ModalFooter className={"items-center"}>
-        <div className={"w-full"}>
-          <Paragraph className={"text-sm mt-auto"}>
-            {t("common.learnMorePrefix")}{" "}
-            <InlineLink
-              href={
-                "https://docs.netbird.io/how-to/register-machines-using-setup-keys"
-              }
-              target={"_blank"}
-            >
-              {t("setupKeys.title")}
-              <ExternalLinkIcon size={12} />
-            </InlineLink>
-          </Paragraph>
-        </div>
         <div className={"flex gap-3 w-full justify-end"}>
           <ModalClose asChild={true}>
             <Button variant={"secondary"}>{t("actions.cancel")}</Button>

@@ -4,7 +4,6 @@ import {
   AlertCircleIcon,
   ArrowUpRightIcon,
   CirclePlusIcon,
-  ExternalLinkIcon,
   LockIcon,
   ShieldIcon,
   SquarePenIcon,
@@ -31,7 +30,6 @@ import PoliciesProvider from "@/contexts/PoliciesProvider";
 import { PeerSSHPolicyModal } from "@/modules/peer/PeerSSHPolicyModal";
 import { Callout } from "@components/Callout";
 import { useDialog } from "@/contexts/DialogProvider";
-import InlineLink from "@components/InlineLink";
 import { isNetbirdSSHProtocolSupported } from "@utils/version";
 import { useI18n } from "@/i18n/I18nProvider";
 
@@ -85,15 +83,7 @@ export const PeerSSHToggle = () => {
       title: t("peerSsh.disableTitle"),
       description: (
         <div>
-          {t("peerSsh.disableDescription")}{" "}
-          <InlineLink
-            href={"https://docs.netbird.io/manage/peers/ssh"}
-            target={"_blank"}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {t("users.learnMoreShort")}
-            <ExternalLinkIcon size={12} />
-          </InlineLink>
+          {t("peerSsh.disableDescription")}
         </div>
       ),
       confirmText: t("peerSsh.disable"),

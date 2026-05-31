@@ -1,5 +1,4 @@
 import { DatePickerWithRange } from "@components/DatePickerWithRange";
-import InlineLink from "@components/InlineLink";
 import SquareIcon from "@components/SquareIcon";
 import { DataTable } from "@components/table/DataTable";
 import DataTableHeader from "@components/table/DataTableHeader";
@@ -10,7 +9,6 @@ import GetStartedTest from "@components/ui/GetStartedTest";
 import { ColumnDef, SortingState } from "@tanstack/react-table";
 import dayjs from "dayjs";
 import { uniqBy } from "lodash";
-import { ExternalLinkIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import React, { useMemo, useState } from "react";
 import { DateRange } from "react-day-picker";
@@ -157,18 +155,6 @@ export default function ActivityTable({
           title={t("activity.getStartedTitle")}
           description={t("activity.getStartedDescription")}
           button={<AddPeerButton />}
-          learnMore={
-            <>
-              {t("activity.learnMorePrefix")}{" "}
-              <InlineLink
-                href={"https://docs.netbird.io/how-to/getting-started"}
-                target={"_blank"}
-              >
-                {t("activity.learnMoreLink")}
-                <ExternalLinkIcon size={12} />
-              </InlineLink>
-            </>
-          }
         />
       }
       onFilterReset={() => {

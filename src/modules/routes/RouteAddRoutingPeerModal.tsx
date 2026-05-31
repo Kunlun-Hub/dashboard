@@ -2,7 +2,6 @@
 
 import Button from "@components/Button";
 import HelpText from "@components/HelpText";
-import InlineLink from "@components/InlineLink";
 import { Label } from "@components/Label";
 import {
   Modal,
@@ -12,12 +11,11 @@ import {
 } from "@components/modal/Modal";
 import ModalHeader from "@components/modal/ModalHeader";
 import { NetworkRouteSelector } from "@components/NetworkRouteSelector";
-import Paragraph from "@components/Paragraph";
 import { PeerGroupSelector } from "@components/PeerGroupSelector";
 import { PeerSelector } from "@components/PeerSelector";
 import Separator from "@components/Separator";
 import { uniqBy } from "lodash";
-import { ExternalLinkIcon, PlusCircle } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import NetworkRoutesIcon from "@/assets/icons/NetworkRoutesIcon";
 import { useRoutes } from "@/contexts/RoutesProvider";
@@ -208,20 +206,6 @@ function Content({ onSuccess, groupedRoute, peer }: ModalProps) {
         </div>
       </div>
       <ModalFooter className={"items-center"}>
-        <div className={"w-full"}>
-          <Paragraph className={"text-sm mt-auto"}>
-            {t("common.learnMorePrefix")}{" "}
-            <InlineLink
-              href={
-                "https://docs.netbird.io/how-to/routing-traffic-to-private-networks"
-              }
-              target={"_blank"}
-            >
-              {t("networkRoutesPage.title")}
-              <ExternalLinkIcon size={12} />
-            </InlineLink>
-          </Paragraph>
-        </div>
         <div className={"flex gap-3 w-full justify-end"}>
           <ModalClose asChild={true}>
             <Button variant={"secondary"}>{t("common.cancel")}</Button>

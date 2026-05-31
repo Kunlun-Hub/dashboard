@@ -1,14 +1,11 @@
 import Button from "@components/Button";
 import HelpText from "@components/HelpText";
-import InlineLink from "@components/InlineLink";
 import { Input } from "@components/Input";
 import { Label } from "@components/Label";
 import { ModalClose, ModalFooter } from "@components/modal/Modal";
-import Paragraph from "@components/Paragraph";
 import { cn, validator } from "@utils/helpers";
 import { isEmpty, uniqueId } from "lodash";
 import {
-  ExternalLinkIcon,
   MinusCircleIcon,
   PlusCircle,
   ServerCogIcon,
@@ -271,20 +268,6 @@ const CheckContent = ({ value, onChange, disabled }: Props) => {
         </Button>
       </div>
       <ModalFooter className={"items-center"}>
-        <div className={"w-full"}>
-          <Paragraph className={"text-sm mt-auto"}>
-            {t("common.learnMorePrefix")}
-            <InlineLink
-              href={
-                "https://docs.netbird.io/how-to/manage-posture-checks#process-check"
-              }
-              target={"_blank"}
-            >
-              {t("postureChecks.processCheck")}
-              <ExternalLinkIcon size={12} />
-            </InlineLink>
-          </Paragraph>
-        </div>
         <div className={"flex gap-3 w-full justify-end"}>
           <ModalClose asChild={true}>
             <Button variant={"secondary"}>{t("actions.cancel")}</Button>

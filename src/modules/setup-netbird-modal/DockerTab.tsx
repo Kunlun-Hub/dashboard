@@ -1,12 +1,8 @@
-import Button from "@components/Button";
 import Code from "@components/Code";
-import InlineLink from "@components/InlineLink";
 import Steps from "@components/Steps";
 import TabsContentPadding, { TabsContent } from "@components/Tabs";
 import { IconBrandUbuntu } from "@tabler/icons-react";
 import { GRPC_API_ORIGIN } from "@utils/netbird";
-import { ExternalLinkIcon } from "lucide-react";
-import Link from "next/link";
 import React from "react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { OperatingSystem } from "@/interfaces/OperatingSystem";
@@ -35,18 +31,6 @@ export default function DockerTab({
         <Steps>
           <Steps.Step step={1}>
             <p>{t("setupModal.installDocker")}</p>
-            <div className={"flex gap-4 mt-1"}>
-              <Link
-                href={"https://docs.docker.com/engine/install/"}
-                passHref
-                target={"_blank"}
-              >
-                <Button variant={"primary"}>
-                  <ExternalLinkIcon size={14} />
-                  {t("setupModal.officialDockerGuide")}
-                </Button>
-              </Link>
-            </div>
           </Steps.Step>
           <Steps.Step step={2}>
             <p>
@@ -83,16 +67,6 @@ export default function DockerTab({
               )}
               <Code.Line> ohoimager/cloink:latest</Code.Line>
             </Code>
-          </Steps.Step>
-          <Steps.Step step={3} line={false}>
-            <p>{t("setupModal.readDocumentation")}</p>
-            <InlineLink
-              href={"https://docs.netbird.io/how-to/installation/docker"}
-              passHref={true}
-              target={"_blank"}
-            >
-              {t("setupModal.runningNetBirdDocker")}
-            </InlineLink>
           </Steps.Step>
         </Steps>
       </TabsContentPadding>

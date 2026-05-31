@@ -15,7 +15,7 @@ type PolicyNode = Node<
 export const PolicyNode = ({ data }: PolicyNode) => {
   const rule = data.policy.rules?.[0];
   const label = getPolicyProtocolAndPortText(data.policy);
-  const isActive = rule?.enabled;
+  const isActive = data.policy.enabled && (rule?.enabled ?? true);
 
   return (
     <div

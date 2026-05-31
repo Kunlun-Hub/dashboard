@@ -1,13 +1,11 @@
 "use client";
 
 import Breadcrumbs from "@components/Breadcrumbs";
-import InlineLink from "@components/InlineLink";
-import Paragraph from "@components/Paragraph";
 import SkeletonTable from "@components/skeletons/SkeletonTable";
 import { RestrictedAccess } from "@components/ui/RestrictedAccess";
 import { usePortalElement } from "@hooks/usePortalElement";
 import useFetchApi from "@utils/api";
-import { ExternalLinkIcon, User2 } from "lucide-react";
+import { User2 } from "lucide-react";
 import React, { lazy, Suspense } from "react";
 import TeamIcon from "@/assets/icons/TeamIcon";
 import { useGroups } from "@/contexts/GroupsProvider";
@@ -46,18 +44,6 @@ export default function TeamUsers() {
           />
         </Breadcrumbs>
         <h1 ref={headingRef}>{t("users.title")}</h1>
-        <Paragraph>{t("users.description")}</Paragraph>
-        <Paragraph>
-          {t("common.learnMorePrefix")}{" "}
-          <InlineLink
-            href={"https://docs.netbird.io/how-to/add-users-to-your-network"}
-            target={"_blank"}
-          >
-            {t("users.title")}
-            <ExternalLinkIcon size={12} />
-          </InlineLink>
-          {t("common.inDocumentationSuffix")}
-        </Paragraph>
       </div>
       <RestrictedAccess page={t("users.title")} hasAccess={permission.users.read}>
         <Suspense fallback={<SkeletonTable />}>
