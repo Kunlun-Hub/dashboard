@@ -11,6 +11,7 @@ import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useUsers } from "@/contexts/UsersProvider";
 import { useI18n } from "@/i18n/I18nProvider";
 import PageContainer from "@/layouts/PageContainer";
+import { ResourceUsageInline } from "@/modules/account/ResourceUsage";
 import { SetupModalContent } from "@/modules/setup-netbird-modal/SetupModal";
 
 const PeersTable = lazy(() => import("@/modules/peers/PeersTable"));
@@ -56,7 +57,14 @@ function PeersView() {
             icon={<PeerIcon size={13} />}
           />
         </Breadcrumbs>
-        <h1 ref={headingRef}>{t("peers.title")}</h1>
+        <div
+          className={
+            "flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"
+          }
+        >
+          <h1 ref={headingRef}>{t("peers.title")}</h1>
+          <ResourceUsageInline limit={"peers"} className={"sm:min-w-[18rem]"} />
+        </div>
       </div>
       <Suspense fallback={<SkeletonTable />}>
         <PeersTable

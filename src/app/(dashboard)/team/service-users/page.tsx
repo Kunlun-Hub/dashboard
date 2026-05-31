@@ -12,6 +12,7 @@ import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useI18n } from "@/i18n/I18nProvider";
 import { User } from "@/interfaces/User";
 import PageContainer from "@/layouts/PageContainer";
+import { ResourceUsageInline } from "@/modules/account/ResourceUsage";
 
 const ServiceUsersTable = lazy(
   () => import("@/modules/users/ServiceUsersTable"),
@@ -43,7 +44,14 @@ export default function ServiceUsers() {
             icon={<IconSettings2 size={17} />}
           />
         </Breadcrumbs>
-        <h1 ref={headingRef}>{t("serviceUsers.title")}</h1>
+        <div
+          className={
+            "flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"
+          }
+        >
+          <h1 ref={headingRef}>{t("serviceUsers.title")}</h1>
+          <ResourceUsageInline limit={"users"} className={"sm:min-w-[18rem]"} />
+        </div>
       </div>
       <RestrictedAccess
         page={t("serviceUsers.title")}

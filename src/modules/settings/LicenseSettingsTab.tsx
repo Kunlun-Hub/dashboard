@@ -27,6 +27,7 @@ import {
   LicenseType,
   UpdateAccountLicenseRequest,
 } from "@/interfaces/AccountLicense";
+import { ResourceUsagePanel } from "@/modules/account/ResourceUsage";
 import { useAccountLicense } from "@/modules/account/useAccountLicense";
 
 type Props = {
@@ -189,6 +190,8 @@ export default function LicenseSettingsTab({ account }: Readonly<Props>) {
             {license.message}
           </p>
         )}
+
+        <ResourceUsagePanel limits={license?.limits} usage={license?.usage} />
 
         <div className={"mt-8"}>
           <Label>{t("licenseSettings.licenseKey")}</Label>

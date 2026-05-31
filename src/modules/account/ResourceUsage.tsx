@@ -1,0 +1,165 @@
+import { cn } from "@utils/helpers";
+import React from "react";
+import { useI18n } from "@/i18n/I18nProvider";
+import { EntitlementLimit } from "@/interfaces/AccountEntitlements";
+import { useAccountEntitlements } from "@/modules/account/useAccountEntitlements";
+
+type UsageMap = Partial<Record<EntitlementLimit, number>>;
+
+const defaultUsageItems: EntitlementLimit[] = [
+  "users",
+  "peers",
+  "self_hosted_relays",
+  "reverse_proxy_servers",
+  "custom_domains",
+  "custom_rules",
+];
+
+type ResourceUsagePanelProps = {
+  limits?: UsageMap;
+  usage?: UsageMap;
+  items?: EntitlementLimit[];
+};
+
+export function ResourceUsagePanel({
+  limits,
+  usage,
+  items = defaultUsageItems,
+}: Readonly<ResourceUsagePanelProps>) {
+  const { t } = useI18n();
+
+  return (
+    <div className={"mt-6"}>
+      <div className={"text-sm font-medium text-nb-gray-900 dark:text-white"}>
+        {t("resourceUsage.title")}
+      </div>
+      <div className={"mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-3"}>
+        {items.map((item) => (
+          <ResourceUsageCard
+            key={item}
+            limit={item}
+            allowed={limits?.[item]}
+            used={usage?.[item]}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+type ResourceUsageInlineProps = {
+  limit: EntitlementLimit;
+  className?: string;
+};
+
+export function ResourceUsageInline({
+  limit,
+  className,
+}: Readonly<ResourceUsageInlineProps>) {
+  const { entitlements } = useAccountEntitlements();
+
+  return (
+    <ResourceUsageCard
+      limit={limit}
+      allowed={entitlements?.limits?.[limit]}
+      used={entitlements?.usage?.[limit]}
+      compact
+      className={className}
+    />
+  );
+}
+
+function ResourceUsageCard({
+  limit,
+  allowed,
+  used,
+  compact = false,
+  className,
+}: Readonly<{
+  limit: EntitlementLimit;
+  allowed?: number;
+  used?: number;
+  compact?: boolean;
+  className?: string;
+}>) {
+  const { t } = useI18n();
+  const currentText = used === undefined ? "-" : String(used);
+  const limitText = formatLimit(t, allowed);
+  const remainingText = formatRemaining(t, used, allowed);
+
+  return (
+    <div
+      className={cn(
+        "border border-neutral-200 dark:border-nb-gray-920 rounded-md bg-white dark:bg-nb-gray-940",
+        compact ? "px-3 py-2 flex items-center gap-3" : "px-4 py-3",
+        className,
+      )}
+    >
+      <div
+        className={cn(
+          "text-nb-gray-500 dark:text-nb-gray-300",
+          compact ? "text-xs" : "text-sm",
+        )}
+      >
+        {limitLabel(t, limit)}
+      </div>
+      <div
+        className={cn(
+          "font-semibold text-nb-gray-900 dark:text-white",
+          compact ? "text-sm" : "text-lg mt-1",
+        )}
+      >
+        {currentText}/{limitText}
+      </div>
+      <div
+        className={cn(
+          "text-nb-gray-400",
+          compact ? "text-xs ml-auto" : "text-xs mt-1",
+        )}
+      >
+        {remainingText}
+      </div>
+    </div>
+  );
+}
+
+function limitLabel(
+  t: ReturnType<typeof useI18n>["t"],
+  limit: EntitlementLimit,
+) {
+  switch (limit) {
+    case "users":
+      return t("resourceUsage.users");
+    case "peers":
+      return t("resourceUsage.peers");
+    case "self_hosted_relays":
+      return t("resourceUsage.relays");
+    case "reverse_proxy_servers":
+      return t("resourceUsage.reverseProxyServers");
+    case "custom_domains":
+      return t("resourceUsage.customDomains");
+    case "custom_rules":
+      return t("resourceUsage.customRules");
+    default:
+      return limit;
+  }
+}
+
+function formatLimit(t: ReturnType<typeof useI18n>["t"], limit?: number) {
+  if (limit === undefined) return "-";
+  if (limit < 0) return t("resourceUsage.unlimited");
+  return String(limit);
+}
+
+function formatRemaining(
+  t: ReturnType<typeof useI18n>["t"],
+  used?: number,
+  limit?: number,
+) {
+  if (used === undefined || limit === undefined)
+    return t("resourceUsage.remainingUnknown");
+  if (limit < 0) return t("resourceUsage.remainingUnlimited");
+  return t("resourceUsage.remaining", {
+    count: Math.max(limit - used, 0),
+  });
+}

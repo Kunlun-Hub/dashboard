@@ -9,6 +9,7 @@ import React, { lazy, Suspense } from "react";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useI18n } from "@/i18n/I18nProvider";
 import PageContainer from "@/layouts/PageContainer";
+import { ResourceUsageInline } from "@/modules/account/ResourceUsage";
 
 const RelaysTable = lazy(() => import("@/modules/relays/RelaysTable"));
 
@@ -29,7 +30,17 @@ export default function RelaysPage() {
             active={true}
           />
         </Breadcrumbs>
-        <h1 ref={headingRef}>{t("relays.title")}</h1>
+        <div
+          className={
+            "flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"
+          }
+        >
+          <h1 ref={headingRef}>{t("relays.title")}</h1>
+          <ResourceUsageInline
+            limit={"self_hosted_relays"}
+            className={"sm:min-w-[18rem]"}
+          />
+        </div>
       </div>
       <RestrictedAccess
         page={t("relays.title")}

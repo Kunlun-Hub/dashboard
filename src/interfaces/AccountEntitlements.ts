@@ -29,4 +29,5 @@ export interface AccountEntitlements {
   plan: EntitlementPlan;
   features: Partial<Record<EntitlementFeature, boolean>>;
   limits: Partial<Record<EntitlementLimit, number>>;
+  usage: Partial<Record<EntitlementLimit, number>>;
 }

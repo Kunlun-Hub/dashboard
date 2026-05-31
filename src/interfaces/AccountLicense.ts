@@ -28,6 +28,7 @@ export interface AccountLicense {
   updated_at?: string;
   features: Partial<Record<EntitlementFeature, boolean>>;
   limits: Partial<Record<EntitlementLimit, number>>;
+  usage: Partial<Record<EntitlementLimit, number>>;
 }
 
 export interface UpdateAccountLicenseRequest {
