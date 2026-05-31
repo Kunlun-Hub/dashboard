@@ -101,8 +101,8 @@ export function PeerSelector({
           className={cn(
             "min-h-[46px] w-full relative items-center group",
             "border border-neutral-200 dark:border-nb-gray-700 justify-between py-2 px-3",
-            "rounded-md bg-white text-sm dark:bg-nb-gray-900/40 flex dark:text-neutral-400/70 text-neutral-500 cursor-pointer enabled:hover:dark:bg-nb-gray-900/50",
-            "disabled:opacity-40 disabled:cursor-default",
+            "rounded-md bg-white text-sm dark:bg-nb-gray-900/40 flex dark:text-neutral-400/70 text-neutral-600 cursor-pointer enabled:hover:bg-neutral-50 enabled:hover:text-neutral-900 enabled:hover:dark:bg-nb-gray-900/50",
+            "disabled:opacity-70 disabled:cursor-default disabled:bg-neutral-50 disabled:text-neutral-500 dark:disabled:bg-nb-gray-900/50",
           )}
           disabled={disabled}
           ref={inputRef}
@@ -115,7 +115,7 @@ export function PeerSelector({
             {value ? (
               <div
                 className={
-                  "flex items-center justify-between text-sm text-white w-full pr-4 pl-1"
+                  "flex items-center justify-between text-sm text-neutral-900 dark:text-white w-full pr-4 pl-1"
                 }
               >
                 <div className={"flex items-center gap-2.5 text-sm"}>
@@ -203,8 +203,8 @@ export function PeerSelector({
                       className={cn(
                         "flex items-center gap-2.5 text-sm",
                         value && value.id == option.id
-                          ? "text-white"
-                          : "text-nb-gray-300",
+                          ? "text-neutral-900 dark:text-white"
+                          : "text-neutral-700 dark:text-nb-gray-300",
                       )}
                     >
                       <PeerOperatingSystemIcon
@@ -233,8 +233,8 @@ export function PeerSelector({
                       className={cn(
                         "font-medium flex items-center gap-1 font-mono text-[10px]",
                         value && value.id == option.id
-                          ? "text-white"
-                          : "text-nb-gray-300",
+                          ? "text-neutral-900 dark:text-white"
+                          : "text-neutral-500 dark:text-nb-gray-300",
                         !isSupported && "opacity-50",
                       )}
                     >

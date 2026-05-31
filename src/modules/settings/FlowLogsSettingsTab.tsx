@@ -317,37 +317,37 @@ export default function FlowLogsSettingsTab({ account }: Readonly<Props>) {
             {flowLocalStorageEnabled && (
               <div className="mt-4 pl-6 space-y-4">
                 <div className="flex flex-col gap-2">
-                  <label className="text-sm text-nb-gray-300">{t("flowLogsSettings.storagePath")}</label>
+                  <label className="text-sm text-neutral-600 dark:text-nb-gray-300">{t("flowLogsSettings.storagePath")}</label>
                   <input
                     type="text"
                     value={flowLocalStoragePath}
                     onChange={(e) => setFlowLocalStoragePath(e.target.value)}
                     placeholder={t("flowLogsSettings.storagePathPlaceholder")}
-                    className="bg-nb-gray-800 border border-nb-gray-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-nb-primary"
+                    className="bg-white border border-neutral-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-nb-primary dark:bg-nb-gray-800 dark:border-nb-gray-700"
                     disabled={!permission.settings.update}
                   />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label className="text-sm text-nb-gray-300">{t("flowLogsSettings.maxFileSize")}</label>
+                  <label className="text-sm text-neutral-600 dark:text-nb-gray-300">{t("flowLogsSettings.maxFileSize")}</label>
                   <input
                     type="number"
                     value={flowLocalStorageMaxSizeMb}
                     onChange={(e) => setFlowLocalStorageMaxSizeMb(Number(e.target.value))}
                     min="1"
                     max="1000"
-                    className="bg-nb-gray-800 border border-nb-gray-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-nb-primary w-32"
+                    className="bg-white border border-neutral-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-nb-primary w-32 dark:bg-nb-gray-800 dark:border-nb-gray-700"
                     disabled={!permission.settings.update}
                   />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label className="text-sm text-nb-gray-300">{t("flowLogsSettings.maxFiles")}</label>
+                  <label className="text-sm text-neutral-600 dark:text-nb-gray-300">{t("flowLogsSettings.maxFiles")}</label>
                   <input
                     type="number"
                     value={flowLocalStorageMaxFiles}
                     onChange={(e) => setFlowLocalStorageMaxFiles(Number(e.target.value))}
                     min="1"
                     max="100"
-                    className="bg-nb-gray-800 border border-nb-gray-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-nb-primary w-32"
+                    className="bg-white border border-neutral-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-nb-primary w-32 dark:bg-nb-gray-800 dark:border-nb-gray-700"
                     disabled={!permission.settings.update}
                   />
                 </div>
@@ -378,22 +378,22 @@ export default function FlowLogsSettingsTab({ account }: Readonly<Props>) {
             {flowSyslogEnabled && (
               <div className="mt-4 pl-6 space-y-4">
                 <div className="flex flex-col gap-2">
-                  <label className="text-sm text-nb-gray-300">{t("flowLogsSettings.syslogServer")}</label>
+                  <label className="text-sm text-neutral-600 dark:text-nb-gray-300">{t("flowLogsSettings.syslogServer")}</label>
                   <input
                     type="text"
                     value={flowSyslogServer}
                     onChange={(e) => setFlowSyslogServer(e.target.value)}
                     placeholder={t("flowLogsSettings.syslogServerPlaceholder")}
-                    className="bg-nb-gray-800 border border-nb-gray-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-nb-primary"
+                    className="bg-white border border-neutral-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-nb-primary dark:bg-nb-gray-800 dark:border-nb-gray-700"
                     disabled={!permission.settings.update}
                   />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label className="text-sm text-nb-gray-300">{t("flowLogsSettings.syslogProtocol")}</label>
+                  <label className="text-sm text-neutral-600 dark:text-nb-gray-300">{t("flowLogsSettings.syslogProtocol")}</label>
                   <select
                     value={flowSyslogProtocol}
                     onChange={(e) => setFlowSyslogProtocol(e.target.value)}
-                    className="bg-nb-gray-800 border border-nb-gray-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-nb-primary w-32"
+                    className="bg-white border border-neutral-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-nb-primary w-32 dark:bg-nb-gray-800 dark:border-nb-gray-700"
                     disabled={!permission.settings.update}
                   >
                     <option value="udp">UDP</option>
@@ -401,11 +401,11 @@ export default function FlowLogsSettingsTab({ account }: Readonly<Props>) {
                   </select>
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label className="text-sm text-nb-gray-300">{t("flowLogsSettings.syslogFacility")}</label>
+                  <label className="text-sm text-neutral-600 dark:text-nb-gray-300">{t("flowLogsSettings.syslogFacility")}</label>
                   <select
                     value={flowSyslogFacility}
                     onChange={(e) => setFlowSyslogFacility(e.target.value)}
-                    className="bg-nb-gray-800 border border-nb-gray-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-nb-primary w-40"
+                    className="bg-white border border-neutral-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-nb-primary w-40 dark:bg-nb-gray-800 dark:border-nb-gray-700"
                     disabled={!permission.settings.update}
                   >
                     <option value="daemon">Daemon</option>
@@ -425,13 +425,13 @@ export default function FlowLogsSettingsTab({ account }: Readonly<Props>) {
                   </select>
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label className="text-sm text-nb-gray-300">{t("flowLogsSettings.syslogTag")}</label>
+                  <label className="text-sm text-neutral-600 dark:text-nb-gray-300">{t("flowLogsSettings.syslogTag")}</label>
                   <input
                     type="text"
                     value={flowSyslogTag}
                     onChange={(e) => setFlowSyslogTag(e.target.value)}
                     placeholder={t("flowLogsSettings.syslogTagPlaceholder")}
-                    className="bg-nb-gray-800 border border-nb-gray-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-nb-primary w-40"
+                    className="bg-white border border-neutral-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-nb-primary w-40 dark:bg-nb-gray-800 dark:border-nb-gray-700"
                     disabled={!permission.settings.update}
                   />
                 </div>

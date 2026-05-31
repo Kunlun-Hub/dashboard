@@ -70,7 +70,7 @@ export default function DNSRecordsTable({ zone }: Props) {
         minimal={true}
         showSearchAndFilters={false}
         rowClassName={"last:pb-10"}
-        className={"bg-nb-gray-960 py-2"}
+        className={"bg-neutral-50 py-2 dark:bg-nb-gray-960"}
         inset={true}
         text={t("dns.records")}
         initialPageSize={zone?.records?.length}

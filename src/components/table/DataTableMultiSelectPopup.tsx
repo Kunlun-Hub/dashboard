@@ -45,22 +45,22 @@ export function DataTableMultiSelectPopup<T>({
                   duration: 0.35,
                 }}
                 className={cn(
-                  "max-w-xl mx-auto border relative z-[50] bg-nb-gray-800 border-nb-gray-900 shadow-2xl border-b-0 overflow-hidden pointer-events-auto",
+                  "max-w-xl mx-auto border relative z-[50] bg-white border-neutral-200 shadow-2xl border-b-0 overflow-hidden pointer-events-auto dark:bg-nb-gray-800 dark:border-nb-gray-900",
                   "rounded-t-lg",
                 )}
               >
                 <AnimatePresence mode={"popLayout"}>
                   <div
                     className={
-                      "flex gap-2 items-center text-sm px-6 pt-3.5 pb-20 bg-nb-gray-920/90 text-nb-gray-200 justify-between"
+                      "flex gap-2 items-center text-sm px-6 pt-3.5 pb-20 bg-neutral-50 text-neutral-700 justify-between dark:bg-nb-gray-920/90 dark:text-nb-gray-200"
                     }
                   >
                     <div className={"flex gap-2 items-center"}>
                       <MonitorSmartphoneIcon size={16} className={""} />
                       <span>
-                        <span className={"font-medium text-white"}>
-                        {count}
-                      </span>{" "}
+                        <span className={"font-medium text-neutral-900 dark:text-white"}>
+                          {count}
+                        </span>{" "}
                         {label ?? t("selection.peersSelected")}
                       </span>
                     </div>

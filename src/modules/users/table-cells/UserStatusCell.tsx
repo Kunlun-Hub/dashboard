@@ -63,7 +63,7 @@ export default function UserStatusCell({ user }: Readonly<Props>) {
           {t("settings.title")}
         </InlineLink>{" "}
         {t("users.pendingApprovalSettingsSuffix")}{" "}
-        <span className={"font-medium text-white"}>
+        <span className={"font-medium text-neutral-900 dark:text-white"}>
           {t("users.pendingApprovalRequired")}
         </span>
         .
@@ -92,7 +92,9 @@ export default function UserStatusCell({ user }: Readonly<Props>) {
         disabled={!showTooltip}
       >
         <div
-          className={cn("flex gap-2.5 items-center text-nb-gray-300 text-sm")}
+          className={cn(
+            "flex gap-2.5 items-center text-neutral-600 dark:text-nb-gray-300 text-sm",
+          )}
           data-cy={"user-status-cell"}
         >
           <span className={cn("h-2 w-2 rounded-full", color)}></span>

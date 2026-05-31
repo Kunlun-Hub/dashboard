@@ -59,7 +59,7 @@ export const ResourcePolicyCell = ({ resource }: Props) => {
             skipDelayDuration={200}
             customOpen={tooltipOpen}
             customOnOpenChange={setTooltipOpen}
-            className={"border-nb-gray-800"}
+            className={"border-neutral-200 dark:border-nb-gray-800"}
             content={
               <div className={"text-xs flex flex-col p-1"}>
                 {resourcePolicies?.map((policy: Policy) => {
@@ -69,7 +69,7 @@ export const ResourcePolicyCell = ({ resource }: Props) => {
                     <button
                       key={policy.id}
                       className={
-                        "m-0 pl-3 py-2.5 leading-none flex justify-between group hover:bg-nb-gray-900 rounded-md"
+                        "m-0 pl-3 py-2.5 leading-none flex justify-between group hover:bg-neutral-100 dark:hover:bg-nb-gray-900 rounded-md"
                       }
                       onClick={async () => {
                         setTooltipOpen(false);
@@ -84,7 +84,7 @@ export const ResourcePolicyCell = ({ resource }: Props) => {
                     >
                       <div
                         className={
-                          " flex items-center gap-2 leading-none font-medium text-nb-gray-300 group-hover:text-nb-gray-200 whitespace-nowrap"
+                          "flex items-center gap-2 leading-none font-medium text-neutral-700 group-hover:text-neutral-900 dark:text-nb-gray-300 dark:group-hover:text-nb-gray-200 whitespace-nowrap"
                         }
                       >
                         <CircleIcon
@@ -97,7 +97,7 @@ export const ResourcePolicyCell = ({ resource }: Props) => {
 
                       <div
                         className={
-                          "text-nb-gray-300 px-2 ml-4 uppercase font-mono opacity-0 group-hover:opacity-100"
+                          "text-neutral-500 dark:text-nb-gray-300 px-2 ml-4 uppercase font-mono opacity-0 group-hover:opacity-100"
                         }
                       >
                         <SquarePenIcon size={12} />
@@ -115,7 +115,9 @@ export const ResourcePolicyCell = ({ resource }: Props) => {
             <Badge
               variant={"gray"}
               useHover={true}
-              className={"select-none hover:bg-nb-gray-910 cursor-pointer"}
+              className={
+                "select-none hover:bg-neutral-100 dark:hover:bg-nb-gray-910 cursor-pointer"
+              }
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();

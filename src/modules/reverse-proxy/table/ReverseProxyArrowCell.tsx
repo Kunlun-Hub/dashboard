@@ -10,7 +10,10 @@ export default function ReverseProxyArrowCell({ disabled }: Readonly<Props>) {
   return (
     <ArrowRight
       size={16}
-      className={cn("text-nb-gray-300", disabled && "opacity-50")}
+      className={cn(
+        "text-neutral-500 dark:text-nb-gray-300",
+        disabled && "text-neutral-300 dark:text-nb-gray-600",
+      )}
     />
   );
 }

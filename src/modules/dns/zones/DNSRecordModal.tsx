@@ -252,7 +252,7 @@ export function DNSRecordModalContent({
             />
             <div
               className={
-                "bg-nb-gray-900 rounded-r-md border text-nb-gray-300 border-l-0 text-sm border-nb-gray-700 flex items-center justify-center whitespace-nowrap px-4 opacity-80"
+                "bg-neutral-100 rounded-r-md border text-neutral-600 border-l-0 text-sm border-neutral-200 flex items-center justify-center whitespace-nowrap px-4 dark:bg-nb-gray-900 dark:text-nb-gray-300 dark:border-nb-gray-700"
               }
             >
               .{zone.domain}

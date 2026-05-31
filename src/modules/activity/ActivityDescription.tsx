@@ -847,7 +847,7 @@ function Value({
   return children ? (
     <span
       className={cn(
-        "text-nb-gray-200 inline-flex gap-1 items-center max-h-[22px] font-medium bg-nb-gray-900 py-[3px] text-[11px] px-[5px] border border-nb-gray-800 rounded-[4px]",
+        "text-neutral-700 inline-flex gap-1 items-center max-h-[22px] font-medium bg-neutral-100 py-[3px] text-[11px] px-[5px] border border-neutral-200 rounded-[4px] dark:text-nb-gray-200 dark:bg-nb-gray-900 dark:border-nb-gray-800",
         className,
       )}
     >

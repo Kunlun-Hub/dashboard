@@ -270,7 +270,7 @@ const PeerGroupMassAssignmentContent = ({
                 duration: 0.35,
               }}
               className={
-                "max-w-xl mx-auto rounded-t-lg -bottom-14 relative z-[49] flex gap-4 flex-col px-6 pt-6 pb-20 bg-nb-gray-920 border border-nb-gray-900 shadow-2xl border-b-0 overflow-hidden pointer-events-auto"
+                "max-w-xl mx-auto rounded-t-lg -bottom-14 relative z-[49] flex gap-4 flex-col px-6 pt-6 pb-20 bg-white border border-neutral-200 shadow-2xl border-b-0 overflow-hidden pointer-events-auto dark:bg-nb-gray-920 dark:border-nb-gray-900"
               }
             >
               <AnimatePresence>
@@ -286,7 +286,7 @@ const PeerGroupMassAssignmentContent = ({
                       duration: 0.25,
                     }}
                     className={
-                      "absolute w-full h-full flex items-center justify-center bg-nb-gray-920/70  z-50 top-0 left-0"
+                      "absolute w-full h-full flex items-center justify-center bg-white/70 z-50 top-0 left-0 dark:bg-nb-gray-920/70"
                     }
                   >
                     <motion.span
@@ -300,7 +300,7 @@ const PeerGroupMassAssignmentContent = ({
                         duration: 0.25,
                       }}
                       className={
-                        "flex items-center justify-center gap-2 mb-14 font-normal text-nb-gray-100 text-sm"
+                        "flex items-center justify-center gap-2 mb-14 font-normal text-neutral-900 dark:text-nb-gray-100 text-sm"
                       }
                     >
                       {isLoading && (
@@ -360,20 +360,20 @@ const PeerGroupMassAssignmentContent = ({
               duration: 0.35,
             }}
             className={cn(
-              "max-w-xl mx-auto border relative z-[50] bg-nb-gray-800 border-nb-gray-900 shadow-2xl border-b-0 overflow-hidden pointer-events-auto",
+              "max-w-xl mx-auto border relative z-[50] bg-white border-neutral-200 shadow-2xl border-b-0 overflow-hidden pointer-events-auto dark:bg-nb-gray-800 dark:border-nb-gray-900",
               !showGroupAssignment && "rounded-t-lg",
             )}
           >
             <AnimatePresence mode={"popLayout"}>
               <div
                 className={
-                  "flex gap-2 items-center text-sm px-6 pt-3.5 pb-20 bg-nb-gray-920/90 text-nb-gray-200 justify-between"
+                  "flex gap-2 items-center text-sm px-6 pt-3.5 pb-20 bg-neutral-50 text-neutral-700 justify-between dark:bg-nb-gray-920/90 dark:text-nb-gray-200"
                 }
               >
                 <div className={"flex gap-2 items-center"}>
                   <MonitorSmartphoneIcon size={16} className={""} />
                   <span>
-                    <span className={"font-medium text-white"}>
+                    <span className={"font-medium text-neutral-900 dark:text-white"}>
                       {peerCount}
                     </span>{" "}
                     {t("peerMultiSelect.peersSelected", { count: peerCount })}

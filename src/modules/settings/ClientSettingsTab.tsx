@@ -251,7 +251,7 @@ function ClientSettingsTabContent({ account }: Readonly<Props>) {
               {` `}
               {t("clientSettings.requiresAtLeast")}
               {` `}
-              <span className={"text-white font-medium"}>v0.61.0</span>.{" "}
+              <span className={"text-neutral-900 dark:text-white font-medium"}>v0.61.0</span>.{" "}
               <InlineLink
                 href={"https://docs.netbird.io/manage/peers/auto-update"}
                 target={"_blank"}
@@ -321,7 +321,7 @@ function ClientSettingsTabContent({ account }: Readonly<Props>) {
                 {t("clientSettings.exposeServicesHelpLine1")} <br />{" "}
                 {t("clientSettings.requiresAtLeast")}
                 {` `}
-                <span className={"text-white font-medium"}>v0.66.0</span>.{" "}
+                <span className={"text-neutral-900 dark:text-white font-medium"}>v0.66.0</span>.{" "}
                 <InlineLink
                   href={
                     "https://docs.netbird.io/manage/reverse-proxy/expose-from-cli"
@@ -347,10 +347,10 @@ function ClientSettingsTabContent({ account }: Readonly<Props>) {
 
             <div
               className={cn(
-                "border border-nb-gray-900 border-t-0 rounded-b-md bg-nb-gray-940 px-[1.28rem] pt-3 pb-5 flex flex-col gap-4 mx-[0.25rem]",
+                "border border-neutral-200 border-t-0 rounded-b-md bg-white px-[1.28rem] pt-3 pb-5 flex flex-col gap-4 mx-[0.25rem] dark:border-nb-gray-900 dark:bg-nb-gray-940",
                 !peerExposeEnabled
                   ? "opacity-50 pointer-events-none"
-                  : "bg-nb-gray-930/80",
+                  : "bg-neutral-50 dark:bg-nb-gray-930/80",
               )}
             >
               <div className={"mt-2"}>

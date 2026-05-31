@@ -179,13 +179,11 @@ function UserOverview({ user, initialGroups }: Readonly<Props>) {
             <div className={"flex items-center gap-3"}>
               <div
                 className={
-                  "w-10 h-10 rounded-full relative flex items-center justify-center text-white uppercase text-md font-medium bg-nb-gray-900"
+                  "w-10 h-10 rounded-full relative flex items-center justify-center uppercase text-md font-medium bg-neutral-100 text-neutral-700 dark:bg-nb-gray-900 dark:text-white"
                 }
                 style={
                   isServiceUser
-                    ? {
-                        color: "white",
-                      }
+                    ? undefined
                     : {
                         color: user?.name
                           ? generateColorFromString(

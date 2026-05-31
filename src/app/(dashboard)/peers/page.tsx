@@ -104,7 +104,7 @@ function PeersBlockedView() {
       <div className={"px-3 pt-1 pb-8 max-w-3xl w-full"}>
         <div
           className={
-            "rounded-md border border-nb-gray-900/70 grid w-full bg-nb-gray-930/40 stepper-bg-variant"
+            "rounded-md border border-neutral-200 grid w-full bg-white stepper-bg-variant dark:border-nb-gray-900/70 dark:bg-nb-gray-930/40"
           }
         >
           <SetupModalContent header={false} footer={false} />

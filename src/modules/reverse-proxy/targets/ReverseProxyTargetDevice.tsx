@@ -82,7 +82,7 @@ export const ReverseProxyTargetDevice = ({
     <div className={cn("flex items-center relative -left-2", wrapperClassName)}>
       <div
         className={cn(
-          "cursor-pointer rounded-md hover:bg-nb-gray-900/40 flex items-center justify-between group pr-4",
+          "cursor-pointer rounded-md hover:bg-neutral-100 flex items-center justify-between group pr-4 dark:hover:bg-nb-gray-900/40",
         )}
         onClick={handleClick}
       >
@@ -99,7 +99,9 @@ export const ReverseProxyTargetDevice = ({
         />
         <ArrowUpRight
           size={14}
-          className={"text-nb-gray-200 opacity-0 group-hover:opacity-100"}
+          className={
+            "text-neutral-600 opacity-0 group-hover:opacity-100 dark:text-nb-gray-200"
+          }
         />
       </div>
     </div>

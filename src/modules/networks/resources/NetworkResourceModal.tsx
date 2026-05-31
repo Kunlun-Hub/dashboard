@@ -306,7 +306,7 @@ export function ResourceModalContent({
               <AccordionItem value={"resource-groups"}>
                 <AccordionTrigger
                   className={
-                    "text-[0.8rem] tracking-wider text-nb-gray-200 py-4  my-0 leading-none gap-2 flex items-center"
+                    "text-[0.8rem] tracking-wider text-neutral-500 hover:text-neutral-900 dark:text-nb-gray-200 py-4 my-0 leading-none gap-2 flex items-center"
                   }
                 >
                   <span className={"relative top-[1px]"}>
@@ -345,7 +345,7 @@ export function ResourceModalContent({
                       {groupPolicyCount > 0 && (
                         <Callout variant={"info"} className={"mt-3"}>
                           {t("networkResources.groupPolicyPrefix")}{" "}
-                          <span className="text-white font-medium">
+                          <span className="text-neutral-900 dark:text-white font-medium">
                             {t("networkResources.groupPolicyCount", {
                               count: groupPolicyCount,
                             })}

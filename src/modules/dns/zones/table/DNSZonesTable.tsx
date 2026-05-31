@@ -177,7 +177,7 @@ export default function DNSZonesTable({
         return (
           <>
             <DNSRecordsTable zone={zone} />
-            <div className={"h-2 w-full bg-nb-gray-960"}></div>
+            <div className={"h-2 w-full bg-neutral-50 dark:bg-nb-gray-960"}></div>
           </>
         );
       }}

@@ -64,7 +64,12 @@ export function GroupFilterSelector({
       }}
     >
       <PopoverTrigger asChild={true}>
-        <Button variant={"secondary"} disabled={disabled} ref={inputRef}>
+        <Button
+          variant={values.length > 0 ? "tertiary" : "secondary"}
+          disabled={disabled}
+          ref={inputRef}
+          aria-pressed={values.length > 0}
+        >
           <FolderGit2 size={16} className={"shrink-0"} />
           <div className={"w-full flex justify-between"}>
             {values.length > 0 ? (

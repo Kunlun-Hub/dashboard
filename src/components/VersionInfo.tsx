@@ -42,10 +42,10 @@ const NavigationVersionInfoContent = () => {
     <div
       className={cn(
         "w-full rounded-md text-xs flex flex-col gap-2 whitespace-normal border text-left",
-        "bg-nb-gray-900/20 py-3 px-3 border-nb-gray-800/30",
+        "bg-neutral-50 py-3 px-3 border-neutral-200 dark:bg-nb-gray-900/20 dark:border-nb-gray-800/30",
       )}
     >
-      <div className="flex flex-col gap-1 text-nb-gray-400">
+      <div className="flex flex-col gap-1 text-neutral-500 dark:text-nb-gray-400">
         <FullTooltip
           content={
             <span className="text-xs">
@@ -57,7 +57,7 @@ const NavigationVersionInfoContent = () => {
         >
           <div className="flex items-center justify-between w-full cursor-default">
             <span>{t("versionInfo.dashboard")}</span>
-            <span className="text-nb-gray-300 font-medium">
+            <span className="text-neutral-700 dark:text-nb-gray-300 font-medium">
               {formatVersion(dashboardVersion)}
             </span>
           </div>

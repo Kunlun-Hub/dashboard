@@ -210,7 +210,7 @@ const RuleEditor = ({
           </button>
           <Label className="text-base font-medium truncate">
             {ruleTitle}
-            <span className="ml-2 text-sm text-nb-gray-300 font-normal">
+            <span className="ml-2 text-sm text-neutral-500 font-normal dark:text-nb-gray-300">
               {actionLabel}
             </span>
           </Label>

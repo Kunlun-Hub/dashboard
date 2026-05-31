@@ -42,20 +42,20 @@ export const ReverseProxyEventsUrlCell = ({ event, service }: Props) => {
     <TruncatedText
       text={fullUrl}
       maxWidth="360px"
-      className={"text-nb-gray-300"}
+      className={"text-neutral-600 dark:text-nb-gray-300"}
       side={"top"}
       sideOffset={10}
       tooltipContent={
-        <div className="max-w-sm break-all whitespace-normal text-xs text-neutral-300">
+        <div className="max-w-sm break-all whitespace-normal text-xs text-neutral-600 dark:text-neutral-300">
           {fullUrl}
         </div>
       }
     >
       <CopyToClipboardText message={"URL has been copied to your clipboard"}>
         <span className="font-mono text-[0.82rem] whitespace-nowrap">
-          <span className="text-nb-gray-200">{wrappedHost}</span>
+          <span className="text-neutral-800 dark:text-nb-gray-200">{wrappedHost}</span>
           {isL4 && listenPort && (
-            <span className="text-nb-gray-300">:{listenPort}</span>
+            <span className="text-neutral-600 dark:text-nb-gray-300">:{listenPort}</span>
           )}
           {!isL4 && (
             <span className="text-nb-gray-300">{event.path}</span>

@@ -57,7 +57,7 @@ export default function ReverseProxyHTTPTargets({
       {targets.length > 0 && (
         <div
           className={
-            "mt-3 mb-3 overflow-hidden border border-nb-gray-900 bg-nb-gray-920/30 py-1 px-1 rounded-md "
+            "mt-3 mb-3 overflow-hidden border border-neutral-200 bg-white py-1 px-1 rounded-md dark:border-nb-gray-900 dark:bg-nb-gray-920/30"
           }
         >
           <table className="w-full">
@@ -66,10 +66,10 @@ export default function ReverseProxyHTTPTargets({
                 <tr
                   key={index}
                   onClick={() => onEditTarget(index)}
-                  className="rounded-md hover:bg-nb-gray-900/30 cursor-pointer transition-all"
+                  className="rounded-md hover:bg-neutral-50 dark:hover:bg-nb-gray-900/30 cursor-pointer transition-all"
                 >
                   <td className="py-2.5 pl-5 pr-2 align-middle">
-                    <span className="text-[11px] leading-none font-mono px-2.5 py-2 rounded bg-nb-gray-900 text-nb-gray-300 inline-flex items-center">
+                    <span className="text-[11px] leading-none font-mono px-2.5 py-2 rounded bg-neutral-100 text-neutral-700 dark:bg-nb-gray-900 dark:text-nb-gray-300 inline-flex items-center">
                       {target.path
                         ? target.path.startsWith("/")
                           ? target.path

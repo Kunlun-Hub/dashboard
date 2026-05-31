@@ -158,7 +158,7 @@ export default function RouteTable({ row }: Props) {
         tableClassName={"mt-0"}
         minimal={true}
         showSearchAndFilters={false}
-        className={"bg-nb-gray-960 py-2"}
+        className={"bg-neutral-50 py-2 dark:bg-nb-gray-960"}
         inset={true}
         text={t("networkRoutesPage.title")}
         manualPagination={true}

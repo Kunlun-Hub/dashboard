@@ -14,6 +14,7 @@ import {
   RowSelectionState,
   SortingState,
 } from "@tanstack/react-table";
+import { removeAllSpaces } from "@utils/helpers";
 import { trim, uniqBy } from "lodash";
 import { MonitorDotIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
@@ -23,6 +24,7 @@ import PeerProvider from "@/contexts/PeerProvider";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useLoggedInUser } from "@/contexts/UsersProvider";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { useI18n } from "@/i18n/I18nProvider";
 import { Group } from "@/interfaces/Group";
 import { Peer } from "@/interfaces/Peer";
 import { GroupFilterSelector } from "@/modules/groups/GroupFilterSelector";
@@ -36,8 +38,6 @@ import PeerNameCell from "@/modules/peers/PeerNameCell";
 import { PeerOSCell } from "@/modules/peers/PeerOSCell";
 import PeerStatusCell from "@/modules/peers/PeerStatusCell";
 import PeerVersionCell from "@/modules/peers/PeerVersionCell";
-import { removeAllSpaces } from "@utils/helpers";
-import { useI18n } from "@/i18n/I18nProvider";
 
 function usePeersTableColumns(): ColumnDef<Peer>[] {
   const { t } = useI18n();
@@ -539,6 +539,7 @@ export default function PeersTable({
                 <Button
                   className={"h-[44px]"}
                   variant={showBrowserPeers ? "tertiary" : "secondary"}
+                  aria-pressed={showBrowserPeers}
                   onClick={() => {
                     setShowBrowserPeers(!showBrowserPeers);
                   }}

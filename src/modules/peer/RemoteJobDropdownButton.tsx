@@ -50,12 +50,12 @@ export const RemoteJobDropdownButton = () => {
             <>
               <div
                 className={
-                  "text-xs flex items-center w-full justify-center max-w-xs px-3 py-3 text-nb-gray-200 font-light"
+                  "text-xs flex items-center w-full justify-center max-w-xs px-3 py-3 text-neutral-600 dark:text-nb-gray-200 font-light"
                 }
               >
                 <div>
                   {t("remoteJobs.peer")}{" "}
-                  <span className={"text-white font-medium"}>{peer.name}</span>{" "}
+                  <span className={"text-neutral-900 dark:text-white font-medium"}>{peer.name}</span>{" "}
                   {t("remoteJobs.offlineMessage")}
                 </div>
               </div>
@@ -74,7 +74,7 @@ export const RemoteJobDropdownButton = () => {
                 size={"small"}
               />
               <div className={"flex flex-col text-left"}>
-                <div className={"text-left text-white"}>
+                <div className={"text-left text-neutral-900 dark:text-white"}>
                   {t("jobs.debugBundle")}
                 </div>
                 <div className={"text-xs"}>{t("remoteJobs.debugBundleHelp")}</div>

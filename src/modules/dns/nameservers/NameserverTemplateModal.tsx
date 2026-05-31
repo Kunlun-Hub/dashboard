@@ -123,7 +123,7 @@ function NameserverTemplate({
   return (
     <button
       className={
-        "bg-nb-gray-930/90 h-full hover:bg-nb-gray-900 border transition-all cursor-pointer border-nb-gray-900 hover:border-nb-gray-800 flex items-center rounded-lg overflow-hidden"
+        "bg-white h-full hover:bg-neutral-50 border transition-all cursor-pointer border-neutral-200 hover:border-neutral-300 flex items-center rounded-lg overflow-hidden dark:bg-nb-gray-930/90 dark:hover:bg-nb-gray-900 dark:border-nb-gray-900 dark:hover:border-nb-gray-800"
       }
       onClick={onClick}
     >

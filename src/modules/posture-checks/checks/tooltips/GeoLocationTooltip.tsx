@@ -23,7 +23,7 @@ export const GeoLocationTooltip = ({ children, check }: Props) => {
       content={
         <div
           className={
-            "text-neutral-300 flex flex-col items-start text-sm gap-1 justify-start min-w-[200px]"
+            "text-neutral-700 dark:text-neutral-300 flex flex-col items-start text-sm gap-1 justify-start min-w-[200px]"
           }
         >
           <div className={"px-4 pt-3"}>
@@ -60,7 +60,7 @@ export const GeoLocationTooltip = ({ children, check }: Props) => {
                     key={index}
                   >
                     <div
-                      className={"border-2 border-nb-gray-900/50 rounded-full"}
+                      className={"border-2 border-neutral-200 dark:border-nb-gray-900/50 rounded-full"}
                     >
                       <RoundedFlag country={location.country_code} size={23} />
                     </div>

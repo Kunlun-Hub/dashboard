@@ -135,19 +135,19 @@ export default function NetworkResourceAccessControl({
         {allPolicies.length > 0 && (
           <div
             className={
-              "mt-3 mb-3 overflow-hidden border border-nb-gray-900 bg-nb-gray-920/30 py-1 px-1 rounded-md"
+              "mt-3 mb-3 overflow-hidden border border-neutral-200 bg-white py-1 px-1 rounded-md dark:border-nb-gray-900 dark:bg-nb-gray-920/30"
             }
           >
             <table className="w-full">
               <thead>
                 <tr>
-                  <th className="py-2 px-4 text-left text-[11px] uppercase tracking-wider text-nb-gray-400 font-medium">
+                  <th className="py-2 px-4 text-left text-[11px] uppercase tracking-wider text-neutral-500 dark:text-nb-gray-400 font-medium">
                     {t("table.name")}
                   </th>
-                  <th className="py-2 pl-5 pr-2 text-left text-[11px] uppercase tracking-wider text-nb-gray-400 font-medium">
+                  <th className="py-2 pl-5 pr-2 text-left text-[11px] uppercase tracking-wider text-neutral-500 dark:text-nb-gray-400 font-medium">
                     {t("networkResourceAccessControl.sourceGroups")}
                   </th>
-                  <th className="py-2 px-4 text-left text-[11px] uppercase tracking-wider text-nb-gray-400 font-medium">
+                  <th className="py-2 px-4 text-left text-[11px] uppercase tracking-wider text-neutral-500 dark:text-nb-gray-400 font-medium">
                     {t("networkResourceAccessControl.protocolPorts")}
                   </th>
                   <th className="py-2 pr-4 pl-2" />
@@ -159,12 +159,12 @@ export default function NetworkResourceAccessControl({
                     <tr
                       key={policy.id || `new-${index}`}
                       onClick={() => openEditPolicy(policy)}
-                      className="rounded-md hover:bg-nb-gray-900/30 cursor-pointer transition-all"
+                      className="rounded-md hover:bg-neutral-50 dark:hover:bg-nb-gray-900/30 cursor-pointer transition-all"
                     >
                       <td className="py-2.5 px-4 align-middle">
                         <div
                           className={
-                            "text-[13px] mt-1 flex items-center gap-2 leading-none font-medium text-nb-gray-300 group-hover:text-nb-gray-200 whitespace-nowrap"
+                            "text-[13px] mt-1 flex items-center gap-2 leading-none font-medium text-neutral-700 dark:text-nb-gray-300 dark:group-hover:text-nb-gray-200 whitespace-nowrap"
                           }
                         >
                           <div className={"self-start flex"}>
@@ -185,7 +185,7 @@ export default function NetworkResourceAccessControl({
                               className={"leading-normal"}
                             />
                             {policy.description && (
-                              <div className={"text-nb-gray-400 text-xs"}>
+                              <div className={"text-neutral-500 dark:text-nb-gray-400 text-xs"}>
                                 <TruncatedText
                                   text={policy.description}
                                   maxWidth={"130px"}

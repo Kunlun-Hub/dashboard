@@ -136,8 +136,10 @@ const Item = ({ group, selected }: ItemProps) => {
         users={usersOfGroup}
         max={3}
         avatarClassName={cn(
-          selected ? "border-nb-gray-910" : "border-nb-gray-920",
-          "bg-nb-gray-800 group-hover/user-stack:bg-nb-gray-700",
+          selected
+            ? "border-neutral-300 dark:border-nb-gray-910"
+            : "border-neutral-200 dark:border-nb-gray-920",
+          "bg-neutral-100 group-hover/user-stack:bg-neutral-200 dark:bg-nb-gray-800 dark:group-hover/user-stack:bg-nb-gray-700",
         )}
       />
     </div>

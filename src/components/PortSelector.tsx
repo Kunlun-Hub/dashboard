@@ -117,7 +117,7 @@ export function PortSelector({
             className={cn(
               "min-h-[48px] w-full relative items-center",
               "border border-neutral-200 dark:border-nb-gray-700 justify-between py-2 px-3",
-              "rounded-md bg-white text-sm dark:bg-nb-gray-900/40 flex dark:text-neutral-400/70 text-neutral-500 cursor-pointer hover:dark:bg-nb-gray-900/50",
+              "rounded-md bg-white text-sm dark:bg-nb-gray-900/40 flex text-neutral-600 dark:text-neutral-400/70 cursor-pointer hover:bg-neutral-50 hover:dark:bg-nb-gray-900/50",
             )}
             data-cy={"port-selector"}
             disabled={disabled}
@@ -211,7 +211,7 @@ export function PortSelector({
                 >
                   <div
                     className={
-                      "flex items-center bg-nb-gray-800 py-1 px-1.5 rounded-[4px] border border-nb-gray-500"
+                      "flex items-center bg-neutral-100 py-1 px-1.5 rounded-[4px] border border-neutral-200 text-neutral-500 dark:bg-nb-gray-800 dark:border-nb-gray-500 dark:text-nb-gray-300"
                     }
                   >
                     <IconArrowBack size={10} />
@@ -322,7 +322,9 @@ export function PortSelector({
       {portRanges?.length > 0 && (
         <Callout variant={"info"} className={"mt-4"}>
           {t("portSelector.portRangesRequire")}{" "}
-          <span className={"text-white font-normal"}>v0.48</span>{" "}
+          <span className={"text-neutral-900 dark:text-white font-normal"}>
+            v0.48
+          </span>{" "}
           {t("portSelector.orHigher")}
         </Callout>
       )}

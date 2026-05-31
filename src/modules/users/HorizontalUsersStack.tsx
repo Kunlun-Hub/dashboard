@@ -56,7 +56,7 @@ export const HorizontalUsersStack = ({
                 />
 
                 <div className={"flex flex-col text-xs"}>
-                  <span className={" text-nb-gray-200"}>
+                  <span className={"text-neutral-800 dark:text-nb-gray-200"}>
                     <TextWithTooltip
                       text={
                         user?.email === "NetBird"
@@ -66,7 +66,7 @@ export const HorizontalUsersStack = ({
                       maxChars={500}
                     />
                   </span>
-                  <span className={"text-nb-gray-350 font-light"}>
+                  <span className={"text-neutral-500 dark:text-nb-gray-350 font-light"}>
                     <TextWithTooltip
                       text={user?.email || t("users.systemEmail")}
                       maxChars={500}
@@ -104,7 +104,8 @@ export const HorizontalUsersStack = ({
         <div
           className={cn(
             "text-neutral-500 dark:text-nb-gray-300 font-medium flex items-center gap-2 text-xs ml-1.5 transition-colors whitespace-nowrap",
-            users.length > 0 && "group-hover/user-stack:text-nb-gray-200 ",
+            users.length > 0 &&
+              "group-hover/user-stack:text-neutral-700 dark:group-hover/user-stack:text-nb-gray-200",
           )}
         >
           {userCountText}
@@ -126,9 +127,10 @@ const UserAvatarCircle = ({
   return (
     <div
       className={cn(
-        "w-6 h-6 bg-nb-gray-900 flex items-center shrink-0 rounded-full justify-center text-[0.6rem] font-medium relative uppercase shadow-xl",
-        "border-nb-gray-940 border-2 transition-all",
-        hoverEffect && "group-hover/user-stack:bg-nb-gray-800",
+        "w-6 h-6 bg-neutral-100 flex items-center shrink-0 rounded-full justify-center text-[0.6rem] font-medium relative uppercase shadow-sm dark:bg-nb-gray-900 dark:shadow-xl",
+        "border-white border-2 transition-all dark:border-nb-gray-940",
+        hoverEffect &&
+          "group-hover/user-stack:bg-neutral-200 dark:group-hover/user-stack:bg-nb-gray-800",
         className,
       )}
       style={{

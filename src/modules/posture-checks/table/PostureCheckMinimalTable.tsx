@@ -79,7 +79,7 @@ export default function PostureCheckMinimalTable({
 
       <div
         className={
-          "rounded-md overflow-hidden border border-nb-gray-900 bg-nb-gray-920/30 py-1 px-1"
+          "rounded-md overflow-hidden border border-neutral-200 bg-white py-1 px-1 dark:border-nb-gray-900 dark:bg-nb-gray-920/30"
         }
       >
         {data.map((check) => {
@@ -87,7 +87,7 @@ export default function PostureCheckMinimalTable({
             <div
               key={check.id}
               className={
-                "flex justify-between py-2 items-center hover:bg-nb-gray-900/30 rounded-md cursor-pointer px-4 transition-all"
+                "flex justify-between py-2 items-center hover:bg-neutral-50 dark:hover:bg-nb-gray-900/30 rounded-md cursor-pointer px-4 transition-all"
               }
               onClick={() =>
                 (permission.policies.update || permission.policies.create) &&

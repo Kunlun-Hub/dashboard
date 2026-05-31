@@ -12,7 +12,7 @@ export default function ResourceAddressCell({ resource }: Readonly<Props>) {
     >
       <div
         className={
-          "font-mono dark:text-nb-gray-300 pt-1 flex gap-2 items-center text-[.82rem]"
+          "font-mono text-neutral-700 dark:text-nb-gray-300 pt-1 flex gap-2 items-center text-[.82rem]"
         }
       >
         {resource.address}

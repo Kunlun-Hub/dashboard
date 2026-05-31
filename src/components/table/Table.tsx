@@ -32,7 +32,7 @@ const Table = React.forwardRef<
       <table
         ref={ref}
         className={cn(
-          "caption-bottom text-sm min-w-full max-w-full w-full",
+          "caption-bottom text-sm min-w-full max-w-full w-full bg-white dark:bg-transparent",
           "text-neutral-900 dark:text-nb-gray-100",
           minimal
             ? ""

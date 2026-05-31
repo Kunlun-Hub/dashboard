@@ -170,16 +170,16 @@ export const SelfHostedProxiesModal = ({ open, onOpenChange }: Props) => {
                 {t("reverseProxy.selfHostedRequirements")}
                 <ul className={"list-disc pl-4 mt-2 flex flex-col gap-1"}>
                   <li>
-                    <span className={"text-white font-medium"}>
+                    <span className={"text-neutral-900 dark:text-white font-medium"}>
                       {t("reverseProxy.publiclyAccessibleIp")}
                     </span>
                   </li>
                   <li>
-                    <span className={"text-white font-medium"}>Docker</span>{" "}
+                    <span className={"text-neutral-900 dark:text-white font-medium"}>Docker</span>{" "}
                     {t("reverseProxy.dockerInstalled")}
                   </li>
                   <li>
-                    <span className={"text-white font-medium"}>
+                    <span className={"text-neutral-900 dark:text-white font-medium"}>
                       {t("reverseProxy.ports80And443")}
                     </span>{" "}
                     {t("reverseProxy.portsOpen")}
@@ -244,7 +244,7 @@ export const SelfHostedProxiesModal = ({ open, onOpenChange }: Props) => {
                 showCopyIcon={!isGeneratingToken}
               >
                 {isGeneratingToken && (
-                  <div className="absolute inset-0 z-10 flex items-center justify-center gap-2 text-nb-gray-100 bg-nb-gray-950/90">
+                  <div className="absolute inset-0 z-10 flex items-center justify-center gap-2 text-neutral-900 bg-white/90 dark:text-nb-gray-100 dark:bg-nb-gray-950/90">
                     <Loader2 size={16} className="animate-spin" />
                     {t("reverseProxy.proxyTokenGenerating")}
                   </div>

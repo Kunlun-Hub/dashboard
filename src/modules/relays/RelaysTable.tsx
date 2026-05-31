@@ -417,8 +417,8 @@ function RelayExpandedRow({ relay }: Readonly<{ relay: Relay }>) {
   ];
 
   return (
-    <div className={"px-8 py-5 bg-nb-gray-940/50 border-t border-nb-gray-900"}>
-      <div className={"flex items-center gap-2 text-sm text-nb-gray-200 mb-4"}>
+    <div className={"px-8 py-5 bg-neutral-50 border-t border-neutral-200 dark:bg-nb-gray-940/50 dark:border-nb-gray-900"}>
+      <div className={"flex items-center gap-2 text-sm text-neutral-700 dark:text-nb-gray-200 mb-4"}>
         <MapPinIcon size={15} />
         {t("relays.details")}
       </div>
@@ -427,11 +427,11 @@ function RelayExpandedRow({ relay }: Readonly<{ relay: Relay }>) {
           <div
             key={item.label}
             className={
-              "rounded-md border border-nb-gray-800 bg-nb-gray-930 px-4 py-3"
+              "rounded-md border border-neutral-200 bg-white px-4 py-3 dark:border-nb-gray-800 dark:bg-nb-gray-930"
             }
           >
-            <div className={"text-xs text-nb-gray-400 mb-1"}>{item.label}</div>
-            <div className={"text-sm text-nb-gray-100 font-medium"}>
+            <div className={"text-xs text-neutral-500 dark:text-nb-gray-400 mb-1"}>{item.label}</div>
+            <div className={"text-sm text-neutral-900 dark:text-nb-gray-100 font-medium"}>
               {item.value}
             </div>
           </div>

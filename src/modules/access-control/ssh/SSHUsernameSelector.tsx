@@ -167,7 +167,7 @@ export function SSHUsernameSelector({
                 >
                   <div
                     className={
-                      "flex items-center bg-nb-gray-800 py-1 px-1.5 rounded-[4px] border border-nb-gray-500"
+                      "flex items-center bg-neutral-100 py-1 px-1.5 rounded-[4px] border border-neutral-300 dark:bg-nb-gray-800 dark:border-nb-gray-500"
                     }
                   >
                     <IconArrowBack size={10} />

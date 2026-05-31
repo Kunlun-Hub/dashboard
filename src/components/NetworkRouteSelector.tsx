@@ -97,8 +97,8 @@ export function NetworkRouteSelector({
           className={cn(
             "min-h-[42px] w-full relative items-center group",
             "border border-neutral-200 dark:border-nb-gray-700 justify-between py-2 px-3",
-            "rounded-md bg-white text-sm dark:bg-nb-gray-900/40 flex dark:text-neutral-400/70 text-neutral-500 cursor-pointer enabled:hover:dark:bg-nb-gray-900/50",
-            "disabled:opacity-40 disabled:cursor-default",
+            "rounded-md bg-white text-sm dark:bg-nb-gray-900/40 flex text-neutral-600 dark:text-neutral-400/70 cursor-pointer enabled:hover:bg-neutral-50 enabled:hover:dark:bg-nb-gray-900/50",
+            "disabled:bg-neutral-50 disabled:text-neutral-400 disabled:cursor-default dark:disabled:bg-nb-gray-900/40 dark:disabled:text-neutral-500/70",
           )}
           disabled={disabled}
           ref={inputRef}
@@ -111,7 +111,7 @@ export function NetworkRouteSelector({
             {value ? (
               <div
                 className={
-                  "flex items-center justify-between text-sm text-white w-full pr-4 pl-1 gap-2"
+                  "flex items-center justify-between text-sm text-neutral-900 dark:text-white w-full pr-4 pl-1 gap-2"
                 }
               >
                 <div className={"flex items-center gap-2.5 text-sm"}>
@@ -185,7 +185,7 @@ export function NetworkRouteSelector({
               >
                 <div
                   className={
-                    "flex items-center bg-nb-gray-800 py-1 px-1.5 rounded-[4px] border border-nb-gray-500"
+                    "flex items-center bg-neutral-100 py-1 px-1.5 rounded-[4px] border border-neutral-200 text-neutral-500 dark:bg-nb-gray-800 dark:border-nb-gray-500 dark:text-nb-gray-300"
                   }
                 >
                   <IconArrowBack size={10} />
@@ -197,14 +197,18 @@ export function NetworkRouteSelector({
               {dropdownOptions.length == 0 && !notFound && (
                 <div
                   className={
-                    "text-center pb-2 text-nb-gray-500 max-w-xs mx-auto"
+                    "text-center pb-2 text-neutral-500 dark:text-nb-gray-500 max-w-xs mx-auto"
                   }
                 >
                   {t("networkRouteSelector.noRoutes")}
                 </div>
               )}
               {notFound && (
-                <div className={"text-center pb-2 text-nb-gray-500"}>
+                <div
+                  className={
+                    "text-center pb-2 text-neutral-500 dark:text-nb-gray-500"
+                  }
+                >
                   {t("networkRouteSelector.noMatchingNetworks")}
                 </div>
               )}
@@ -268,7 +272,7 @@ function DomainList({ domains }: { domains?: string[] }) {
       >
         <div
           className={
-            "text-xs text-nb-gray-300 block min-w-0 truncate max-w-[180px]"
+            "text-xs text-neutral-500 dark:text-nb-gray-300 block min-w-0 truncate max-w-[180px]"
           }
         >
           {firstDomain} {domains.length > 1 && "+" + (domains.length - 1)}

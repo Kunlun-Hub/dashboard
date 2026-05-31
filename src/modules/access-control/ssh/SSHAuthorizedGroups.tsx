@@ -72,7 +72,7 @@ export function SSHAuthorizedGroups({
     <div
       className={cn(
         "rounded-md overflow-hidden mt-3 py-2",
-        "border border-nb-gray-900 bg-nb-gray-920/30",
+        "border border-neutral-200 bg-neutral-50 dark:border-nb-gray-900 dark:bg-nb-gray-920/30",
       )}
     >
       {Object.entries(authorizedGroups).map(([groupName, usernames]) => (

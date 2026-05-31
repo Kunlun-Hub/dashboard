@@ -17,20 +17,46 @@ const variants = cva("", {
       blue: [
         "bg-sky-100 border-sky-500 text-sky-800 border border-transparent",
       ],
-      blueDark: ["bg-sky-900 border-sky-500 text-white border"],
-      "blue-darker": ["bg-sky-900 border-sky-500 text-white border"],
-      red: ["bg-red-950/40 border-red-500 border text-red-500"],
-      purple: ["bg-purple-950/50 border-purple-500 border text-purple-500"],
-      yellow: ["bg-yellow-950 border-yellow-500 border text-yellow-400"],
-      gray: ["bg-nb-gray-930/60 border-nb-gray-800/40 text-nb-gray-300 border"],
+      blueDark: [
+        "bg-sky-100 border-sky-300 text-sky-700 border",
+        "dark:bg-sky-900 dark:border-sky-500 dark:text-white",
+      ],
+      "blue-darker": [
+        "bg-sky-100 border-sky-300 text-sky-700 border",
+        "dark:bg-sky-900 dark:border-sky-500 dark:text-white",
+      ],
+      red: [
+        "bg-red-50 border-red-200 border text-red-600",
+        "dark:bg-red-950/40 dark:border-red-500 dark:text-red-500",
+      ],
+      purple: [
+        "bg-purple-50 border-purple-200 border text-purple-600",
+        "dark:bg-purple-950/50 dark:border-purple-500 dark:text-purple-500",
+      ],
+      yellow: [
+        "bg-yellow-50 border-yellow-200 border text-yellow-700",
+        "dark:bg-yellow-950 dark:border-yellow-500 dark:text-yellow-400",
+      ],
+      gray: [
+        "bg-neutral-50 border-neutral-200 text-neutral-600 border",
+        "dark:bg-nb-gray-930/60 dark:border-nb-gray-800/40 dark:text-nb-gray-300",
+      ],
       grayer: [
-        "bg-nb-gray-900/40 border-nb-gray-800/40 text-nb-gray-300 border",
+        "bg-neutral-50 border-neutral-200 text-neutral-600 border",
+        "dark:bg-nb-gray-900/40 dark:border-nb-gray-800/40 dark:text-nb-gray-300",
       ],
       "gray-ghost": [
-        "bg-nb-gray-900 border-nb-gray-800 text-nb-gray-300 border border-nb-gray-800/50",
+        "bg-white border-neutral-200 text-neutral-600 border",
+        "dark:bg-nb-gray-900 dark:border-nb-gray-800 dark:text-nb-gray-300 dark:border-nb-gray-800/50",
       ],
-      green: ["bg-green-950 border-green-500 border text-green-400"],
-      netbird: ["bg-netbird-950 border-netbird-500 border text-netbird-500"],
+      green: [
+        "bg-emerald-50 border-emerald-200 border text-emerald-600",
+        "dark:bg-green-950 dark:border-green-500 dark:text-green-400",
+      ],
+      netbird: [
+        "bg-orange-50 border-orange-200 border text-netbird",
+        "dark:bg-netbird-950 dark:border-netbird-500 dark:text-netbird-500",
+      ],
     },
     size: {
       default: "text-[0.75rem] py-1.5 px-3",
@@ -39,16 +65,18 @@ const variants = cva("", {
     hover: {
       none: [],
       blue: ["hover:bg-sky-200"],
-      purple: ["hover:bg-purple-950/40"],
-      yellow: ["hover:bg-yellow-950/40"],
-      blueDark: ["hover:bg-sky-800"],
-      "blue-darker": ["hover:bg-sky-800"],
-      red: ["hover:bg-red-950/40"],
-      gray: ["hover:bg-nb-gray-900"],
-      grayer: ["hover:bg-nb-gray-900"],
-      "gray-ghost": ["hover:bg-nb-gray-800 cursor-pointer"],
-      green: ["hover:bg-green-950/50"],
-      netbird: ["hover:bg-netbird-950/50"],
+      purple: ["hover:bg-purple-100 dark:hover:bg-purple-950/40"],
+      yellow: ["hover:bg-yellow-100 dark:hover:bg-yellow-950/40"],
+      blueDark: ["hover:bg-sky-200 dark:hover:bg-sky-800"],
+      "blue-darker": ["hover:bg-sky-200 dark:hover:bg-sky-800"],
+      red: ["hover:bg-red-100 dark:hover:bg-red-950/40"],
+      gray: ["hover:bg-neutral-100 dark:hover:bg-nb-gray-900"],
+      grayer: ["hover:bg-neutral-100 dark:hover:bg-nb-gray-900"],
+      "gray-ghost": [
+        "hover:bg-neutral-100 cursor-pointer dark:hover:bg-nb-gray-800",
+      ],
+      green: ["hover:bg-emerald-100 dark:hover:bg-green-950/50"],
+      netbird: ["hover:bg-orange-100 dark:hover:bg-netbird-950/50"],
     },
   },
 });

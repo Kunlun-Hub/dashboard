@@ -326,10 +326,10 @@ function HeaderItemRow({
   };
 
   return (
-    <div className="rounded-md border border-nb-gray-900 bg-nb-gray-920/30 overflow-hidden">
-      <div className="flex flex-col gap-2 px-4 pt-2 pb-4 bg-nb-gray-920/30">
+    <div className="rounded-md border border-neutral-200 bg-neutral-50 overflow-hidden dark:border-nb-gray-900 dark:bg-nb-gray-920/30">
+      <div className="flex flex-col gap-2 px-4 pt-2 pb-4 bg-neutral-50 dark:bg-nb-gray-920/30">
         <div className="flex items-center justify-between h-6 mt-0.5">
-          <span className="text-xs font-normal text-nb-gray-200 flex items-center gap-2">
+          <span className="text-xs font-normal text-neutral-700 dark:text-nb-gray-200 flex items-center gap-2">
             <FileCode2Icon size={14} />
             {item.existingSecret
               ? t("reverseProxy.headerIndexWithName", {

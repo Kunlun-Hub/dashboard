@@ -361,7 +361,7 @@ export default function DNSLogsTable({ headingTarget }: Readonly<Props>) {
             }}
           >
             <SelectTrigger
-              className="h-10 w-[132px] bg-nb-gray-930"
+              className="h-10 w-[132px] bg-white dark:bg-nb-gray-930"
               aria-label={t("dnsLogs.typeFilter")}
             >
               <SelectValue placeholder={t("dnsLogs.typeFilter")} />

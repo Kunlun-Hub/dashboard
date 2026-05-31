@@ -12,7 +12,7 @@ function ButtonGroup({ children, disabled, className }: Props) {
   return (
     <div
       className={cn(
-        "rounded-lg border-[1px] dark:border-nb-gray-900 border-neutral-200 overflow-hidden flex items-center justify-center shrink-0 border-separate",
+        "rounded-lg border bg-white dark:border-nb-gray-900 border-neutral-300 overflow-hidden flex items-center justify-center shrink-0 border-separate shadow-sm dark:bg-transparent dark:shadow-none",
         disabled ? "opacity-100 !border-nb-gray-900/20" : "",
         className,
       )}
@@ -34,7 +34,7 @@ const ButtonGroupButton = forwardRef(
         border={2}
         rounded={false}
         className={cn(
-          "first:border-l-0 last:border-r-0 border-t-0 border-b-0 h-[40px]",
+          "first:border-l-0 last:border-r-0 border-t-0 border-b-0 h-[40px] shadow-none ring-0",
           "!py-2.5 !px-4",
           className,
         )}

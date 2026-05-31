@@ -448,14 +448,14 @@ function UserAvatars() {
       </div>
       <div
         className={
-          "w-14 h-14 relative top-2 overflow-hidden -right-8 bg-nb-gray-950 rounded-full flex items-center justify-center border-4 border-nb-gray-950 outline-2 outline-netbird"
+          "w-14 h-14 relative top-2 overflow-hidden -right-8 bg-white rounded-full flex items-center justify-center border-4 border-white outline-2 outline-netbird dark:bg-nb-gray-950 dark:border-nb-gray-950"
         }
       >
         <Image src={Avatar1} alt={"MS"} />
       </div>
       <div
         className={
-          "w-14 h-14 relative top-1 overflow-hidden -right-4 bg-nb-gray-950 rounded-full flex items-center justify-center border-4 border-nb-gray-950 outline-2 outline-netbird"
+          "w-14 h-14 relative top-1 overflow-hidden -right-4 bg-white rounded-full flex items-center justify-center border-4 border-white outline-2 outline-netbird dark:bg-nb-gray-950 dark:border-nb-gray-950"
         }
       >
         <Image src={Avatar2} alt={"MS"} />
@@ -463,21 +463,21 @@ function UserAvatars() {
 
       <div
         className={
-          "w-14 h-14 z-20 relative overflow-hidden bg-nb-gray-930 rounded-full flex items-center justify-center border-4 border-nb-gray-950"
+          "w-14 h-14 z-20 relative overflow-hidden bg-neutral-100 rounded-full flex items-center justify-center border-4 border-white dark:bg-nb-gray-930 dark:border-nb-gray-950"
         }
       >
         <User2 size={24} className={"text-netbird"} />
       </div>
       <div
         className={
-          "w-14 h-14 relative overflow-hidden z-10 top-1 -left-4 bg-nb-gray-950 rounded-full flex items-center justify-center border-4 border-nb-gray-950"
+          "w-14 h-14 relative overflow-hidden z-10 top-1 -left-4 bg-white rounded-full flex items-center justify-center border-4 border-white dark:bg-nb-gray-950 dark:border-nb-gray-950"
         }
       >
         <Image src={Avatar3} alt={"MS"} />
       </div>
       <div
         className={
-          "w-14 h-14 relative overflow-hidden z-0 top-2 -left-8 bg-nb-gray-950 rounded-full flex items-center justify-center border-4 border-nb-gray-950"
+          "w-14 h-14 relative overflow-hidden z-0 top-2 -left-8 bg-white rounded-full flex items-center justify-center border-4 border-white dark:bg-nb-gray-950 dark:border-nb-gray-950"
         }
       >
         <Image src={Avatar4} alt={"MS"} />

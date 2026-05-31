@@ -35,7 +35,7 @@ function SettingCardItem({
         }
       }}
       className={
-        "flex justify-between gap-10 px-6 border-t border-nb-gray-920 first:border-t-0 py-5 hover:bg-nb-gray-935 cursor-pointer transition-colors"
+        "flex justify-between gap-10 px-6 border-t border-neutral-200 first:border-t-0 py-5 hover:bg-neutral-50 cursor-pointer transition-colors dark:border-nb-gray-920 dark:hover:bg-nb-gray-935"
       }
     >
       <div className={"max-w-sm"}>
@@ -88,7 +88,7 @@ function SettingCard({ children, className }: Readonly<SettingCardProps>) {
   return (
     <div
       className={cn(
-        "border-nb-gray-920 bg-nb-gray-800/10 border rounded-md",
+        "border-neutral-200 bg-white border rounded-md dark:border-nb-gray-920 dark:bg-nb-gray-800/10",
         className,
       )}
     >

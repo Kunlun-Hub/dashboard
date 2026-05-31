@@ -82,8 +82,8 @@ export function UserSelector({
           className={cn(
             "min-h-[46px] w-full relative items-center group",
             "border border-neutral-200 dark:border-nb-gray-700 justify-between py-2 px-3",
-            "rounded-md bg-white text-sm dark:bg-nb-gray-900/40 flex dark:text-neutral-400/70 text-neutral-500 cursor-pointer enabled:hover:dark:bg-nb-gray-900/50",
-            "disabled:opacity-40 disabled:cursor-default",
+            "rounded-md bg-white text-sm dark:bg-nb-gray-900/40 flex text-neutral-600 dark:text-neutral-400/70 cursor-pointer enabled:hover:bg-neutral-50 enabled:hover:dark:bg-nb-gray-900/50",
+            "disabled:bg-neutral-50 disabled:text-neutral-400 disabled:cursor-default dark:disabled:bg-nb-gray-900/40 dark:disabled:text-neutral-500/70",
           )}
           disabled={disabled}
           ref={inputRef}
@@ -96,7 +96,7 @@ export function UserSelector({
             {value ? (
               <UserListItem
                 user={value}
-                className={"bg-nb-gray-800"}
+                className={"bg-neutral-100 dark:bg-nb-gray-800"}
                 variant={"selected"}
               />
             ) : (
@@ -148,7 +148,10 @@ export function UserSelector({
               renderItem={(option) => {
                 return (
                   <div>
-                    <UserListItem user={option} className={"bg-nb-gray-800"} />
+                    <UserListItem
+                      user={option}
+                      className={"bg-neutral-100 dark:bg-nb-gray-800"}
+                    />
                   </div>
                 );
               }}

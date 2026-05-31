@@ -27,11 +27,11 @@ const inputVariants = cva("", {
   variants: {
     variant: {
       default: [
-        "dark:bg-nb-gray-900 dark:placeholder:text-neutral-400/70 placeholder:text-neutral-500 border-neutral-200 dark:border-nb-gray-700",
+        "dark:bg-nb-gray-900 dark:placeholder:text-neutral-400/70 placeholder:text-neutral-500 border-neutral-200 dark:border-nb-gray-700 disabled:bg-neutral-50 disabled:text-neutral-500 disabled:placeholder:text-neutral-400 disabled:border-neutral-200 dark:disabled:bg-nb-gray-900/50 dark:disabled:text-nb-gray-400",
         "ring-offset-neutral-200/20 dark:ring-offset-neutral-950/50 dark:focus-visible:ring-neutral-500/20 focus-visible:ring-neutral-300/10",
       ],
       darker: [
-        "dark:bg-nb-gray-920 dark:placeholder:text-neutral-400/70 placeholder:text-neutral-500 border-neutral-300 dark:border-nb-gray-800",
+        "dark:bg-nb-gray-920 dark:placeholder:text-neutral-400/70 placeholder:text-neutral-500 border-neutral-300 dark:border-nb-gray-800 disabled:bg-neutral-50 disabled:text-neutral-500 disabled:placeholder:text-neutral-400 disabled:border-neutral-200 dark:disabled:bg-nb-gray-900/50 dark:disabled:text-nb-gray-400",
         "ring-offset-neutral-200/20 dark:ring-offset-neutral-950/50 dark:focus-visible:ring-neutral-500/20 focus-visible:ring-neutral-300/10",
       ],
       error: [
@@ -41,7 +41,7 @@ const inputVariants = cva("", {
     },
     prefixSuffixVariant: {
       default: [
-        "dark:bg-nb-gray-900 border-neutral-200 dark:border-nb-gray-700 text-nb-gray-300",
+        "dark:bg-nb-gray-900 border-neutral-200 dark:border-nb-gray-700 text-neutral-600 dark:text-nb-gray-300",
       ],
       error: [
         "dark:bg-nb-gray-900 border-red-500 text-nb-gray-300 text-red-500",
@@ -99,7 +99,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 }),
                 "flex h-[42px] w-auto rounded-l-md bg-white px-3 py-2 text-sm ",
                 "border  items-center whitespace-nowrap",
-                props.disabled && "opacity-40",
+                props.disabled && "opacity-100",
                 prefixClassName,
               )}
             >
@@ -110,7 +110,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <div
             className={cn(
               "absolute left-0 top-0 h-full flex items-center text-xs dark:text-nb-gray-300 pl-3 leading-[0]",
-              props.disabled && "opacity-40",
+              props.disabled && "opacity-70",
             )}
           >
             {icon}
@@ -122,7 +122,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {...props}
             className={cn(
               inputVariants({ variant: error ? "error" : variant }),
-              "flex h-[42px] w-full rounded-md  bg-white px-3 py-2 text-sm file:bg-transparent file:text-sm file:font-medium  focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-40  ",
+              "flex h-[42px] w-full rounded-md  bg-white px-3 py-2 text-sm file:bg-transparent file:text-sm file:font-medium  focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-100  ",
               "file:border-0",
               "focus-visible:ring-2 focus-visible:ring-offset-2",
               customPrefix && "!border-l-0 !rounded-l-none",
@@ -138,7 +138,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <div
             className={cn(
               "absolute right-0 top-0 h-full flex items-center text-xs dark:text-nb-gray-300 pr-4 leading-[0] select-none",
-              props.disabled && "opacity-30",
+              props.disabled && "opacity-70",
             )}
           >
             {suffix}

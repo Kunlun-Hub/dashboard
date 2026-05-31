@@ -69,7 +69,7 @@ export const ReverseProxyEventsLocationIpCell = ({ event }: Props) => {
     >
       <div
         className={cn(
-          "flex gap-2.5 items-center group/cell transition-all hover:bg-nb-gray-800/10 py-2 px-3 rounded-md cursor-default",
+          "flex gap-2.5 items-center group/cell transition-all hover:bg-neutral-100 dark:hover:bg-nb-gray-800/10 py-2 px-3 rounded-md cursor-default",
         )}
         onClick={(e) => {
           e.stopPropagation();

@@ -17,8 +17,8 @@ export default function ReverseProxyDestinationCell({
   return (
     <div
       className={cn(
-        "flex items-center gap-2 text-neutral-300 font-light truncate",
-        !target.enabled && "opacity-30",
+        "flex items-center gap-2 text-neutral-600 dark:text-neutral-300 font-light truncate",
+        !target.enabled && "text-neutral-400 dark:text-neutral-500",
       )}
     >
       <CopyToClipboardText>

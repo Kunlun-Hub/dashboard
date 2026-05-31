@@ -137,7 +137,7 @@ const SettingDisabledManagementGroups = ({
       </div>
       <div
         className={
-          "flex justify-end bg-nb-gray-900/20 border-t border-nb-gray-900 px-8 py-5"
+          "flex justify-end bg-neutral-50 border-t border-neutral-200 px-8 py-5 dark:bg-nb-gray-900/20 dark:border-nb-gray-900"
         }
       >
         <Button

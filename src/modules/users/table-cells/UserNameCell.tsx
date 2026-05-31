@@ -63,7 +63,7 @@ export default function UserNameCell({ user }: Readonly<Props>) {
     >
       <div
         className={
-          "w-10 h-10 rounded-full relative flex items-center justify-center text-white uppercase text-md font-medium bg-nb-gray-900"
+          "w-10 h-10 rounded-full relative flex items-center justify-center uppercase text-md font-medium bg-neutral-100 dark:bg-nb-gray-900"
         }
         style={{
           color: generateColorFromUser(user),
@@ -74,7 +74,7 @@ export default function UserNameCell({ user }: Readonly<Props>) {
         {(status == "invited" || status == "blocked") && (
           <div
             className={cn(
-              "w-5 h-5 absolute -right-1 -bottom-1 bg-nb-gray-930 rounded-full flex items-center justify-center border-2 border-nb-gray-950",
+              "w-5 h-5 absolute -right-1 -bottom-1 bg-white rounded-full flex items-center justify-center border-2 border-white dark:bg-nb-gray-930 dark:border-nb-gray-950",
               color,
             )}
           >
@@ -85,7 +85,7 @@ export default function UserNameCell({ user }: Readonly<Props>) {
           <TooltipProvider>
             <Tooltip delayDuration={0}>
               <TooltipTrigger asChild>
-                <div className="w-5 h-5 absolute -right-1 -bottom-1 bg-nb-gray-930 rounded-full flex items-center justify-center border-2 border-nb-gray-950 text-nb-gray-50">
+                <div className="w-5 h-5 absolute -right-1 -bottom-1 bg-white rounded-full flex items-center justify-center border-2 border-white text-neutral-700 dark:bg-nb-gray-930 dark:border-nb-gray-950 dark:text-nb-gray-50">
                   {idpIcon(userIdp.type, 14)}
                 </div>
               </TooltipTrigger>
@@ -109,7 +109,9 @@ export default function UserNameCell({ user }: Readonly<Props>) {
             </span>
           )}
         </span>
-        <span className={cn("text-sm text-nb-gray-400")}>{user.email}</span>
+        <span className={cn("text-sm text-neutral-500 dark:text-nb-gray-400")}>
+          {user.email}
+        </span>
       </div>
     </div>
   );

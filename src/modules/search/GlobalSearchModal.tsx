@@ -197,7 +197,7 @@ const GlobalSearchModalContent = ({ open, setOpen }: Props) => {
               }}
               renderHeading={(item) => {
                 return (
-                  <div className={"text-xs text-nb-gray-400 px-4 py-2"}>
+                  <div className={"text-xs text-neutral-500 dark:text-nb-gray-400 px-4 py-2"}>
                     {item.type === SearchType.Network &&
                       t("globalSearch.networksHeading", {
                         count: networksCount,
@@ -217,7 +217,7 @@ const GlobalSearchModalContent = ({ open, setOpen }: Props) => {
                     <div className={"flex justify-between items-center gap-3"}>
                       <div
                         className={
-                          "h-8 w-8 bg-nb-gray-850 group-aria-selected/list-item:bg-nb-gray-700 flex items-center justify-center rounded-md"
+                          "h-8 w-8 bg-neutral-100 group-aria-selected/list-item:bg-neutral-200 flex items-center justify-center rounded-md dark:bg-nb-gray-850 dark:group-aria-selected/list-item:bg-nb-gray-700"
                         }
                       >
                         {item.type === SearchType.Network && (
@@ -233,7 +233,7 @@ const GlobalSearchModalContent = ({ open, setOpen }: Props) => {
                         <div>
                           {item.data.name} {network && ` - ${network.name}`}
                         </div>
-                        <div className={"text-nb-gray-400"}>
+                        <div className={"text-neutral-500 dark:text-nb-gray-400"}>
                           {item.data.description}
                         </div>
                       </div>
@@ -311,29 +311,29 @@ const BlankState = () => {
         <div className={"flex items-center justify-center mb-3 mt-3 gap-3"}>
           <div
             className={
-              "bg-nb-gray-920 h-8 w-8 flex items-center justify-center rounded-md"
+              "bg-neutral-100 text-neutral-700 h-8 w-8 flex items-center justify-center rounded-md dark:bg-nb-gray-920 dark:text-nb-gray-100"
             }
           >
             <NetworkIcon size={16} />
           </div>
           <div
             className={
-              "bg-nb-gray-920 h-8 w-8 flex items-center justify-center rounded-md"
+              "bg-neutral-100 text-neutral-700 h-8 w-8 flex items-center justify-center rounded-md dark:bg-nb-gray-920 dark:text-nb-gray-100"
             }
           >
             <WorkflowIcon size={16} />
           </div>
           <div
             className={
-              "bg-nb-gray-920 h-8 w-8 flex items-center justify-center rounded-md"
+              "bg-neutral-100 text-neutral-700 h-8 w-8 flex items-center justify-center rounded-md dark:bg-nb-gray-920 dark:text-nb-gray-100"
             }
           >
             <GlobeIcon size={16} />
           </div>
         </div>
 
-        <div className={"text-nb-gray-100 mb-1"}>{t("globalSearch.blankTitle")}</div>
-        <div className={"text-sm text-nb-gray-350 font-light"}>
+        <div className={"text-neutral-900 dark:text-nb-gray-100 mb-1"}>{t("globalSearch.blankTitle")}</div>
+        <div className={"text-sm text-neutral-500 dark:text-nb-gray-350 font-light"}>
           {t("globalSearch.blankDescription")}
         </div>
       </div>
@@ -350,15 +350,15 @@ const NotFoundState = () => {
         <div className={"flex items-center justify-center mb-3 mt-3 gap-3"}>
           <div
             className={
-              "bg-nb-gray-920 h-8 w-8 flex items-center justify-center rounded-md"
+              "bg-neutral-100 text-neutral-700 h-8 w-8 flex items-center justify-center rounded-md dark:bg-nb-gray-920 dark:text-nb-gray-100"
             }
           >
             <TextSearchIcon size={16} />
           </div>
         </div>
 
-        <div className={"text-nb-gray-100 mb-1"}>{t("globalSearch.notFoundTitle")}</div>
-        <div className={"text-sm text-nb-gray-350 font-light max-w-xs"}>
+        <div className={"text-neutral-900 dark:text-nb-gray-100 mb-1"}>{t("globalSearch.notFoundTitle")}</div>
+        <div className={"text-sm text-neutral-500 dark:text-nb-gray-350 font-light max-w-xs"}>
           {t("globalSearch.notFoundDescription")}
         </div>
       </div>
@@ -382,7 +382,7 @@ const KeyboardShortcutsFooter = () => {
   return (
     <div
       className={
-        "bg-nb-gray-940 border-t border-nb-gray-910 px-4 py-3 text-xs text-nb-gray-300 flex items-center gap-5"
+        "bg-neutral-50 border-t border-neutral-200 px-4 py-3 text-xs text-neutral-500 flex items-center gap-5 dark:bg-nb-gray-940 dark:border-nb-gray-910 dark:text-nb-gray-300"
       }
     >
       <div className={"flex items-center gap-1.5"}>

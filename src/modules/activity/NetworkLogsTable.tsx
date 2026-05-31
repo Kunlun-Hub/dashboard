@@ -270,34 +270,34 @@ function NetworkLogDetails({ group }: Readonly<{ group: NetworkLogClientGroup }>
   );
 
   return (
-    <div className="border-y border-nb-gray-900 bg-nb-gray-950/60 px-8 py-5">
+    <div className="border-y border-neutral-200 bg-neutral-50 px-8 py-5 dark:border-nb-gray-900 dark:bg-nb-gray-950/60">
       <div className="mb-4 grid grid-cols-2 gap-4 text-sm md:grid-cols-4">
         <div>
-          <div className="text-xs text-nb-gray-300">{t("networkLogs.client")}</div>
-          <div className="mt-1 text-white">{formatEndpoint(group.client)}</div>
+          <div className="text-xs text-neutral-500 dark:text-nb-gray-300">{t("networkLogs.client")}</div>
+          <div className="mt-1 text-neutral-900 dark:text-white">{formatEndpoint(group.client)}</div>
         </div>
         <div>
-          <div className="text-xs text-nb-gray-300">{t("networkLogs.user")}</div>
-          <div className="mt-1 text-white">{group.user.name || group.user.email || "-"}</div>
+          <div className="text-xs text-neutral-500 dark:text-nb-gray-300">{t("networkLogs.user")}</div>
+          <div className="mt-1 text-neutral-900 dark:text-white">{group.user.name || group.user.email || "-"}</div>
         </div>
         <div>
-          <div className="text-xs text-nb-gray-300">{t("networkLogs.packets")}</div>
-          <div className="mt-1 text-white">
+          <div className="text-xs text-neutral-500 dark:text-nb-gray-300">{t("networkLogs.packets")}</div>
+          <div className="mt-1 text-neutral-900 dark:text-white">
             {t("networkLogs.tx")} {group.txPackets} / {t("networkLogs.rx")} {group.rxPackets}
           </div>
         </div>
         <div>
-          <div className="text-xs text-nb-gray-300">{t("networkLogs.totalTraffic")}</div>
-          <div className="mt-1 text-white">
+          <div className="text-xs text-neutral-500 dark:text-nb-gray-300">{t("networkLogs.totalTraffic")}</div>
+          <div className="mt-1 text-neutral-900 dark:text-white">
             {t("networkLogs.tx")} {formatBytes(group.txBytes)} / {t("networkLogs.rx")}{" "}
             {formatBytes(group.rxBytes)}
           </div>
         </div>
       </div>
 
-      <div className="overflow-x-auto rounded-md border border-nb-gray-900">
+      <div className="overflow-x-auto rounded-md border border-neutral-200 dark:border-nb-gray-900">
         <table className="w-full min-w-[980px] text-left text-sm">
-          <thead className="bg-nb-gray-930 text-xs text-nb-gray-300">
+          <thead className="bg-neutral-100 text-xs text-neutral-500 dark:bg-nb-gray-930 dark:text-nb-gray-300">
             <tr>
               <th className="px-4 py-3 font-medium">{t("networkLogs.time")}</th>
               <th className="px-4 py-3 font-medium">{t("networkLogs.protocol")}</th>
@@ -311,7 +311,10 @@ function NetworkLogDetails({ group }: Readonly<{ group: NetworkLogClientGroup }>
           </thead>
           <tbody>
             {sortedLogs.map((log) => (
-              <tr key={log.flow_id} className="border-t border-nb-gray-900 text-nb-gray-100">
+              <tr
+                key={log.flow_id}
+                className="border-t border-neutral-200 text-neutral-700 dark:border-nb-gray-900 dark:text-nb-gray-100"
+              >
                 <td className="whitespace-nowrap px-4 py-3">
                   {dayjs(latestEventTimestamp(log)).format("YYYY/MM/DD HH:mm:ss")}
                 </td>

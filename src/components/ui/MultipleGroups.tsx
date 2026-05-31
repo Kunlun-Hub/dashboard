@@ -73,7 +73,9 @@ export default function MultipleGroups({
                 group={firstGroup}
                 showNewBadge={true}
                 className={
-                  permission.groups.update ? "group-hover:bg-nb-gray-800" : ""
+                  permission.groups.update
+                    ? "group-hover:bg-neutral-100 dark:group-hover:bg-nb-gray-800"
+                    : ""
                 }
               />
             )}
@@ -83,7 +85,9 @@ export default function MultipleGroups({
                 useHover={true}
                 className={cn(
                   "px-3 gap-2 whitespace-nowrap",
-                  permission.groups.update ? "group-hover:bg-nb-gray-800" : "",
+                  permission.groups.update
+                    ? "group-hover:bg-neutral-100 dark:group-hover:bg-nb-gray-800"
+                    : "",
                 )}
               >
                 + {otherGroups.length}
@@ -153,7 +157,7 @@ export const TransparentEditIconButton = () => {
   return (
     <div
       className={
-        "h-[34px] w-[34px] !p-0 opacity-0 group-hover:opacity-100 flex items-center justify-center text-nb-gray-400 hover:text-nb-gray-100"
+        "h-[34px] w-[34px] !p-0 opacity-0 group-hover:opacity-100 flex items-center justify-center text-neutral-400 hover:text-neutral-900 dark:text-nb-gray-400 dark:hover:text-nb-gray-100"
       }
     >
       <PencilLineIcon size={16} />

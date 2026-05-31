@@ -32,9 +32,15 @@ export const SSHAccessType = ({ value, onChange }: Props) => {
           data-cy={"protocol-select-button"}
         >
           {value === "full" ? (
-            <ShieldUserIcon size={15} className={"text-nb-gray-300 shrink-0"} />
+            <ShieldUserIcon
+              size={15}
+              className={"text-neutral-500 dark:text-nb-gray-300 shrink-0"}
+            />
           ) : (
-            <ShieldHalfIcon size={15} className={"text-nb-gray-300 shrink-0"} />
+            <ShieldHalfIcon
+              size={15}
+              className={"text-neutral-500 dark:text-nb-gray-300 shrink-0"}
+            />
           )}
           <SelectValue placeholder={t("accessControl.selectSshAccessType")} />
         </div>

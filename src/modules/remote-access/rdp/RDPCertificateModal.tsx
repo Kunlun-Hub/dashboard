@@ -66,13 +66,13 @@ export const RDPCertificateModal = ({
                 setRememberCertificate(checked === true)
               }
             />
-            <div className={"font-normal text-sm text-nb-gray-200"}>
+            <div className={"font-normal text-sm text-neutral-700 dark:text-nb-gray-200"}>
               {t("remoteAccess.alwaysTrust")}{" "}
-              <span className={"text-white font-medium"}>
+              <span className={"text-neutral-900 dark:text-white font-medium"}>
                 {'"' + certificate?.issuer?.replace("CN=", "") + '"'}
               </span>{" "}
               {t("remoteAccess.whenConnectingTo")}{" "}
-              <span className={"text-white font-medium"}>
+              <span className={"text-neutral-900 dark:text-white font-medium"}>
                 {'"' + hostname + '"'}
               </span>
             </div>
@@ -108,7 +108,7 @@ const CertificateDetailsList = ({
   return (
     <div
       className={
-        "bg-nb-gray-930 border border-nb-gray-900 rounded-md mt-3 flex flex-col py-3 px-4 gap-2"
+        "bg-neutral-50 border border-neutral-200 rounded-md mt-3 flex flex-col py-3 px-4 gap-2 dark:bg-nb-gray-930 dark:border-nb-gray-900"
       }
     >
       <CertificateDetailsListItem
@@ -164,8 +164,8 @@ const CertificateDetailsListItem = ({
 }) => {
   return (
     <div key={label} className={"flex justify-between text-xs gap-10"}>
-      <span className={"font-mono text-nb-gray-200 w-[200px]"}>{label}:</span>
-      <span className={"font-mono text-nb-gray-300 break-all text-left w-full"}>
+      <span className={"font-mono text-neutral-700 dark:text-nb-gray-200 w-[200px]"}>{label}:</span>
+      <span className={"font-mono text-neutral-600 dark:text-nb-gray-300 break-all text-left w-full"}>
         {value}
       </span>
     </div>

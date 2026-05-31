@@ -515,7 +515,7 @@ function AffectedResourceList({ resources }: { resources: NetworkResource[] }) {
   return (
     <div
       className={cn(
-        "rounded-md bg-nb-gray-930 border border-nb-gray-900 text-xs mt-4",
+        "rounded-md bg-neutral-50 border border-neutral-200 text-xs mt-4 dark:bg-nb-gray-930 dark:border-nb-gray-900",
       )}
     >
       {visible.map((r, i) => (
@@ -523,18 +523,18 @@ function AffectedResourceList({ resources }: { resources: NetworkResource[] }) {
           key={r.id}
           className={cn(
             "flex items-center gap-2.5 px-3 py-2.5",
-            i > 0 && "border-t border-nb-gray-900",
+            i > 0 && "border-t border-neutral-200 dark:border-nb-gray-900",
           )}
         >
           <ResourceIcon type={r.type || "host"} size={12} />
-          <span className="font-medium text-nb-gray-200">{r.name}</span>
-          <CopyToClipboardText className={"text-nb-gray-300"}>
+          <span className="font-medium text-neutral-800 dark:text-nb-gray-200">{r.name}</span>
+          <CopyToClipboardText className={"text-neutral-600 dark:text-nb-gray-300"}>
             {r.address}
           </CopyToClipboardText>
         </div>
       ))}
       {remaining > 0 && (
-        <div className="border-t border-nb-gray-900 px-3 py-2 text-nb-gray-200">
+        <div className="border-t border-neutral-200 px-3 py-2 text-neutral-700 dark:border-nb-gray-900 dark:text-nb-gray-200">
           {t("common.moreCount", { count: remaining })}
         </div>
       )}

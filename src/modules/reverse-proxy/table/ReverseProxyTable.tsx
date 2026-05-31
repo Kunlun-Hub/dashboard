@@ -206,7 +206,7 @@ export default function ReverseProxyTable({ headingTarget }: Readonly<Props>) {
         return (
           <>
             <ReverseProxyTargetsTable reverseProxy={reverseProxy} />
-            <div className={"h-2 w-full bg-nb-gray-960"}></div>
+            <div className={"h-2 w-full bg-neutral-50 dark:bg-nb-gray-960"}></div>
           </>
         );
       }}

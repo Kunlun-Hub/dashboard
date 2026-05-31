@@ -91,15 +91,15 @@ export function OSLogo({ os }: { os: string }) {
   }, [os]);
 
   if (icon === OperatingSystem.WINDOWS)
-    return <FaWindows className={"text-white text-lg"} />;
+    return <FaWindows className={"text-neutral-700 dark:text-white text-lg"} />;
   if (icon === OperatingSystem.APPLE)
     return <Image src={AppleLogo} alt={""} width={14} />;
   if (icon === OperatingSystem.FREEBSD)
     return <Image src={FreeBSDLogo} alt={""} width={18} />;
   if (icon === OperatingSystem.IOS)
-    return <IOSIcon className={"fill-white"} size={20} />;
+    return <IOSIcon className={"fill-neutral-700 dark:fill-white"} size={20} />;
   if (icon === OperatingSystem.ANDROID)
-    return <FcAndroidOs className={"text-white text-2xl brightness-200"} />;
+    return <FcAndroidOs className={"text-neutral-700 dark:text-white text-2xl dark:brightness-200"} />;
 
-  return <FcLinux className={"text-white text-2xl brightness-150"} />;
+  return <FcLinux className={"text-neutral-700 dark:text-white text-2xl dark:brightness-150"} />;
 }

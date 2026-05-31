@@ -12,7 +12,7 @@ export const SmallUserAvatar = ({ name, id, email, className }: Props) => {
   return (
     <div
       className={cn(
-        "w-7 h-7 rounded-full shrink-0 flex items-center justify-center text-white uppercase text-[12px] font-medium bg-nb-gray-850",
+        "w-7 h-7 rounded-full shrink-0 flex items-center justify-center uppercase text-[12px] font-medium bg-neutral-100 dark:bg-nb-gray-850",
         className,
       )}
       style={{

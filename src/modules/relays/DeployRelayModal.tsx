@@ -289,7 +289,7 @@ docker compose up -d`,
           {tokenError ? (
             <div
               className={
-                "rounded-md border border-red-500/40 bg-red-950/20 px-4 py-3 text-sm text-red-200"
+                "rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 dark:border-red-500/40 dark:bg-red-950/20 dark:text-red-200"
               }
             >
               {tokenError}
@@ -297,7 +297,7 @@ docker compose up -d`,
           ) : (
             <div
               className={
-                "flex items-center gap-3 rounded-md border border-nb-gray-800 bg-nb-gray-930 px-4 py-3 text-sm text-nb-gray-300"
+                "flex items-center gap-3 rounded-md border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-700 dark:border-nb-gray-800 dark:bg-nb-gray-930 dark:text-nb-gray-300"
               }
             >
               <SquareIcon
@@ -318,15 +318,15 @@ docker compose up -d`,
             <AccordionItem
               value={"install"}
               className={
-                "rounded-md border border-nb-gray-800 bg-nb-gray-930 px-4"
+                "rounded-md border border-neutral-200 bg-neutral-50 px-4 dark:border-nb-gray-800 dark:bg-nb-gray-930"
               }
             >
               <AccordionTrigger className={"my-0 py-4"}>
                 <div className={"flex flex-col items-start gap-1"}>
-                  <span className={"text-sm text-nb-gray-100"}>
+                  <span className={"text-sm text-neutral-900 dark:text-nb-gray-100"}>
                     {t("relays.installCommand")}
                   </span>
-                  <span className={"text-xs text-nb-gray-400 font-normal"}>
+                  <span className={"text-xs text-neutral-500 dark:text-nb-gray-400 font-normal"}>
                     {t("relays.installCommandHelp")}
                   </span>
                 </div>

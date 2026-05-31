@@ -115,7 +115,7 @@ export default function ReverseProxyAuthCell({
       variant={"gray"}
       useHover={false}
       disabled={!canConfigure}
-      className={"cursor-pointer !rounded-r-none !border-r-0 !h-[34px] min-w-[100px] !justify-start hover:bg-nb-gray-930 transition-all"}
+      className={"cursor-pointer !rounded-r-none !border-r-0 !h-[34px] min-w-[100px] !justify-start hover:bg-neutral-100 dark:hover:bg-nb-gray-930 transition-all"}
     >
       <SingleAuthIcon size={12} className="text-green-500" />
       <span className={"font-medium text-xs"}>{singleAuth!.label}</span>
@@ -125,7 +125,7 @@ export default function ReverseProxyAuthCell({
       variant={"gray"}
       useHover={false}
       disabled={!canConfigure}
-      className={"cursor-pointer !rounded-r-none !border-r-0 !h-[34px] min-w-[100px] !justify-start hover:bg-nb-gray-930 transition-all"}
+      className={"cursor-pointer !rounded-r-none !border-r-0 !h-[34px] min-w-[100px] !justify-start hover:bg-neutral-100 dark:hover:bg-nb-gray-930 transition-all"}
     >
       <LockKeyhole size={12} className="text-green-500" />
       <span className={"font-medium text-xs"}>
@@ -211,7 +211,7 @@ export default function ReverseProxyAuthCell({
           <Badge
             variant={"gray"}
             disabled={!canConfigure}
-            className={"cursor-pointer !rounded-r-none !border-r-0 !h-[34px] min-w-[100px] !justify-start hover:bg-nb-gray-930 transition-all"}
+            className={"cursor-pointer !rounded-r-none !border-r-0 !h-[34px] min-w-[100px] !justify-start hover:bg-neutral-100 dark:hover:bg-nb-gray-930 transition-all"}
           >
             <LockOpenIcon size={12} className="text-red-500" />
             <span className={"font-medium text-xs"}>

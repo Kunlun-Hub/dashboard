@@ -55,7 +55,7 @@ export const ReverseProxyCrowdSecIPReputation = ({
       <div className="flex gap-4">
         <div
           className={
-            "h-12 w-12 flex items-center justify-center rounded-md bg-nb-gray-900/70 p-2 border border-nb-gray-900/70 shrink-0 relative"
+            "h-12 w-12 flex items-center justify-center rounded-md bg-neutral-100 p-2 border border-neutral-200 shrink-0 relative dark:bg-nb-gray-900/70 dark:border-nb-gray-900/70"
           }
         >
           <Image
@@ -68,9 +68,13 @@ export const ReverseProxyCrowdSecIPReputation = ({
           <Label>{t("reverseProxy.crowdsecTitle")}</Label>
           <HelpText>
             {t("reverseProxy.crowdsecDescriptionPrefix")}{" "}
-            <b className={"text-white"}>{t("reverseProxy.crowdsecEnforce")}</b>{" "}
+            <b className={"text-neutral-900 dark:text-white"}>
+              {t("reverseProxy.crowdsecEnforce")}
+            </b>{" "}
             {t("reverseProxy.crowdsecDescriptionMiddle")}{" "}
-            <b className={"text-white"}>{t("reverseProxy.crowdsecObserve")}</b>{" "}
+            <b className={"text-neutral-900 dark:text-white"}>
+              {t("reverseProxy.crowdsecObserve")}
+            </b>{" "}
             {t("reverseProxy.crowdsecDescriptionSuffix")}
           </HelpText>
         </div>

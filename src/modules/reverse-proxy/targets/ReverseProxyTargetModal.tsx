@@ -255,7 +255,7 @@ export default function ReverseProxyTargetModal({
               <HelpText>{t("reverseProxy.locationHelp")}</HelpText>
               <div className="flex w-full">
                 <div
-                  className={`bg-nb-gray-900 rounded-l-md border text-nb-gray-300 border-r-0 text-sm border-nb-gray-700 flex items-center justify-center whitespace-nowrap px-4 ${
+                  className={`bg-neutral-100 rounded-l-md border text-neutral-600 border-r-0 text-sm border-neutral-200 flex items-center justify-center whitespace-nowrap px-4 dark:bg-nb-gray-900 dark:text-nb-gray-300 dark:border-nb-gray-700 ${
                     !hasTarget ? "opacity-50" : "opacity-80"
                   }`}
                 >
@@ -317,22 +317,22 @@ export default function ReverseProxyTargetModal({
                             <div className="text-xs max-w-xs flex flex-col gap-2">
                               <div>
                                 {t("reverseProxy.preservePathDisabledPrefix")}{" "}
-                                <span className="font-mono text-white">
+                                <span className="font-mono text-neutral-900 dark:text-white">
                                   {targetPath}/users
                                 </span>{" "}
                                 {t("reverseProxy.preservePathDisabledMiddle")}{" "}
-                                <span className="font-mono text-white">
+                                <span className="font-mono text-neutral-900 dark:text-white">
                                   /users
                                 </span>
                                 .
                               </div>
                               <div>
                                 {t("reverseProxy.preservePathEnabledPrefix")}{" "}
-                                <span className="font-mono text-white">
+                                <span className="font-mono text-neutral-900 dark:text-white">
                                   {targetPath}/users
                                 </span>{" "}
                                 {t("reverseProxy.preservePathEnabledMiddle")}{" "}
-                                <span className="font-mono text-white">
+                                <span className="font-mono text-neutral-900 dark:text-white">
                                   {targetPath}/users
                                 </span>
                                 .
@@ -446,7 +446,7 @@ export default function ReverseProxyTargetModal({
               <AccordionItem value={"optional-settings"}>
                 <AccordionTrigger
                   className={
-                    "text-[0.8rem] tracking-wider text-nb-gray-200 py-4 my-0 leading-none gap-2 flex items-center"
+                    "text-[0.8rem] tracking-wider text-neutral-500 hover:text-neutral-900 dark:text-nb-gray-200 py-4 my-0 leading-none gap-2 flex items-center"
                   }
                 >
                   <span className={"relative top-[1px]"}>

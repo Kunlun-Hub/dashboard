@@ -212,12 +212,24 @@ html:not(.dark) .light-theme-surface .bg-nb-gray-950,
 html:not(.dark) .light-theme-surface .bg-nb-gray-940,
 html:not(.dark) .light-theme-surface .bg-nb-gray-935,
 html:not(.dark) .light-theme-surface .bg-nb-gray-850,
+html:not(.dark) .light-theme-surface .bg-nb-gray-800,
+html:not(.dark) .light-theme-surface .bg-nb-gray-700,
+html:not(.dark) .light-theme-surface .bg-nb-gray-600,
+html:not(.dark) .light-theme-surface .bg-nb-gray-500,
 html:not(.dark) .light-theme-surface .hover\:bg-nb-gray:hover,
 html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-960:hover,
 html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-950:hover,
 html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-940:hover,
 html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-935:hover,
-html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-850:hover {
+html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-850:hover,
+html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-800:hover,
+html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-700:hover,
+html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-600:hover,
+html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-500:hover,
+html:not(.dark) .light-theme-surface .group:hover .group-hover\:bg-nb-gray-800,
+html:not(.dark) .light-theme-surface .group:hover .group-hover\:bg-nb-gray-700,
+html:not(.dark) .light-theme-surface .group:hover .group-hover\:bg-nb-gray-600,
+html:not(.dark) .light-theme-surface .group:hover .group-hover\:bg-nb-gray-500 {
     background-color: #ffffff;
 }
 
@@ -280,5 +292,9 @@ html:not(.dark) .light-theme-surface .text-nb-gray-350,
 html:not(.dark) .light-theme-surface .text-nb-gray-400,
 html:not(.dark) .light-theme-surface .text-nb-gray-500,
 html:not(.dark) .light-theme-surface .text-nb-gray-600 {
+    color: #525252;
+}
+
+html:not(.dark) .light-theme-surface .text-neutral-300 {
     color: #525252;
 }

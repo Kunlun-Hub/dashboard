@@ -35,7 +35,7 @@ export const ReverseProxyEventsUserCell = ({ event }: Props) => {
     <div className={"flex items-center gap-2 py-2 px-3"}>
       <div
         className={
-          "w-8 h-8 rounded-full flex items-center justify-center text-white uppercase text-xs font-medium bg-nb-gray-900 shrink-0"
+          "w-8 h-8 rounded-full flex items-center justify-center uppercase text-xs font-medium bg-neutral-100 dark:bg-nb-gray-900 shrink-0"
         }
         style={{
           color: generateColorFromUser(userForColor),
@@ -45,11 +45,11 @@ export const ReverseProxyEventsUserCell = ({ event }: Props) => {
       </div>
 
       <div className="flex flex-col gap-0 min-w-0">
-        <span className={"text-sm text-nb-gray-200 truncate"}>
+        <span className={"text-sm text-neutral-800 dark:text-nb-gray-200 truncate"}>
           <TextWithTooltip text={displayName} maxChars={20} />
         </span>
         {displayEmail && (
-          <span className={"text-xs text-nb-gray-400 font-light truncate"}>
+          <span className={"text-xs text-neutral-500 dark:text-nb-gray-400 font-light truncate"}>
             <TextWithTooltip text={displayEmail} maxChars={25} />
           </span>
         )}

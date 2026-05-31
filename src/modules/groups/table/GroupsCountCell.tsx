@@ -47,8 +47,10 @@ export default function GroupsCountCell({
           useHover={!!href}
           onClick={href ? handleClick : undefined}
           className={cn(
-            "gap-2 w-full",
-            count === 0 && "opacity-30",
+            "gap-2 w-full border",
+            count === 0
+              ? "bg-neutral-50 text-neutral-600 border-neutral-200 dark:bg-nb-gray-930/30 dark:text-nb-gray-400 dark:border-nb-gray-800/30"
+              : "bg-white text-neutral-800 border-neutral-300 dark:bg-nb-gray-930/60 dark:text-nb-gray-200 dark:border-nb-gray-800/40",
             href && "cursor-pointer",
           )}
         >

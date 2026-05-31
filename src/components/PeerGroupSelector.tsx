@@ -351,8 +351,8 @@ export function PeerGroupSelector({
             className={cn(
               "min-h-[46px] w-full relative items-center group",
               "border border-neutral-200 dark:border-nb-gray-700 justify-between py-2 px-3",
-              "rounded-md bg-white text-sm dark:bg-nb-gray-900/40 flex dark:text-neutral-400/70 text-neutral-500 cursor-pointer hover:dark:bg-nb-gray-900/50",
-              "disabled:pointer-events-none disabled:opacity-60 transition-all",
+              "rounded-md bg-white text-sm dark:bg-nb-gray-900/40 flex text-neutral-600 dark:text-neutral-400/70 cursor-pointer hover:bg-neutral-50 hover:dark:bg-nb-gray-900/50",
+              "disabled:pointer-events-none disabled:bg-neutral-50 disabled:text-neutral-400 dark:disabled:bg-nb-gray-900/40 dark:disabled:text-neutral-500/70 transition-all",
             )}
             disabled={disabled}
             data-cy={dataCy}
@@ -493,7 +493,7 @@ export function PeerGroupSelector({
               >
                 <div
                   className={
-                    "flex items-center bg-nb-gray-800 py-1 px-1.5 rounded-[4px] border border-nb-gray-500"
+                    "flex items-center bg-neutral-100 py-1 px-1.5 rounded-[4px] border border-neutral-200 text-neutral-500 dark:bg-nb-gray-800 dark:border-nb-gray-500 dark:text-nb-gray-300"
                   }
                 >
                   <IconArrowBack size={10} />
@@ -584,7 +584,10 @@ export function PeerGroupSelector({
                               toggleGroupByName(option.name);
                               searchRef.current?.focus();
                             }}
-                            className={cn(isDisabled && "opacity-40")}
+                            className={cn(
+                              isDisabled &&
+                                "text-neutral-400 dark:text-nb-gray-500",
+                            )}
                             onClick={(e) => e.preventDefault()}
                           >
                             <div className={"flex items-center gap-2"}>
@@ -781,7 +784,9 @@ const UsersCounter = ({
   if (usersOfGroup.length === 0)
     return (
       <span
-        className={"group-hover/user-stack:text-nb-gray-200 text-nb-gray-300"}
+        className={
+          "text-neutral-500 group-hover/user-stack:text-neutral-700 dark:text-nb-gray-300 dark:group-hover/user-stack:text-nb-gray-200"
+        }
       >
         {t("peerGroupSelector.zeroUsers")}
       </span>
@@ -792,9 +797,9 @@ const UsersCounter = ({
       users={usersOfGroup}
       max={3}
       avatarClassName={cn(
-        "border-nb-gray-920",
-        "bg-nb-gray-800 group-hover/user-stack:bg-nb-gray-700",
-        "group-hover/command-item:border-nb-gray-910",
+        "border-neutral-200 dark:border-nb-gray-920",
+        "bg-neutral-100 group-hover/user-stack:bg-neutral-200 dark:bg-nb-gray-800 dark:group-hover/user-stack:bg-nb-gray-700",
+        "group-hover/command-item:border-neutral-300 dark:group-hover/command-item:border-nb-gray-910",
       )}
     />
   );
@@ -831,7 +836,7 @@ const ResourcesCounter = ({ group }: { group: Group }) => {
   return group?.resources_count && group.resources_count > 0 ? (
     <div
       className={
-        "text-nb-gray-300 font-medium flex items-center gap-2 transition-all"
+        "text-neutral-500 dark:text-nb-gray-300 font-medium flex items-center gap-2 transition-all"
       }
     >
       <Layers3 size={14} className={"shrink-0"} />
@@ -867,7 +872,7 @@ const PolicyCounter = ({
   return (
     <div
       className={
-        "text-nb-gray-300 font-medium flex items-center gap-2 transition-all"
+        "text-neutral-500 dark:text-nb-gray-300 font-medium flex items-center gap-2 transition-all"
       }
     >
       <ShieldCheck size={14} className={"shrink-0"} />

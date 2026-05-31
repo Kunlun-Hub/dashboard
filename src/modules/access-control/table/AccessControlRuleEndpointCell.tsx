@@ -213,7 +213,9 @@ export default function AccessControlRuleEndpointCell({
                 useHover={true}
                 className={cn(
                   "px-3 gap-2 whitespace-nowrap",
-                  permission.groups.update ? "group-hover:bg-nb-gray-800" : "",
+                  permission.groups.update
+                    ? "group-hover:bg-neutral-100 dark:group-hover:bg-nb-gray-800"
+                    : "",
                 )}
               >
                 + {otherItems.length}
@@ -294,14 +296,19 @@ const RuleOverview = ({
   const isDrop = rule.action === "drop";
 
   return (
-    <div className="rounded-md border border-nb-gray-800 bg-nb-gray-900/40 px-3 py-2">
+    <div className="rounded-md border border-neutral-200 bg-neutral-50 px-3 py-2 dark:border-nb-gray-800 dark:bg-nb-gray-900/40">
       <div className="flex items-center gap-2 text-left mb-2">
-        <span className="text-sm font-medium text-nb-gray-100 truncate">
+        <span className="text-sm font-medium text-neutral-900 truncate dark:text-nb-gray-100">
           {rule.name?.trim() ||
             t("accessControl.ruleNumber", { number: ruleIndex + 1 })}
         </span>
         <span
-          className={cn("text-xs", isDrop ? "text-red-400" : "text-green-400")}
+          className={cn(
+            "text-xs",
+            isDrop
+              ? "text-red-600 dark:text-red-400"
+              : "text-emerald-600 dark:text-green-400",
+          )}
         >
           {isDrop
             ? t("accessControl.actionDrop")
@@ -320,8 +327,8 @@ const RuleOverview = ({
           className={cn(
             "h-7 w-7 rounded-md flex items-center justify-center border",
             isDrop
-              ? "border-red-500/50 bg-red-950/40 text-red-400"
-              : "border-green-500/50 bg-green-950/40 text-green-400",
+              ? "border-red-200 bg-red-50 text-red-600 dark:border-red-500/50 dark:bg-red-950/40 dark:text-red-400"
+              : "border-emerald-200 bg-emerald-50 text-emerald-600 dark:border-green-500/50 dark:bg-green-950/40 dark:text-green-400",
           )}
         >
           {isDrop ? <XIcon size={15} /> : <CheckIcon size={15} />}
@@ -352,10 +359,10 @@ const RuleDirectionIndicator = ({
       className={cn(
         "h-7 min-w-16 rounded-md flex items-center justify-center border px-2",
         isDrop
-          ? "border-red-500/40 bg-red-950/30"
+          ? "border-red-200 bg-red-50 dark:border-red-500/40 dark:bg-red-950/30"
           : isBidirectional
-          ? "border-green-500/40 bg-green-950/30"
-          : "border-sky-500/40 bg-sky-950/30",
+          ? "border-emerald-200 bg-emerald-50 dark:border-green-500/40 dark:bg-green-950/30"
+          : "border-sky-200 bg-sky-50 dark:border-sky-500/40 dark:bg-sky-950/30",
       )}
     >
       {isBidirectional ? (
@@ -387,7 +394,11 @@ const EndpointBadgeList = ({
   resourceData: EndpointResourceData;
 }) => {
   if (items.length === 0) {
-    return <span className="text-xs text-nb-gray-400">{emptyLabel}</span>;
+    return (
+      <span className="text-xs text-neutral-500 dark:text-nb-gray-400">
+        {emptyLabel}
+      </span>
+    );
   }
 
   return (

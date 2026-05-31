@@ -282,7 +282,10 @@ export function SetupKeyModalContent({
             onChange={(e) => setUsageLimit(e.target.value)}
             placeholder={usageLimitPlaceholder}
             customPrefix={
-              <MonitorSmartphoneIcon size={16} className={"text-nb-gray-300"} />
+              <MonitorSmartphoneIcon
+                size={16}
+                className={"text-neutral-500 dark:text-nb-gray-300"}
+              />
             }
             customSuffix={t("setupKey.peerCount")}
           />
@@ -306,7 +309,10 @@ export function SetupKeyModalContent({
             data-cy={"setup-key-expire-in-days"}
             onChange={(e) => setExpiresIn(e.target.value)}
             customPrefix={
-              <AlarmClock size={16} className={"text-nb-gray-300"} />
+              <AlarmClock
+                size={16}
+                className={"text-neutral-500 dark:text-nb-gray-300"}
+              />
             }
             customSuffix={t("invite.days")}
           />

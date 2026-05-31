@@ -32,14 +32,14 @@ export const ReverseProxyTargetPath = ({ target }: Props) => {
     >
       <span
         className={
-          "text-[11px] leading-none font-mono px-2.5 py-2 rounded bg-nb-gray-920 text-nb-gray-300 transition-all group-hover:bg-nb-gray-900 group-hover:text-nb-gray-100"
+          "text-[11px] leading-none font-mono px-2.5 py-2 rounded bg-neutral-100 text-neutral-700 transition-all group-hover:bg-neutral-200 group-hover:text-neutral-900 dark:bg-nb-gray-920 dark:text-nb-gray-300 dark:group-hover:bg-nb-gray-900 dark:group-hover:text-nb-gray-100"
         }
       >
         {path}
       </span>
       <ExternalLinkIcon
         size={12}
-        className="text-nb-gray-400 opacity-0 group-hover:opacity-100 transition-opacity"
+        className="text-neutral-500 opacity-0 group-hover:opacity-100 transition-opacity dark:text-nb-gray-400"
       />
     </a>
   );

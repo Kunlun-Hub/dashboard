@@ -479,7 +479,12 @@ export function DataTable<TData, TValue>({
   return (
     <div className={cn("relative table-fixed-scroll", className)}>
       {showSearchAndFilters && (
-        <div className={cn("flex gap-x-4 gap-y-6", !minimal && "p-default")}>
+        <div
+          className={cn(
+            "flex items-center gap-x-4 gap-y-6 border-y border-neutral-200 bg-neutral-50/80 py-3 dark:border-transparent dark:bg-transparent",
+            !minimal && "p-default",
+          )}
+        >
           <DataTableGlobalSearch
             className={searchClassName}
             disabled={false} // Never disable the search input

@@ -27,7 +27,7 @@ export default function NoResultsCard({
       <Card className={"w-full relative overflow-hidden"}>
         <div
           className={
-            "absolute z-20 bg-gradient-to-b  dark:to-nb-gray-950 dark:from-nb-gray-950/40 w-full h-full"
+            "absolute z-20 bg-gradient-to-b from-white/40 to-white dark:to-nb-gray-950 dark:from-nb-gray-950/40 w-full h-full"
           }
         ></div>
         <div
@@ -46,14 +46,16 @@ export default function NoResultsCard({
         <div className={"max-w-md mx-auto relative z-20 py-8"}>
           <div
             className={
-              "mx-auto w-10 h-10 bg-nb-gray-930 flex items-center justify-center mb-3 rounded-md border border-nb-gray-800"
+              "mx-auto w-10 h-10 bg-neutral-100 text-neutral-700 flex items-center justify-center mb-3 rounded-md border border-neutral-200 dark:bg-nb-gray-930 dark:text-nb-gray-100 dark:border-nb-gray-800"
             }
           >
             {icon || <FilterX size={24} />}
           </div>
           <div className={"text-center"}>
-            <h1 className={"text-2xl font-medium max-w-lg mx-auto"}>{title ?? t("noResults.title")}</h1>
-            <Paragraph className={"justify-center my-2 !text-nb-gray-400"}>
+            <h1 className={"text-2xl font-medium max-w-lg mx-auto"}>
+              {title ?? t("noResults.title")}
+            </h1>
+            <Paragraph className={"justify-center my-2 !text-neutral-500 dark:!text-nb-gray-400"}>
               {description ?? t("noResults.description")}
             </Paragraph>
             {children}

@@ -229,14 +229,14 @@ export const AssignGroupToPeerModalContent = ({
         <div className={"flex items-start justify-between pr-8"}>
           <ModalHeader
             title={
-              <div className={"flex items-center gap-2 mb-1 text-nb-gray-100"}>
+              <div className={"flex items-center gap-2 mb-1 text-neutral-900 dark:text-nb-gray-100"}>
                 <FolderGit2 size={16} className={"shrink-0"} />
                 <div className={"flex gap-2 items-center"}>
                   {groupName}
                   {groupName !== "All" && (
                     <button
                       className={
-                        "flex items-center gap-2 dark:text-neutral-300 text-neutral-500 hover:text-neutral-100 transition-all hover:bg-nb-gray-800/60 py-2 px-3 rounded-md cursor-pointer"
+                        "flex items-center gap-2 text-neutral-500 hover:text-neutral-900 transition-all hover:bg-neutral-100 py-2 px-3 rounded-md cursor-pointer dark:text-neutral-300 dark:hover:text-neutral-100 dark:hover:bg-nb-gray-800/60"
                       }
                       onClick={() => setGroupNameModal(true)}
                     >

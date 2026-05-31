@@ -93,7 +93,7 @@ export default function GroupedRouteHighAvailabilityCell({
             </>
           ) : (
             <>
-              <div className={"h-2 w-2 rounded-full bg-nb-gray-700"}></div>
+              <div className={"h-2 w-2 rounded-full bg-neutral-400 dark:bg-nb-gray-700"}></div>
               {t("common.disabled")}
             </>
           )}

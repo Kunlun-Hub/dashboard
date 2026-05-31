@@ -46,9 +46,9 @@ export const RadioGroupItem = ({
           variant === "default" &&
             "text-neutral-500 hover:text-neutral-700 data-[state=checked]:bg-white data-[state=checked]:text-neutral-900 dark:text-nb-gray-500 dark:hover:text-nb-gray-400 dark:data-[state=checked]:bg-nb-gray-600 dark:data-[state=checked]:text-nb-gray-100",
           variant === "red" &&
-            "text-neutral-500 hover:text-neutral-700 data-[state=checked]:bg-red-50 data-[state=checked]:text-red-700 dark:text-nb-gray-500 dark:hover:text-nb-gray-400 dark:data-[state=checked]:bg-red-800 dark:data-[state=checked]:text-red-200",
+            "text-neutral-600 hover:text-neutral-800 data-[state=checked]:bg-red-50 data-[state=checked]:text-red-700 data-[state=checked]:ring-1 data-[state=checked]:ring-red-200 dark:text-nb-gray-500 dark:hover:text-nb-gray-400 dark:data-[state=checked]:bg-red-800 dark:data-[state=checked]:text-red-200 dark:data-[state=checked]:ring-0",
           variant === "green" &&
-            "text-neutral-500 hover:text-neutral-700 data-[state=checked]:bg-green-50 data-[state=checked]:text-green-700 dark:text-nb-gray-500 dark:hover:text-nb-gray-400 dark:data-[state=checked]:bg-green-800 dark:data-[state=checked]:text-green-200",
+            "text-neutral-600 hover:text-neutral-800 data-[state=checked]:bg-emerald-50 data-[state=checked]:text-emerald-700 data-[state=checked]:ring-1 data-[state=checked]:ring-emerald-200 dark:text-nb-gray-500 dark:hover:text-nb-gray-400 dark:data-[state=checked]:bg-green-800 dark:data-[state=checked]:text-green-200 dark:data-[state=checked]:ring-0",
           "cursor-pointer relative transition-all w-full py-1.5 px-5 rounded-md h-full flex items-center text-sm gap-1 text-center justify-center",
         )}
       >

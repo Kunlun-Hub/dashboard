@@ -187,7 +187,11 @@ export function DataTableFilter<TData>({
   return (
     <Popover open={open} onOpenChange={onOpenChange}>
       <PopoverTrigger asChild={true}>
-        <Button variant={"secondary"} disabled={disabled}>
+        <Button
+          variant={activeFiltersCount > 0 ? "tertiary" : "secondary"}
+          disabled={disabled}
+          aria-pressed={activeFiltersCount > 0}
+        >
           <FilterIcon size={15} className={"shrink-0"} />
           <span>
             <span className={"text-neutral-900 dark:text-white"}>

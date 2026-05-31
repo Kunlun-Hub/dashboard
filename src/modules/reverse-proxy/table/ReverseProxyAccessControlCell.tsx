@@ -68,7 +68,7 @@ export default function ReverseProxyAccessControlCell({
         variant={"gray"}
         disabled={!canConfigure}
         className={
-          "cursor-pointer !rounded-r-none !border-r-0 !h-[34px] min-w-[100px] !justify-start hover:bg-nb-gray-930 transition-all"
+          "cursor-pointer !rounded-r-none !border-r-0 !h-[34px] min-w-[100px] !justify-start hover:bg-neutral-100 dark:hover:bg-nb-gray-930 transition-all"
         }
       >
         <ShieldCheck size={12} className="text-green-500" />
@@ -240,7 +240,7 @@ export default function ReverseProxyAccessControlCell({
             variant={"gray"}
             disabled={!canConfigure}
             className={
-              "cursor-pointer !rounded-r-none !border-r-0 !h-[34px] min-w-[100px] !justify-start hover:bg-nb-gray-930 transition-all"
+              "cursor-pointer !rounded-r-none !border-r-0 !h-[34px] min-w-[100px] !justify-start hover:bg-neutral-100 dark:hover:bg-nb-gray-930 transition-all"
             }
           >
             <ShieldOff size={12} className="text-red-500" />
