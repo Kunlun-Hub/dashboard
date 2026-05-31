@@ -17,6 +17,7 @@ export type LicenseType = "try" | "year" | "enterprise";
 export interface AccountLicense {
   machine_id: string;
   server_url?: string;
+  name?: string;
   status: LicenseStatus;
   plan: EntitlementPlan;
   license_key_masked?: string;

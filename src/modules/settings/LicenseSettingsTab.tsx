@@ -1,7 +1,6 @@
 import Breadcrumbs from "@components/Breadcrumbs";
 import Button from "@components/Button";
 import CopyToClipboardText from "@components/CopyToClipboardText";
-import HelpText from "@components/HelpText";
 import { Label } from "@components/Label";
 import { notify } from "@components/Notification";
 import { Textarea } from "@components/Textarea";
@@ -19,7 +18,6 @@ import {
 import React, { useMemo, useState } from "react";
 import { useSWRConfig } from "swr";
 import SettingsIcon from "@/assets/icons/SettingsIcon";
-import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useI18n } from "@/i18n/I18nProvider";
 import { Account } from "@/interfaces/Account";
 import { EntitlementPlan } from "@/interfaces/AccountEntitlements";
@@ -37,7 +35,6 @@ type Props = {
 
 export default function LicenseSettingsTab({ account }: Readonly<Props>) {
   const { t } = useI18n();
-  const { permission } = usePermissions();
   const { mutate } = useSWRConfig();
   const { license, isLoading } = useAccountLicense();
   const [licenseKey, setLicenseKey] = useState("");
@@ -89,7 +86,6 @@ export default function LicenseSettingsTab({ account }: Readonly<Props>) {
     });
   };
 
-  const canUpdate = permission.accounts.update;
   const active = license?.status === "active";
 
   return (
@@ -166,6 +162,10 @@ export default function LicenseSettingsTab({ account }: Readonly<Props>) {
             value={license?.server_url || t("licenseSettings.noKey")}
           />
           <LicenseInfoRow
+            label={t("licenseSettings.authorizedUser")}
+            value={license?.name || t("licenseSettings.noKey")}
+          />
+          <LicenseInfoRow
             label={t("licenseSettings.licenseType")}
             value={licenseTypeLabel(t, license?.license)}
           />
@@ -192,19 +192,17 @@ export default function LicenseSettingsTab({ account }: Readonly<Props>) {
 
         <div className={"mt-8"}>
           <Label>{t("licenseSettings.licenseKey")}</Label>
-          <HelpText>{t("licenseSettings.licenseKeyHelp")}</HelpText>
           <Textarea
             value={licenseKey}
             onChange={(event) => setLicenseKey(event.target.value)}
             placeholder={t("licenseSettings.licenseKeyPlaceholder")}
             className={"min-h-[92px] font-mono text-xs"}
-            disabled={!canUpdate}
             resize
           />
           <div className={"mt-4 flex items-center gap-3"}>
             <Button
               variant={"primary"}
-              disabled={!canUpdate || licenseKey.trim().length === 0}
+              disabled={licenseKey.trim().length === 0}
               onClick={saveLicense}
             >
               <KeyRoundIcon size={14} />
@@ -212,7 +210,7 @@ export default function LicenseSettingsTab({ account }: Readonly<Props>) {
             </Button>
             <Button
               variant={"danger-outline"}
-              disabled={!canUpdate || !license?.license_key_masked}
+              disabled={!license?.license_key_masked}
               onClick={clearLicense}
             >
               <Trash2Icon size={14} />

@@ -338,6 +338,7 @@ export const messages = {
     "licenseSettings.plan.pro": "Pro",
     "licenseSettings.machineCode": "Machine Code",
     "licenseSettings.authorizedUrl": "Authorized URL",
+    "licenseSettings.authorizedUser": "Authorized Party",
     "licenseSettings.currentUrl": "Current URL",
     "licenseSettings.licenseType": "License Type",
     "licenseSettings.license.try": "Trial",
@@ -348,8 +349,6 @@ export const messages = {
     "licenseSettings.never": "Never",
     "licenseSettings.noKey": "None",
     "licenseSettings.licenseKey": "License Key",
-    "licenseSettings.licenseKeyHelp":
-      "Paste the AES encrypted base64 license key issued for this dashboard domain.",
     "licenseSettings.licenseKeyPlaceholder": "Paste license key...",
     "licenseSettings.saveTitle": "License",
     "licenseSettings.updatedDescription": "License was updated.",
@@ -3759,6 +3758,7 @@ export const messages = {
     "licenseSettings.plan.pro": "Pro",
     "licenseSettings.machineCode": "机器码",
     "licenseSettings.authorizedUrl": "授权 URL",
+    "licenseSettings.authorizedUser": "授权使用方",
     "licenseSettings.currentUrl": "当前 URL",
     "licenseSettings.licenseType": "授权类型",
     "licenseSettings.license.try": "试用",
@@ -3769,8 +3769,6 @@ export const messages = {
     "licenseSettings.never": "从未",
     "licenseSettings.noKey": "无",
     "licenseSettings.licenseKey": "授权 Key",
-    "licenseSettings.licenseKeyHelp":
-      "粘贴为当前 dashboard 域名签发的 AES 加密 base64 授权 Key。",
     "licenseSettings.licenseKeyPlaceholder": "粘贴授权 Key...",
     "licenseSettings.saveTitle": "授权",
     "licenseSettings.updatedDescription": "授权已更新。",
