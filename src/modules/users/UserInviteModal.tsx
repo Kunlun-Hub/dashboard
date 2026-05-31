@@ -15,24 +15,28 @@ import { notify } from "@components/Notification";
 import Paragraph from "@components/Paragraph";
 import { PeerGroupSelector } from "@components/PeerGroupSelector";
 import { SegmentedTabs } from "@components/SegmentedTabs";
-import { IconMailForward, IconLink, IconUserPlus } from "@tabler/icons-react";
+import { IconLink, IconMailForward, IconUserPlus } from "@tabler/icons-react";
 import { useApiCall } from "@utils/api";
 import { cn, validator } from "@utils/helpers";
+import { isNetBirdHosted } from "@utils/netbird";
 import { AlarmClock, CopyIcon, MailIcon, User2 } from "lucide-react";
 import Image from "next/image";
 import React, { useMemo, useState } from "react";
 import { useSWRConfig } from "swr";
-import useCopyToClipboard from "@/hooks/useCopyToClipboard";
 import Avatar1 from "@/assets/avatars/009.jpg";
 import Avatar2 from "@/assets/avatars/030.jpg";
 import Avatar3 from "@/assets/avatars/063.jpg";
 import Avatar4 from "@/assets/avatars/086.jpg";
+import useCopyToClipboard from "@/hooks/useCopyToClipboard";
+import { useI18n } from "@/i18n/I18nProvider";
 import { Group } from "@/interfaces/Group";
 import { Role, User, UserInvite } from "@/interfaces/User";
-import { useI18n } from "@/i18n/I18nProvider";
+import {
+  ResourceLimitTooltip,
+  useResourceLimit,
+} from "@/modules/account/ResourceUsage";
 import useGroupHelper from "@/modules/groups/useGroupHelper";
 import { UserRoleSelector } from "@/modules/users/UserRoleSelector";
-import { isNetBirdHosted } from "@utils/netbird";
 
 type UserCreationMode = "create" | "invite";
 
@@ -164,7 +168,9 @@ export default function UserInviteModal({ children, groups }: Readonly<Props>) {
               )}
             </Code>
             {isInviteSuccess && (
-              <Paragraph className={"mt-3 text-xs text-nb-gray-400 text-center"}>
+              <Paragraph
+                className={"mt-3 text-xs text-nb-gray-400 text-center"}
+              >
                 {t("invite.expiresOn")}{" "}
                 {new Date(successData.invite.expires_at).toLocaleString()}
               </Paragraph>
@@ -201,6 +207,7 @@ export function UserInviteModalContent({
   const inviteRequest = useApiCall<UserInvite>("/users/invites");
   const { mutate } = useSWRConfig();
   const { t } = useI18n();
+  const userLimit = useResourceLimit("users");
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -259,6 +266,7 @@ export function UserInviteModalContent({
   };
 
   const handleSubmit = async () => {
+    if (userLimit.exhausted) return;
     if (isCloud) {
       await createUser();
     } else {
@@ -275,8 +283,8 @@ export function UserInviteModalContent({
   }, [email]);
 
   const isDisabled = useMemo(() => {
-    return name.length === 0 || !isValidEmail;
-  }, [name, isValidEmail]);
+    return name.length === 0 || !isValidEmail || userLimit.exhausted;
+  }, [name, isValidEmail, userLimit.exhausted]);
 
   const getTitle = () => {
     if (isCloud) return t("invite.inviteUserTitle");
@@ -329,7 +337,9 @@ export function UserInviteModalContent({
           "mx-auto text-center flex flex-col items-center justify-center mt-6"
         }
       >
-        <h2 className={"text-lg my-0 leading-[1.5 text-center]"}>{getTitle()}</h2>
+        <h2 className={"text-lg my-0 leading-[1.5 text-center]"}>
+          {getTitle()}
+        </h2>
         <Paragraph className={cn("text-sm text-center max-w-xs")}>
           {getDescription()}
         </Paragraph>
@@ -418,15 +428,20 @@ export function UserInviteModalContent({
       </div>
 
       <ModalFooter className={"items-center"}>
-        <Button
-          variant={"primary"}
-          className={"w-full"}
-          disabled={isDisabled}
-          onClick={handleSubmit}
+        <ResourceLimitTooltip
+          limitState={userLimit}
+          className={userLimit.exhausted ? "w-full" : undefined}
         >
-          {getButtonText()}
-          {getButtonIcon()}
-        </Button>
+          <Button
+            variant={"primary"}
+            className={"w-full"}
+            disabled={isDisabled}
+            onClick={handleSubmit}
+          >
+            {getButtonText()}
+            {getButtonIcon()}
+          </Button>
+        </ResourceLimitTooltip>
       </ModalFooter>
     </ModalContent>
   );

@@ -51,6 +51,8 @@ export const messages = {
     "resourceUsage.remaining": "{count} remaining",
     "resourceUsage.remainingUnlimited": "Unlimited remaining",
     "resourceUsage.remainingUnknown": "Remaining unknown",
+    "resourceUsage.insufficient":
+      "Insufficient resources: {resource} quota is exhausted ({usage}). Upgrade or remove existing resources before adding more.",
     "actions.save": "Save",
     "actions.saveChanges": "Save Changes",
     "actions.confirmChanges": "Confirm Changes",
@@ -3491,6 +3493,8 @@ export const messages = {
     "resourceUsage.remaining": "剩余 {count}",
     "resourceUsage.remainingUnlimited": "剩余不限",
     "resourceUsage.remainingUnknown": "剩余未知",
+    "resourceUsage.insufficient":
+      "资源不足：{resource}额度已用完（{usage}）。请升级授权或删除已有资源后再添加。",
     "actions.save": "保存",
     "actions.saveChanges": "保存更改",
     "actions.confirmChanges": "确认更改",

@@ -29,6 +29,10 @@ import RoundedFlag from "@/assets/countries/RoundedFlag";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useI18n } from "@/i18n/I18nProvider";
 import { Relay } from "@/interfaces/Relay";
+import {
+  ResourceLimitTooltip,
+  useResourceLimit,
+} from "@/modules/account/ResourceUsage";
 import DeployRelayModal from "@/modules/relays/DeployRelayModal";
 import useFetchApi, { useApiCall } from "@/utils/api";
 
@@ -39,6 +43,7 @@ type Props = {
 export default function RelaysTable({ headingTarget }: Readonly<Props>) {
   const { t } = useI18n();
   const { mutate } = useSWRConfig();
+  const relayLimit = useResourceLimit("self_hosted_relays");
   const path = usePathname();
   const [deployModal, setDeployModal] = React.useState(false);
   const [priorityRelay, setPriorityRelay] = React.useState<Relay | null>(null);
@@ -289,14 +294,19 @@ export default function RelaysTable({ headingTarget }: Readonly<Props>) {
       >
         {(table) => (
           <>
-            <Button
-              variant={"primary"}
-              size={"sm"}
-              onClick={() => setDeployModal(true)}
-            >
-              <PlusIcon size={16} />
-              {t("relays.deployButton")}
-            </Button>
+            <ResourceLimitTooltip limitState={relayLimit}>
+              <Button
+                variant={"primary"}
+                size={"sm"}
+                disabled={relayLimit.exhausted}
+                onClick={() => {
+                  if (!relayLimit.exhausted) setDeployModal(true);
+                }}
+              >
+                <PlusIcon size={16} />
+                {t("relays.deployButton")}
+              </Button>
+            </ResourceLimitTooltip>
             <Button
               variant={"secondary"}
               size={"sm"}
@@ -371,7 +381,11 @@ function RelayPriorityModal({
           />
         </div>
         <ModalFooter className={"justify-end"}>
-          <Button variant={"secondary"} size={"sm"} onClick={() => onOpenChange(false)}>
+          <Button
+            variant={"secondary"}
+            size={"sm"}
+            onClick={() => onOpenChange(false)}
+          >
             {t("common.cancel")}
           </Button>
           <Button variant={"primary"} size={"sm"} onClick={onSave}>
@@ -417,8 +431,16 @@ function RelayExpandedRow({ relay }: Readonly<{ relay: Relay }>) {
   ];
 
   return (
-    <div className={"px-8 py-5 bg-neutral-50 border-t border-neutral-200 dark:bg-nb-gray-940/50 dark:border-nb-gray-900"}>
-      <div className={"flex items-center gap-2 text-sm text-neutral-700 dark:text-nb-gray-200 mb-4"}>
+    <div
+      className={
+        "px-8 py-5 bg-neutral-50 border-t border-neutral-200 dark:bg-nb-gray-940/50 dark:border-nb-gray-900"
+      }
+    >
+      <div
+        className={
+          "flex items-center gap-2 text-sm text-neutral-700 dark:text-nb-gray-200 mb-4"
+        }
+      >
         <MapPinIcon size={15} />
         {t("relays.details")}
       </div>
@@ -430,8 +452,16 @@ function RelayExpandedRow({ relay }: Readonly<{ relay: Relay }>) {
               "rounded-md border border-neutral-200 bg-white px-4 py-3 dark:border-nb-gray-800 dark:bg-nb-gray-930"
             }
           >
-            <div className={"text-xs text-neutral-500 dark:text-nb-gray-400 mb-1"}>{item.label}</div>
-            <div className={"text-sm text-neutral-900 dark:text-nb-gray-100 font-medium"}>
+            <div
+              className={"text-xs text-neutral-500 dark:text-nb-gray-400 mb-1"}
+            >
+              {item.label}
+            </div>
+            <div
+              className={
+                "text-sm text-neutral-900 dark:text-nb-gray-100 font-medium"
+              }
+            >
               {item.value}
             </div>
           </div>

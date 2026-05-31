@@ -17,8 +17,12 @@ import { useApiCall } from "@utils/api";
 import { PlusCircle, User2 } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import { useSWRConfig } from "swr";
-import { Role, User } from "@/interfaces/User";
 import { useI18n } from "@/i18n/I18nProvider";
+import { Role, User } from "@/interfaces/User";
+import {
+  ResourceLimitTooltip,
+  useResourceLimit,
+} from "@/modules/account/ResourceUsage";
 import { UserRoleSelector } from "@/modules/users/UserRoleSelector";
 
 type Props = {
@@ -44,10 +48,12 @@ export function ServiceUserModalContent({ onSuccess }: Readonly<ModalProps>) {
   const userRequest = useApiCall<User>("/users");
   const { mutate } = useSWRConfig();
   const { t } = useI18n();
+  const userLimit = useResourceLimit("users");
   const [name, setName] = useState("");
   const [role, setRole] = useState("user");
 
   const create = async () => {
+    if (userLimit.exhausted) return;
     notify({
       title: t("serviceUser.created"),
       description: t("serviceUser.createdDescription", { name }),
@@ -67,8 +73,8 @@ export function ServiceUserModalContent({ onSuccess }: Readonly<ModalProps>) {
   };
 
   const isDisabled = useMemo(() => {
-    return name.length === 0;
-  }, [name]);
+    return name.length === 0 || userLimit.exhausted;
+  }, [name, userLimit.exhausted]);
 
   return (
     <ModalContent maxWidthClass={"max-w-lg"}>
@@ -112,15 +118,20 @@ export function ServiceUserModalContent({ onSuccess }: Readonly<ModalProps>) {
             <Button variant={"secondary"}>{t("actions.cancel")}</Button>
           </ModalClose>
 
-          <Button
-            variant={"primary"}
-            disabled={isDisabled}
-            onClick={create}
-            data-cy={"create-service-user"}
+          <ResourceLimitTooltip
+            limitState={userLimit}
+            className={userLimit.exhausted ? "inline-flex" : undefined}
           >
-            <PlusCircle size={16} />
-            {t("serviceUsers.createTitle")}
-          </Button>
+            <Button
+              variant={"primary"}
+              disabled={isDisabled}
+              onClick={create}
+              data-cy={"create-service-user"}
+            >
+              <PlusCircle size={16} />
+              {t("serviceUsers.createTitle")}
+            </Button>
+          </ResourceLimitTooltip>
         </div>
       </ModalFooter>
     </ModalContent>

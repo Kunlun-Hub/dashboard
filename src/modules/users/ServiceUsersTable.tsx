@@ -18,6 +18,10 @@ import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useI18n } from "@/i18n/I18nProvider";
 import { User } from "@/interfaces/User";
+import {
+  ResourceLimitTooltip,
+  useResourceLimit,
+} from "@/modules/account/ResourceUsage";
 import ServiceUserModal from "@/modules/users/ServiceUserModal";
 import ServiceUserNameCell from "@/modules/users/table-cells/ServiceUserNameCell";
 import UserActionCell from "@/modules/users/table-cells/UserActionCell";
@@ -32,7 +36,9 @@ function useServiceUsersTableColumns(): ColumnDef<User>[] {
       {
         accessorKey: "name",
         header: ({ column }) => {
-          return <DataTableHeader column={column}>{t("table.name")}</DataTableHeader>;
+          return (
+            <DataTableHeader column={column}>{t("table.name")}</DataTableHeader>
+          );
         },
         sortingFn: "text",
         cell: ({ row }) => <ServiceUserNameCell user={row.original} />,
@@ -44,7 +50,9 @@ function useServiceUsersTableColumns(): ColumnDef<User>[] {
       {
         accessorKey: "role",
         header: ({ column }) => {
-          return <DataTableHeader column={column}>{t("table.role")}</DataTableHeader>;
+          return (
+            <DataTableHeader column={column}>{t("table.role")}</DataTableHeader>
+          );
         },
         sortingFn: "text",
         cell: ({ row }) => <UserRoleCell user={row.original} />,
@@ -52,7 +60,11 @@ function useServiceUsersTableColumns(): ColumnDef<User>[] {
       {
         accessorKey: "status",
         header: ({ column }) => {
-          return <DataTableHeader column={column}>{t("table.status")}</DataTableHeader>;
+          return (
+            <DataTableHeader column={column}>
+              {t("table.status")}
+            </DataTableHeader>
+          );
         },
         sortingFn: "text",
         cell: ({ row }) => <UserStatusCell user={row.original} />,
@@ -134,17 +146,7 @@ export default function ServiceUsersTable({
           button={
             <div className={"flex flex-col"}>
               <div>
-                <ServiceUserModal>
-                  <Button
-                    variant={"primary"}
-                    className={""}
-                    data-cy={"open-service-user-modal"}
-                    disabled={!permission.users.create}
-                  >
-                    <PlusCircle size={16} />
-                    {t("serviceUsers.createTitle")}
-                  </Button>
-                </ServiceUserModal>
+                <ServiceUserCreateButton />
               </div>
             </div>
           }
@@ -153,17 +155,7 @@ export default function ServiceUsersTable({
       rightSide={() => (
         <>
           {users && users?.length > 0 && (
-            <ServiceUserModal>
-              <Button
-                variant={"primary"}
-                className={"ml-auto"}
-                data-cy={"open-service-user-modal"}
-                disabled={!permission.users.create}
-              >
-                <PlusCircle size={16} />
-                {t("serviceUsers.createTitle")}
-              </Button>
-            </ServiceUserModal>
+            <ServiceUserCreateButton className={"ml-auto"} />
           )}
         </>
       )}
@@ -182,4 +174,34 @@ export default function ServiceUsersTable({
       )}
     </DataTable>
   );
+}
+
+function ServiceUserCreateButton({
+  className,
+}: Readonly<{ className?: string }>) {
+  const { permission } = usePermissions();
+  const { t } = useI18n();
+  const userLimit = useResourceLimit("users");
+  const disabled = !permission.users.create || userLimit.exhausted;
+  const button = (
+    <Button
+      variant={"primary"}
+      className={userLimit.exhausted ? undefined : className}
+      data-cy={"open-service-user-modal"}
+      disabled={disabled}
+    >
+      <PlusCircle size={16} />
+      {t("serviceUsers.createTitle")}
+    </Button>
+  );
+
+  if (userLimit.exhausted) {
+    return (
+      <ResourceLimitTooltip limitState={userLimit} className={className}>
+        {button}
+      </ResourceLimitTooltip>
+    );
+  }
+
+  return <ServiceUserModal>{button}</ServiceUserModal>;
 }

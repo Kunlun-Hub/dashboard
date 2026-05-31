@@ -1,6 +1,8 @@
+import Badge from "@components/Badge";
 import Button from "@components/Button";
 import Code from "@components/Code";
 import { Modal, ModalContent, ModalFooter } from "@components/modal/Modal";
+import { notify } from "@components/Notification";
 import Paragraph from "@components/Paragraph";
 import SquareIcon from "@components/SquareIcon";
 import { DataTable } from "@components/table/DataTable";
@@ -9,13 +11,12 @@ import DataTableRefreshButton from "@components/table/DataTableRefreshButton";
 import { DataTableRowsPerPage } from "@components/table/DataTableRowsPerPage";
 import GetStartedTest from "@components/ui/GetStartedTest";
 import MultipleGroups from "@components/ui/MultipleGroups";
-import Skeleton from "react-loading-skeleton";
 import { ColumnDef, SortingState } from "@tanstack/react-table";
 import useFetchApi, { useApiCall } from "@utils/api";
-import { notify } from "@components/Notification";
-import { RefreshCw } from "lucide-react";
+import { cn, generateColorFromString } from "@utils/helpers";
 import { isNetBirdHosted } from "@utils/netbird";
 import dayjs from "dayjs";
+import { RefreshCw } from "lucide-react";
 import {
   Cog,
   CopyIcon,
@@ -27,22 +28,29 @@ import {
   Trash2,
   User2,
 } from "lucide-react";
-import NetBirdIcon from "@/assets/icons/NetBirdIcon";
-import Badge from "@components/Badge";
 import { usePathname } from "next/navigation";
 import React, { useMemo, useState } from "react";
+import Skeleton from "react-loading-skeleton";
 import { useSWRConfig } from "swr";
+import NetBirdIcon from "@/assets/icons/NetBirdIcon";
 import { useDialog } from "@/contexts/DialogProvider";
 import { useGroups } from "@/contexts/GroupsProvider";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import useCopyToClipboard from "@/hooks/useCopyToClipboard";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useI18n } from "@/i18n/I18nProvider";
-import { cn, generateColorFromString } from "@utils/helpers";
 import { Group } from "@/interfaces/Group";
-import { Role, UserInvite, UserInviteRegenerateResponse } from "@/interfaces/User";
-import UserInviteModal from "@/modules/users/UserInviteModal";
+import {
+  Role,
+  UserInvite,
+  UserInviteRegenerateResponse,
+} from "@/interfaces/User";
+import {
+  ResourceLimitTooltip,
+  useResourceLimit,
+} from "@/modules/account/ResourceUsage";
 import { useAccount } from "@/modules/account/useAccount";
+import UserInviteModal from "@/modules/users/UserInviteModal";
 
 // Name cell for invites - same styling as UserNameCell but for invites
 function InviteNameCell({ invite }: { invite: UserInvite }) {
@@ -126,7 +134,8 @@ function InviteRegenerateCell({ invite }: { invite: UserInvite }) {
   const { mutate } = useSWRConfig();
   const { permission } = usePermissions();
   const [modalOpen, setModalOpen] = useState(false);
-  const [regeneratedData, setRegeneratedData] = useState<UserInviteRegenerateResponse | null>(null);
+  const [regeneratedData, setRegeneratedData] =
+    useState<UserInviteRegenerateResponse | null>(null);
 
   const regenerateRequest = useApiCall<UserInviteRegenerateResponse>(
     `/users/invites/${invite.id}/regenerate`,
@@ -211,7 +220,9 @@ function InviteRegenerateCell({ invite }: { invite: UserInvite }) {
               </span>
             </Code>
             {regeneratedData && (
-              <Paragraph className={"mt-3 text-xs text-nb-gray-400 text-center"}>
+              <Paragraph
+                className={"mt-3 text-xs text-nb-gray-400 text-center"}
+              >
                 {t("invite.expiresOn")}{" "}
                 {new Date(regeneratedData.invite_expires_at).toLocaleString()}
               </Paragraph>
@@ -254,12 +265,7 @@ function InviteGroupCell({ invite }: { invite: UserInvite }) {
     );
   }
 
-  return (
-    <MultipleGroups
-      groups={foundGroups}
-      label={t("userGroups.label")}
-    />
-  );
+  return <MultipleGroups groups={foundGroups} label={t("userGroups.label")} />;
 }
 
 // Status cell for invites - shows Valid/Expired based on expired field
@@ -334,68 +340,80 @@ function useInviteTableColumns(): ColumnDef<UserInvite>[] {
   const { t } = useI18n();
 
   return [
-  {
-    accessorKey: "name",
-    header: ({ column }) => {
-      return <DataTableHeader column={column}>{t("table.name")}</DataTableHeader>;
+    {
+      accessorKey: "name",
+      header: ({ column }) => {
+        return (
+          <DataTableHeader column={column}>{t("table.name")}</DataTableHeader>
+        );
+      },
+      accessorFn: (row) => row.name + " " + row.email,
+      sortingFn: "text",
+      cell: ({ row }) => <InviteNameCell invite={row.original} />,
     },
-    accessorFn: (row) => row.name + " " + row.email,
-    sortingFn: "text",
-    cell: ({ row }) => <InviteNameCell invite={row.original} />,
-  },
-  {
-    accessorKey: "role",
-    header: ({ column }) => {
-      return <DataTableHeader column={column}>{t("table.role")}</DataTableHeader>;
+    {
+      accessorKey: "role",
+      header: ({ column }) => {
+        return (
+          <DataTableHeader column={column}>{t("table.role")}</DataTableHeader>
+        );
+      },
+      sortingFn: "text",
+      cell: ({ row }) => <InviteRoleCell invite={row.original} />,
     },
-    sortingFn: "text",
-    cell: ({ row }) => <InviteRoleCell invite={row.original} />,
-  },
-  {
-    accessorKey: "expired",
-    header: ({ column }) => {
-      return <DataTableHeader column={column}>{t("table.status")}</DataTableHeader>;
+    {
+      accessorKey: "expired",
+      header: ({ column }) => {
+        return (
+          <DataTableHeader column={column}>{t("table.status")}</DataTableHeader>
+        );
+      },
+      sortingFn: "basic",
+      cell: ({ row }) => <InviteStatusCell invite={row.original} />,
     },
-    sortingFn: "basic",
-    cell: ({ row }) => <InviteStatusCell invite={row.original} />,
-  },
-  {
-    accessorKey: "auto_groups",
-    header: ({ column }) => {
-      return <DataTableHeader column={column}>{t("table.groups")}</DataTableHeader>;
+    {
+      accessorKey: "auto_groups",
+      header: ({ column }) => {
+        return (
+          <DataTableHeader column={column}>{t("table.groups")}</DataTableHeader>
+        );
+      },
+      sortingFn: "text",
+      cell: ({ row }) => <InviteGroupCell invite={row.original} />,
     },
-    sortingFn: "text",
-    cell: ({ row }) => <InviteGroupCell invite={row.original} />,
-  },
-  {
-    id: "regenerate",
-    header: ({ column }) => {
-      return (
-        <DataTableHeader column={column}>
-          {t("userInvites.regenerate")}
-        </DataTableHeader>
-      );
+    {
+      id: "regenerate",
+      header: ({ column }) => {
+        return (
+          <DataTableHeader column={column}>
+            {t("userInvites.regenerate")}
+          </DataTableHeader>
+        );
+      },
+      cell: ({ row }) => <InviteRegenerateCell invite={row.original} />,
     },
-    cell: ({ row }) => <InviteRegenerateCell invite={row.original} />,
-  },
-  {
-    accessorKey: "expires_at",
-    header: ({ column }) => {
-      return <DataTableHeader column={column}>{t("table.expires")}</DataTableHeader>;
+    {
+      accessorKey: "expires_at",
+      header: ({ column }) => {
+        return (
+          <DataTableHeader column={column}>
+            {t("table.expires")}
+          </DataTableHeader>
+        );
+      },
+      sortingFn: "datetime",
+      cell: ({ row }) => (
+        <span className="text-nb-gray-400">
+          {dayjs(row.original.expires_at).format("D MMM, YYYY")}
+        </span>
+      ),
     },
-    sortingFn: "datetime",
-    cell: ({ row }) => (
-      <span className="text-nb-gray-400">
-        {dayjs(row.original.expires_at).format("D MMM, YYYY")}
-      </span>
-    ),
-  },
-  {
-    accessorKey: "id",
-    header: "",
-    sortingFn: "text",
-    cell: ({ row }) => <InviteActionCell invite={row.original} />,
-  },
+    {
+      accessorKey: "id",
+      header: "",
+      sortingFn: "text",
+      cell: ({ row }) => <InviteActionCell invite={row.original} />,
+    },
   ];
 }
 
@@ -411,7 +429,8 @@ export default function UserInvitesTable({
   const { t } = useI18n();
   const columns = useInviteTableColumns();
   useFetchApi("/groups");
-  const { data: invites, isLoading } = useFetchApi<UserInvite[]>("/users/invites");
+  const { data: invites, isLoading } =
+    useFetchApi<UserInvite[]>("/users/invites");
   const { mutate } = useSWRConfig();
   const path = usePathname();
 
@@ -468,7 +487,10 @@ export default function UserInvitesTable({
       {(table) => {
         return (
           <>
-            <DataTableRowsPerPage table={table} disabled={invites?.length == 0} />
+            <DataTableRowsPerPage
+              table={table}
+              disabled={invites?.length == 0}
+            />
             <DataTableRefreshButton
               isDisabled={invites?.length == 0}
               onClick={() => {
@@ -500,6 +522,7 @@ export const InviteUserButton = ({
   const { permission } = usePermissions();
   const account = useAccount();
   const { t } = useI18n();
+  const userLimit = useResourceLimit("users");
 
   if (!show) return null;
 
@@ -507,19 +530,31 @@ export const InviteUserButton = ({
   // On self-hosted: only show when embedded_idp_enabled is true
   const isCloud = isNetBirdHosted();
   const embeddedIdpEnabled = account?.settings.embedded_idp_enabled;
+  const localAuthDisabled = account?.settings.local_auth_disabled;
 
   if (!isCloud && !embeddedIdpEnabled) return null;
 
-  return (
-    <UserInviteModal groups={groups}>
-      <Button
-        variant={"primary"}
-        className={className}
-        disabled={!permission.users.create}
-      >
-        <MailPlus size={16} />
-        {isCloud ? t("users.inviteUser") : t("users.addUser")}
-      </Button>
-    </UserInviteModal>
+  const disabled =
+    !permission.users.create || localAuthDisabled || userLimit.exhausted;
+
+  const button = (
+    <Button
+      variant={"primary"}
+      className={userLimit.exhausted ? undefined : className}
+      disabled={disabled}
+    >
+      <MailPlus size={16} />
+      {isCloud ? t("users.inviteUser") : t("users.addUser")}
+    </Button>
   );
+
+  if (userLimit.exhausted) {
+    return (
+      <ResourceLimitTooltip limitState={userLimit} className={className}>
+        {button}
+      </ResourceLimitTooltip>
+    );
+  }
+
+  return <UserInviteModal groups={groups}>{button}</UserInviteModal>;
 };

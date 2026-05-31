@@ -7,12 +7,17 @@ import React, { memo, useState } from "react";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useI18n } from "@/i18n/I18nProvider";
 import { Peer } from "@/interfaces/Peer";
+import {
+  ResourceLimitTooltip,
+  useResourceLimit,
+} from "@/modules/account/ResourceUsage";
 import SetupModal from "@/modules/setup-netbird-modal/SetupModal";
 
 function AddPeerButton() {
   const { t } = useI18n();
   const { data: peers } = useFetchApi<Peer[]>("/peers");
   const { oidcUser: user } = useOidcUser();
+  const peerLimit = useResourceLimit("peers");
 
   const [hasOnboardingFormCompleted] = useLocalStorage(
     "netbird-onboarding-modal",
@@ -37,18 +42,31 @@ function AddPeerButton() {
     setIsFirstRun(false);
   };
 
+  const button = (
+    <Button
+      variant={"primary"}
+      size={"sm"}
+      className={peerLimit.exhausted ? undefined : "ml-auto"}
+      disabled={peerLimit.exhausted}
+    >
+      <PlusCircle size={16} />
+      {t("peers.addPeer")}
+    </Button>
+  );
+
+  if (peerLimit.exhausted) {
+    return (
+      <ResourceLimitTooltip limitState={peerLimit} className={"ml-auto"}>
+        {button}
+      </ResourceLimitTooltip>
+    );
+  }
+
   return (
-    <>
-      <Modal open={installModal} onOpenChange={handleOpenChange}>
-        <ModalTrigger asChild>
-          <Button variant={"primary"} size={"sm"} className={"ml-auto"}>
-            <PlusCircle size={16} />
-            {t("peers.addPeer")}
-          </Button>
-        </ModalTrigger>
-        <SetupModal user={user} />
-      </Modal>
-    </>
+    <Modal open={installModal} onOpenChange={handleOpenChange}>
+      <ModalTrigger asChild>{button}</ModalTrigger>
+      <SetupModal user={user} />
+    </Modal>
   );
 }
 

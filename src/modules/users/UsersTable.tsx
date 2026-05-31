@@ -30,8 +30,12 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useI18n } from "@/i18n/I18nProvider";
 import { Group } from "@/interfaces/Group";
 import { User, UserInvite } from "@/interfaces/User";
-import LastTimeRow from "@/modules/common-table-rows/LastTimeRow";
+import {
+  ResourceLimitTooltip,
+  useResourceLimit,
+} from "@/modules/account/ResourceUsage";
 import { useAccount } from "@/modules/account/useAccount";
+import LastTimeRow from "@/modules/common-table-rows/LastTimeRow";
 import { PendingApprovalFilter } from "@/modules/users/PendingApprovalFilter";
 import UserActionCell from "@/modules/users/table-cells/UserActionCell";
 import UserBlockCell from "@/modules/users/table-cells/UserBlockCell";
@@ -50,7 +54,9 @@ function useUsersTableColumns(): ColumnDef<User>[] {
       {
         accessorKey: "name",
         header: ({ column }) => {
-          return <DataTableHeader column={column}>{t("table.name")}</DataTableHeader>;
+          return (
+            <DataTableHeader column={column}>{t("table.name")}</DataTableHeader>
+          );
         },
         accessorFn: (row) => row.name + " " + row.email,
         sortingFn: "text",
@@ -63,7 +69,9 @@ function useUsersTableColumns(): ColumnDef<User>[] {
       {
         accessorKey: "role",
         header: ({ column }) => {
-          return <DataTableHeader column={column}>{t("table.role")}</DataTableHeader>;
+          return (
+            <DataTableHeader column={column}>{t("table.role")}</DataTableHeader>
+          );
         },
         sortingFn: "text",
         cell: ({ row }) => <UserRoleCell user={row.original} />,
@@ -71,7 +79,11 @@ function useUsersTableColumns(): ColumnDef<User>[] {
       {
         accessorKey: "status",
         header: ({ column }) => {
-          return <DataTableHeader column={column}>{t("table.status")}</DataTableHeader>;
+          return (
+            <DataTableHeader column={column}>
+              {t("table.status")}
+            </DataTableHeader>
+          );
         },
         sortingFn: "text",
         cell: ({ row }) => <UserStatusCell user={row.original} />,
@@ -79,7 +91,11 @@ function useUsersTableColumns(): ColumnDef<User>[] {
       {
         accessorKey: "auto_groups",
         header: ({ column }) => {
-          return <DataTableHeader column={column}>{t("table.groups")}</DataTableHeader>;
+          return (
+            <DataTableHeader column={column}>
+              {t("table.groups")}
+            </DataTableHeader>
+          );
         },
         sortingFn: "text",
         cell: ({ row }) => <UserGroupCell user={row.original} />,
@@ -88,7 +104,9 @@ function useUsersTableColumns(): ColumnDef<User>[] {
         accessorKey: "is_blocked",
         header: ({ column }) => {
           return (
-            <DataTableHeader column={column}>{t("table.blockUser")}</DataTableHeader>
+            <DataTableHeader column={column}>
+              {t("table.blockUser")}
+            </DataTableHeader>
           );
         },
         sortingFn: "text",
@@ -98,7 +116,9 @@ function useUsersTableColumns(): ColumnDef<User>[] {
         accessorKey: "last_login",
         header: ({ column }) => {
           return (
-            <DataTableHeader column={column}>{t("table.lastLogin")}</DataTableHeader>
+            <DataTableHeader column={column}>
+              {t("table.lastLogin")}
+            </DataTableHeader>
           );
         },
         sortingFn: "text",
@@ -310,6 +330,7 @@ export const InviteUserButton = ({
   const { permission } = usePermissions();
   const account = useAccount();
   const { t } = useI18n();
+  const userLimit = useResourceLimit("users");
 
   if (!show) return null;
 
@@ -319,12 +340,13 @@ export const InviteUserButton = ({
 
   if (!isCloud && !embeddedIdpEnabled) return null;
 
-  const isDisabled = !permission.users.create || localAuthDisabled;
+  const isDisabled =
+    !permission.users.create || localAuthDisabled || userLimit.exhausted;
 
   const button = (
     <Button
       variant={"primary"}
-      className={className}
+      className={userLimit.exhausted ? undefined : className}
       disabled={isDisabled}
     >
       <MailPlus size={16} />
@@ -339,12 +361,22 @@ export const InviteUserButton = ({
         interactive={true}
         content={
           <div className={"flex flex-col"}>
-            <p className={"max-w-[200px] text-xs"}>{t("users.localAuthDisabled")}</p>
+            <p className={"max-w-[200px] text-xs"}>
+              {t("users.localAuthDisabled")}
+            </p>
           </div>
         }
       >
         {button}
       </FullTooltip>
+    );
+  }
+
+  if (userLimit.exhausted) {
+    return (
+      <ResourceLimitTooltip limitState={userLimit} className={className}>
+        {button}
+      </ResourceLimitTooltip>
     );
   }
 

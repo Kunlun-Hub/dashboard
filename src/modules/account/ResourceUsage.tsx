@@ -1,5 +1,6 @@
 import { cn } from "@utils/helpers";
 import React from "react";
+import FullTooltip from "@/components/FullTooltip";
 import { useI18n } from "@/i18n/I18nProvider";
 import { EntitlementLimit } from "@/interfaces/AccountEntitlements";
 import { useAccountEntitlements } from "@/modules/account/useAccountEntitlements";
@@ -66,6 +67,58 @@ export function ResourceUsageInline({
       compact
       className={className}
     />
+  );
+}
+
+export function useResourceLimit(limit: EntitlementLimit) {
+  const { t } = useI18n();
+  const { entitlements } = useAccountEntitlements();
+  const allowed = entitlements?.limits?.[limit];
+  const used = entitlements?.usage?.[limit];
+  const usageText = `${used === undefined ? "-" : used}/${formatLimit(
+    t,
+    allowed,
+  )}`;
+  const exhausted =
+    allowed !== undefined &&
+    allowed >= 0 &&
+    used !== undefined &&
+    used >= allowed;
+
+  return {
+    allowed,
+    exhausted,
+    label: limitLabel(t, limit),
+    message: t("resourceUsage.insufficient", {
+      resource: limitLabel(t, limit),
+      usage: usageText,
+    }),
+    usageText,
+    used,
+  } as const;
+}
+
+type ResourceLimitTooltipProps = {
+  children: React.ReactNode;
+  className?: string;
+  limitState: ReturnType<typeof useResourceLimit>;
+};
+
+export function ResourceLimitTooltip({
+  children,
+  className,
+  limitState,
+}: Readonly<ResourceLimitTooltipProps>) {
+  if (!limitState.exhausted) return <>{children}</>;
+
+  return (
+    <FullTooltip
+      content={<p className={"max-w-[240px] text-xs"}>{limitState.message}</p>}
+      className={className}
+      side={"top"}
+    >
+      {children}
+    </FullTooltip>
   );
 }
 
