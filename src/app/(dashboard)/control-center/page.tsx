@@ -10,6 +10,7 @@ import {
 } from "@components/select/SelectDropdown";
 import SquareIcon from "@components/SquareIcon";
 import GetStartedTest from "@components/ui/GetStartedTest";
+import { GroupBadgeIcon } from "@components/ui/GroupBadgeIcon";
 import useFetchApi from "@utils/api";
 import {
   Background,
@@ -35,6 +36,7 @@ import {
   PlusIcon,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useTheme } from "next-themes";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import NetworkRoutesIcon from "@/assets/icons/NetworkRoutesIcon";
 import PeersProvider from "@/contexts/PeersProvider";
@@ -69,7 +71,6 @@ import {
   DEFAULT_MIN_ZOOM,
 } from "@/modules/control-center/utils/layouts";
 import { NODE_TYPES } from "@/modules/control-center/utils/nodes";
-import { GroupBadgeIcon } from "@components/ui/GroupBadgeIcon";
 import { OSLogo } from "@/modules/peers/PeerOSCell";
 
 const MAX_EXPANDED_DESTINATION_PEERS = 6;
@@ -1917,8 +1918,10 @@ function ControlCenterView() {
 
   const { permission } = usePermissions();
   const router = useRouter();
+  const { resolvedTheme } = useTheme();
+  const isDarkTheme = resolvedTheme !== "light";
   const selectorClassName =
-    "!bg-nb-gray-920 !hover:bg-nb-gray-925 !text-nb-gray-300";
+    "!bg-white !text-neutral-700 hover:!bg-neutral-50 dark:!bg-nb-gray-920 dark:!text-nb-gray-300 dark:hover:!bg-nb-gray-925";
 
   const handleZoomIn = useCallback(() => {
     reactFlow.zoomIn({ duration: 200 });
@@ -2014,7 +2017,7 @@ function ControlCenterView() {
                 <Button
                   variant={"secondary"}
                   size={"xs"}
-                  className={"!bg-nb-gray-930"}
+                  className={"!bg-white hover:!bg-neutral-50 dark:!bg-nb-gray-930"}
                   onClick={() => onNetworkSelect("")}
                 >
                   <ArrowLeftIcon size={14} />
@@ -2026,7 +2029,7 @@ function ControlCenterView() {
                   <Button
                     variant={"secondary"}
                     size={"xs"}
-                    className={"!bg-nb-gray-930"}
+                    className={"!bg-white hover:!bg-neutral-50 dark:!bg-nb-gray-930"}
                     onClick={() => {
                       forceSingleUserView(previousSelectedUser);
                     }}
@@ -2111,7 +2114,7 @@ function ControlCenterView() {
                 <NetworkRoutingPeerCount network={currentNetwork} />
               )}
 
-              <div className="flex items-center gap-1 rounded-md border border-nb-gray-800 bg-nb-gray-930/95 p-1 shadow-sm backdrop-blur-sm">
+              <div className="flex items-center gap-1 rounded-md border border-neutral-200 bg-white/95 p-1 shadow-sm backdrop-blur-sm dark:border-nb-gray-800 dark:bg-nb-gray-930/95">
                 <Button
                   variant={"secondary"}
                   size={"xs"}
@@ -2122,7 +2125,7 @@ function ControlCenterView() {
                 >
                   <MinusIcon size={14} />
                 </Button>
-                <div className="min-w-[3.5rem] px-2 text-center text-xs font-medium text-nb-gray-300">
+                <div className="min-w-[3.5rem] px-2 text-center text-xs font-medium text-neutral-600 dark:text-nb-gray-300">
                   {Math.round(zoom * 100)}%
                 </div>
                 <Button
@@ -2194,9 +2197,13 @@ function ControlCenterView() {
             fitView={false}
             maxZoom={DEFAULT_MAX_ZOOM}
             minZoom={DEFAULT_MIN_ZOOM}
-            colorMode={"dark"}
+            colorMode={isDarkTheme ? "dark" : "light"}
           >
-            <Background bgColor={"#181a1d"} gap={20} color={"#717171"} />
+            <Background
+              bgColor={isDarkTheme ? "#181a1d" : "#ffffff"}
+              gap={20}
+              color={isDarkTheme ? "#717171" : "#d4d4d4"}
+            />
           </ReactFlow>
         </PeersProvider>
       </div>

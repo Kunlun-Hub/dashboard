@@ -35,12 +35,15 @@ export function DataTableRowsPerPage<TData>({
             data-cy={"rows-per-page"}
             className="w-[200px] justify-between"
           >
-            <RowsIcon size={15} className={"text-nb-gray-300 shrink-0"} />
+            <RowsIcon
+              size={15}
+              className={"shrink-0 text-neutral-500 dark:text-nb-gray-300"}
+            />
             <div>
-              <span className={"text-white"}>
+              <span className={"text-neutral-900 dark:text-white"}>
                 {table.getState().pagination.pageSize}
               </span>
-              <span className={"text-nb-gray-300"}>
+              <span className={"text-neutral-500 dark:text-nb-gray-300"}>
                 {" "}{t("table.rowsPerPage")}
               </span>
             </div>
@@ -66,16 +69,16 @@ export function DataTableRowsPerPage<TData>({
                   <div
                     className={cn(
                       "cursor-pointer",
-                      "flex gap-2 px-2 py-1.5 my-1 mx-1 rounded-md items-center hover:dark:bg-nb-gray-800 text-nb-gray-400 hover:text-white",
+                      "flex gap-2 px-2 py-1.5 my-1 mx-1 rounded-md items-center text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-nb-gray-400 dark:hover:bg-nb-gray-800 dark:hover:text-white",
                       table.getState().pagination.pageSize === val
-                        ? "text-white"
+                        ? "text-neutral-900 dark:text-white"
                         : "",
                     )}
                   >
                     <Check
                       size={15}
                       className={cn(
-                        "text-white shrink-0",
+                        "shrink-0 text-neutral-900 dark:text-white",
                         table.getState().pagination.pageSize === val
                           ? "opacity-100"
                           : "opacity-0",

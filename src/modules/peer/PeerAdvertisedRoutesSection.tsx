@@ -288,7 +288,7 @@ function PeerRoutePoliciesSection({ peer }: Readonly<Props>) {
         ) : (
           <div className={"overflow-x-auto"}>
             <table className={"w-full min-w-[1040px] text-left text-sm"}>
-              <thead className={"border-b border-nb-gray-900 text-nb-gray-400"}>
+              <thead className={"border-b border-neutral-200 text-neutral-500 dark:border-nb-gray-900 dark:text-nb-gray-400"}>
                 <tr>
                   <th className={"w-[260px] px-4 py-3 font-medium"}>
                     {t("peerRoutePreview.accessControl")}
@@ -318,13 +318,13 @@ function PeerRoutePoliciesSection({ peer }: Readonly<Props>) {
                   <tr
                     key={`${row.network.id}-${row.policy.id}-${row.resource.id}`}
                     className={
-                      "border-b border-nb-gray-900 last:border-b-0 hover:bg-nb-gray-930/60"
+                      "border-b border-neutral-200 last:border-b-0 hover:bg-neutral-50 dark:border-nb-gray-900 dark:hover:bg-nb-gray-930/60"
                     }
                   >
                     <td className={"px-4 py-3 align-middle"}>
                       <div className={"flex flex-col gap-1"}>
                         <div className={"flex items-center gap-2"}>
-                          <span className={"font-medium text-nb-gray-100"}>
+                          <span className={"font-medium text-neutral-900 dark:text-nb-gray-100"}>
                             {row.policy.name}
                           </span>
                         </div>
@@ -405,13 +405,13 @@ function CollapsibleRouteCard({
         type={"button"}
         onClick={() => onOpenChange(!open)}
         className={
-          "flex w-full items-center gap-2 border-b border-nb-gray-900 bg-nb-gray-930 px-4 py-3 text-left"
+          "flex w-full items-center gap-2 border-b border-neutral-200 bg-neutral-50 px-4 py-3 text-left dark:border-nb-gray-900 dark:bg-nb-gray-930"
         }
       >
         {open ? (
-          <ChevronDownIcon size={16} className={"text-nb-gray-400"} />
+          <ChevronDownIcon size={16} className={"text-neutral-500 dark:text-nb-gray-400"} />
         ) : (
-          <ChevronRightIcon size={16} className={"text-nb-gray-400"} />
+          <ChevronRightIcon size={16} className={"text-neutral-500 dark:text-nb-gray-400"} />
         )}
         <Label>{title}</Label>
       </button>
@@ -564,7 +564,7 @@ function GroupList({ groups }: Readonly<{ groups: Group[] }>) {
   const { t } = useI18n();
 
   if (groups.length === 0) {
-    return <span className={"text-nb-gray-500"}>-</span>;
+    return <span className={"text-neutral-400 dark:text-nb-gray-500"}>-</span>;
   }
 
   return (
@@ -596,7 +596,7 @@ function SourceList({
 
   if (sources.length === 0) {
     return (
-      <span className={"text-nb-gray-500"}>
+      <span className={"text-neutral-400 dark:text-nb-gray-500"}>
         {t("peerRoutePreview.noSources")}
       </span>
     );
@@ -775,13 +775,13 @@ function RouteSettingsModal({
   return (
     <Modal open={open} onOpenChange={onOpenChange}>
       <ModalContent maxWidthClass={"max-w-3xl"} className={"py-0"}>
-        <div className={"border-b border-nb-gray-900 px-6 py-4"}>
-          <h2 className={"text-xl font-semibold text-white"}>
+        <div className={"border-b border-neutral-200 px-6 py-4 dark:border-nb-gray-900"}>
+          <h2 className={"text-xl font-semibold text-neutral-900 dark:text-white"}>
             {t("peerRouteSettings.editTitle")}
           </h2>
         </div>
         <div className={"px-6 py-5"}>
-          <h3 className={"text-2xl font-semibold text-white"}>
+          <h3 className={"text-2xl font-semibold text-neutral-900 dark:text-white"}>
             {t("peerRouteSettings.connector")}
           </h3>
           <Paragraph>{t("peerRouteSettings.connectorModalHelp")}</Paragraph>
@@ -809,7 +809,7 @@ function RouteSettingsModal({
               placeholder={t("peerRouteSettings.searchRoutes")}
               maxWidthClass={"w-[260px]"}
               customSuffix={
-                <SearchIcon size={16} className={"text-nb-gray-400"} />
+                <SearchIcon size={16} className={"text-neutral-500 dark:text-nb-gray-400"} />
               }
             />
           </div>
@@ -922,7 +922,7 @@ function EditableRouteList({
   }
 
   if (routes.length === 0) {
-    return <div className={"py-6 text-sm text-nb-gray-400"}>{emptyLabel}</div>;
+    return <div className={"py-6 text-sm text-neutral-500 dark:text-nb-gray-400"}>{emptyLabel}</div>;
   }
 
   return (
@@ -960,7 +960,7 @@ function RouteGrid({
   emptyLabel,
 }: Readonly<{ routes: string[]; emptyLabel: string }>) {
   if (routes.length === 0) {
-    return <div className={"py-6 text-sm text-nb-gray-400"}>{emptyLabel}</div>;
+    return <div className={"py-6 text-sm text-neutral-500 dark:text-nb-gray-400"}>{emptyLabel}</div>;
   }
 
   return (
@@ -968,7 +968,7 @@ function RouteGrid({
       className={"grid gap-x-16 gap-y-2 text-sm sm:grid-cols-2 lg:grid-cols-4"}
     >
       {routes.map((route) => (
-        <div key={route} className={"font-mono text-nb-gray-200"}>
+        <div key={route} className={"font-mono text-neutral-800 dark:text-nb-gray-200"}>
           {route}
         </div>
       ))}
@@ -982,7 +982,7 @@ function EmptyRoutesCard({
 }: Readonly<{ title: string; description: string }>) {
   return (
     <div className={"mt-5 flex flex-col items-center gap-2 py-8 text-center"}>
-      <RouteIcon size={20} className={"text-nb-gray-400"} />
+      <RouteIcon size={20} className={"text-neutral-500 dark:text-nb-gray-400"} />
       <Label>{title}</Label>
       <HelpText>{description}</HelpText>
     </div>

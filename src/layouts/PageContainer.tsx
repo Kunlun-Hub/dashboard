@@ -15,7 +15,7 @@ export default function PageContainer({
     <div
       className={cn(
         className,
-        "relative flex-auto overflow-auto bg-nb-gray z-1 focus:outline-none",
+        "light-theme-surface relative flex-auto overflow-auto bg-white dark:bg-nb-gray z-1 focus:outline-none",
         isNavigationCollapsed && "md:pl-[70px]",
       )}
     >

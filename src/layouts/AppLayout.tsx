@@ -19,8 +19,8 @@ import DialogProvider from "@/contexts/DialogProvider";
 import ErrorBoundaryProvider from "@/contexts/ErrorBoundary";
 import { GlobalThemeProvider } from "@/contexts/GlobalThemeProvider";
 import InstanceSetupProvider from "@/contexts/InstanceSetupProvider";
-import { I18nProvider } from "@/i18n/I18nProvider";
 import { NavigationEvents } from "@/contexts/NavigationEvents";
+import { I18nProvider } from "@/i18n/I18nProvider";
 
 const inter = localFont({
   src: "../assets/fonts/Inter.ttf",
@@ -39,7 +39,7 @@ export default function AppLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="zh-CN" className="dark" suppressHydrationWarning>
+    <html lang="zh-CN" suppressHydrationWarning>
       <head>
         <GoogleTagManagerHeadScript />
       </head>

@@ -5,9 +5,9 @@ import { useMemo } from "react";
 import RoundedFlag from "@/assets/countries/RoundedFlag";
 import { PeerOSIcon } from "@/assets/icons/PeerOSIcon";
 import { ResourceIcon } from "@/assets/icons/ResourceIcon";
+import { useI18n } from "@/i18n/I18nProvider";
 import { NetworkResource } from "@/interfaces/Network";
 import type { Peer } from "@/interfaces/Peer";
-import { useI18n } from "@/i18n/I18nProvider";
 
 type DeviceCardProps = {
   device?: Peer;
@@ -36,15 +36,15 @@ export const DeviceCard = ({
   return (
     <div
       className={cn(
-        "flex shrink-0 items-center gap-2.5 text-nb-gray-200 text-left py-1 pl-3 pr-4 rounded-md group/machine my-0 w-[230px]",
+        "flex shrink-0 items-center gap-2.5 text-neutral-800 text-left py-1 pl-3 pr-4 rounded-md group/machine my-0 w-[230px] dark:text-nb-gray-200",
         !descriptionText && "py-2",
         className,
       )}
     >
       <div
         className={cn(
-          "flex items-center justify-center rounded-md h-9 w-9 shrink-0 bg-nb-gray-900 transition-all",
-          "group-hover:bg-nb-gray-800 relative",
+          "flex items-center justify-center rounded-md h-9 w-9 shrink-0 transition-all",
+          "bg-neutral-100 group-hover:bg-neutral-200 relative dark:bg-nb-gray-900 dark:group-hover:bg-nb-gray-800",
         )}
       >
         {device ? (
@@ -58,7 +58,7 @@ export const DeviceCard = ({
             <div
               className={cn(
                 "flex items-center justify-center rounded-full border-[3px] shrink-0",
-                "border-nb-gray-940",
+                "border-white dark:border-nb-gray-940",
               )}
             >
               <RoundedFlag country={device?.country_code} size={10} />
@@ -73,7 +73,7 @@ export const DeviceCard = ({
       >
         <span
           className={
-            "font-normal text-[0.85rem] text-nb-gray-100 flex items-center gap-2"
+            "font-normal text-[0.85rem] text-neutral-900 flex items-center gap-2 dark:text-nb-gray-100"
           }
         >
           <TruncatedText
@@ -85,7 +85,7 @@ export const DeviceCard = ({
         {descriptionText && (
           <span
             className={
-              "text-sm font-normal text-nb-gray-400 relative whitespace-nowrap"
+              "text-sm font-normal text-neutral-500 relative whitespace-nowrap dark:text-nb-gray-400"
             }
           >
             <TruncatedText text={descriptionText} maxWidth={"160px"} />

@@ -14,7 +14,7 @@ function Card({ children, className, ...props }: Props) {
     <div
       {...props}
       className={cn(
-        "w-1/2 overflow-hidden rounded-md border border-nb-gray-900 bg-nb-gray-940 text-nb-gray-300",
+        "w-1/2 overflow-hidden rounded-md border border-neutral-200 bg-white text-neutral-700 dark:border-nb-gray-900 dark:bg-nb-gray-940 dark:text-nb-gray-300",
         className,
       )}
     >
@@ -51,11 +51,11 @@ function CardListItem({
   return (
     <li
       className={cn(
-        "flex justify-between px-4 border-b border-nb-gray-900 py-3.5 last:border-b-0 items-center h-full",
+        "flex justify-between px-4 border-b border-neutral-200 py-3.5 last:border-b-0 items-center h-full dark:border-nb-gray-900",
         className,
       )}
     >
-      <div className={"flex items-center gap-2.5 text-[0.84rem] text-nb-gray-300"}>
+      <div className={"flex items-center gap-2.5 text-[0.84rem] text-neutral-700 dark:text-nb-gray-300"}>
         {label}
       </div>
       <div className={"flex flex-col gap-2"}>
@@ -104,8 +104,8 @@ const CardTextItem = ({
   return (
     <div
       className={cn(
-        "text-right text-nb-gray-400 text-[0.84rem] flex items-center gap-2",
-        copy && "cursor-pointer hover:text-nb-gray-300 transition-all",
+        "text-right text-neutral-500 text-[0.84rem] flex items-center gap-2 dark:text-nb-gray-400",
+        copy && "cursor-pointer hover:text-neutral-700 transition-all dark:hover:text-nb-gray-300",
       )}
       onClick={() =>
         copy &&

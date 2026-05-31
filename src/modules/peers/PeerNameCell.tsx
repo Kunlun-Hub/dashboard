@@ -34,7 +34,7 @@ export default function PeerNameCell({ peer, linkToPeer = true }: Props) {
         className={cn(
           "flex items-center max-w-[280px] gap-2 dark:text-neutral-300 text-neutral-500 transition-all py-2 px-3 rounded-md ",
           linkToPeer &&
-            "hover:text-neutral-100 hover:bg-nb-gray-900/60 cursor-pointer",
+            "hover:bg-neutral-100 hover:text-neutral-900 dark:hover:bg-nb-gray-900/60 dark:hover:text-neutral-100 cursor-pointer",
         )}
         data-testid="peer-name-cell"
         aria-label={t("peerNameCell.viewPeerDetails", { name: peer.name })}
@@ -59,7 +59,11 @@ export default function PeerNameCell({ peer, linkToPeer = true }: Props) {
             )
           }
         >
-          <div className={"text-nb-gray-400 font-light truncate"}>
+          <div
+            className={
+              "truncate font-light text-neutral-500 dark:text-nb-gray-400"
+            }
+          >
             {displayUserEmailOrName ||
               (displayUserId &&
                 t("peerNameCell.userIdFallback", { id: displayUserId }))}

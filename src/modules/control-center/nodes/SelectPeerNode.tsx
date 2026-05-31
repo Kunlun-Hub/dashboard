@@ -1,3 +1,4 @@
+import { DeviceCard } from "@components/DeviceCard";
 import {
   SelectDropdown,
   SelectOption,
@@ -10,7 +11,6 @@ import { ChevronsUpDown } from "lucide-react";
 import * as React from "react";
 import { OperatingSystem } from "@/interfaces/OperatingSystem";
 import type { Peer } from "@/interfaces/Peer";
-import { DeviceCard } from "@components/DeviceCard";
 import { OSLogo } from "@/modules/peers/PeerOSCell";
 
 type PeerNodeProps = Node<
@@ -63,7 +63,7 @@ export const SelectPeerNode = ({ data, id }: PeerNodeProps) => {
   return (
     <div
       className={
-        "bg-nb-gray-930 border hover:bg-nb-gray-910 cursor-pointer border-nb-gray-800 rounded-lg overflow-hidden transition-all"
+        "bg-white border hover:bg-neutral-50 cursor-pointer border-neutral-200 rounded-lg overflow-hidden transition-all shadow-sm dark:border-nb-gray-800 dark:bg-nb-gray-930 dark:hover:bg-nb-gray-910 dark:shadow-none"
       }
     >
       <SelectDropdown
@@ -74,7 +74,7 @@ export const SelectPeerNode = ({ data, id }: PeerNodeProps) => {
         showSearch={true}
         searchPlaceholder={data?.placeholder ?? "Search peers..."}
         popoverWidth={280}
-        className={"!bg-nb-gray-920  !hover:bg-nb-gray-925 !text-nb-gray-300"}
+        className={"!bg-white !text-neutral-700 hover:!bg-neutral-50 dark:!bg-nb-gray-920 dark:!text-nb-gray-300 dark:hover:!bg-nb-gray-925"}
         size={"xs"}
         maxHeight={300}
       >

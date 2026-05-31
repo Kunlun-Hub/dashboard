@@ -1,11 +1,12 @@
 "use client";
 
-import { Edge, Node } from "@xyflow/react";
 import Badge from "@components/Badge";
 import Button from "@components/Button";
+import { DeviceCard } from "@components/DeviceCard";
 import { SmallBadge } from "@components/ui/SmallBadge";
-import dayjs from "dayjs";
 import { cn } from "@utils/helpers";
+import { Edge, Node } from "@xyflow/react";
+import dayjs from "dayjs";
 import {
   ChevronsLeft,
   ChevronsRight,
@@ -20,7 +21,12 @@ import {
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { useMemo } from "react";
-import { DeviceCard } from "@components/DeviceCard";
+import { useI18n } from "@/i18n/I18nProvider";
+import { Group } from "@/interfaces/Group";
+import { Network, NetworkResource } from "@/interfaces/Network";
+import { Peer } from "@/interfaces/Peer";
+import { Policy } from "@/interfaces/Policy";
+import { Role, User } from "@/interfaces/User";
 import { FlowView } from "@/modules/control-center/FlowSelector";
 import {
   getDestinationGroupsFromPolicy,
@@ -28,12 +34,6 @@ import {
   getPolicyProtocolAndPortText,
   getSourceGroupsFromPolicy,
 } from "@/modules/control-center/utils/helpers";
-import { Group } from "@/interfaces/Group";
-import { Network, NetworkResource } from "@/interfaces/Network";
-import { Peer } from "@/interfaces/Peer";
-import { Policy } from "@/interfaces/Policy";
-import { Role, User } from "@/interfaces/User";
-import { useI18n } from "@/i18n/I18nProvider";
 
 type Translate = ReturnType<typeof useI18n>["t"];
 
@@ -601,7 +601,7 @@ export function ControlCenterDetailsPanel({
         type="button"
         onClick={onToggleCollapsed}
         className={cn(
-          "absolute right-full top-4 flex h-11 w-11 items-center justify-center rounded-l-md border border-r-0 border-nb-gray-800 bg-nb-gray-940/95 text-nb-gray-300 shadow-lg transition-all hover:text-white",
+          "absolute right-full top-4 flex h-11 w-11 items-center justify-center rounded-l-md border border-r-0 border-neutral-200 bg-white/95 text-neutral-500 shadow-lg transition-all hover:text-neutral-900 dark:border-nb-gray-800 dark:bg-nb-gray-940/95 dark:text-nb-gray-300 dark:hover:text-white",
         )}
         aria-label={
           collapsed
@@ -619,7 +619,7 @@ export function ControlCenterDetailsPanel({
 
       <div
         className={cn(
-          "absolute inset-y-0 right-0 flex w-[22rem] flex-col overflow-hidden rounded-r-lg border border-nb-gray-800 bg-nb-gray-940/95 shadow-xl backdrop-blur-sm transition-all duration-200",
+          "absolute inset-y-0 right-0 flex w-[22rem] flex-col overflow-hidden rounded-r-lg border border-neutral-200 bg-white/95 shadow-xl backdrop-blur-sm transition-all duration-200 dark:border-nb-gray-800 dark:bg-nb-gray-940/95",
           collapsed
             ? "pointer-events-none translate-x-[calc(100%+0.5rem)] opacity-0"
             : "translate-x-0 opacity-100",
@@ -643,15 +643,15 @@ function PanelHeader({
   badge?: React.ReactNode;
 }>) {
   return (
-    <div className="mb-4 border-b border-nb-gray-800 pb-4">
+    <div className="mb-4 border-b border-neutral-200 pb-4 dark:border-nb-gray-800">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <div className="mb-2 flex items-center gap-2 text-sm font-medium text-nb-gray-200">
-            <span className="text-nb-gray-400">{icon}</span>
+          <div className="mb-2 flex items-center gap-2 text-sm font-medium text-neutral-900 dark:text-nb-gray-200">
+            <span className="text-neutral-500 dark:text-nb-gray-400">{icon}</span>
             <span className="truncate">{title}</span>
           </div>
           {description && (
-            <div className="text-xs leading-5 text-nb-gray-400">
+            <div className="text-xs leading-5 text-neutral-500 dark:text-nb-gray-400">
               {description}
             </div>
           )}
@@ -671,10 +671,10 @@ function Section({
 }>) {
   return (
     <div className="mb-4">
-      <div className="mb-2 text-[11px] font-medium uppercase tracking-[0.04em] text-nb-gray-500">
+      <div className="mb-2 text-[11px] font-medium uppercase tracking-[0.04em] text-neutral-400 dark:text-nb-gray-500">
         {title}
       </div>
-      <div className="rounded-md border border-nb-gray-800 bg-nb-gray-930/70 p-3">
+      <div className="rounded-md border border-neutral-200 bg-neutral-50/80 p-3 dark:border-nb-gray-800 dark:bg-nb-gray-930/70">
         {children}
       </div>
     </div>
@@ -683,7 +683,7 @@ function Section({
 
 function EntityCard({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <div className="mb-4 rounded-md border border-nb-gray-800 bg-nb-gray-930/70 px-3 py-2">
+    <div className="mb-4 rounded-md border border-neutral-200 bg-neutral-50/80 px-3 py-2 dark:border-nb-gray-800 dark:bg-nb-gray-930/70">
       {children}
     </div>
   );
@@ -697,16 +697,16 @@ function FactRow({
   value: string;
 }>) {
   return (
-    <div className="flex items-start justify-between gap-4 border-b border-nb-gray-800/70 py-2 text-sm last:border-b-0 first:pt-0 last:pb-0">
-      <span className="text-nb-gray-400">{label}</span>
-      <span className="max-w-[11rem] text-right text-nb-gray-100">{value}</span>
+    <div className="flex items-start justify-between gap-4 border-b border-neutral-200 py-2 text-sm last:border-b-0 first:pt-0 last:pb-0 dark:border-nb-gray-800/70">
+      <span className="text-neutral-500 dark:text-nb-gray-400">{label}</span>
+      <span className="max-w-[11rem] text-right text-neutral-900 dark:text-nb-gray-100">{value}</span>
     </div>
   );
 }
 
 function ChipList({ items }: Readonly<{ items: string[] }>) {
   if (items.length === 0) {
-    return <div className="text-sm text-nb-gray-500">-</div>;
+    return <div className="text-sm text-neutral-400 dark:text-nb-gray-500">-</div>;
   }
 
   return (
@@ -742,16 +742,16 @@ function EndpointCard({
   badge: string;
 }>) {
   return (
-    <div className="rounded-md border border-nb-gray-800 bg-nb-gray-930/70 px-3 py-2">
+    <div className="rounded-md border border-neutral-200 bg-neutral-50/80 px-3 py-2 dark:border-nb-gray-800 dark:bg-nb-gray-930/70">
       <div className="mb-1 flex items-center justify-between gap-3">
-        <div className="truncate text-sm font-medium text-nb-gray-100">
+        <div className="truncate text-sm font-medium text-neutral-900 dark:text-nb-gray-100">
           {title}
         </div>
         <Badge variant="gray" size="xs">
           {badge}
         </Badge>
       </div>
-      {subtitle && <div className="text-xs text-nb-gray-400">{subtitle}</div>}
+      {subtitle && <div className="text-xs text-neutral-500 dark:text-nb-gray-400">{subtitle}</div>}
     </div>
   );
 }

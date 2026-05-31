@@ -8,7 +8,7 @@
 }
 
 html{
-    @apply bg-nb-gray;
+    @apply bg-white dark:bg-nb-gray;
 }
 
 h1 {
@@ -199,4 +199,86 @@ p {
 /* Control Center */
 .react-flow__node-groupNode .selected{
     @apply border-netbird;
+}
+
+/*
+ * Light-theme compatibility for legacy dark-only utility classes.
+ * This is scoped to page surfaces so terminals and other intentionally dark
+ * embeds keep their own styling.
+ */
+html:not(.dark) .light-theme-surface .bg-nb-gray,
+html:not(.dark) .light-theme-surface .bg-nb-gray-960,
+html:not(.dark) .light-theme-surface .bg-nb-gray-950,
+html:not(.dark) .light-theme-surface .bg-nb-gray-940,
+html:not(.dark) .light-theme-surface .bg-nb-gray-935,
+html:not(.dark) .light-theme-surface .bg-nb-gray-850,
+html:not(.dark) .light-theme-surface .hover\:bg-nb-gray:hover,
+html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-960:hover,
+html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-950:hover,
+html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-940:hover,
+html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-935:hover,
+html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-850:hover {
+    background-color: #ffffff;
+}
+
+html:not(.dark) .light-theme-surface .bg-nb-gray-930,
+html:not(.dark) .light-theme-surface .bg-nb-gray-925,
+html:not(.dark) .light-theme-surface .bg-nb-gray-920,
+html:not(.dark) .light-theme-surface .bg-nb-gray-910,
+html:not(.dark) .light-theme-surface .bg-nb-gray-900,
+html:not(.dark) .light-theme-surface .bg-nb-gray-940\/95,
+html:not(.dark) .light-theme-surface .bg-nb-gray-930\/95,
+html:not(.dark) .light-theme-surface .bg-nb-gray-930\/90,
+html:not(.dark) .light-theme-surface .bg-nb-gray-930\/80,
+html:not(.dark) .light-theme-surface .bg-nb-gray-930\/70,
+html:not(.dark) .light-theme-surface .bg-nb-gray-930\/60,
+html:not(.dark) .light-theme-surface .bg-nb-gray-930\/50,
+html:not(.dark) .light-theme-surface .bg-nb-gray-930\/40,
+html:not(.dark) .light-theme-surface .bg-nb-gray-920\/30,
+html:not(.dark) .light-theme-surface .bg-nb-gray-900\/70,
+html:not(.dark) .light-theme-surface .bg-nb-gray-900\/50,
+html:not(.dark) .light-theme-surface .bg-nb-gray-900\/40,
+html:not(.dark) .light-theme-surface .bg-nb-gray-900\/30,
+html:not(.dark) .light-theme-surface .bg-nb-gray-900\/20,
+html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-930:hover,
+html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-925:hover,
+html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-920:hover,
+html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-910:hover,
+html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-900:hover,
+html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-930\/60:hover,
+html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-900\/50:hover,
+html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-900\/40:hover {
+    background-color: #f9fafb;
+}
+
+html:not(.dark) .light-theme-surface .border-nb-gray,
+html:not(.dark) .light-theme-surface .border-nb-gray-950,
+html:not(.dark) .light-theme-surface .border-nb-gray-940,
+html:not(.dark) .light-theme-surface .border-nb-gray-930,
+html:not(.dark) .light-theme-surface .border-nb-gray-920,
+html:not(.dark) .light-theme-surface .border-nb-gray-910,
+html:not(.dark) .light-theme-surface .border-nb-gray-900,
+html:not(.dark) .light-theme-surface .border-nb-gray-800,
+html:not(.dark) .light-theme-surface .border-nb-gray-700,
+html:not(.dark) .light-theme-surface .border-nb-gray-600,
+html:not(.dark) .light-theme-surface .border-nb-gray-500,
+html:not(.dark) .light-theme-surface .border-nb-gray-900\/70,
+html:not(.dark) .light-theme-surface .border-nb-gray-800\/70,
+html:not(.dark) .light-theme-surface .border-nb-gray-800\/50,
+html:not(.dark) .light-theme-surface .border-nb-gray-800\/30 {
+    border-color: #e5e7eb;
+}
+
+html:not(.dark) .light-theme-surface .text-nb-gray-50,
+html:not(.dark) .light-theme-surface .text-nb-gray-100,
+html:not(.dark) .light-theme-surface .text-nb-gray-200 {
+    color: #171717;
+}
+
+html:not(.dark) .light-theme-surface .text-nb-gray-300,
+html:not(.dark) .light-theme-surface .text-nb-gray-350,
+html:not(.dark) .light-theme-surface .text-nb-gray-400,
+html:not(.dark) .light-theme-surface .text-nb-gray-500,
+html:not(.dark) .light-theme-surface .text-nb-gray-600 {
+    color: #525252;
 }

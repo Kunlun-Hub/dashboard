@@ -41,25 +41,23 @@ export default function DarkModeToggle() {
         <DropdownMenuItem
           onClick={() => setTheme("light")}
           className={"flex gap-2"}
-          disabled={true}
         >
           <SunIcon size={16} />
-          {t('darkModeToggle.light')}
+          {t("darkModeToggle.light")}
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => setTheme("dark")}
           className={"flex gap-2"}
         >
           <MoonIcon size={16} />
-          {t('darkModeToggle.dark')}
+          {t("darkModeToggle.dark")}
         </DropdownMenuItem>
         <DropdownMenuItem
-          disabled={true}
           onClick={() => setTheme("system")}
           className={"flex gap-2"}
         >
           <MonitorIcon size={16} />
-          {t('darkModeToggle.system')}
+          {t("darkModeToggle.system")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

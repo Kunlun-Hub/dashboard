@@ -1,11 +1,11 @@
+import { DeviceCard } from "@components/DeviceCard";
 import { cn } from "@utils/helpers";
 import { Handle, type Node, Position } from "@xyflow/react";
 import { NetworkIcon } from "lucide-react";
 import * as React from "react";
-import { DeviceCard } from "@components/DeviceCard";
 import CircleIcon from "@/assets/icons/CircleIcon";
-import { Network, NetworkResource } from "@/interfaces/Network";
 import { useI18n } from "@/i18n/I18nProvider";
+import { Network, NetworkResource } from "@/interfaces/Network";
 
 type NetworkNodeType = {
   network: Network;
@@ -26,12 +26,13 @@ export const NetworkNode = ({ data }: NetworkNodeProps) => {
   return (
     <div
       className={cn(
-        "bg-nb-gray-940 border border-nb-gray-800 rounded-2xl overflow-hidden group hover:bg-nb-gray-935 transition-all cursor-pointer",
+        "bg-white border border-neutral-200 rounded-2xl overflow-hidden group hover:bg-neutral-50 transition-all cursor-pointer shadow-sm dark:border-nb-gray-800 dark:bg-nb-gray-940 dark:hover:bg-nb-gray-935 dark:shadow-none",
       )}
     >
       <div
         className={cn(
-          "flex w-full items-center justify-between text-nb-gray-300 gap-2 text-sm pl-6 pr-6 py-3.5 font-normal bg-nb-gray-935 border-b border-nb-gray-800 group-hover:bg-nb-gray-930 transition-all",
+          "flex w-full items-center justify-between gap-2 text-sm pl-6 pr-6 py-3.5 font-normal border-b transition-all",
+          "text-neutral-600 bg-neutral-50 border-neutral-200 group-hover:bg-neutral-100 dark:text-nb-gray-300 dark:bg-nb-gray-935 dark:border-nb-gray-800 dark:group-hover:bg-nb-gray-930",
           resources?.length === 0 && "border-b-0",
         )}
       >
@@ -39,13 +40,13 @@ export const NetworkNode = ({ data }: NetworkNodeProps) => {
           <div>
             <div
               className={
-                " text-nb-gray-100 font-medium whitespace-nowrap flex items-center gap-2"
+                " text-neutral-900 font-medium whitespace-nowrap flex items-center gap-2 dark:text-nb-gray-100"
               }
             >
               <NetworkIcon size={12} />
               {n?.name}
             </div>
-            <div className={"text-nb-gray-400 whitespace-nowrap mt-0.5"}>
+            <div className={"text-neutral-500 whitespace-nowrap mt-0.5 dark:text-nb-gray-400"}>
               {t("common.resourceCount", { count: resources?.length || 0 })}
             </div>
           </div>
@@ -55,7 +56,7 @@ export const NetworkNode = ({ data }: NetworkNodeProps) => {
             size={8}
             className={cn(
               "shrink-0 block",
-              routingPeersCount === 0 && "bg-nb-gray-500",
+              routingPeersCount === 0 && "bg-neutral-400 dark:bg-nb-gray-500",
               routingPeersCount === 1 && "bg-yellow-400",
               routingPeersCount > 1 && "bg-green-400",
             )}
@@ -72,13 +73,13 @@ export const NetworkNode = ({ data }: NetworkNodeProps) => {
             })}
           </div>
           {hiddenResourceCount > 0 && (
-            <div className="absolute bottom-3 right-3 z-20 rounded-md border border-nb-gray-800 bg-nb-gray-930/95 px-2 py-1 text-[11px] font-medium text-nb-gray-200 shadow-sm">
+            <div className="absolute bottom-3 right-3 z-20 rounded-md border border-neutral-200 bg-white/95 px-2 py-1 text-[11px] font-medium text-neutral-700 shadow-sm dark:border-nb-gray-800 dark:bg-nb-gray-930/95 dark:text-nb-gray-200">
               +{hiddenResourceCount} {t("controlCenter.more")}
             </div>
           )}
           <div
             className={cn(
-              "absolute w-full h-full bg-gradient-to-b from-transparent via-nb-gray-940/20 to-nb-gray-940 z-10 left-0 top-0 pointer-events-none",
+              "absolute w-full h-full bg-gradient-to-b from-transparent via-white/20 to-white z-10 left-0 top-0 pointer-events-none dark:via-nb-gray-940/20 dark:to-nb-gray-940",
               resources?.length > 6 ? "opacity-100" : "opacity-0",
             )}
           ></div>

@@ -1,14 +1,14 @@
+import { notify } from "@components/Notification";
+import { cn } from "@utils/helpers";
+import { TimerResetIcon } from "lucide-react";
 import * as React from "react";
 import { useState } from "react";
-import { PeerExpirationToggle } from "@/modules/peer/PeerExpirationToggle";
-import { usePeer } from "@/contexts/PeerProvider";
-import { TimerResetIcon } from "lucide-react";
-import { usePermissions } from "@/contexts/PermissionsProvider";
-import { notify } from "@components/Notification";
 import { useSWRConfig } from "swr";
-import { cn } from "@utils/helpers";
-import { useAccount } from "@/modules/account/useAccount";
+import { usePeer } from "@/contexts/PeerProvider";
+import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useI18n } from "@/i18n/I18nProvider";
+import { useAccount } from "@/modules/account/useAccount";
+import { PeerExpirationToggle } from "@/modules/peer/PeerExpirationToggle";
 
 export const PeerExpirationSettings = () => {
   const { t } = useI18n();
@@ -73,12 +73,12 @@ export const PeerExpirationSettings = () => {
       {permission?.peers.update && !!peer?.user_id && (
         <div
           className={cn(
-            "border border-nb-gray-900 border-t-0 rounded-b-md bg-nb-gray-940 px-[1.28rem] pt-3 pb-5 flex flex-col gap-4 mx-[0.25rem]",
+            "border border-neutral-200 border-t-0 rounded-b-md bg-white px-[1.28rem] pt-3 pb-5 flex flex-col gap-4 mx-[0.25rem] dark:border-nb-gray-900 dark:bg-nb-gray-940",
             !peerLoginExpiration
               ? "opacity-50 pointer-events-none"
-              : "bg-nb-gray-930/80",
+              : "bg-neutral-50 dark:bg-nb-gray-930/80",
             isAccountInactivityExpirationDisabled &&
-              "opacity-50 bg-nb-gray-940",
+              "opacity-50 bg-white dark:bg-nb-gray-940",
           )}
         >
           <PeerExpirationToggle

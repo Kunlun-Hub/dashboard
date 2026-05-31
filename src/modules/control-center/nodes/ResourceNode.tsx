@@ -1,9 +1,9 @@
+import { DeviceCard } from "@components/DeviceCard";
 import { cn } from "@utils/helpers";
 import { Handle, type Node, Position } from "@xyflow/react";
 import * as React from "react";
 import { NetworkResource } from "@/interfaces/Network";
 import { Peer } from "@/interfaces/Peer";
-import { DeviceCard } from "@components/DeviceCard";
 import { useAnySourceGroupEnabled } from "@/modules/control-center/utils/helpers";
 
 type ResourceNode = Node<
@@ -24,7 +24,7 @@ export const ResourceNode = ({ data, id }: ResourceNode) => {
   return (
     <div
       className={cn(
-        "cursor-pointer border-0 border-nb-gray-800 rounded-lg overflow-hidden transition-all",
+        "cursor-pointer border-0 border-neutral-200 rounded-lg overflow-hidden transition-all dark:border-nb-gray-800",
         className,
       )}
     >

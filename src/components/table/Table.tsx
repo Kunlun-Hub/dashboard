@@ -34,7 +34,9 @@ const Table = React.forwardRef<
         className={cn(
           "caption-bottom text-sm min-w-full max-w-full w-full",
           "text-neutral-900 dark:text-nb-gray-100",
-          minimal ? "" : "border dark:border-zinc-700/40 border-l-0 border-r-0",
+          minimal
+            ? ""
+            : "border border-neutral-200 dark:border-zinc-700/40 border-l-0 border-r-0",
           className,
         )}
         {...props}
@@ -106,7 +108,7 @@ const TableRow = React.forwardRef<
       "dark:data-[state=selected]:border-nb-gray-900",
       minimal
         ? "dark:hover:bg-nb-gray-910/[15%]"
-        : "border-b dark:border-zinc-700/40 dark:hover:bg-nb-gray-940 hover:bg-neutral-100/50",
+        : "border-b border-neutral-200 dark:border-zinc-700/40 hover:bg-neutral-50 dark:hover:bg-nb-gray-940",
       className,
     )}
     {...props}
@@ -129,7 +131,7 @@ const TableHead = React.forwardRef<
       "h-12 px-4 text-left align-middle uppercase font-medium  [&:has([role=checkbox])]:pr-0 w-auto",
       minimal
         ? "px-6"
-        : "text-neutral-500 dark:text-nb-gray-400 dark:bg-nb-gray-900",
+        : "bg-neutral-50 text-neutral-500 dark:bg-nb-gray-900 dark:text-nb-gray-400",
       inset && "first:pl-[52px]",
       className,
     )}

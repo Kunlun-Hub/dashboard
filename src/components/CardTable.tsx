@@ -12,7 +12,7 @@ function CardTable({ children, className }: CardTableProps) {
   return (
     <div
       className={cn(
-        "bg-nb-gray-940 rounded-md border border-nb-gray-900 w-full overflow-hidden",
+        "bg-white rounded-md border border-neutral-200 w-full overflow-hidden dark:border-nb-gray-900 dark:bg-nb-gray-940",
         className,
       )}
     >
@@ -26,7 +26,7 @@ function CardTableHeader({ children, className }: CardTableProps) {
     <thead>
       <tr
         className={cn(
-          "border-b border-nb-gray-900",
+          "border-b border-neutral-200 dark:border-nb-gray-900",
           className,
         )}
       >
@@ -73,7 +73,7 @@ function CardTableRow({ children, className }: CardTableRowProps) {
   return (
     <tr
       className={cn(
-        "border-b border-nb-gray-900 last:border-b-0",
+        "border-b border-neutral-200 last:border-b-0 dark:border-nb-gray-900",
         className,
       )}
     >
@@ -105,8 +105,8 @@ function CardTableCell({
     >
       <div
         className={cn(
-          "text-nb-gray-400 text-sm flex items-center gap-2",
-          copy && "cursor-pointer hover:text-nb-gray-300 transition-all",
+          "text-neutral-500 text-sm flex items-center gap-2 dark:text-nb-gray-400",
+          copy && "cursor-pointer hover:text-neutral-700 transition-all dark:hover:text-nb-gray-300",
         )}
         onClick={() =>
           copy &&

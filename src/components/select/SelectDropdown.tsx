@@ -1,5 +1,6 @@
 import Button, { ButtonVariants } from "@components/Button";
 import { CommandItem } from "@components/Command";
+import { DropdownInfoText } from "@components/DropdownInfoText";
 import Paragraph from "@components/Paragraph";
 import { Popover, PopoverContent, PopoverTrigger } from "@components/Popover";
 import { ScrollArea } from "@components/ScrollArea";
@@ -14,7 +15,6 @@ import * as React from "react";
 import { useEffect, useRef, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { useElementSize } from "@/hooks/useElementSize";
-import { DropdownInfoText } from "@components/DropdownInfoText";
 import { useI18n } from "@/i18n/I18nProvider";
 
 export interface SelectOption {
@@ -126,7 +126,7 @@ export function SelectDropdown({
             truncate && "min-w-0",
           )}
         >
-          <span className={cn("text-nb-gray-200", truncate && "truncate")}>
+          <span className={cn("text-neutral-800 dark:text-nb-gray-200", truncate && "truncate")}>
             {selected?.label}
           </span>
         </div>
@@ -143,7 +143,7 @@ export function SelectDropdown({
             size === "xs" && "text-xs",
           )}
         >
-          <span className={"text-nb-gray-200"}>{resolvedPlaceholder}</span>
+          <span className={"text-neutral-800 dark:text-nb-gray-200"}>{resolvedPlaceholder}</span>
         </div>
       </div>
     );
@@ -315,7 +315,7 @@ const SelectDropdownItem = ({
                   size === "xs" && "text-xs",
                 )}
               >
-                <span className={"text-nb-gray-200"}>{option.label}</span>
+                <span className={"text-neutral-800 dark:text-nb-gray-200"}>{option.label}</span>
               </div>
             )}
           </div>

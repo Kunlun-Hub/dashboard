@@ -18,15 +18,15 @@ export const SummaryNode = ({ data }: SummaryNodeProps) => {
   return (
     <div
       className={cn(
-        "rounded-lg border border-dashed border-nb-gray-700 bg-nb-gray-930/90 px-3 py-3 text-left transition-all",
+        "rounded-lg border border-dashed border-neutral-300 bg-white/90 px-3 py-3 text-left transition-all shadow-sm dark:border-nb-gray-700 dark:bg-nb-gray-930/90 dark:shadow-none",
         !enabled && "opacity-60",
       )}
     >
-      <div className="flex items-center gap-2 text-sm font-medium text-nb-gray-100">
-        <Layers3Icon size={14} className="text-nb-gray-400" />
+      <div className="flex items-center gap-2 text-sm font-medium text-neutral-900 dark:text-nb-gray-100">
+        <Layers3Icon size={14} className="text-neutral-500 dark:text-nb-gray-400" />
         <span>{title}</span>
       </div>
-      <div className="mt-1 text-xs text-nb-gray-400">{subtitle}</div>
+      <div className="mt-1 text-xs text-neutral-500 dark:text-nb-gray-400">{subtitle}</div>
 
       <Handle
         type="source"

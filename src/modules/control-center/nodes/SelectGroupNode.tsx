@@ -9,8 +9,8 @@ import { sortBy } from "lodash";
 import { ChevronsUpDown } from "lucide-react";
 import * as React from "react";
 import { useMemo } from "react";
-import { Group } from "@/interfaces/Group";
 import { useI18n } from "@/i18n/I18nProvider";
+import { Group } from "@/interfaces/Group";
 
 type NodeProps = Node<
   {
@@ -57,7 +57,7 @@ export const SelectGroupNode = ({ data, id }: NodeProps) => {
   return (
     <div
       className={
-        "bg-nb-gray-930 border hover:bg-nb-gray-910 cursor-pointer border-nb-gray-800 rounded-lg overflow-hidden transition-all"
+        "bg-white border hover:bg-neutral-50 cursor-pointer border-neutral-200 rounded-lg overflow-hidden transition-all shadow-sm dark:border-nb-gray-800 dark:bg-nb-gray-930 dark:hover:bg-nb-gray-910 dark:shadow-none"
       }
     >
       <SelectDropdown
@@ -68,7 +68,7 @@ export const SelectGroupNode = ({ data, id }: NodeProps) => {
         showSearch={true}
         searchPlaceholder={t("groups.searchPlaceholder")}
         popoverWidth={280}
-        className={"!bg-nb-gray-920  !hover:bg-nb-gray-925 !text-nb-gray-300"}
+        className={"!bg-white !text-neutral-700 hover:!bg-neutral-50 dark:!bg-nb-gray-920 dark:!text-nb-gray-300 dark:hover:!bg-nb-gray-925"}
         size={"xs"}
         maxHeight={300}
       >
@@ -76,13 +76,13 @@ export const SelectGroupNode = ({ data, id }: NodeProps) => {
           {group && (
             <div
               className={
-                "flex w-full items-center justify-between text-nb-gray-300 gap-2 text-sm pl-3 pr-5 py-3 font-normal"
+                "flex w-full items-center justify-between text-neutral-600 gap-2 text-sm pl-3 pr-5 py-3 font-normal dark:text-nb-gray-300"
               }
             >
               <div className={"flex items-center gap-3 font-normal text-sm"}>
                 <div
                   className={
-                    "h-9 w-9 bg-nb-gray-850 rounded-md flex items-center justify-center shrink-0"
+                    "h-9 w-9 bg-neutral-100 rounded-md flex items-center justify-center shrink-0 dark:bg-nb-gray-850"
                   }
                 >
                   <GroupBadgeIcon
@@ -94,14 +94,14 @@ export const SelectGroupNode = ({ data, id }: NodeProps) => {
                 <div>
                   <div
                     className={
-                      " text-nb-gray-200 font-normal whitespace-nowrap text-left"
+                      " text-neutral-900 font-normal whitespace-nowrap text-left dark:text-nb-gray-200"
                     }
                   >
                     {group.name}
                   </div>
                   <div
                     className={
-                      "text-nb-gray-400 whitespace-nowrap text-xs text-left"
+                      "text-neutral-500 whitespace-nowrap text-xs text-left dark:text-nb-gray-400"
                     }
                   >
                     {countLabel}

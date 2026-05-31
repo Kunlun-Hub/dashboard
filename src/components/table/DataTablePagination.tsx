@@ -41,7 +41,7 @@ export function DataTablePagination<TData>({
       <div
         className={cn("flex items-center justify-between", paginationPadding)}
       >
-        <div className="text-nb-gray-400">
+        <div className="text-neutral-500 dark:text-nb-gray-400">
           {t("dataTablePagination.showing", {
             from: showingFrom,
             to: showingTo,

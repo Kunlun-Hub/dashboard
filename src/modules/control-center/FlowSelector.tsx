@@ -27,7 +27,7 @@ export const FlowSelector = ({ value, onChange }: Props) => {
     <SegmentedTabs value={value} onChange={(v) => onChange?.(v as FlowView)}>
       <SegmentedTabs.List
         className={
-          "border-b rounded-b-lg text-sm font-medium bg-nb-gray-930 p-1"
+          "border-b rounded-b-lg text-sm font-medium bg-white p-1 dark:bg-nb-gray-930"
         }
       >
         <SegmentedTabs.Trigger

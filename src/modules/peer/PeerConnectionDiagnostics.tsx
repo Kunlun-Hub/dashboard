@@ -96,10 +96,10 @@ export function PeerConnectionDiagnostics({ peer }: Readonly<Props>) {
       <div className="max-w-6xl">
         <div className="mb-5 flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-semibold text-nb-gray-100">
+            <h2 className="text-xl font-semibold text-neutral-900 dark:text-nb-gray-100">
               {t("saasDiagnostics.title")}
             </h2>
-            <p className="mt-1 text-sm text-nb-gray-400">
+            <p className="mt-1 text-sm text-neutral-500 dark:text-nb-gray-400">
               {t("saasDiagnostics.description")}
             </p>
           </div>
@@ -120,10 +120,10 @@ export function PeerConnectionDiagnostics({ peer }: Readonly<Props>) {
           {diagnostics.map((item) => (
             <div
               key={item.label}
-              className="rounded-md border border-nb-gray-900 bg-nb-gray-940 p-4"
+              className="rounded-md border border-neutral-200 bg-white p-4 shadow-sm dark:border-nb-gray-900 dark:bg-nb-gray-940 dark:shadow-none"
             >
               <div className="mb-3 flex items-center justify-between gap-2">
-                <span className="text-xs text-nb-gray-400">{item.label}</span>
+                <span className="text-xs text-neutral-500 dark:text-nb-gray-400">{item.label}</span>
                 {item.state === "good" && (
                   <CheckCircle2Icon className="text-green-500" size={15} />
                 )}
@@ -131,7 +131,7 @@ export function PeerConnectionDiagnostics({ peer }: Readonly<Props>) {
                   <AlertTriangleIcon className="text-yellow-500" size={15} />
                 )}
               </div>
-              <div className="truncate text-sm font-medium text-nb-gray-100">
+              <div className="truncate text-sm font-medium text-neutral-900 dark:text-nb-gray-100">
                 {item.value}
               </div>
             </div>
@@ -139,8 +139,8 @@ export function PeerConnectionDiagnostics({ peer }: Readonly<Props>) {
         </div>
 
         <div className="mt-5 grid grid-cols-1 gap-4 lg:grid-cols-2">
-          <div className="rounded-md border border-nb-gray-900 bg-nb-gray-940 p-5">
-            <div className="mb-4 flex items-center gap-2 text-sm font-medium text-nb-gray-100">
+          <div className="rounded-md border border-neutral-200 bg-white p-5 shadow-sm dark:border-nb-gray-900 dark:bg-nb-gray-940 dark:shadow-none">
+            <div className="mb-4 flex items-center gap-2 text-sm font-medium text-neutral-900 dark:text-nb-gray-100">
               <NetworkIcon size={16} />
               {t("saasDiagnostics.connectionFacts")}
             </div>
@@ -150,8 +150,8 @@ export function PeerConnectionDiagnostics({ peer }: Readonly<Props>) {
             <Fact label={t("saasDiagnostics.kernel")} value={peer.kernel_version || t("common.unknown")} />
           </div>
 
-          <div className="rounded-md border border-nb-gray-900 bg-nb-gray-940 p-5">
-            <div className="mb-4 flex items-center gap-2 text-sm font-medium text-nb-gray-100">
+          <div className="rounded-md border border-neutral-200 bg-white p-5 shadow-sm dark:border-nb-gray-900 dark:bg-nb-gray-940 dark:shadow-none">
+            <div className="mb-4 flex items-center gap-2 text-sm font-medium text-neutral-900 dark:text-nb-gray-100">
               <RadioTowerIcon size={16} />
               {t("saasDiagnostics.recommendations")}
             </div>
@@ -159,7 +159,7 @@ export function PeerConnectionDiagnostics({ peer }: Readonly<Props>) {
               {recommendations.map((item) => (
                 <div
                   key={item}
-                  className="rounded-md border border-nb-gray-900 bg-nb-gray-930 px-3 py-2 text-sm text-nb-gray-300"
+                  className="rounded-md border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm text-neutral-700 dark:border-nb-gray-900 dark:bg-nb-gray-930 dark:text-nb-gray-300"
                 >
                   {item}
                 </div>
@@ -168,9 +168,9 @@ export function PeerConnectionDiagnostics({ peer }: Readonly<Props>) {
           </div>
         </div>
 
-        <div className="mt-5 rounded-md border border-nb-gray-900 bg-nb-gray-940 p-5">
+        <div className="mt-5 rounded-md border border-neutral-200 bg-white p-5 shadow-sm dark:border-nb-gray-900 dark:bg-nb-gray-940 dark:shadow-none">
           <div className="mb-4 flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2 text-sm font-medium text-nb-gray-100">
+            <div className="flex items-center gap-2 text-sm font-medium text-neutral-900 dark:text-nb-gray-100">
               <RadioTowerIcon size={16} />
               {t("saasDiagnostics.relayCandidates")}
             </div>
@@ -186,10 +186,10 @@ export function PeerConnectionDiagnostics({ peer }: Readonly<Props>) {
             {(relays ?? []).slice(0, 8).map((relay) => (
               <div
                 key={relay.id || relay.address}
-                className="rounded-md border border-nb-gray-900 bg-nb-gray-930 px-3 py-2"
+                className="rounded-md border border-neutral-200 bg-neutral-50 px-3 py-2 dark:border-nb-gray-900 dark:bg-nb-gray-930"
               >
                 <div className="flex items-center justify-between gap-3">
-                  <span className="truncate text-sm font-medium text-nb-gray-100">
+                  <span className="truncate text-sm font-medium text-neutral-900 dark:text-nb-gray-100">
                     {relay.name || relay.id || relay.address}
                   </span>
                   <SmallBadge
@@ -202,13 +202,13 @@ export function PeerConnectionDiagnostics({ peer }: Readonly<Props>) {
                     size="md"
                   />
                 </div>
-                <div className="mt-1 truncate text-xs text-nb-gray-400">
+                <div className="mt-1 truncate text-xs text-neutral-500 dark:text-nb-gray-400">
                   {relay.address}
                 </div>
               </div>
             ))}
             {(relays ?? []).length === 0 && (
-              <div className="text-sm text-nb-gray-400">
+              <div className="text-sm text-neutral-500 dark:text-nb-gray-400">
                 {t("relays.emptyTitle")}
               </div>
             )}
@@ -221,9 +221,9 @@ export function PeerConnectionDiagnostics({ peer }: Readonly<Props>) {
 
 function Fact({ label, value }: Readonly<{ label: string; value: string }>) {
   return (
-    <div className="flex justify-between gap-4 border-b border-nb-gray-900 py-2 last:border-b-0">
-      <span className="text-sm text-nb-gray-400">{label}</span>
-      <span className="truncate text-right text-sm text-nb-gray-100">{value}</span>
+    <div className="flex justify-between gap-4 border-b border-neutral-200 py-2 last:border-b-0 dark:border-nb-gray-900">
+      <span className="text-sm text-neutral-500 dark:text-nb-gray-400">{label}</span>
+      <span className="truncate text-right text-sm text-neutral-900 dark:text-nb-gray-100">{value}</span>
     </div>
   );
 }

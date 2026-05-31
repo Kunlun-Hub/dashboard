@@ -4,8 +4,8 @@ import { useRouter } from "next/navigation";
 import * as React from "react";
 import { useMemo } from "react";
 import CircleIcon from "@/assets/icons/CircleIcon";
-import { Network } from "@/interfaces/Network";
 import { useI18n } from "@/i18n/I18nProvider";
+import { Network } from "@/interfaces/Network";
 import { navigateToNetwork } from "@/modules/networks/networkNavigation";
 
 type Props = {
@@ -18,11 +18,11 @@ export const NetworkRoutingPeerCount = ({ network }: Props) => {
   const { t } = useI18n();
 
   const routingPeerStatusColor = useMemo(() => {
-    if (!network) return "bg-nb-gray-500";
-    if (routerCount === 0) return "bg-nb-gray-500";
+    if (!network) return "bg-neutral-400 dark:bg-nb-gray-500";
+    if (routerCount === 0) return "bg-neutral-400 dark:bg-nb-gray-500";
     if (routerCount === 1) return "bg-yellow-400";
     if (routerCount > 1) return "bg-green-400";
-    return "bg-nb-gray-500";
+    return "bg-neutral-400 dark:bg-nb-gray-500";
   }, [network, routerCount]);
 
   const openNetworkPage = () => {

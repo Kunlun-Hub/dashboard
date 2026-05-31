@@ -1,3 +1,4 @@
+import FullTooltip from "@components/FullTooltip";
 import InlineLink from "@components/InlineLink";
 import {
   Tooltip,
@@ -12,10 +13,9 @@ import { ArrowRightIcon, ArrowUpCircleIcon } from "lucide-react";
 import * as React from "react";
 import { useMemo } from "react";
 import { useApplicationContext } from "@/contexts/ApplicationProvider";
+import { useI18n } from "@/i18n/I18nProvider";
 import { OperatingSystem } from "@/interfaces/OperatingSystem";
 import { PeerOperatingSystemIcon } from "@/modules/peers/PeerOperatingSystemIcon";
-import FullTooltip from "@components/FullTooltip";
-import { useI18n } from "@/i18n/I18nProvider";
 
 type Props = {
   version: string;
@@ -54,7 +54,7 @@ export default function PeerVersionCell({
         <TooltipProvider>
           <Tooltip delayDuration={10}>
             <TooltipTrigger>
-              <div className="flex gap-2 dark:text-neutral-300 text-neutral-500 hover:text-neutral-100 transition-all rounded-md items-center">
+              <div className="flex items-center gap-2 rounded-md text-neutral-500 transition-all hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-neutral-100">
                 <MemoizedNetBirdIcon />
                 {version == "development" ? "dev" : version}
                 <div className={"relative"}>
@@ -79,7 +79,7 @@ export default function PeerVersionCell({
 
               <div
                 className={
-                  "text-neutral-300 flex flex-col gap-1 max-w-[300px] text-xs mt-1"
+                  "mt-1 flex max-w-[300px] flex-col gap-1 text-xs text-neutral-600 dark:text-neutral-300"
                 }
               >
                 {t("peerVersion.updateDescription")}
@@ -96,7 +96,7 @@ export default function PeerVersionCell({
           </Tooltip>
         </TooltipProvider>
       ) : (
-        <div className="inline-flex gap-2 dark:text-neutral-300 text-neutral-500 items-center">
+        <div className="inline-flex items-center gap-2 text-neutral-500 dark:text-neutral-300">
           <MemoizedNetBirdIcon />
           {version == "development" ? "dev" : version}
         </div>
@@ -108,14 +108,18 @@ export default function PeerVersionCell({
           disabled={!serial || serial === ""}
           content={
             <div className={"text-xs"}>
-              <span className={"text-nb-gray-100 font-medium"}>{t("peerVersion.serial")}</span>
+              <span
+                className={"font-medium text-neutral-900 dark:text-nb-gray-100"}
+              >
+                {t("peerVersion.serial")}
+              </span>
               {serial}
             </div>
           }
         >
           <div
             className={
-              "flex items-center gap-2 text-neutral-300 whitespace-nowrap"
+              "flex items-center gap-2 whitespace-nowrap text-neutral-700 dark:text-neutral-300"
             }
           >
             <PeerOperatingSystemIcon os={os} />

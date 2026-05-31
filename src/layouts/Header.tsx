@@ -2,6 +2,8 @@
 
 import Button from "@components/Button";
 import { NetBirdLogo } from "@components/NetBirdLogo";
+import DarkModeToggle from "@components/ui/DarkModeToggle";
+import HelpAndSupportButton from "@components/ui/HelpAndSupportButton";
 import UserDropdown from "@components/ui/UserDropdown";
 import { cn } from "@utils/helpers";
 import { MenuIcon, PanelLeftCloseIcon, PanelLeftOpenIcon } from "lucide-react";
@@ -9,7 +11,6 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { useApplicationContext } from "@/contexts/ApplicationProvider";
 import { usePermissions } from "@/contexts/PermissionsProvider";
-import HelpAndSupportButton from "@components/ui/HelpAndSupportButton";
 
 export const headerHeight = 65;
 
@@ -60,6 +61,7 @@ export default function NavbarWithDropdown() {
           </div>
 
           <div className="flex md:order-2 gap-5 items-center">
+            <DarkModeToggle />
             <HelpAndSupportButton />
             <UserDropdown />
           </div>

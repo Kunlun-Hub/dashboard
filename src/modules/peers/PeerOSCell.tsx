@@ -13,8 +13,8 @@ import IOSIcon from "@/assets/icons/IOSIcon";
 import AppleLogo from "@/assets/os-icons/apple.svg";
 import FreeBSDLogo from "@/assets/os-icons/FreeBSD.png";
 import { getOperatingSystem } from "@/hooks/useOperatingSystem";
-import { OperatingSystem } from "@/interfaces/OperatingSystem";
 import { useI18n } from "@/i18n/I18nProvider";
+import { OperatingSystem } from "@/interfaces/OperatingSystem";
 
 type Props = {
   os: string;
@@ -28,7 +28,7 @@ export function PeerOSCell({ os, serial }: Readonly<Props>) {
         <TooltipTrigger>
           <div
             className={
-              "flex items-center gap-2 dark:text-neutral-300 text-neutral-500 hover:text-neutral-100 transition-all hover:bg-nb-gray-800/60 py-2 px-3 rounded-md"
+              "flex items-center gap-2 text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-300 dark:hover:bg-nb-gray-800/60 dark:hover:text-neutral-100 transition-all py-2 px-3 rounded-md"
             }
           >
             <div
@@ -69,14 +69,18 @@ const ListItem = ({
   return (
     <div
       className={
-        "flex justify-between gap-5 border-b border-nb-gray-920 py-2 px-4 last:border-b-0 text-xs"
+        "flex justify-between gap-5 border-b border-neutral-200 px-4 py-2 text-xs last:border-b-0 dark:border-nb-gray-920"
       }
     >
-      <div className={"flex items-center gap-2 text-nb-gray-100 font-medium"}>
+      <div
+        className={
+          "flex items-center gap-2 font-medium text-neutral-900 dark:text-nb-gray-100"
+        }
+      >
         {icon}
         {label}
       </div>
-      <div className={"text-nb-gray-400"}>{value}</div>
+      <div className={"text-neutral-500 dark:text-nb-gray-400"}>{value}</div>
     </div>
   );
 };

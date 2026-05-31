@@ -2,16 +2,16 @@ import {
   SelectDropdown,
   SelectOption,
 } from "@components/select/SelectDropdown";
+import TextWithTooltip from "@components/ui/TextWithTooltip";
+import TruncatedText from "@components/ui/TruncatedText";
 import useFetchApi from "@utils/api";
 import { cn, generateColorFromUser } from "@utils/helpers";
 import { Handle, type Node, Position } from "@xyflow/react";
 import { sortBy } from "lodash";
 import { ChevronsUpDown, Cog } from "lucide-react";
 import * as React from "react";
-import { User } from "@/interfaces/User";
 import { useI18n } from "@/i18n/I18nProvider";
-import TruncatedText from "@components/ui/TruncatedText";
-import TextWithTooltip from "@components/ui/TextWithTooltip";
+import { User } from "@/interfaces/User";
 import { SmallUserAvatar } from "@/modules/users/SmallUserAvatar";
 
 type UserNodeProps = Node<
@@ -44,7 +44,7 @@ export const SelectUserNode = ({ data, id }: UserNodeProps) => {
                 <div className={"flex flex-col text-xs w-full"}>
                   <span
                     className={
-                      "text-nb-gray-200 flex items-center gap-1.5 w-full"
+                      "text-neutral-800 flex items-center gap-1.5 w-full dark:text-nb-gray-200"
                     }
                   >
                     <TextWithTooltip
@@ -55,7 +55,7 @@ export const SelectUserNode = ({ data, id }: UserNodeProps) => {
                   {user?.email && (
                     <span
                       className={
-                        "text-nb-gray-400 font-light flex items-center gap-1"
+                        "text-neutral-500 font-light flex items-center gap-1 dark:text-nb-gray-400"
                       }
                     >
                       <TextWithTooltip
@@ -79,7 +79,7 @@ export const SelectUserNode = ({ data, id }: UserNodeProps) => {
   return (
     <div
       className={cn(
-        "bg-nb-gray-930 border hover:bg-nb-gray-910 cursor-pointer border-nb-gray-800 rounded-lg overflow-hidden transition-all",
+        "bg-white border hover:bg-neutral-50 cursor-pointer border-neutral-200 rounded-lg overflow-hidden transition-all shadow-sm dark:border-nb-gray-800 dark:bg-nb-gray-930 dark:hover:bg-nb-gray-910 dark:shadow-none",
       )}
     >
       <SelectDropdown
@@ -91,7 +91,7 @@ export const SelectUserNode = ({ data, id }: UserNodeProps) => {
         searchPlaceholder={t("users.searchByEmailOrName")}
         popoverWidth={280}
         className={cn(
-          "!bg-nb-gray-920  !hover:bg-nb-gray-925 !text-nb-gray-300",
+          "!bg-white !text-neutral-700 hover:!bg-neutral-50 dark:!bg-nb-gray-920 dark:!text-nb-gray-300 dark:hover:!bg-nb-gray-925",
         )}
         triggerClassName={"focus:outline-none focus-visible:outline-none"}
         size={"xs"}
@@ -155,7 +155,7 @@ export const SelectedUser = ({
       >
         <span
           className={
-            "font-normal text-[0.85rem] text-nb-gray-100 flex items-center gap-2"
+            "font-normal text-[0.85rem] text-neutral-900 flex items-center gap-2 dark:text-nb-gray-100"
           }
         >
           {user.name || user.id}
@@ -165,7 +165,7 @@ export const SelectedUser = ({
           text={user?.email}
           maxWidth={"180px"}
           className={
-            "text-sm font-normal text-nb-gray-400 relative -top-[0.2rem]"
+            "text-sm font-normal text-neutral-500 relative -top-[0.2rem] dark:text-nb-gray-400"
           }
         />
       </div>

@@ -84,9 +84,9 @@ const ConnectButton = ({
   return (
     <button
       className={cn(
-        "flex gap-2 items-center text-sm text-nb-gray-300 hover:text-white disabled:cursor-not-allowed enabled:cursor-pointer enabled:hover:bg-nb-gray-800/60 rounded-md py-2 px-3 disabled:text-nb-gray-700",
+        "flex gap-2 items-center rounded-md py-2 px-3 text-sm text-neutral-600 hover:text-neutral-900 disabled:cursor-not-allowed disabled:text-neutral-300 enabled:cursor-pointer enabled:hover:bg-neutral-100 dark:text-nb-gray-300 dark:hover:text-white dark:disabled:text-nb-gray-700 dark:enabled:hover:bg-nb-gray-800/60",
         // group data state open
-        "group-data-[state=open]:bg-nb-gray-800/30",
+        "group-data-[state=open]:bg-neutral-100 dark:group-data-[state=open]:bg-nb-gray-800/30",
       )}
       disabled={disabled}
       onClick={(e) => {

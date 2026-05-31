@@ -111,7 +111,7 @@ function AnimatedLine({ id, source, target, data }: AnimatedLineProps) {
               background: "none",
             }}
             className={
-              "flex items-center justify-center gap-1 select-none pointer-events-none z-10 text-green-50"
+              "flex items-center justify-center gap-1 select-none pointer-events-none z-10 text-green-700 dark:text-green-50"
             }
           >
             <div className={"whitespace-nowrap"}>{label}</div>

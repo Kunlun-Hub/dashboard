@@ -27,7 +27,7 @@ export default function PeerAddressCell({ peer }: Props) {
     >
       <div
         className={
-          "flex gap-2.5 items-center min-w-[300px] max-w-[300px] group/cell transition-all hover:bg-nb-gray-800/10 py-2 px-3 rounded-md cursor-default"
+          "flex gap-2.5 items-center min-w-[300px] max-w-[300px] group/cell transition-all hover:bg-neutral-100 py-2 px-3 rounded-md cursor-default dark:hover:bg-nb-gray-800/10"
         }
         onClick={(e) => {
           e.stopPropagation();
@@ -40,7 +40,7 @@ export default function PeerAddressCell({ peer }: Props) {
           )}
         >
           {isEmpty(peer.country_code) ? (
-            <GlobeIcon size={16} className={"text-nb-gray-300"} />
+            <GlobeIcon size={16} className={"text-neutral-500 dark:text-nb-gray-300"} />
           ) : (
             <RoundedFlag country={peer.country_code} size={12} />
           )}
@@ -55,7 +55,7 @@ export default function PeerAddressCell({ peer }: Props) {
             message={t("peerAddress.netBirdIpCopied")}
           >
             <span
-              className={"dark:text-nb-gray-400 font-mono font-thin text-xs"}
+              className={"font-mono font-thin text-xs text-neutral-500 dark:text-nb-gray-400"}
             >
               {peer.ip}
             </span>

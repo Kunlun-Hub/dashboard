@@ -263,7 +263,7 @@ const PeerHeader = () => {
                   <ModalTrigger>
                     <div
                       className={
-                        "flex h-8 w-8 items-center justify-center gap-2 dark:text-neutral-300 text-neutral-500 hover:text-neutral-100 transition-all hover:bg-nb-gray-800/60 rounded-md cursor-pointer"
+                        "flex h-8 w-8 items-center justify-center gap-2 text-neutral-500 transition-all hover:bg-neutral-100 hover:text-neutral-900 rounded-md cursor-pointer dark:text-neutral-300 dark:hover:bg-nb-gray-800/60 dark:hover:text-neutral-100"
                       }
                     >
                       <PencilIcon size={16} />
@@ -291,7 +291,7 @@ const PeerHeader = () => {
                 <Link
                   href={`/team/user?id=${user?.id}`}
                   className={
-                    "hover:text-nb-gray-200 transition-all flex items-center gap-1"
+                    "transition-all flex items-center gap-1 hover:text-neutral-900 dark:hover:text-nb-gray-200"
                   }
                 >
                   {user?.email || user?.id}
@@ -865,7 +865,7 @@ function EditableValue({
       <span>{value}</span>
       {canEdit && (
         <button
-          className="flex w-7 h-7 items-center justify-center gap-2 text-nb-gray-400 hover:text-neutral-100 transition-all hover:bg-nb-gray-800/60 rounded-md cursor-pointer"
+          className="flex w-7 h-7 items-center justify-center gap-2 text-neutral-500 transition-all hover:bg-neutral-100 hover:text-neutral-900 rounded-md cursor-pointer dark:text-nb-gray-400 dark:hover:bg-nb-gray-800/60 dark:hover:text-neutral-100"
           onClick={(e) => {
             e.stopPropagation();
             onEdit();

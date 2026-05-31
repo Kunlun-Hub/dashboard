@@ -36,30 +36,30 @@ export const GroupNode = ({ data, id }: GroupNodeProps) => {
   return (
     <div
       className={cn(
-        "cc-group-node bg-nb-gray-940  border border-nb-gray-800 rounded-lg overflow-hidden transition-all",
+        "cc-group-node bg-white border border-neutral-200 rounded-lg overflow-hidden transition-all shadow-sm dark:border-nb-gray-800 dark:bg-nb-gray-940 dark:shadow-none",
         !isEnabled && "opacity-60",
-        hoverable && "hover:bg-nb-gray-930 cursor-pointer",
+        hoverable && "hover:bg-neutral-50 cursor-pointer dark:hover:bg-nb-gray-930",
       )}
       onClick={() => onClick?.(group)}
     >
       <div
         className={
-          "flex w-full items-center justify-between text-nb-gray-300 gap-2 text-sm pl-3 pr-5 py-3 font-normal"
+          "flex w-full items-center justify-between text-neutral-600 gap-2 text-sm pl-3 pr-5 py-3 font-normal dark:text-nb-gray-300"
         }
       >
         <div className={"flex items-center gap-3 font-normal text-sm"}>
           <div
             className={
-              "h-9 w-9 bg-nb-gray-850 rounded-md flex items-center justify-center shrink-0"
+              "h-9 w-9 bg-neutral-100 rounded-md flex items-center justify-center shrink-0 dark:bg-nb-gray-850"
             }
           >
             <GroupBadgeIcon id={group?.id} issued={group?.issued} size={14} />
           </div>
           <div>
-            <div className={" text-nb-gray-200 font-normal whitespace-nowrap"}>
+            <div className={" text-neutral-900 font-normal whitespace-nowrap dark:text-nb-gray-200"}>
               {group.name}
             </div>
-            <div className={"text-nb-gray-400 whitespace-nowrap text-xs"}>
+            <div className={"text-neutral-500 whitespace-nowrap text-xs dark:text-nb-gray-400"}>
               {countLabel}
             </div>
           </div>
