@@ -11,6 +11,7 @@ import * as React from "react";
 import { usePeer } from "@/contexts/PeerProvider";
 import { useI18n } from "@/i18n/I18nProvider";
 import { OperatingSystem } from "@/interfaces/OperatingSystem";
+import { useAccountEntitlements } from "@/modules/account/useAccountEntitlements";
 import { RDPButton } from "@/modules/remote-access/rdp/RDPButton";
 import { SSHButton } from "@/modules/remote-access/ssh/SSHButton";
 import { SSHCredentialsModal } from "@/modules/remote-access/ssh/SSHCredentialsModal";
@@ -18,12 +19,15 @@ import { SSHCredentialsModal } from "@/modules/remote-access/ssh/SSHCredentialsM
 export const PeerConnectButton = () => {
   const { peer } = usePeer();
   const { t } = useI18n();
+  const { isFeatureEnabled } = useAccountEntitlements();
   const [sshModalOpen, setSshModalOpen] = React.useState(false);
   const isConnected = peer.connected;
   const os = getOperatingSystem(peer?.os);
   const isMobile = os === OperatingSystem.ANDROID || os === OperatingSystem.IOS;
+  const remoteAccessEnabled =
+    isFeatureEnabled("web_ssh") || isFeatureEnabled("web_rdp");
 
-  if (isMobile) return;
+  if (isMobile || !remoteAccessEnabled) return;
 
   return isConnected ? (
     <>

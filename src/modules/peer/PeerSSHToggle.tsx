@@ -1,5 +1,15 @@
+import Badge from "@components/Badge";
+import Button from "@components/Button";
+import { Callout } from "@components/Callout";
 import FancyToggleSwitch from "@components/FancyToggleSwitch";
 import FullTooltip from "@components/FullTooltip";
+import HelpText from "@components/HelpText";
+import { Label } from "@components/Label";
+import { Modal } from "@components/modal/Modal";
+import useFetchApi from "@utils/api";
+import { cn, singularize } from "@utils/helpers";
+import { isNetbirdSSHProtocolSupported } from "@utils/version";
+import { orderBy } from "lodash";
 import {
   AlertCircleIcon,
   ArrowUpRightIcon,
@@ -11,31 +21,24 @@ import {
 } from "lucide-react";
 import * as React from "react";
 import { useMemo, useState } from "react";
+import CircleIcon from "@/assets/icons/CircleIcon";
+import { useDialog } from "@/contexts/DialogProvider";
 import { usePeer } from "@/contexts/PeerProvider";
 import { usePermissions } from "@/contexts/PermissionsProvider";
-import { PeerSSHPolicyInfo } from "@/modules/peer/PeerSSHPolicyInfo";
-import { Label } from "@components/Label";
-import HelpText from "@components/HelpText";
-import Button from "@components/Button";
-import useFetchApi from "@utils/api";
-import { Policy } from "@/interfaces/Policy";
-import { Group } from "@/interfaces/Group";
-import { orderBy } from "lodash";
-import CircleIcon from "@/assets/icons/CircleIcon";
-import Badge from "@components/Badge";
-import { cn, singularize } from "@utils/helpers";
-import { Modal } from "@components/modal/Modal";
-import { AccessControlModalContent } from "@/modules/access-control/AccessControlModal";
 import PoliciesProvider from "@/contexts/PoliciesProvider";
-import { PeerSSHPolicyModal } from "@/modules/peer/PeerSSHPolicyModal";
-import { Callout } from "@components/Callout";
-import { useDialog } from "@/contexts/DialogProvider";
-import { isNetbirdSSHProtocolSupported } from "@utils/version";
 import { useI18n } from "@/i18n/I18nProvider";
+import { Group } from "@/interfaces/Group";
+import { Policy } from "@/interfaces/Policy";
+import { AccessControlModalContent } from "@/modules/access-control/AccessControlModal";
+import { PlanUpgradeCallout } from "@/modules/account/EntitlementGate";
+import { useAccountEntitlements } from "@/modules/account/useAccountEntitlements";
+import { PeerSSHPolicyInfo } from "@/modules/peer/PeerSSHPolicyInfo";
+import { PeerSSHPolicyModal } from "@/modules/peer/PeerSSHPolicyModal";
 
 export const PeerSSHToggle = () => {
   const { t } = useI18n();
   const { permission } = usePermissions();
+  const { isFeatureEnabled } = useAccountEntitlements();
   const { peer, toggleSSH, setSSHInstructionsModal } = usePeer();
   const { data: policies } = useFetchApi<Policy[]>(
     "/policies",
@@ -51,6 +54,7 @@ export const PeerSSHToggle = () => {
 
   const isSSHDashboardEnabled = peer?.ssh_enabled;
   const isSSHClientEnabled = peer?.local_flags?.server_ssh_allowed;
+  const webSSHEnabled = isFeatureEnabled("web_ssh");
 
   const assignedPolicies = useMemo(() => {
     const peerGroups = peer?.groups as Group[];
@@ -78,14 +82,14 @@ export const PeerSSHToggle = () => {
 
   const enabledPolicies = assignedPolicies?.filter((policy) => policy?.enabled);
 
+  if (!webSSHEnabled) {
+    return <PlanUpgradeCallout feature={t("remoteAccess.ssh")} />;
+  }
+
   const disableDashboardSSH = async () => {
     const choice = await confirm({
       title: t("peerSsh.disableTitle"),
-      description: (
-        <div>
-          {t("peerSsh.disableDescription")}
-        </div>
-      ),
+      description: <div>{t("peerSsh.disableDescription")}</div>,
       confirmText: t("peerSsh.disable"),
       cancelText: t("common.cancel"),
       type: "warning",
@@ -101,9 +105,7 @@ export const PeerSSHToggle = () => {
         content={
           <div className={"flex gap-2 items-center !text-nb-gray-300 text-xs"}>
             <LockIcon size={14} />
-            <span>
-              {t("peerSsh.noPermission")}
-            </span>
+            <span>{t("peerSsh.noPermission")}</span>
           </div>
         }
         interactive={false}
@@ -148,9 +150,9 @@ export const PeerSSHToggle = () => {
             }
             className="my-3"
           >
-          {t("peerSsh.clientUpdateWarning")}
-        </Callout>
-      )}
+            {t("peerSsh.clientUpdateWarning")}
+          </Callout>
+        )}
 
       {!isSSHClientEnabled && enabledPolicies?.length > 0 && (
         <Callout
@@ -259,7 +261,9 @@ export const PeerSSHToggle = () => {
             <Badge
               variant={"gray"}
               useHover={false}
-              className={"select-none hover:bg-neutral-100 dark:hover:bg-nb-gray-910 px-4"}
+              className={
+                "select-none hover:bg-neutral-100 dark:hover:bg-nb-gray-910 px-4"
+              }
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();

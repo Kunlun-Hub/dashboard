@@ -6,6 +6,7 @@ import { Input } from "@components/Input";
 import { Label } from "@components/Label";
 import { notify } from "@components/Notification";
 import { PeerGroupSelector } from "@components/PeerGroupSelector";
+import { SkeletonSettings } from "@components/skeletons/SkeletonSettings";
 import { useHasChanges } from "@hooks/useHasChanges";
 import * as Tabs from "@radix-ui/react-tabs";
 import { useApiCall } from "@utils/api";
@@ -16,12 +17,13 @@ import { GlobeIcon, NetworkIcon } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import { useSWRConfig } from "swr";
 import SettingsIcon from "@/assets/icons/SettingsIcon";
+import { useGroups } from "@/contexts/GroupsProvider";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useI18n } from "@/i18n/I18nProvider";
 import { Account } from "@/interfaces/Account";
+import { PlanUpgradeCallout } from "@/modules/account/EntitlementGate";
+import { useAccountEntitlements } from "@/modules/account/useAccountEntitlements";
 import useGroupHelper from "@/modules/groups/useGroupHelper";
-import { useGroups } from "@/contexts/GroupsProvider";
-import { SkeletonSettings } from "@components/skeletons/SkeletonSettings";
 
 type Props = {
   account: Account;
@@ -40,6 +42,8 @@ export default function NetworkSettingsTab({ account }: Readonly<Props>) {
 function NetworkSettingsTabContent({ account }: Readonly<Props>) {
   const { permission } = usePermissions();
   const { t } = useI18n();
+  const { isFeatureEnabled } = useAccountEntitlements();
+  const dnsEnabled = isFeatureEnabled("dns");
 
   const { mutate } = useSWRConfig();
   const saveRequest = useApiCall<Account>("/accounts/" + account.id, true);
@@ -100,13 +104,15 @@ function NetworkSettingsTabContent({ account }: Readonly<Props>) {
       .map((group) => group.id)
       .filter(Boolean) as string[];
 
-    const updatedSettings = {
+    const updatedSettings: Partial<Account["settings"]> = {
       ...account.settings,
       ipv6_enabled_groups: ipv6EnabledGroupIds,
     };
 
-    if (customDNSDomain !== "" || account.settings.dns_domain) {
+    if (dnsEnabled && (customDNSDomain !== "" || account.settings.dns_domain)) {
       updatedSettings.dns_domain = customDNSDomain;
+    } else {
+      delete updatedSettings.dns_domain;
     }
 
     // Only send network ranges when the user actually changed them, to avoid
@@ -209,6 +215,8 @@ function NetworkSettingsTabContent({ account }: Readonly<Props>) {
             disabled={
               !hasChanges ||
               !permission.settings.update ||
+              (!dnsEnabled &&
+                customDNSDomain !== (account.settings.dns_domain || "")) ||
               !!domainError ||
               !!networkRangeError ||
               !!networkRangeV6Error
@@ -220,6 +228,10 @@ function NetworkSettingsTabContent({ account }: Readonly<Props>) {
         </div>
 
         <div className={"flex flex-col gap-6 w-full mt-8"}>
+          {!dnsEnabled && (
+            <PlanUpgradeCallout feature={t("nav.dns")} className="mb-1" />
+          )}
+
           <div>
             <div
               className={
@@ -228,9 +240,7 @@ function NetworkSettingsTabContent({ account }: Readonly<Props>) {
             >
               <div className={"min-w-[330px]"}>
                 <Label>{t("networkSettings.dnsDomain")}</Label>
-                <HelpText>
-                  {t("networkSettings.dnsDomainHelp")}
-                </HelpText>
+                <HelpText>{t("networkSettings.dnsDomainHelp")}</HelpText>
               </div>
               <div className={"w-full"}>
                 <Input
@@ -241,7 +251,7 @@ function NetworkSettingsTabContent({ account }: Readonly<Props>) {
                   errorTooltipPosition={"top"}
                   error={domainError}
                   value={customDNSDomain}
-                  disabled={!permission.settings.update}
+                  disabled={!permission.settings.update || !dnsEnabled}
                   onChange={(e) => setCustomDNSDomain(e.target.value)}
                 />
               </div>
@@ -256,9 +266,7 @@ function NetworkSettingsTabContent({ account }: Readonly<Props>) {
             >
               <div className={"min-w-[330px]"}>
                 <Label>{t("networkSettings.networkRange")}</Label>
-                <HelpText>
-                  {t("networkSettings.networkRangeHelp")}
-                </HelpText>
+                <HelpText>{t("networkSettings.networkRangeHelp")}</HelpText>
               </div>
               <div className={"w-full"}>
                 <Input
@@ -282,9 +290,7 @@ function NetworkSettingsTabContent({ account }: Readonly<Props>) {
             >
               <div className={"min-w-[330px]"}>
                 <Label>{t("networkSettings.ipv6NetworkRange")}</Label>
-                <HelpText>
-                  {t("networkSettings.ipv6NetworkRangeHelp")}
-                </HelpText>
+                <HelpText>{t("networkSettings.ipv6NetworkRangeHelp")}</HelpText>
               </div>
               <div className={"w-full"}>
                 <Input
@@ -302,9 +308,7 @@ function NetworkSettingsTabContent({ account }: Readonly<Props>) {
 
           <div>
             <Label>{t("networkSettings.ipv6EnabledGroups")}</Label>
-            <HelpText>
-              {t("networkSettings.ipv6EnabledGroupsHelp")}
-            </HelpText>
+            <HelpText>{t("networkSettings.ipv6EnabledGroupsHelp")}</HelpText>
             <PeerGroupSelector
               values={ipv6EnabledGroups}
               onChange={setIpv6EnabledGroups}
@@ -325,12 +329,8 @@ function NetworkSettingsTabContent({ account }: Readonly<Props>) {
                 {t("networkSettings.enableDnsWildcardRouting")}
               </>
             }
-            helpText={
-              <>
-                {t("networkSettings.enableDnsWildcardRoutingHelp")}
-              </>
-            }
-            disabled={!permission.settings.update}
+            helpText={<>{t("networkSettings.enableDnsWildcardRoutingHelp")}</>}
+            disabled={!permission.settings.update || !dnsEnabled}
           />
         </div>
       </div>

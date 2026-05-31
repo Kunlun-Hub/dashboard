@@ -37,6 +37,9 @@ export const messages = {
     "common.remove": "Remove",
     "common.routingPeerCount": "{count} Routing Peer(s)",
     "common.routingPeers": "Routing Peers",
+    "entitlements.upgradeTitle": "Upgrade required",
+    "entitlements.upgradeDescription":
+      "{feature} is not included in the current plan. Upgrade to unlock this feature.",
     "actions.save": "Save",
     "actions.saveChanges": "Save Changes",
     "actions.confirmChanges": "Confirm Changes",
@@ -82,7 +85,8 @@ export const messages = {
     "relays.priorityInvalid": "Priority must be a positive integer.",
     "relays.priorityUpdateTitle": "Relay Priority",
     "relays.priorityUpdating": "Updating relay priority...",
-    "relays.priorityUpdated": "Relay priority was updated and sent to online clients.",
+    "relays.priorityUpdated":
+      "Relay priority was updated and sent to online clients.",
     "relays.connectedClients": "Current Connections",
     "relays.publicIp": "Public IP",
     "relays.details": "Relay Details",
@@ -996,8 +1000,7 @@ export const messages = {
     "setupKeys.autoAssignedGroups": "Auto-assigned Groups",
     "setupKeys.autoAssignedGroupsDescription":
       "These groups will be automatically assigned to peers enrolled with this key",
-    "setupKeys.groupsSaved":
-      "Groups of the setup key were successfully saved",
+    "setupKeys.groupsSaved": "Groups of the setup key were successfully saved",
     "setupKeys.groupsSaving": "Saving the groups of the setup key...",
     "setupKeys.extraDnsLabels": "Extra DNS Labels",
     "setupKeys.extraDnsLabelsDescription":
@@ -2110,8 +2113,7 @@ export const messages = {
     "reverseProxy.crowdsecDescriptionPrefix":
       "Detect malicious IPs with CrowdSec.",
     "reverseProxy.crowdsecDescriptionMiddle": "to block them or",
-    "reverseProxy.crowdsecDescriptionSuffix":
-      "to only log without blocking.",
+    "reverseProxy.crowdsecDescriptionSuffix": "to only log without blocking.",
     "reverseProxy.crowdsecEnforce": "Enforce",
     "reverseProxy.crowdsecEnforceDescription":
       "Blocked IPs are denied immediately. If the bouncer is not yet synced, connections are denied (fail-closed).",
@@ -2519,10 +2521,8 @@ export const messages = {
       "Enter the Agent ID of your WeCom application. The official login component uses this value to initialize the sign-in panel.",
     "identityProviderModal.agentIdPlaceholder": "Enter WeCom Agent ID",
     "identityProviderModal.wechatworkCorpId": "Corp ID",
-    "identityProviderModal.wechatworkCorpIdHelp":
-      "Enter your WeCom Corp ID.",
-    "identityProviderModal.wechatworkCorpIdPlaceholder":
-      "Enter WeCom Corp ID",
+    "identityProviderModal.wechatworkCorpIdHelp": "Enter your WeCom Corp ID.",
+    "identityProviderModal.wechatworkCorpIdPlaceholder": "Enter WeCom Corp ID",
     "identityProviderModal.wechatworkSecret": "Secret",
     "identityProviderModal.wechatworkSecretHelp":
       "Enter the secret of your self-built WeCom application.",
@@ -2743,8 +2743,7 @@ export const messages = {
     "networkSettings.ipv6NetworkRange": "IPv6 Network Range",
     "networkSettings.ipv6NetworkRangeHelp":
       "Specify a custom IPv6 range for your network in CIDR format. All peer IPv6 addresses will be re-allocated when changed.",
-    "networkSettings.ipv6NetworkRangePlaceholder":
-      "e.g. fd00:1234:5678::/64",
+    "networkSettings.ipv6NetworkRangePlaceholder": "e.g. fd00:1234:5678::/64",
     "networkSettings.ipv6EnabledGroups": "IPv6 Enabled Groups",
     "networkSettings.ipv6EnabledGroupsHelp":
       "Peers in the selected groups will receive IPv6 overlay addresses (dual-stack). Remove all groups to disable IPv6. Changes apply on save and will restart affected clients.",
@@ -3273,8 +3272,7 @@ export const messages = {
     "peer.editIpPlaceholder": "e.g., 100.64.0.15",
     "peer.editIpError": "Please enter a valid IP, e.g., 100.64.0.15",
     "peer.editIpv6Title": "Edit Peer IPv6 Address",
-    "peer.editIpv6Description":
-      "Update the Cloink IPv6 address for this peer.",
+    "peer.editIpv6Description": "Update the Cloink IPv6 address for this peer.",
     "peer.editIpv6Placeholder": "e.g., fd00:1234::1",
     "peer.editIpv6Error":
       "Please enter a valid IPv6 address, e.g., fd00:1234::1",
@@ -3430,6 +3428,9 @@ export const messages = {
     "common.resourceCount": "{count} 个资源",
     "common.routingPeerCount": "{count} 个路由设备",
     "common.routingPeers": "路由设备",
+    "entitlements.upgradeTitle": "需要升级套餐",
+    "entitlements.upgradeDescription":
+      "当前套餐不包含“{feature}”。升级后即可使用此功能。",
     "actions.save": "保存",
     "actions.saveChanges": "保存更改",
     "actions.confirmChanges": "确认更改",
@@ -3960,8 +3961,7 @@ export const messages = {
     "reverseProxy.rewriteRedirects": "重写重定向",
     "reverseProxy.rewriteRedirectsHelp":
       "将后端响应中的 Location 头重写为公网域名，而不是内部后端地址。",
-    "reverseProxy.statusGenericError":
-      "此服务在配置过程中出现问题。",
+    "reverseProxy.statusGenericError": "此服务在配置过程中出现问题。",
     "reverseProxy.statusTunnelError": "无法建立到目标对等端的隧道。",
     "reverseProxy.statusError": "错误",
     "reverseProxy.statusTunnelNotCreated": "隧道未创建",
@@ -4280,8 +4280,7 @@ export const messages = {
       "本地认证已被禁用。该用户将无法再登录，请使用你的身份提供商进行认证。",
     "users.pendingApprovalDescription":
       "该用户需要管理员批准后才能加入你的组织。",
-    "users.pendingApprovalSettingsPrefix":
-      "如果你想关闭新用户审批，请前往",
+    "users.pendingApprovalSettingsPrefix": "如果你想关闭新用户审批，请前往",
     "users.pendingApprovalSettingsSuffix": "并关闭",
     "users.pendingApprovalRequired": "“需要用户审批”",
     "users.userCount": "{count} 个用户",
@@ -4305,13 +4304,11 @@ export const messages = {
     "setupKeys.lastUsedOn": "最近使用于",
     "setupKeys.defaultName": "注册密钥",
     "setupKeys.revokeTitle": "撤销“{name}”？",
-    "setupKeys.revokeDescription":
-      "确定要撤销此注册密钥吗？此操作无法撤销。",
+    "setupKeys.revokeDescription": "确定要撤销此注册密钥吗？此操作无法撤销。",
     "setupKeys.revokedDescription": "注册密钥已成功撤销",
     "setupKeys.revoking": "正在撤销注册密钥...",
     "setupKeys.deleteTitle": "删除“{name}”？",
-    "setupKeys.deleteDescription":
-      "确定要删除此注册密钥吗？此操作无法撤销。",
+    "setupKeys.deleteDescription": "确定要删除此注册密钥吗？此操作无法撤销。",
     "setupKeys.deletedDescription": "注册密钥已成功删除",
     "setupKeys.deleting": "正在删除注册密钥...",
     "setupKeys.revoke": "撤销",
@@ -4324,8 +4321,7 @@ export const messages = {
     "setupKeys.extraDnsLabelsDescription":
       "允许设备名称包含多个 DNS 标签（例如 host.europe.netbird.io.）。",
     "setupKeys.ephemeral": "临时设备",
-    "setupKeys.ephemeralDescription":
-      "离线超过 10 分钟的设备将被自动移除。",
+    "setupKeys.ephemeralDescription": "离线超过 10 分钟的设备将被自动移除。",
     "invite.passwordCopied": "密码已复制到剪贴板！",
     "invite.linkCopied": "邀请链接已复制到剪贴板！",
     "invite.userCreatedSuccess": "用户创建成功！",
@@ -4451,13 +4447,10 @@ export const messages = {
     "onboarding.policyDisabled": "策略已成功禁用",
     "onboarding.policyUpdating": "正在更新策略...",
     "onboarding.usersToResourcePolicyName": "用户到 {name}",
-    "onboarding.usersToResourcePolicyDescription":
-      "允许访问该资源 {address}",
-    "onboarding.usersToSubnetPolicyDescription":
-      "允许访问该子网 {address}",
+    "onboarding.usersToResourcePolicyDescription": "允许访问该资源 {address}",
+    "onboarding.usersToSubnetPolicyDescription": "允许访问该子网 {address}",
     "onboarding.usersToRoutingPeersPolicyName": "用户到路由设备",
-    "onboarding.usersToRoutingPeersPolicyDescription":
-      "允许用户访问路由设备",
+    "onboarding.usersToRoutingPeersPolicyDescription": "允许用户访问路由设备",
     "onboarding.getFirstDeviceOnline": "让我们让你的第一台设备上线",
     "onboarding.getFirstDeviceOnlineDescription":
       "要访问其他机器，安装 云链-Cloink，登录，你的设备就会加入网络。你添加的每台设备都会成为你网络中的 云链-Cloink 对等端。就这么简单。",
@@ -5355,8 +5348,7 @@ export const messages = {
     "reverseProxy.blockedCidr": "已阻止的 CIDR",
     "reverseProxy.blockedCidrs": "已阻止的 CIDR",
     "reverseProxy.crowdsecTitle": "CrowdSec IP 信誉",
-    "reverseProxy.crowdsecDescriptionPrefix":
-      "使用 CrowdSec 检测恶意 IP。",
+    "reverseProxy.crowdsecDescriptionPrefix": "使用 CrowdSec 检测恶意 IP。",
     "reverseProxy.crowdsecDescriptionMiddle": "可选择",
     "reverseProxy.crowdsecDescriptionSuffix": "仅记录而不阻止。",
     "reverseProxy.crowdsecEnforce": "强制阻止",
@@ -5706,8 +5698,7 @@ export const messages = {
     "identityProviderModal.agentIdPlaceholder": "输入企业微信 Agent ID",
     "identityProviderModal.wechatworkCorpId": "Corp ID",
     "identityProviderModal.wechatworkCorpIdHelp": "填写企业微信的 Corp ID。",
-    "identityProviderModal.wechatworkCorpIdPlaceholder":
-      "输入企业微信 Corp ID",
+    "identityProviderModal.wechatworkCorpIdPlaceholder": "输入企业微信 Corp ID",
     "identityProviderModal.wechatworkSecret": "Secret",
     "identityProviderModal.wechatworkSecretHelp":
       "填写企业微信自建应用的 Secret。",
@@ -5908,13 +5899,11 @@ export const messages = {
     "networkSettings.ipv6NetworkRange": "IPv6 网络范围",
     "networkSettings.ipv6NetworkRangeHelp":
       "为你的网络指定自定义 IPv6 CIDR 范围。修改后，所有设备的 IPv6 地址都会重新分配。",
-    "networkSettings.ipv6NetworkRangePlaceholder":
-      "例如：fd00:1234:5678::/64",
+    "networkSettings.ipv6NetworkRangePlaceholder": "例如：fd00:1234:5678::/64",
     "networkSettings.ipv6EnabledGroups": "启用 IPv6 的分组",
     "networkSettings.ipv6EnabledGroupsHelp":
       "所选分组中的设备将获得 IPv6 叠加地址（双栈）。移除全部分组即可禁用 IPv6。保存后更改会生效，并重启受影响的客户端。",
-    "networkSettings.ipv6EnabledGroupsPlaceholder":
-      "选择要启用 IPv6 的分组...",
+    "networkSettings.ipv6EnabledGroupsPlaceholder": "选择要启用 IPv6 的分组...",
     "networkSettings.enableDnsWildcardRouting": "启用 DNS 通配符路由",
     "networkSettings.enableDnsWildcardRoutingHelp":
       "允许使用 DNS 通配符进行路由。此功能要求 Cloink 客户端版本不低于 v0.35。修改后需要重启客户端才会生效。",
@@ -6426,8 +6415,7 @@ export const messages = {
     "globalSearch.blankDescription":
       "快速查找网络及其关联资源。输入名称、描述或地址即可开始搜索。",
     "globalSearch.notFoundTitle": "未找到任何结果",
-    "globalSearch.notFoundDescription":
-      "没有找到匹配结果。请尝试其他搜索词。",
+    "globalSearch.notFoundDescription": "没有找到匹配结果。请尝试其他搜索词。",
     "globalSearch.navigate": "导航",
     "globalSearch.open": "打开",
     "globalSearch.close": "关闭",

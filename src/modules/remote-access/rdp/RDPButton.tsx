@@ -7,6 +7,7 @@ import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useI18n } from "@/i18n/I18nProvider";
 import { OperatingSystem } from "@/interfaces/OperatingSystem";
 import { Peer } from "@/interfaces/Peer";
+import { useAccountEntitlements } from "@/modules/account/useAccountEntitlements";
 import { RDPTooltip } from "@/modules/remote-access/rdp/RDPTooltip";
 
 type Props = {
@@ -17,6 +18,8 @@ type Props = {
 export const RDPButton = ({ peer, isDropdown = false }: Props) => {
   const { permission } = usePermissions();
   const { t } = useI18n();
+  const { isFeatureEnabled } = useAccountEntitlements();
+  const webRDPEnabled = isFeatureEnabled("web_rdp");
 
   const disabled = !peer.connected || !permission.peers.update;
   const hasPermission = permission.peers.update;
@@ -32,6 +35,7 @@ export const RDPButton = ({ peer, isDropdown = false }: Props) => {
   };
 
   return (
+    webRDPEnabled &&
     isWindows && (
       <>
         <div>

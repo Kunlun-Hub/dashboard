@@ -20,7 +20,9 @@ import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useLoggedInUser } from "@/contexts/UsersProvider";
 import { useI18n } from "@/i18n/I18nProvider";
 import PageContainer from "@/layouts/PageContainer";
+import { EntitlementLockedTab } from "@/modules/account/EntitlementGate";
 import { useAccount } from "@/modules/account/useAccount";
+import { useAccountEntitlements } from "@/modules/account/useAccountEntitlements";
 import AuthenticationTab from "@/modules/settings/AuthenticationTab";
 import BrandingSettingsTab from "@/modules/settings/BrandingSettingsTab";
 import ClientSettingsTab from "@/modules/settings/ClientSettingsTab";
@@ -46,6 +48,11 @@ export default function NetBirdSettings() {
   const [tab, setTab] = useState(queryTab ?? initialTab);
 
   const account = useAccount();
+  const { isFeatureEnabled } = useAccountEntitlements();
+
+  const identityProvidersEnabled = isFeatureEnabled("identity_providers");
+  const flowLogsEnabled = isFeatureEnabled("flow_logs");
+  const brandingEnabled = isFeatureEnabled("branding");
 
   useEffect(() => {
     if (queryTab) {
@@ -64,6 +71,7 @@ export default function NetBirdSettings() {
                 {t("settings.authentication")}
               </VerticalTabs.Trigger>
               {account?.settings?.embedded_idp_enabled &&
+                identityProvidersEnabled &&
                 permission?.identity_providers?.read && (
                   <VerticalTabs.Trigger value="identity-providers">
                     <FingerprintIcon size={14} />
@@ -86,11 +94,17 @@ export default function NetBirdSettings() {
                 <MonitorSmartphoneIcon size={14} />
                 {t("settings.clients")}
               </VerticalTabs.Trigger>
-              <VerticalTabs.Trigger value="flow-logs">
+              <VerticalTabs.Trigger
+                value="flow-logs"
+                disabled={!flowLogsEnabled}
+              >
                 <ActivityIcon size={14} />
                 {t("settings.flowLogs")}
               </VerticalTabs.Trigger>
-              <VerticalTabs.Trigger value="branding">
+              <VerticalTabs.Trigger
+                value="branding"
+                disabled={!brandingEnabled}
+              >
                 <PaletteIcon size={14} />
                 {t("settings.branding")}
               </VerticalTabs.Trigger>
@@ -110,13 +124,37 @@ export default function NetBirdSettings() {
           <div className={"border-l border-nb-gray-930 w-full"}>
             {account && <AuthenticationTab account={account} />}
             {account?.settings?.embedded_idp_enabled &&
+              identityProvidersEnabled &&
               permission.identity_providers.read && <IdentityProvidersTab />}
+            {account?.settings?.embedded_idp_enabled &&
+              !identityProvidersEnabled && (
+                <EntitlementLockedTab
+                  value="identity-providers"
+                  feature={t("settings.identityProviders")}
+                />
+              )}
             {account && <PermissionsTab account={account} />}
             {account && <GroupsSettings account={account} />}
             {account && <NetworkSettingsTab account={account} />}
             {account && <ClientSettingsTab account={account} />}
-            {account && <FlowLogsSettingsTab account={account} />}
-            {account && <BrandingSettingsTab account={account} />}
+            {account &&
+              (flowLogsEnabled ? (
+                <FlowLogsSettingsTab account={account} />
+              ) : (
+                <EntitlementLockedTab
+                  value="flow-logs"
+                  feature={t("settings.flowLogs")}
+                />
+              ))}
+            {account &&
+              (brandingEnabled ? (
+                <BrandingSettingsTab account={account} />
+              ) : (
+                <EntitlementLockedTab
+                  value="branding"
+                  feature={t("settings.branding")}
+                />
+              ))}
             {account && <VersionReleasesTab />}
             {account && <DangerZoneTab account={account} />}
           </div>

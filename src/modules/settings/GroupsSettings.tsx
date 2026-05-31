@@ -1,7 +1,9 @@
 import Breadcrumbs from "@components/Breadcrumbs";
 import Button from "@components/Button";
+import { Callout } from "@components/Callout";
 import FancyToggleSwitch from "@components/FancyToggleSwitch";
 import HelpText from "@components/HelpText";
+import { InlineButtonLink } from "@components/InlineLink";
 import { Input } from "@components/Input";
 import { Label } from "@components/Label";
 import { notify } from "@components/Notification";
@@ -20,18 +22,18 @@ import {
   ShieldCheck,
   X,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useSWRConfig } from "swr";
 import SettingsIcon from "@/assets/icons/SettingsIcon";
 import Badge from "@/components/Badge";
-import { Callout } from "@components/Callout";
-import { InlineButtonLink } from "@components/InlineLink";
 import { useDialog } from "@/contexts/DialogProvider";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useHasChanges } from "@/hooks/useHasChanges";
 import { useI18n } from "@/i18n/I18nProvider";
 import { Account } from "@/interfaces/Account";
-import { useRouter } from "next/navigation";
+import { PlanUpgradeCallout } from "@/modules/account/EntitlementGate";
+import { useAccountEntitlements } from "@/modules/account/useAccountEntitlements";
 
 type Props = {
   account: Account;
@@ -40,6 +42,7 @@ type Props = {
 export default function GroupsSettings({ account }: Props) {
   const { permission } = usePermissions();
   const { t } = useI18n();
+  const { isFeatureEnabled } = useAccountEntitlements();
   const router = useRouter();
   const { mutate } = useSWRConfig();
   const { confirm } = useDialog();
@@ -66,6 +69,9 @@ export default function GroupsSettings({ account }: Props) {
   ]);
 
   const saveRequest = useApiCall<Account>("/accounts/" + account.id);
+  const groupsPropagationEnabled = isFeatureEnabled("groups_propagation");
+  const jwtGroupsEnabled = isFeatureEnabled("jwt_groups");
+  const groupEnhancementsEnabled = groupsPropagationEnabled && jwtGroupsEnabled;
 
   const saveChanges = async () => {
     const jwtGroupsEntered =
@@ -153,6 +159,13 @@ export default function GroupsSettings({ account }: Props) {
           </Button>
         </div>
 
+        {!groupEnhancementsEnabled && (
+          <PlanUpgradeCallout
+            feature={t("groupsSettings.title")}
+            className="mt-6"
+          />
+        )}
+
         <div className={"flex flex-col gap-6 mt-8 mb-3"}>
           <FancyToggleSwitch
             value={groupsPropagation}
@@ -164,7 +177,7 @@ export default function GroupsSettings({ account }: Props) {
               </>
             }
             helpText={t("groupsSettings.enablePropagationHelp")}
-            disabled={!permission.settings.update}
+            disabled={!permission.settings.update || !groupsPropagationEnabled}
           />
           {(!isNetBirdHosted() || isLocalDev()) && (
             <FancyToggleSwitch
@@ -177,7 +190,7 @@ export default function GroupsSettings({ account }: Props) {
                 </>
               }
               helpText={t("groupsSettings.enableJwtSyncHelp")}
-              disabled={!permission.settings.update}
+              disabled={!permission.settings.update || !jwtGroupsEnabled}
             />
           )}
         </div>
@@ -261,7 +274,9 @@ export default function GroupsSettings({ account }: Props) {
                           customPrefix={
                             <ShieldCheck
                               size={16}
-                              className={"text-neutral-500 dark:text-nb-gray-300"}
+                              className={
+                                "text-neutral-500 dark:text-nb-gray-300"
+                              }
                             />
                           }
                           placeholder={t("groupsSettings.addGroupPlaceholder")}
@@ -300,7 +315,8 @@ export default function GroupsSettings({ account }: Props) {
         )}
 
         <Callout variant={"info"} className={"mt-6"}>
-          {t("groupsSettings.manageGroupsPrefix")}{"  "}
+          {t("groupsSettings.manageGroupsPrefix")}
+          {"  "}
           <InlineButtonLink
             onClick={() => router.push("/groups")}
             variant={"dashed"}

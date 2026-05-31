@@ -20,6 +20,7 @@ import { useApplicationContext } from "@/contexts/ApplicationProvider";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useI18n } from "@/i18n/I18nProvider";
 import { headerHeight } from "@/layouts/Header";
+import { useAccountEntitlements } from "@/modules/account/useAccountEntitlements";
 import { NetworkNavigation } from "@/modules/networks/misc/NetworkNavigation";
 
 type Props = {
@@ -33,7 +34,11 @@ export default function Navigation({
 }: Readonly<Props>) {
   const { isNavigationCollapsed } = useApplicationContext();
   const { permission, isRestricted } = usePermissions();
+  const { isFeatureEnabled } = useAccountEntitlements();
   const { t } = useI18n();
+
+  const dnsEnabled = isFeatureEnabled("dns");
+  const postureEnabled = isFeatureEnabled("device_posture");
 
   return (
     <div
@@ -121,7 +126,7 @@ export default function Navigation({
                     isChild
                     href={"/posture-checks"}
                     exactPathMatch={true}
-                    visible={permission.policies.read}
+                    visible={permission.policies.read && postureEnabled}
                   />
                 </SidebarItem>
 
@@ -175,7 +180,10 @@ export default function Navigation({
                   label={t("nav.dns")}
                   collapsible
                   exactPathMatch={true}
-                  visible={permission.dns.read || permission.nameservers.read}
+                  visible={
+                    dnsEnabled &&
+                    (permission.dns.read || permission.nameservers.read)
+                  }
                 >
                   <SidebarItem
                     label={t("nav.nameservers")}
@@ -254,7 +262,11 @@ export function SidebarItemGroup({ children }: SidebarItemGroupProps) {
 
 const ActivityNavigationItem = () => {
   const { permission } = usePermissions();
+  const { isFeatureEnabled } = useAccountEntitlements();
   const { t } = useI18n();
+
+  const flowLogsEnabled = isFeatureEnabled("flow_logs");
+  const dnsLogsEnabled = isFeatureEnabled("dns_logs");
 
   return (
     <SidebarItem
@@ -282,14 +294,14 @@ const ActivityNavigationItem = () => {
         isChild
         href={"/events/network"}
         exactPathMatch={true}
-        visible={permission.events.read}
+        visible={permission.events.read && flowLogsEnabled}
       />
       <SidebarItem
         label={t("nav.dnsLogs")}
         isChild
         href={"/events/dns"}
         exactPathMatch={true}
-        visible={permission.events.read}
+        visible={permission.events.read && dnsLogsEnabled}
       />
     </SidebarItem>
   );

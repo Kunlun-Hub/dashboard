@@ -19,11 +19,12 @@ import {
 import { useRouter } from "next/navigation";
 import React, { useMemo } from "react";
 import { useSWRConfig } from "swr";
+import { useDialog } from "@/contexts/DialogProvider";
 import { usePeer } from "@/contexts/PeerProvider";
 import { usePermissions } from "@/contexts/PermissionsProvider";
-import { ExitNodeDropdownButton } from "@/modules/exit-node/ExitNodeDropdownButton";
-import { useDialog } from "@/contexts/DialogProvider";
 import { useI18n } from "@/i18n/I18nProvider";
+import { useAccountEntitlements } from "@/modules/account/useAccountEntitlements";
+import { ExitNodeDropdownButton } from "@/modules/exit-node/ExitNodeDropdownButton";
 
 export default function PeerActionCell() {
   const { peer, deletePeer, update, toggleSSH, setSSHInstructionsModal } =
@@ -33,6 +34,8 @@ export default function PeerActionCell() {
   const { permission } = usePermissions();
   const { confirm } = useDialog();
   const { t } = useI18n();
+  const { isFeatureEnabled } = useAccountEntitlements();
+  const webSSHEnabled = isFeatureEnabled("web_ssh");
 
   const showSSHButton = useMemo(() => {
     const isClientSSHEnabled = peer?.local_flags?.server_ssh_allowed;
@@ -70,11 +73,7 @@ export default function PeerActionCell() {
   const disableDashboardSSH = async () => {
     const choice = await confirm({
       title: t("peerSsh.disableTitle"),
-      description: (
-        <div>
-          {t("peerSsh.disableDescription")}
-        </div>
-      ),
+      description: <div>{t("peerSsh.disableDescription")}</div>,
       confirmText: t("peerSsh.disable"),
       cancelText: t("common.cancel"),
       type: "warning",
@@ -116,9 +115,7 @@ export default function PeerActionCell() {
                 className={"flex gap-2 items-center !text-nb-gray-300 text-xs"}
               >
                 <IconInfoCircle size={14} />
-                <span>
-                  {t("peerActionCell.expirationDisabledTooltip")}
-                </span>
+                <span>{t("peerActionCell.expirationDisabledTooltip")}</span>
               </div>
             }
             className={"w-full block"}
@@ -137,7 +134,7 @@ export default function PeerActionCell() {
             </DropdownMenuItem>
           </FullTooltip>
 
-          {showSSHButton && (
+          {showSSHButton && webSSHEnabled && (
             <DropdownMenuItem
               onClick={() =>
                 peer.ssh_enabled

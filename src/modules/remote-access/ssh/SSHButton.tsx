@@ -8,6 +8,7 @@ import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useI18n } from "@/i18n/I18nProvider";
 import { OperatingSystem } from "@/interfaces/OperatingSystem";
 import { Peer } from "@/interfaces/Peer";
+import { useAccountEntitlements } from "@/modules/account/useAccountEntitlements";
 import { SSHCredentialsModal } from "@/modules/remote-access/ssh/SSHCredentialsModal";
 import { SSHTooltip } from "@/modules/remote-access/ssh/SSHTooltip";
 
@@ -25,6 +26,8 @@ export const SSHButton = ({
   const [modal, setModal] = useState(false);
   const { permission } = usePermissions();
   const { t } = useI18n();
+  const { isFeatureEnabled } = useAccountEntitlements();
+  const webSSHEnabled = isFeatureEnabled("web_ssh");
 
   const isSSHEnabled =
     peer?.local_flags?.server_ssh_allowed || peer?.ssh_enabled;
@@ -44,6 +47,7 @@ export const SSHButton = ({
   };
 
   return (
+    webSSHEnabled &&
     isSSHSupported && (
       <>
         {!onOpenCredentials && modal && (
