@@ -53,6 +53,7 @@ function useMinimalPeersTableColumns(): ColumnDef<Peer>[] {
       id: "connected",
       accessorKey: "connected",
       accessorFn: (peer) => peer.connected,
+      filterFn: "exactMatch",
     },
     {
       accessorKey: "ip",
@@ -174,12 +175,7 @@ export default function MinimalPeersTable({
               disabled={peers?.length == 0}
               onClick={() => {
                 table.setPageIndex(0);
-                table.setColumnFilters([
-                  {
-                    id: "connected",
-                    value: undefined,
-                  },
-                ]);
+                table.getColumn("connected")?.setFilterValue(undefined);
               }}
               variant={
                 table.getColumn("connected")?.getFilterValue() == undefined
@@ -192,12 +188,7 @@ export default function MinimalPeersTable({
             <ButtonGroup.Button
               onClick={() => {
                 table.setPageIndex(0);
-                table.setColumnFilters([
-                  {
-                    id: "connected",
-                    value: true,
-                  },
-                ]);
+                table.getColumn("connected")?.setFilterValue(true);
               }}
               disabled={peers?.length == 0}
               variant={
@@ -211,12 +202,7 @@ export default function MinimalPeersTable({
             <ButtonGroup.Button
               onClick={() => {
                 table.setPageIndex(0);
-                table.setColumnFilters([
-                  {
-                    id: "connected",
-                    value: false,
-                  },
-                ]);
+                table.getColumn("connected")?.setFilterValue(false);
               }}
               disabled={peers?.length == 0}
               variant={

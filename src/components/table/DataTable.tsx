@@ -253,6 +253,10 @@ export function DataTable<TData, TValue>({
   const { t } = useI18n();
   const path = usePathname();
   const isInitialRender = useRef(true);
+  const previousInitialFilters = useRef<ColumnFiltersState | undefined>(
+    initialFilters,
+  );
+  const previousInitialSearch = useRef<string | undefined>(initialSearch);
 
   const [showOverlay, setShowOverlay] = useState(false);
   const overlayTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
@@ -445,6 +449,10 @@ export function DataTable<TData, TValue>({
     if (manualColumnFiltering || keepStateInLocalStorage) return;
 
     const nextFilters = initialFilters ?? [];
+    const previousFilters = previousInitialFilters.current ?? [];
+    if (isEqual(previousFilters, nextFilters)) return;
+
+    previousInitialFilters.current = initialFilters;
     if (isEqual(localColumnFilters, nextFilters)) return;
 
     setLocalColumnFilters(nextFilters);
@@ -462,6 +470,10 @@ export function DataTable<TData, TValue>({
     if (manualFiltering || keepStateInLocalStorage) return;
 
     const nextSearch = initialSearch ?? "";
+    const previousSearch = previousInitialSearch.current ?? "";
+    if (previousSearch === nextSearch) return;
+
+    previousInitialSearch.current = initialSearch;
     if (localGlobalSearch === nextSearch) return;
 
     setLocalGlobalSearch(nextSearch);

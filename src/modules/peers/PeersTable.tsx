@@ -93,11 +93,13 @@ function usePeersTableColumns(): ColumnDef<Peer>[] {
       accessorKey: "approval_required",
       sortingFn: "basic",
       accessorFn: (peer) => peer.approval_required,
+      filterFn: "exactMatch",
     },
     {
       id: "connected",
       accessorKey: "connected",
       accessorFn: (peer) => peer.connected,
+      filterFn: "exactMatch",
     },
     {
       accessorKey: "ip",
