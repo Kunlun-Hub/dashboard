@@ -42,6 +42,7 @@ import { Network, NetworkRouter } from "@/interfaces/Network";
 import { OperatingSystem } from "@/interfaces/OperatingSystem";
 import { Peer } from "@/interfaces/Peer";
 import { SetupKey } from "@/interfaces/SetupKey";
+import { PlanUpgradeCallout } from "@/modules/account/EntitlementGate";
 import useGroupHelper from "@/modules/groups/useGroupHelper";
 import { RoutingPeerMasqueradeSwitch } from "@/modules/networks/routing-peers/RoutingPeerMasqueradeSwitch";
 import SetupModal from "@/modules/setup-netbird-modal/SetupModal";
@@ -53,6 +54,7 @@ type Props = {
   onCreated?: (r: NetworkRouter) => void;
   onUpdated?: (r: NetworkRouter) => void;
   router?: NetworkRouter;
+  highAvailabilityLocked?: boolean;
 };
 
 export default function NetworkRoutingPeerModal({
@@ -62,12 +64,14 @@ export default function NetworkRoutingPeerModal({
   onCreated,
   onUpdated,
   router,
+  highAvailabilityLocked,
 }: Props) {
   return (
     <Modal open={open} onOpenChange={setOpen}>
       <RoutingPeerModalContent
         network={network}
         router={router}
+        highAvailabilityLocked={highAvailabilityLocked}
         onCreated={onCreated}
         onUpdated={onUpdated}
         key={open ? "1" : "0"}
@@ -81,6 +85,7 @@ type ContentProps = {
   router?: NetworkRouter;
   onCreated?: (r: NetworkRouter) => void;
   onUpdated?: (r: NetworkRouter) => void;
+  highAvailabilityLocked?: boolean;
 };
 
 function RoutingPeerModalContent({
@@ -88,6 +93,7 @@ function RoutingPeerModalContent({
   router,
   onCreated,
   onUpdated,
+  highAvailabilityLocked = false,
 }: ContentProps) {
   const { t } = useI18n();
   const isRoutingPeer = router ? router.peer != "" : true;
@@ -232,6 +238,29 @@ function RoutingPeerModalContent({
   };
 
   const canContinue = routingPeer !== undefined || routingPeerGroups.length > 0;
+
+  if (highAvailabilityLocked) {
+    return (
+      <ModalContent maxWidthClass={"max-w-xl"}>
+        <ModalHeader
+          icon={<Share2Icon size={16} />}
+          title={t("networkRoutingPeers.addTitle")}
+          description={t("networkRoutingPeers.description", {
+            name: network.name,
+          })}
+          color={"netbird"}
+        />
+        <div className={"px-8 pb-6"}>
+          <PlanUpgradeCallout feature={t("networkDetails.highAvailability")} />
+        </div>
+        <ModalFooter className={"items-center"}>
+          <ModalClose asChild={true}>
+            <Button variant={"secondary"}>{t("common.close")}</Button>
+          </ModalClose>
+        </ModalFooter>
+      </ModalContent>
+    );
+  }
 
   return (
     <ModalContent maxWidthClass={"max-w-xl"}>

@@ -2,10 +2,14 @@ import { cn } from "@utils/helpers";
 import React from "react";
 import FullTooltip from "@/components/FullTooltip";
 import { useI18n } from "@/i18n/I18nProvider";
-import { EntitlementLimit } from "@/interfaces/AccountEntitlements";
+import {
+  EntitlementFeature,
+  EntitlementLimit,
+} from "@/interfaces/AccountEntitlements";
 import { useAccountEntitlements } from "@/modules/account/useAccountEntitlements";
 
 type UsageMap = Partial<Record<EntitlementLimit, number>>;
+type FeatureMap = Partial<Record<EntitlementFeature, boolean>>;
 
 const defaultUsageItems: EntitlementLimit[] = [
   "users",
@@ -16,12 +20,16 @@ const defaultUsageItems: EntitlementLimit[] = [
 ];
 
 type ResourceUsagePanelProps = {
+  featureItems?: EntitlementFeature[];
+  features?: FeatureMap;
   limits?: UsageMap;
   usage?: UsageMap;
   items?: EntitlementLimit[];
 };
 
 export function ResourceUsagePanel({
+  featureItems = [],
+  features,
   limits,
   usage,
   items = defaultUsageItems,
@@ -40,6 +48,13 @@ export function ResourceUsagePanel({
             limit={item}
             allowed={limits?.[item]}
             used={usage?.[item]}
+          />
+        ))}
+        {featureItems.map((feature) => (
+          <ResourceFeatureStatusCard
+            key={feature}
+            feature={feature}
+            enabled={features?.[feature]}
           />
         ))}
       </div>
@@ -173,6 +188,59 @@ function ResourceUsageCard({
       </div>
     </div>
   );
+}
+
+function ResourceFeatureStatusCard({
+  feature,
+  enabled,
+}: Readonly<{
+  feature: EntitlementFeature;
+  enabled?: boolean;
+}>) {
+  const { t } = useI18n();
+  const statusText =
+    enabled === undefined
+      ? t("common.unknown")
+      : enabled
+      ? t("resourceUsage.authorized")
+      : t("resourceUsage.unauthorized");
+
+  return (
+    <div
+      className={
+        "border border-neutral-200 dark:border-nb-gray-920 rounded-md bg-white dark:bg-nb-gray-940 px-4 py-3"
+      }
+    >
+      <div className={"text-sm text-nb-gray-500 dark:text-nb-gray-300"}>
+        {featureLabel(t, feature)}
+      </div>
+      <div
+        className={cn(
+          "font-semibold text-lg mt-1",
+          enabled === undefined && "text-nb-gray-400",
+          enabled === true && "text-green-600 dark:text-green-400",
+          enabled === false && "text-yellow-600 dark:text-yellow-400",
+        )}
+      >
+        {statusText}
+      </div>
+      <div className={"text-xs mt-1 text-nb-gray-400"}>
+        {t("resourceUsage.featureStatus")}
+      </div>
+    </div>
+  );
+}
+
+function featureLabel(
+  t: ReturnType<typeof useI18n>["t"],
+  feature: EntitlementFeature,
+) {
+  switch (feature) {
+    case "ha_routes":
+      return t("resourceUsage.routeHighAvailability");
+    default:
+      return feature;
+  }
 }
 
 function limitLabel(

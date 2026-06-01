@@ -47,6 +47,10 @@ export const messages = {
     "resourceUsage.reverseProxyServers": "Reverse Proxy",
     "resourceUsage.customDomains": "Reverse Proxy Domains",
     "resourceUsage.customRules": "Reverse Proxy Services",
+    "resourceUsage.routeHighAvailability": "Route High Availability",
+    "resourceUsage.authorized": "Authorized",
+    "resourceUsage.unauthorized": "Unauthorized",
+    "resourceUsage.featureStatus": "Feature status",
     "resourceUsage.unlimited": "Unlimited",
     "resourceUsage.remaining": "{count} remaining",
     "resourceUsage.remainingUnlimited": "Unlimited remaining",
@@ -1970,10 +1974,13 @@ export const messages = {
     "networkDetails.highAvailabilitySuffix": "for this network.",
     "networkDetails.active": "Active",
     "networkDetails.inactive": "Inactive",
+    "networkDetails.highAvailabilityLocked": "Locked",
     "networkDetails.highAvailabilityEnabledHelp":
       "You can add more routing peers to increase the availability of this network.",
     "networkDetails.highAvailabilityDisabledHelp":
       "Go ahead and add more routing peers or groups with routing peers to enable high availability for this network.",
+    "networkDetails.highAvailabilityLockedHelp":
+      "High availability is not included in the current plan. Upgrade to add multiple routing peers to this network.",
     "networkDetails.activePolicy": "Active Policy",
     "networkDetails.activePolicies": "Active Policies",
     "networkDetails.noActivePolicies": "No Active Policies",
@@ -3489,6 +3496,10 @@ export const messages = {
     "resourceUsage.reverseProxyServers": "反向代理",
     "resourceUsage.customDomains": "反向代理域名",
     "resourceUsage.customRules": "反向代理服务",
+    "resourceUsage.routeHighAvailability": "路由高可用",
+    "resourceUsage.authorized": "已授权",
+    "resourceUsage.unauthorized": "未授权",
+    "resourceUsage.featureStatus": "功能状态",
     "resourceUsage.unlimited": "不限",
     "resourceUsage.remaining": "剩余 {count}",
     "resourceUsage.remainingUnlimited": "剩余不限",
@@ -5268,10 +5279,13 @@ export const messages = {
     "networkDetails.highAvailabilitySuffix": "状态。",
     "networkDetails.active": "活跃",
     "networkDetails.inactive": "未启用",
+    "networkDetails.highAvailabilityLocked": "未授权",
     "networkDetails.highAvailabilityEnabledHelp":
       "你可以添加更多路由设备来提升此网络的可用性。",
     "networkDetails.highAvailabilityDisabledHelp":
       "继续添加更多路由设备或包含路由设备的分组，以为此网络启用高可用。",
+    "networkDetails.highAvailabilityLockedHelp":
+      "当前套餐不包含高可用。升级后才可为此网络添加多个路由设备。",
     "networkDetails.activePolicy": "条启用中的策略",
     "networkDetails.activePolicies": "条启用中的策略",
     "networkDetails.noActivePolicies": "没有启用中的策略",

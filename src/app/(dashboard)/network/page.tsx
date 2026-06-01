@@ -41,6 +41,7 @@ import ReverseProxiesProvider, {
 import { useI18n } from "@/i18n/I18nProvider";
 import { Network, NetworkResource, NetworkRouter } from "@/interfaces/Network";
 import PageContainer from "@/layouts/PageContainer";
+import { useAccountEntitlements } from "@/modules/account/useAccountEntitlements";
 import { NetworkInformationSquare } from "@/modules/networks/misc/NetworkInformationSquare";
 import { NetworkAccessControlProvider } from "@/modules/networks/NetworkAccessControlProvider";
 import {
@@ -348,6 +349,8 @@ function NetworkActions() {
 
 function NetworkInformationCard({ network }: Readonly<{ network: Network }>) {
   const { t } = useI18n();
+  const { isFeatureEnabled } = useAccountEntitlements();
+  const highAvailabilityEnabled = isFeatureEnabled("ha_routes");
   const isHighlyAvailable = !!(
     network?.routing_peers_count && network?.routing_peers_count >= 2
   );
@@ -378,6 +381,24 @@ function NetworkInformationCard({ network }: Readonly<{ network: Network }>) {
     [t],
   );
 
+  const lockedText = useMemo(
+    () => (
+      <>
+        {t("networkDetails.highAvailability")}{" "}
+        <span className={"text-neutral-500 dark:text-nb-gray-300 font-medium"}>
+          {t("networkDetails.highAvailabilityLocked")}
+        </span>
+      </>
+    ),
+    [t],
+  );
+
+  const statusLabel = !highAvailabilityEnabled
+    ? t("networkDetails.highAvailabilityLocked")
+    : isHighlyAvailable
+    ? t("networkDetails.active")
+    : t("networkDetails.inactive");
+
   const policyCount = network.policies?.length ?? 0;
 
   return (
@@ -396,8 +417,16 @@ function NetworkInformationCard({ network }: Readonly<{ network: Network }>) {
               interactive={false}
               content={
                 <div className={"max-w-xs text-xs"}>
-                  {isHighlyAvailable ? enabledText : disabledText}
-                  {isHighlyAvailable ? (
+                  {!highAvailabilityEnabled
+                    ? lockedText
+                    : isHighlyAvailable
+                    ? enabledText
+                    : disabledText}
+                  {!highAvailabilityEnabled ? (
+                    <div className={"inline-flex mt-2"}>
+                      {t("networkDetails.highAvailabilityLockedHelp")}
+                    </div>
+                  ) : isHighlyAvailable ? (
                     <div className={"inline-flex mt-2"}>
                       {t("networkDetails.highAvailabilityEnabledHelp")}
                     </div>
@@ -417,12 +446,14 @@ function NetworkInformationCard({ network }: Readonly<{ network: Network }>) {
                 <span
                   className={cn(
                     "h-2 w-2 rounded-full",
-                    !isHighlyAvailable ? "bg-yellow-400" : "bg-green-500",
+                    !highAvailabilityEnabled
+                      ? "bg-neutral-400 dark:bg-nb-gray-500"
+                      : !isHighlyAvailable
+                      ? "bg-yellow-400"
+                      : "bg-green-500",
                   )}
                 ></span>
-                {isHighlyAvailable
-                  ? t("networkDetails.active")
-                  : t("networkDetails.inactive")}
+                {statusLabel}
                 <HelpCircle size={12} />
               </div>
             </FullTooltip>

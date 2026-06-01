@@ -197,12 +197,13 @@ export default function Notification<T>({
         </div>
 
         <button
-          className="flex dark:border-nb-gray-900 items-center cursor-pointer group"
+          className="flex items-center cursor-pointer group text-neutral-500 hover:text-neutral-900 dark:text-nb-gray-300 dark:hover:text-white"
           onClick={() => toast.dismiss(toastId)}
+          aria-label={t("common.close")}
         >
           <div
             className={
-              "p-2 hover:bg-nb-gray-900 rounded-md opacity-50 group-hover:opacity-100"
+              "p-2 rounded-md opacity-60 transition-colors group-hover:opacity-100 group-hover:bg-neutral-100 dark:group-hover:bg-nb-gray-900"
             }
           >
             <XIcon size={16} />

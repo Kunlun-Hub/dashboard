@@ -191,7 +191,12 @@ export default function LicenseSettingsTab({ account }: Readonly<Props>) {
           </p>
         )}
 
-        <ResourceUsagePanel limits={license?.limits} usage={license?.usage} />
+        <ResourceUsagePanel
+          features={license?.features}
+          featureItems={["ha_routes"]}
+          limits={license?.limits}
+          usage={license?.usage}
+        />
 
         <div className={"mt-8"}>
           <Label>{t("licenseSettings.licenseKey")}</Label>

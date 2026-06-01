@@ -12,6 +12,7 @@ import PeerIcon from "@/assets/icons/PeerIcon";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useI18n } from "@/i18n/I18nProvider";
 import { NetworkRouter } from "@/interfaces/Network";
+import { useAccountEntitlements } from "@/modules/account/useAccountEntitlements";
 import { useNetworksContext } from "@/modules/networks/NetworkProvider";
 import { NetworkRoutingPeerName } from "@/modules/networks/routing-peers/NetworkRoutingPeerName";
 import { RoutingPeersActionCell } from "@/modules/networks/routing-peers/RoutingPeersActionCell";
@@ -151,6 +152,9 @@ export default function NetworkRoutingPeersTable({
   const { t } = useI18n();
   const { permission } = usePermissions();
   const { openAddRoutingPeerModal, network } = useNetworksContext();
+  const { isFeatureEnabled } = useAccountEntitlements();
+  const highAvailabilityLocked =
+    !isFeatureEnabled("ha_routes") && (network?.routing_peers_count ?? 0) > 0;
   const columns = useNetworkRouterColumns();
 
   const [sorting, setSorting] = useState<SortingState>([
@@ -192,7 +196,12 @@ export default function NetworkRoutingPeersTable({
           variant={"primary"}
           className={"ml-auto"}
           onClick={() => network && openAddRoutingPeerModal(network)}
-          disabled={!permission.networks.update}
+          disabled={!permission.networks.update || highAvailabilityLocked}
+          title={
+            highAvailabilityLocked
+              ? t("networkDetails.highAvailabilityLockedHelp")
+              : undefined
+          }
         >
           <IconCirclePlus size={16} />
           {t("networkRouting.add")}

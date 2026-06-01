@@ -9,6 +9,7 @@ import { useMemo } from "react";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useI18n } from "@/i18n/I18nProvider";
 import { Network } from "@/interfaces/Network";
+import { useAccountEntitlements } from "@/modules/account/useAccountEntitlements";
 import { navigateToNetwork } from "@/modules/networks/networkNavigation";
 import { useNetworksContext } from "@/modules/networks/NetworkProvider";
 
@@ -18,6 +19,8 @@ type Props = {
 export default function NetworkRoutingPeerCell({ network }: Props) {
   const { t } = useI18n();
   const { permission } = usePermissions();
+  const { isFeatureEnabled } = useAccountEntitlements();
+  const highAvailabilityEnabled = isFeatureEnabled("ha_routes");
   const router = useRouter();
   const disabledText = useMemo(
     () => (
@@ -45,6 +48,18 @@ export default function NetworkRoutingPeerCell({ network }: Props) {
     [t],
   );
 
+  const lockedText = useMemo(
+    () => (
+      <>
+        {t("networkDetails.highAvailability")}{" "}
+        <span className={"text-neutral-500 dark:text-nb-gray-300 font-medium"}>
+          {t("networkDetails.highAvailabilityLocked")}
+        </span>
+      </>
+    ),
+    [t],
+  );
+
   const { openAddRoutingPeerModal } = useNetworksContext();
 
   const isHighlyAvailable = !!(
@@ -53,6 +68,8 @@ export default function NetworkRoutingPeerCell({ network }: Props) {
   const isActive = !!(
     network?.routing_peers_count && network.routing_peers_count > 0
   );
+  const highAvailabilityLocked =
+    !highAvailabilityEnabled && (network?.routing_peers_count ?? 0) > 0;
 
   return (
     <div className={"flex gap-3 items-center"}>
@@ -61,8 +78,16 @@ export default function NetworkRoutingPeerCell({ network }: Props) {
         content={
           <div className={"max-w-xs text-xs"}>
             <>
-              {isHighlyAvailable ? enabledText : disabledText}
-              {isHighlyAvailable ? (
+              {!highAvailabilityEnabled
+                ? lockedText
+                : isHighlyAvailable
+                ? enabledText
+                : disabledText}
+              {!highAvailabilityEnabled ? (
+                <div className={"inline-flex mt-2"}>
+                  {t("networkDetails.highAvailabilityLockedHelp")}
+                </div>
+              ) : isHighlyAvailable ? (
                 <div className={"inline-flex mt-2"}>
                   {t("networkDetails.highAvailabilityEnabledHelp")}
                 </div>
@@ -93,11 +118,22 @@ export default function NetworkRoutingPeerCell({ network }: Props) {
               <div
                 className={cn(
                   "h-2 w-2 rounded-full",
-                  isHighlyAvailable ? "bg-green-500" : "bg-yellow-400",
+                  !highAvailabilityEnabled
+                    ? "bg-neutral-400 dark:bg-nb-gray-500"
+                    : isHighlyAvailable
+                    ? "bg-green-500"
+                    : "bg-yellow-400",
                 )}
               ></div>
-              {network?.routing_peers_count && network.routing_peers_count}{" "}
-              {t("networkRouting.peer")}
+              {!highAvailabilityEnabled ? (
+                t("networkDetails.highAvailabilityLocked")
+              ) : (
+                <>
+                  {network?.routing_peers_count &&
+                    network.routing_peers_count}{" "}
+                  {t("networkRouting.peer")}
+                </>
+              )}
             </>
 
             <HelpCircle size={12} />
@@ -109,7 +145,12 @@ export default function NetworkRoutingPeerCell({ network }: Props) {
         variant={"secondary"}
         className={"min-w-[130px]"}
         onClick={() => openAddRoutingPeerModal(network)}
-        disabled={!permission.networks.update}
+        disabled={!permission.networks.update || highAvailabilityLocked}
+        title={
+          highAvailabilityLocked
+            ? t("networkDetails.highAvailabilityLockedHelp")
+            : undefined
+        }
       >
         <PlusCircle size={12} />
         {t("networkRouting.add")}

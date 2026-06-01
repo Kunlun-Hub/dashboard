@@ -1,24 +1,25 @@
+import CopyToClipboardText from "@components/CopyToClipboardText";
 import { Modal } from "@components/modal/Modal";
 import { notify } from "@components/Notification";
 import { useApiCall } from "@utils/api";
+import { cn } from "@utils/helpers";
 import * as React from "react";
 import { useState } from "react";
 import { useSWRConfig } from "swr";
+import { ResourceIcon } from "@/assets/icons/ResourceIcon";
 import { useDialog } from "@/contexts/DialogProvider";
-import { useNetworkAccessControl } from "@/modules/networks/NetworkAccessControlProvider";
+import PoliciesProvider from "@/contexts/PoliciesProvider";
+import { useI18n } from "@/i18n/I18nProvider";
 import { Group } from "@/interfaces/Group";
 import { Network, NetworkResource, NetworkRouter } from "@/interfaces/Network";
+import { Policy, PolicyRuleResource } from "@/interfaces/Policy";
 import { AccessControlModalContent } from "@/modules/access-control/AccessControlModal";
+import { useAccountEntitlements } from "@/modules/account/useAccountEntitlements";
+import { useNetworkAccessControl } from "@/modules/networks/NetworkAccessControlProvider";
 import NetworkModal from "@/modules/networks/NetworkModal";
 import NetworkResourceModal from "@/modules/networks/resources/NetworkResourceModal";
 import { ResourceGroupModal } from "@/modules/networks/resources/ResourceGroupModal";
 import NetworkRoutingPeerModal from "@/modules/networks/routing-peers/NetworkRoutingPeerModal";
-import { Policy, PolicyRuleResource } from "@/interfaces/Policy";
-import PoliciesProvider from "@/contexts/PoliciesProvider";
-import { ResourceIcon } from "@/assets/icons/ResourceIcon";
-import CopyToClipboardText from "@components/CopyToClipboardText";
-import { cn } from "@utils/helpers";
-import { useI18n } from "@/i18n/I18nProvider";
 
 type Props = {
   children: React.ReactNode;
@@ -75,6 +76,8 @@ export const NetworkProvider = ({
   onResourceUpdate,
 }: Props) => {
   const { t } = useI18n();
+  const { isFeatureEnabled } = useAccountEntitlements();
+  const highAvailabilityEnabled = isFeatureEnabled("ha_routes");
   const { mutate } = useSWRConfig();
   const { confirm } = useDialog();
   const deleteCall = useApiCall("/networks").del;
@@ -407,6 +410,11 @@ export const NetworkProvider = ({
             <NetworkRoutingPeerModal
               network={currentNetwork}
               router={currentRouter}
+              highAvailabilityLocked={
+                !currentRouter &&
+                !highAvailabilityEnabled &&
+                (currentNetwork.routing_peers_count ?? 0) > 0
+              }
               open={routingPeerModal}
               onCreated={async () => {
                 setRoutingPeerModal(false);
