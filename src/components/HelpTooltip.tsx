@@ -1,8 +1,8 @@
-import * as React from "react";
 import FullTooltip from "@components/FullTooltip";
-import { HelpCircle } from "lucide-react";
-import { cn } from "@utils/helpers";
 import { TooltipVariants } from "@components/Tooltip";
+import { cn } from "@utils/helpers";
+import { HelpCircle } from "lucide-react";
+import * as React from "react";
 
 type Props = {
   content: React.ReactNode;
@@ -42,7 +42,7 @@ export const HelpTooltip = ({
         delayDuration={delayDuration}
         variant={variant}
         className={
-          "inline underline decoration-dashed underline-offset-[3px] decoration-nb-gray-300 cursor-help transition-all hover:decoration-white"
+          "inline underline decoration-dashed underline-offset-[3px] decoration-neutral-400 cursor-help transition-all hover:decoration-neutral-700 dark:decoration-nb-gray-300 dark:hover:decoration-white"
         }
         content={
           <div className={cn("max-w-xs text-xs", className)}>{content}</div>
@@ -59,7 +59,7 @@ export const HelpTooltip = ({
           >
             <HelpCircle
               size={iconSize}
-              className={"text-nb-gray-300 group-hover/help:text-nb-gray-100"}
+              className={"text-neutral-500 group-hover/help:text-neutral-900 dark:text-nb-gray-300 dark:group-hover/help:text-nb-gray-100"}
             />
           </span>
         )}

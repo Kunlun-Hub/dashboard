@@ -48,7 +48,7 @@ export default function HelpAndSupportButton() {
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1 px-1">
-            <div className="text-sm font-normal leading-none text-nb-gray-200 py-1">
+            <div className="text-sm font-normal leading-none text-neutral-900 py-1 dark:text-nb-gray-200">
               {t("help.title")}
             </div>
           </div>

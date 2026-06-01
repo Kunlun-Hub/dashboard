@@ -44,7 +44,7 @@ const inputVariants = cva("", {
         "dark:bg-nb-gray-900 border-neutral-200 dark:border-nb-gray-700 text-neutral-600 dark:text-nb-gray-300",
       ],
       error: [
-        "dark:bg-nb-gray-900 border-red-500 text-nb-gray-300 text-red-500",
+        "dark:bg-nb-gray-900 border-red-500 text-red-500",
       ],
     },
   },
@@ -79,7 +79,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         <button
           type="button"
           onClick={() => setShowPassword(!showPassword)}
-          className={"hover:text-white transition-all"}
+          className={"hover:text-neutral-900 transition-all dark:hover:text-white"}
           aria-label={t("input.togglePasswordVisibility")}
         >
           {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -130,7 +130,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               icon && "!pl-10",
               "border",
               props.readOnly &&
-                "!bg-nb-gray-920 text-nb-gray-400 !border-nb-gray-800",
+                "!bg-neutral-50 text-neutral-500 !border-neutral-200 dark:!bg-nb-gray-920 dark:text-nb-gray-400 dark:!border-nb-gray-800",
               className,
             )}
           />

@@ -13,7 +13,7 @@ function ButtonGroup({ children, disabled, className }: Props) {
     <div
       className={cn(
         "rounded-lg border bg-white dark:border-nb-gray-900 border-neutral-300 overflow-hidden flex items-center justify-center shrink-0 border-separate shadow-sm dark:bg-transparent dark:shadow-none",
-        disabled ? "opacity-100 !border-nb-gray-900/20" : "",
+        disabled ? "opacity-100 !border-neutral-200 dark:!border-nb-gray-900/20" : "",
         className,
       )}
     >

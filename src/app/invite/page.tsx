@@ -107,17 +107,17 @@ function InviteAcceptContent() {
   if (error && !inviteInfo) {
     if (isRateLimited) {
       return (
-        <div className="min-h-screen flex items-center justify-center bg-nb-gray-950 p-4">
+        <div className="min-h-screen flex items-center justify-center bg-neutral-50 p-4 dark:bg-nb-gray-950">
           <div className="max-w-md w-full text-center">
             <div className="mb-6 flex justify-center">
               <div className="w-16 h-16 bg-yellow-500/10 rounded-full flex items-center justify-center">
                 <Clock className="w-8 h-8 text-yellow-500" />
               </div>
             </div>
-            <h1 className="text-2xl font-semibold text-white mb-2">
+            <h1 className="text-2xl font-semibold text-neutral-900 mb-2 dark:text-white">
               {t("invite.tooManyRequests")}
             </h1>
-            <Paragraph className="text-nb-gray-400 text-base">
+            <Paragraph className="text-neutral-500 text-base dark:text-nb-gray-400">
               {t("invite.tooManyRequestsDescription")}
             </Paragraph>
             <Button
@@ -133,17 +133,17 @@ function InviteAcceptContent() {
     }
 
     return (
-      <div className="min-h-screen flex items-center justify-center bg-nb-gray-950 p-4">
+      <div className="min-h-screen flex items-center justify-center bg-neutral-50 p-4 dark:bg-nb-gray-950">
         <div className="max-w-md w-full text-center">
           <div className="mb-6 flex justify-center">
             <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center">
               <AlertCircle className="w-8 h-8 text-red-500" />
             </div>
           </div>
-          <h1 className="text-2xl font-semibold text-white mb-2">
+          <h1 className="text-2xl font-semibold text-neutral-900 mb-2 dark:text-white">
             {t("invite.invalidTitle")}
           </h1>
-          <Paragraph className="text-nb-gray-400 text-base">
+          <Paragraph className="text-neutral-500 text-base dark:text-nb-gray-400">
             {t("invite.invalidDescription")}
           </Paragraph>
           <Button
@@ -160,17 +160,17 @@ function InviteAcceptContent() {
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-nb-gray-950 p-4">
+      <div className="min-h-screen flex items-center justify-center bg-neutral-50 p-4 dark:bg-nb-gray-950">
         <div className="max-w-md w-full text-center">
           <div className="mb-6 flex justify-center">
             <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center">
               <CheckCircle2 className="w-8 h-8 text-green-500" />
             </div>
           </div>
-          <h1 className="text-2xl font-semibold text-white mb-2">
+          <h1 className="text-2xl font-semibold text-neutral-900 mb-2 dark:text-white">
             {t("invite.accountCreatedTitle")}
           </h1>
-          <Paragraph className="text-nb-gray-400">
+          <Paragraph className="text-neutral-500 dark:text-nb-gray-400">
             {t("invite.accountCreatedDescription")}
           </Paragraph>
           <Button
@@ -187,17 +187,17 @@ function InviteAcceptContent() {
 
   if (isExpired || !inviteInfo?.valid) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-nb-gray-950 p-4">
+      <div className="min-h-screen flex items-center justify-center bg-neutral-50 p-4 dark:bg-nb-gray-950">
         <div className="max-w-md w-full text-center">
           <div className="mb-6 flex justify-center">
             <div className="w-16 h-16 bg-yellow-500/10 rounded-full flex items-center justify-center">
               <AlertCircle className="w-8 h-8 text-yellow-500" />
             </div>
           </div>
-          <h1 className="text-2xl font-semibold text-white mb-2">
+          <h1 className="text-2xl font-semibold text-neutral-900 mb-2 dark:text-white">
             {t("invite.expiredTitle")}
           </h1>
-          <Paragraph className="text-nb-gray-400">
+          <Paragraph className="text-neutral-500 dark:text-nb-gray-400">
             {t("invite.expiredDescription")}
           </Paragraph>
           <Button
@@ -213,31 +213,31 @@ function InviteAcceptContent() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-nb-gray-950 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-neutral-50 p-4 dark:bg-nb-gray-950">
       <div className="max-w-md w-full">
         <div className="mb-8 flex justify-center">
           <PublicBrandingLogo size={"large"} mobile={false} />
         </div>
 
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-semibold text-white mb-2">
+          <h1 className="text-2xl font-semibold text-neutral-900 mb-2 dark:text-white">
             {t("invite.welcomeTitle")}
           </h1>
-          <p className="dark:text-nb-gray-400 text-nb-gray-500 text-base">
+          <p className="text-neutral-500 text-base dark:text-nb-gray-400">
             {t("invite.welcomeDescription", {
               invitedBy: inviteInfo.invited_by,
             })}
           </p>
         </div>
 
-        <div className="bg-nb-gray-930 border border-nb-gray-900 rounded-lg p-6 mb-6">
+        <div className="bg-white border border-neutral-200 rounded-lg p-6 mb-6 shadow-sm dark:bg-nb-gray-930 dark:border-nb-gray-900 dark:shadow-none">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 bg-nb-gray-900 rounded-full flex items-center justify-center">
-              <User2 className="w-5 h-5 text-nb-gray-400" />
+            <div className="w-10 h-10 bg-neutral-100 rounded-full flex items-center justify-center dark:bg-nb-gray-900">
+              <User2 className="w-5 h-5 text-neutral-500 dark:text-nb-gray-400" />
             </div>
             <div>
-              <div className="text-white font-medium">{inviteInfo.name}</div>
-              <div className="text-nb-gray-400 text-sm flex items-center gap-1">
+              <div className="text-neutral-900 font-medium dark:text-white">{inviteInfo.name}</div>
+              <div className="text-neutral-500 text-sm flex items-center gap-1 dark:text-nb-gray-400">
                 <Mail className="w-3 h-3" />
                 {inviteInfo.email}
               </div>
@@ -252,7 +252,7 @@ function InviteAcceptContent() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 customPrefix={
-                  <KeyRound size={16} className="text-nb-gray-400" />
+                  <KeyRound size={16} className="text-neutral-500 dark:text-nb-gray-400" />
                 }
               />
               {password && (
@@ -288,7 +288,7 @@ function InviteAcceptContent() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 customPrefix={
-                  <KeyRound size={16} className="text-nb-gray-400" />
+                  <KeyRound size={16} className="text-neutral-500 dark:text-nb-gray-400" />
                 }
               />
               {confirmPassword && !passwordsMatch && (
@@ -317,7 +317,7 @@ function InviteAcceptContent() {
           </form>
         </div>
 
-        <p className="text-center text-xs text-nb-gray-500">
+        <p className="text-center text-xs text-neutral-500 dark:text-nb-gray-500">
           {t("invite.expiresOn")}{" "}
           {dayjs(inviteInfo.expires_at).format(
             t("invite.acceptExpiresOnFormat"),
@@ -334,9 +334,9 @@ function PasswordRule({ met, text }: { met: boolean; text: string }) {
       {met ? (
         <CheckCircle2 className="w-3 h-3 text-green-500" />
       ) : (
-        <AlertCircle className="w-3 h-3 text-nb-gray-500" />
+        <AlertCircle className="w-3 h-3 text-neutral-500 dark:text-nb-gray-500" />
       )}
-      <span className={met ? "text-green-500" : "text-nb-gray-500"}>
+      <span className={met ? "text-green-500" : "text-neutral-500 dark:text-nb-gray-500"}>
         {text}
       </span>
     </div>

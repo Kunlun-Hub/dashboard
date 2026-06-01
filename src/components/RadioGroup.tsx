@@ -26,7 +26,11 @@ export const RadioGroupItems = ({
 }: {
   children: React.ReactNode;
 }) => {
-  return <div className={"flex w-full bg-neutral-100 dark:bg-nb-gray-900"}>{children}</div>;
+  return (
+    <div className={"flex w-full bg-neutral-100 dark:bg-nb-gray-900"}>
+      {children}
+    </div>
+  );
 };
 
 export const RadioGroupItem = ({
@@ -44,7 +48,7 @@ export const RadioGroupItem = ({
         key={value}
         className={cn(
           variant === "default" &&
-            "text-neutral-500 hover:text-neutral-700 data-[state=checked]:bg-white data-[state=checked]:text-neutral-900 dark:text-nb-gray-500 dark:hover:text-nb-gray-400 dark:data-[state=checked]:bg-nb-gray-600 dark:data-[state=checked]:text-nb-gray-100",
+            "text-neutral-500 hover:text-neutral-700 data-[state=checked]:bg-netbird-50 data-[state=checked]:text-netbird-700 data-[state=checked]:ring-1 data-[state=checked]:ring-netbird-200 dark:text-nb-gray-500 dark:hover:text-nb-gray-400 dark:data-[state=checked]:bg-nb-gray-600 dark:data-[state=checked]:text-nb-gray-100 dark:data-[state=checked]:ring-0",
           variant === "red" &&
             "text-neutral-600 hover:text-neutral-800 data-[state=checked]:bg-red-50 data-[state=checked]:text-red-700 data-[state=checked]:ring-1 data-[state=checked]:ring-red-200 dark:text-nb-gray-500 dark:hover:text-nb-gray-400 dark:data-[state=checked]:bg-red-800 dark:data-[state=checked]:text-red-200 dark:data-[state=checked]:ring-0",
           variant === "green" &&

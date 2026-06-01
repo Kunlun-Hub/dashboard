@@ -38,7 +38,7 @@ export function ResourceUsagePanel({
 
   return (
     <div className={"mt-6"}>
-      <div className={"text-sm font-medium text-nb-gray-900 dark:text-white"}>
+      <div className={"text-sm font-medium text-neutral-900 dark:text-white"}>
         {t("resourceUsage.title")}
       </div>
       <div className={"mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-3"}>
@@ -164,7 +164,7 @@ function ResourceUsageCard({
     >
       <div
         className={cn(
-          "text-nb-gray-500 dark:text-nb-gray-300",
+          "text-neutral-500 dark:text-nb-gray-300",
           compact ? "text-xs" : "text-sm",
         )}
       >
@@ -172,7 +172,7 @@ function ResourceUsageCard({
       </div>
       <div
         className={cn(
-          "font-semibold text-nb-gray-900 dark:text-white",
+          "font-semibold text-neutral-900 dark:text-white",
           compact ? "text-sm" : "text-lg mt-1",
         )}
       >
@@ -180,7 +180,7 @@ function ResourceUsageCard({
       </div>
       <div
         className={cn(
-          "text-nb-gray-400",
+          "text-neutral-500 dark:text-nb-gray-400",
           compact ? "text-xs ml-auto" : "text-xs mt-1",
         )}
       >
@@ -211,20 +211,20 @@ function ResourceFeatureStatusCard({
         "border border-neutral-200 dark:border-nb-gray-920 rounded-md bg-white dark:bg-nb-gray-940 px-4 py-3"
       }
     >
-      <div className={"text-sm text-nb-gray-500 dark:text-nb-gray-300"}>
+      <div className={"text-sm text-neutral-500 dark:text-nb-gray-300"}>
         {featureLabel(t, feature)}
       </div>
       <div
         className={cn(
           "font-semibold text-lg mt-1",
-          enabled === undefined && "text-nb-gray-400",
+          enabled === undefined && "text-neutral-500 dark:text-nb-gray-400",
           enabled === true && "text-green-600 dark:text-green-400",
           enabled === false && "text-yellow-600 dark:text-yellow-400",
         )}
       >
         {statusText}
       </div>
-      <div className={"text-xs mt-1 text-nb-gray-400"}>
+      <div className={"text-xs mt-1 text-neutral-500 dark:text-nb-gray-400"}>
         {t("resourceUsage.featureStatus")}
       </div>
     </div>

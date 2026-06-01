@@ -233,7 +233,7 @@ export const VirtualScrollListItemWrapper = memo(
         <div
           className={cn(
             "text-xs flex justify-between py-2 px-3 cursor-pointer items-center rounded-md group/list-item",
-            "bg-transparent dark:aria-selected:bg-nb-gray-800/50",
+            "bg-transparent aria-selected:bg-netbird-50 aria-selected:text-netbird-700 dark:aria-selected:bg-nb-gray-800/50 dark:aria-selected:text-neutral-100",
             itemClassName,
           )}
           aria-selected={ariaSelected}

@@ -30,11 +30,11 @@ export default function ExternalLinkText({
     >
       <span className="relative">
         {children}
-        <span className="absolute bottom-0 left-0 right-0 border-b border-dashed border-transparent group-hover/link:border-nb-gray-500 pointer-events-none" />
+        <span className="absolute bottom-0 left-0 right-0 border-b border-dashed border-transparent group-hover/link:border-neutral-400 dark:group-hover/link:border-nb-gray-500 pointer-events-none" />
       </span>
       <ExternalLinkIcon
         className={cn(
-          "text-nb-gray-100 group-hover/link:opacity-100 shrink-0",
+          "text-neutral-600 group-hover/link:opacity-100 shrink-0 dark:text-nb-gray-100",
           iconAlignment === "left" ? "order-first" : "order-last",
           !alwaysShowIcon && "opacity-0",
         )}

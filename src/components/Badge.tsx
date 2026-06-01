@@ -54,7 +54,7 @@ const variants = cva("", {
         "dark:bg-green-950 dark:border-green-500 dark:text-green-400",
       ],
       netbird: [
-        "bg-orange-50 border-orange-200 border text-netbird",
+        "bg-netbird-50 border-netbird-200 border text-netbird-700",
         "dark:bg-netbird-950 dark:border-netbird-500 dark:text-netbird-500",
       ],
     },
@@ -76,7 +76,7 @@ const variants = cva("", {
         "hover:bg-neutral-100 cursor-pointer dark:hover:bg-nb-gray-800",
       ],
       green: ["hover:bg-emerald-100 dark:hover:bg-green-950/50"],
-      netbird: ["hover:bg-orange-100 dark:hover:bg-netbird-950/50"],
+      netbird: ["hover:bg-netbird-100 dark:hover:bg-netbird-950/50"],
     },
   },
 });

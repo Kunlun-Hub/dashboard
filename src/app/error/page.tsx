@@ -143,7 +143,7 @@ export default function ErrorPage() {
 
   return (
     <div className="flex items-center justify-center flex-col h-screen max-w-xl mx-auto">
-      <div className="bg-nb-gray-930 mb-3 border border-nb-gray-900 h-12 w-12 rounded-md flex items-center justify-center">
+      <div className="bg-neutral-50 mb-3 border border-neutral-200 h-12 w-12 rounded-md flex items-center justify-center dark:bg-nb-gray-930 dark:border-nb-gray-900">
         <PublicBrandingIcon size={23} />
       </div>
 
@@ -154,7 +154,7 @@ export default function ErrorPage() {
       </Paragraph>
 
       {error && (
-        <div className="bg-nb-gray-930 border border-nb-gray-800 rounded-md p-4 mt-4 max-w-md font-mono mb-2">
+        <div className="bg-neutral-50 border border-neutral-200 rounded-md p-4 mt-4 max-w-md font-mono mb-2 dark:bg-nb-gray-930 dark:border-nb-gray-800">
           <div className="text-center text-sm text-netbird">
             <div>
               {t("errorPage.responseMessage")}: {error.message}

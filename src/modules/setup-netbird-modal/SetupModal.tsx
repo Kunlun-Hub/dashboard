@@ -122,7 +122,7 @@ export function SetupModalContent({
   }, [isFirstRun, isInstallPage, setupKey, t, title, user?.given_name]);
 
   return (
-    <>
+    <div className={"light-theme-surface"}>
       {isInstallPage && (
         <div className={"flex justify-center pt-6"}>
           <PublicBrandingLogo size={"large"} mobile={false} />
@@ -251,7 +251,7 @@ export function SetupModalContent({
           />
         )}
       </Tabs>
-    </>
+    </div>
   );
 }
 

@@ -104,7 +104,7 @@ const ToggleCollapsableNavigationButton = () => {
       <button
         onClick={toggleNavigation}
         className={cn(
-          "h-10 w-10 hover:text-white flex items-center justify-center text-nb-gray-300 transition-all ml-2",
+          "h-10 w-10 flex items-center justify-center text-neutral-500 transition-all hover:text-neutral-900 dark:text-nb-gray-300 dark:hover:text-white ml-2",
           "hidden md:block",
         )}
       >

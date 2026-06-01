@@ -25,10 +25,12 @@ export const linkVariants = cva(
     variants: {
       variant: {
         default: "text-netbird hover:underline font-normal",
-        faded: "text-nb-gray-400 hover:text-nb-gray-300 hover:underline",
-        white: "text-nb-gray-100 hover:text-white hover:underline",
+        faded:
+          "text-neutral-500 hover:text-neutral-900 hover:underline dark:text-nb-gray-400 dark:hover:text-nb-gray-300",
+        white:
+          "text-neutral-700 hover:text-neutral-900 hover:underline dark:text-nb-gray-100 dark:hover:text-white",
         dashed:
-          "text-nb-gray-100/90 underline font-normal decoration-dashed hover:text-white",
+          "text-neutral-700 underline font-normal decoration-dashed hover:text-neutral-900 dark:text-nb-gray-100/90 dark:hover:text-white",
       },
     },
   },

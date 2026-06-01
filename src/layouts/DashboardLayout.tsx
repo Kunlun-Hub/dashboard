@@ -56,7 +56,9 @@ function DashboardPageContent({
     <div className={cn("flex flex-col h-screen", mobileNavOpen && "flex")}>
       {mobileNavOpen && (
         <motion.div
-          className={"h-screen bg-nb-gray-950 w-11/12 max-w-[22rem]"}
+          className={
+            "h-screen bg-gray-50 dark:bg-nb-gray-950 w-11/12 max-w-[22rem]"
+          }
           layout={true}
           transition={{
             type: "spring",
@@ -107,7 +109,7 @@ function DashboardPageContent({
           layout={"position"}
           className={cn(
             mobileNavOpen
-              ? "border border-nb-gray-900 shadow-inner overflow-hidden rounded-xl fixed scale-75"
+              ? "border border-neutral-200 dark:border-nb-gray-900 shadow-inner overflow-hidden rounded-xl fixed scale-75"
               : "",
           )}
           transition={{

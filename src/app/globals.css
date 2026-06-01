@@ -17,6 +17,11 @@
     --cloink-brand-800: 151 50 21;
     --cloink-brand-900: 122 43 20;
     --cloink-brand-950: 66 19 8;
+    --onboarding-line-gap: 255 255 255;
+}
+
+.dark {
+    --onboarding-line-gap: 28 30 33;
 }
 
 html{
@@ -53,7 +58,13 @@ p {
 }
 
 .animated-gradient-bg{
-    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background: linear-gradient(
+        -45deg,
+        rgb(var(--cloink-brand-700)),
+        rgb(var(--cloink-brand-500)),
+        rgb(var(--cloink-brand-300)),
+        rgb(var(--cloink-brand-100))
+    );
     background-size: 400% 400%;
     animation: gradient 15s ease infinite;
     height: 100%;
@@ -251,6 +262,8 @@ html:not(.dark) .light-theme-surface .bg-nb-gray-920,
 html:not(.dark) .light-theme-surface .bg-nb-gray-910,
 html:not(.dark) .light-theme-surface .bg-nb-gray-900,
 html:not(.dark) .light-theme-surface .bg-nb-gray-940\/95,
+html:not(.dark) .light-theme-surface .bg-nb-gray-940\/50,
+html:not(.dark) .light-theme-surface .bg-nb-gray-940\/40,
 html:not(.dark) .light-theme-surface .bg-nb-gray-930\/95,
 html:not(.dark) .light-theme-surface .bg-nb-gray-930\/90,
 html:not(.dark) .light-theme-surface .bg-nb-gray-930\/80,
@@ -259,16 +272,28 @@ html:not(.dark) .light-theme-surface .bg-nb-gray-930\/60,
 html:not(.dark) .light-theme-surface .bg-nb-gray-930\/50,
 html:not(.dark) .light-theme-surface .bg-nb-gray-930\/40,
 html:not(.dark) .light-theme-surface .bg-nb-gray-920\/30,
+html:not(.dark) .light-theme-surface .bg-nb-gray-900\/90,
+html:not(.dark) .light-theme-surface .bg-nb-gray-900\/80,
 html:not(.dark) .light-theme-surface .bg-nb-gray-900\/70,
+html:not(.dark) .light-theme-surface .bg-nb-gray-900\/60,
 html:not(.dark) .light-theme-surface .bg-nb-gray-900\/50,
 html:not(.dark) .light-theme-surface .bg-nb-gray-900\/40,
 html:not(.dark) .light-theme-surface .bg-nb-gray-900\/30,
 html:not(.dark) .light-theme-surface .bg-nb-gray-900\/20,
+html:not(.dark) .light-theme-surface .bg-nb-gray-800\/60,
+html:not(.dark) .light-theme-surface .bg-nb-gray-800\/50,
+html:not(.dark) .light-theme-surface .bg-nb-gray-800\/30,
+html:not(.dark) .light-theme-surface .bg-nb-gray-800\/20,
+html:not(.dark) .light-theme-surface .bg-nb-gray-800\/10,
 html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-930:hover,
 html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-925:hover,
+html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-920\/80:hover,
 html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-920:hover,
 html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-910:hover,
 html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-900:hover,
+html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-900\/90:hover,
+html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-900\/80:hover,
+html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-900\/60:hover,
 html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-930\/60:hover,
 html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-900\/50:hover,
 html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-900\/40:hover {
@@ -287,9 +312,17 @@ html:not(.dark) .light-theme-surface .border-nb-gray-700,
 html:not(.dark) .light-theme-surface .border-nb-gray-600,
 html:not(.dark) .light-theme-surface .border-nb-gray-500,
 html:not(.dark) .light-theme-surface .border-nb-gray-900\/70,
+html:not(.dark) .light-theme-surface .border-nb-gray-900\/50,
 html:not(.dark) .light-theme-surface .border-nb-gray-800\/70,
 html:not(.dark) .light-theme-surface .border-nb-gray-800\/50,
-html:not(.dark) .light-theme-surface .border-nb-gray-800\/30 {
+html:not(.dark) .light-theme-surface .border-nb-gray-800\/40,
+html:not(.dark) .light-theme-surface .border-nb-gray-800\/30,
+html:not(.dark) .light-theme-surface .border-nb-gray-800\/20,
+html:not(.dark) .light-theme-surface .border-nb-gray-700\/40,
+html:not(.dark) .light-theme-surface .border-nb-gray-600\/80,
+html:not(.dark) .light-theme-surface .border-nb-gray-600\/60,
+html:not(.dark) .light-theme-surface .border-nb-gray-600\/50,
+html:not(.dark) .light-theme-surface .border-nb-gray-600\/40 {
     border-color: #e5e7eb;
 }
 
@@ -303,10 +336,54 @@ html:not(.dark) .light-theme-surface .text-nb-gray-300,
 html:not(.dark) .light-theme-surface .text-nb-gray-350,
 html:not(.dark) .light-theme-surface .text-nb-gray-400,
 html:not(.dark) .light-theme-surface .text-nb-gray-500,
-html:not(.dark) .light-theme-surface .text-nb-gray-600 {
+html:not(.dark) .light-theme-surface .text-nb-gray-600,
+html:not(.dark) .light-theme-surface .text-nb-gray-700,
+html:not(.dark) .light-theme-surface .text-nb-gray-300\/80,
+html:not(.dark) .light-theme-surface .text-nb-gray-200\/60,
+html:not(.dark) .light-theme-surface .text-nb-gray-100\/90 {
     color: #525252;
 }
 
 html:not(.dark) .light-theme-surface .text-neutral-300 {
     color: #525252;
+}
+
+html:not(.dark) .light-theme-surface .\!text-nb-gray-200,
+html:not(.dark) .light-theme-surface .\!text-nb-gray-300,
+html:not(.dark) .light-theme-surface .\!text-nb-gray-400 {
+    color: #525252 !important;
+}
+
+html:not(.dark) .light-theme-surface .\!bg-nb-gray-930,
+html:not(.dark) .light-theme-surface .\!bg-nb-gray-925,
+html:not(.dark) .light-theme-surface .\!bg-nb-gray-920,
+html:not(.dark) .light-theme-surface .\!bg-nb-gray-910 {
+    background-color: #f9fafb !important;
+}
+
+html:not(.dark) .light-theme-surface .\!border-nb-gray-940,
+html:not(.dark) .light-theme-surface .\!border-nb-gray-930,
+html:not(.dark) .light-theme-surface .\!border-nb-gray-900\/20,
+html:not(.dark) .light-theme-surface .\!border-nb-gray-800 {
+    border-color: #e5e7eb !important;
+}
+
+html:not(.dark) .light-theme-surface .fill-nb-gray-100,
+html:not(.dark) .light-theme-surface .fill-nb-gray-200,
+html:not(.dark) .light-theme-surface .fill-nb-gray-300,
+html:not(.dark) .light-theme-surface .fill-nb-gray-400,
+html:not(.dark) .light-theme-surface .fill-nb-gray-500,
+html:not(.dark) .light-theme-surface .fill-nb-gray-800,
+html:not(.dark) .light-theme-surface .fill-nb-gray-900 {
+    fill: #a3a3a3;
+}
+
+html:not(.dark) .light-theme-surface .stroke-nb-gray-300,
+html:not(.dark) .light-theme-surface .stroke-nb-gray-800,
+html:not(.dark) .light-theme-surface .stroke-nb-gray-930 {
+    stroke: #a3a3a3;
+}
+
+html:not(.dark) .light-theme-surface .ring-nb-gray-500\/20 {
+    --tw-ring-color: rgb(212 212 212 / 0.35);
 }

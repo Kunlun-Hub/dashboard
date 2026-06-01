@@ -37,7 +37,7 @@ function Calendar({
         weekday:
           "text-neutral-500 rounded-md w-9 font-normal text-[0.8rem] dark:text-neutral-400",
         week: "flex w-full mt-2",
-        day: "h-9 w-9 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-neutral-100/50 [&:has([aria-selected])]:bg-neutral-100 first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20 dark:[&:has([aria-selected].day-outside)]:bg-neutral-800/50 dark:[&:has([aria-selected])]:bg-neutral-800",
+        day: "h-9 w-9 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-netbird-50/50 [&:has([aria-selected])]:bg-netbird-50 first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20 dark:[&:has([aria-selected].day-outside)]:bg-neutral-800/50 dark:[&:has([aria-selected])]:bg-neutral-800",
         day_button: cn("h-9 w-9 p-0 font-normal aria-selected:opacity-100"),
         range_end: "day-range-end rounded-r-md",
         range_start: "day-range-start rounded-l-md",
@@ -45,10 +45,10 @@ function Calendar({
           "bg-netbird text-white hover:bg-netbird-500 hover:text-white focus:bg-netbird-500 focus:text-white dark:bg-neutral-50 dark:text-neutral-900 dark:hover:bg-neutral-50 dark:hover:text-neutral-900 dark:focus:bg-neutral-50 dark:focus:text-neutral-900",
         today: "text-neutral-900 dark:text-red-500",
         outside:
-          "day-outside text-neutral-500 opacity-50 aria-selected:bg-neutral-100/50 aria-selected:text-neutral-500 aria-selected:opacity-30 dark:text-neutral-400 dark:aria-selected:bg-neutral-800/50 dark:aria-selected:text-neutral-400",
+          "day-outside text-neutral-500 opacity-50 aria-selected:bg-netbird-50/50 aria-selected:text-netbird-600 aria-selected:opacity-40 dark:text-neutral-400 dark:aria-selected:bg-neutral-800/50 dark:aria-selected:text-neutral-400",
         disabled: "text-neutral-500 opacity-50 dark:text-neutral-400",
         range_middle:
-          "aria-selected:bg-neutral-100 aria-selected:text-neutral-900 dark:aria-selected:bg-nb-gray-800 dark:aria-selected:text-neutral-50 rounded-none",
+          "aria-selected:bg-netbird-50 aria-selected:text-netbird-700 dark:aria-selected:bg-nb-gray-800 dark:aria-selected:text-neutral-50 rounded-none",
         hidden: "invisible",
         ...classNames,
       }}

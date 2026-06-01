@@ -305,7 +305,7 @@ export const Onboarding = ({
           onPointerDownOutside={(e) => e.preventDefault()}
           asChild={true}
           className={
-            "h-full w-screen fixed z-[50] left-0 top-0 bg-nb-gray-950 flex overflow-y-auto"
+            "light-theme-surface h-full w-screen fixed z-[50] left-0 top-0 bg-neutral-50 text-neutral-950 flex overflow-y-auto dark:bg-nb-gray-950 dark:text-nb-gray-100"
           }
         >
           <div>
@@ -592,13 +592,13 @@ export const Onboarding = ({
               {step !== 1 && step !== maxSteps && (
                 <span
                   className={
-                    "text-sm text-nb-gray-400 font-light pb-10 text-center px-4"
+                    "text-sm text-neutral-500 font-light pb-10 text-center px-4 dark:text-nb-gray-400"
                   }
                 >
                   {t("onboarding.skipPrompt")}
                   <InlineLink
                     href={"#"}
-                    className={"!text-nb-gray-200 ml-1"}
+                    className={"!text-netbird-700 ml-1 dark:!text-nb-gray-200"}
                     onClick={() => {
                       dispatch({
                         type: "SKIP",
@@ -627,8 +627,10 @@ const Stepper = ({ step, maxSteps }: { step: number; maxSteps: number }) => {
         <div
           key={index}
           className={cn(
-            "w-8 h-1 rounded-full bg-nb-gray-800",
-            step >= index + 1 && "bg-netbird",
+            "w-8 h-1 rounded-full",
+            step >= index + 1
+              ? "bg-netbird"
+              : "bg-neutral-200 dark:bg-nb-gray-800",
           )}
         />
       ))}
@@ -647,7 +649,7 @@ const Card = ({
     <div
       className={cn(
         "px-6 sm:px-8 py-8 pt-6",
-        "bg-nb-gray-940 border border-nb-gray-910  rounded-lg   relative",
+        "bg-white border border-neutral-200 rounded-lg relative text-neutral-950 shadow-sm dark:bg-nb-gray-940 dark:border-nb-gray-910 dark:text-nb-gray-100 dark:shadow-none",
         className,
       )}
     >

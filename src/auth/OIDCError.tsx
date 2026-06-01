@@ -35,12 +35,12 @@ export const OIDCError = () => {
   return (
     <div
       className={
-        "flex items-center justify-center flex-col h-screen max-w-lg mx-auto"
+        "flex items-center justify-center flex-col h-screen max-w-lg mx-auto px-4"
       }
     >
       <div
         className={
-          "bg-nb-gray-930 mb-3 border border-nb-gray-900 h-12 w-12 rounded-md flex items-center justify-center "
+          "bg-neutral-50 mb-3 border border-neutral-200 h-12 w-12 rounded-md flex items-center justify-center dark:bg-nb-gray-930 dark:border-nb-gray-900"
         }
       >
         <PublicBrandingIcon size={23} />

@@ -2,6 +2,7 @@ import chroma from "chroma-js";
 import { type ClassValue, clsx } from "clsx";
 import deepClone from "lodash/cloneDeep";
 import { twMerge } from "tailwind-merge";
+import { defaultBrandingColor } from "@/modules/account/accountBranding";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -26,9 +27,9 @@ export function removeAllSpaces(str?: string) {
 }
 
 export const generateColorFromString = (str?: string) => {
-  if (!str) return "#f68330";
+  if (!str) return defaultBrandingColor;
   if (str.includes("System")) return "#808080";
-  if (str.toLowerCase().startsWith("netbird")) return "#f68330";
+  if (str.toLowerCase().startsWith("netbird")) return defaultBrandingColor;
   let hash = 0;
   str.split("").forEach((char) => {
     hash = char.charCodeAt(0) + ((hash << 5) - hash);

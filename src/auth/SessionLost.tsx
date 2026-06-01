@@ -23,12 +23,12 @@ export const SessionLost = () => {
   return (
     <div
       className={
-        "flex items-center justify-center flex-col h-screen max-w-md mx-auto"
+        "flex items-center justify-center flex-col h-screen max-w-md mx-auto px-4"
       }
     >
       <div
         className={
-          "bg-nb-gray-930 mb-3 border border-nb-gray-900 h-10 w-10 rounded-md flex items-center justify-center "
+          "bg-neutral-50 mb-3 border border-neutral-200 h-10 w-10 rounded-md flex items-center justify-center dark:bg-nb-gray-930 dark:border-nb-gray-900"
         }
       >
         <PublicBrandingIcon size={20} />

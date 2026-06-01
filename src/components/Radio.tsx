@@ -11,7 +11,7 @@ const variants = cva([], {
     variant: {
       default: [
         "dark:data-[state=unchecked]:bg-nb-gray-950 dark:border-nb-gray-900 dark:ring-offset-neutral-950 dark:focus-visible:ring-neutral-300",
-        "dark:data-[state=checked]:bg-netbird",
+        "data-[state=checked]:border-netbird data-[state=checked]:bg-netbird dark:data-[state=checked]:bg-netbird",
       ],
     },
   },
@@ -48,9 +48,9 @@ const RadioItem = ({ value, className, variant = "default" }: Props) => {
       value={value}
       className={cn(
         variants({ variant }),
-        "border-neutral-900",
+        "border-neutral-300",
         "peer h-5 w-5 shrink-0 rounded-full border",
-        "ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-950 focus-visible:ring-offset-2",
+        "ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-netbird-400/50 focus-visible:ring-offset-2",
         "disabled:cursor-not-allowed disabled:opacity-50 relative",
         className,
       )}

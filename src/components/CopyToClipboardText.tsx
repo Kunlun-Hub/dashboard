@@ -32,7 +32,7 @@ export default function CopyToClipboardText({
     >
       <span className="relative truncate">
         {children}
-        <span className="absolute bottom-0 left-0 right-0 border-b border-dashed border-transparent group-hover:border-nb-gray-500 pointer-events-none" />
+        <span className="absolute bottom-0 left-0 right-0 border-b border-dashed border-transparent group-hover:border-neutral-400 dark:group-hover:border-nb-gray-500 pointer-events-none" />
       </span>
 
       <span
@@ -43,7 +43,7 @@ export default function CopyToClipboardText({
       >
         <CheckIcon
           className={cn(
-            "text-nb-gray-100 group-hover:opacity-100",
+            "text-neutral-600 group-hover:opacity-100 dark:text-nb-gray-100",
             !copied && "hidden",
             !alwaysShowIcon && !copied && "opacity-0",
           )}
@@ -51,7 +51,7 @@ export default function CopyToClipboardText({
         />
         <CopyIcon
           className={cn(
-            "text-nb-gray-100 group-hover:opacity-100",
+            "text-neutral-600 group-hover:opacity-100 dark:text-nb-gray-100",
             copied && "hidden",
             !alwaysShowIcon && "opacity-0",
           )}

@@ -114,7 +114,7 @@ export const PostureCheckPolicyUsageCell = ({ check }: Props) => {
           size={"xs"}
           variant={"secondary"}
           className={
-            "min-w-[130px] border-orange-200 bg-orange-50 text-orange-800 hover:border-orange-300 hover:bg-orange-100 hover:text-orange-900 dark:border-gray-700/40 dark:bg-nb-gray-920 dark:text-gray-400"
+            "min-w-[130px] border-netbird-200 bg-netbird-50 text-netbird-800 hover:border-netbird-300 hover:bg-netbird-100 hover:text-netbird-900 dark:border-gray-700/40 dark:bg-nb-gray-920 dark:text-gray-400"
           }
           onClick={() => router.push("/access-control")}
         >

@@ -29,7 +29,7 @@ export const buttonVariants = cva(
         ],
         primary: [
           "dark:focus:ring-netbird-600/50 dark:ring-offset-neutral-950/50 enabled:dark:bg-netbird disabled:dark:bg-nb-gray-910 dark:text-gray-100 enabled:dark:hover:text-white enabled:dark:hover:bg-netbird-500/80",
-          "enabled:bg-netbird enabled:text-white enabled:border-netbird enabled:focus:ring-netbird-400/50 enabled:hover:bg-netbird-500 enabled:hover:border-netbird-500 disabled:bg-orange-100 disabled:text-orange-700 disabled:border-orange-200",
+          "enabled:bg-netbird enabled:text-white enabled:border-netbird enabled:focus:ring-netbird-400/50 enabled:hover:bg-netbird-500 enabled:hover:border-netbird-500 disabled:bg-netbird-100 disabled:text-netbird-700 disabled:border-netbird-200",
         ],
         secondary: [
           "bg-white hover:text-neutral-950 focus:ring-netbird/20 hover:bg-neutral-50 border-neutral-300 text-neutral-800 shadow-sm",
@@ -57,7 +57,7 @@ export const buttonVariants = cva(
           "dark:bg-nb-gray-900/30 dark:text-gray-400 dark:border-gray-500/40 dark:hover:text-white dark:hover:bg-nb-gray-900/50",
         ],
         tertiary: [
-          "bg-orange-50 hover:text-orange-900 focus:ring-netbird/25 hover:bg-orange-100 border-orange-300 text-orange-800 shadow-sm ring-1 ring-orange-200/60",
+          "bg-netbird-50 hover:text-netbird-900 focus:ring-netbird/25 hover:bg-netbird-100 border-netbird-300 text-netbird-800 shadow-sm ring-1 ring-netbird-200/60",
           "dark:focus:ring-zinc-800/50 dark:bg-white dark:text-gray-800 dark:border-gray-700/40 dark:hover:bg-neutral-200 disabled:dark:bg-nb-gray-920 disabled:dark:text-nb-gray-300",
         ],
         white: [

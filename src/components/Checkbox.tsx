@@ -33,10 +33,10 @@ const Checkbox = React.forwardRef<
       ref={ref}
       className={cn(
         variants({ variant }),
-        "border-neutral-900",
+        "border-neutral-300",
         "peer h-5 w-5 shrink-0 rounded-[4px] border",
-        "ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-950 focus-visible:ring-offset-2",
-        "disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-neutral-900 data-[state=checked]:text-neutral-50 ",
+        "ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-netbird-400/50 focus-visible:ring-offset-2",
+        "disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:border-netbird data-[state=checked]:bg-netbird data-[state=checked]:text-white ",
         className,
       )}
       {...props}

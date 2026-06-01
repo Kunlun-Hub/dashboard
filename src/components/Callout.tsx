@@ -19,7 +19,7 @@ export const calloutVariants = cva(
         default:
           "bg-neutral-50 border-neutral-200 text-neutral-700 dark:bg-nb-gray-900/60 dark:border-nb-gray-800/80 dark:text-nb-gray-300",
         warning:
-          "bg-orange-50 border-orange-200 text-orange-800 dark:bg-netbird-500/10 dark:border-netbird-400/20 dark:text-netbird-150",
+          "bg-netbird-50 border-netbird-200 text-netbird-800 dark:bg-netbird-500/10 dark:border-netbird-400/20 dark:text-netbird-150",
         info: "bg-sky-50 border-sky-200 text-sky-800 dark:bg-sky-400/10 dark:border-sky-400/20 dark:text-sky-100",
         success:
           "bg-green-50 border-green-200 text-green-800 dark:bg-green-400/15 dark:border-green-400/20 dark:text-green-100",

@@ -103,7 +103,7 @@ const SelectItem = React.forwardRef<
           <div className="flex flex-col">
             <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
             {description && (
-              <span className="text-xs text-nb-gray-300 font-normal">
+              <span className="text-xs text-neutral-500 dark:text-nb-gray-300 font-normal">
                 {description}
               </span>
             )}
@@ -120,7 +120,7 @@ const SelectItem = React.forwardRef<
         <div className="flex flex-col">
           <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
           {description && (
-            <span className="text-xs text-nb-gray-300 font-normal">
+            <span className="text-xs text-neutral-500 dark:text-nb-gray-300 font-normal">
               {description}
             </span>
           )}

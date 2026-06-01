@@ -136,7 +136,7 @@ export default function InstanceSetupWizard() {
 
   if (isSuccess) {
     return (
-      <div className="mt-20">
+      <div className="light-theme-surface min-h-screen bg-neutral-50 px-4 py-20 text-neutral-950 dark:bg-nb-gray-950 dark:text-nb-gray-100">
         <div className={"flex items-center justify-center"}>
           <PublicBrandingLogo size={"large"} mobile={false} />
         </div>
@@ -149,11 +149,14 @@ export default function InstanceSetupWizard() {
           </h1>
           <div
             className={
-              "text-sm text-nb-gray-300 font-light mt-2 block text-center z-10 relative"
+              "text-sm text-neutral-500 font-light mt-2 block text-center z-10 relative dark:text-nb-gray-300"
             }
           >
             {t("instanceSetup.redirectingToLoginIn")}{" "}
-            <span className={"text-white font-medium"}>{countdown}s</span>...
+            <span className={"text-neutral-950 font-medium dark:text-white"}>
+              {countdown}s
+            </span>
+            ...
           </div>
           <div className={"flex items-center justify-center mt-4"}>
             <Button
@@ -171,7 +174,7 @@ export default function InstanceSetupWizard() {
   }
 
   return (
-    <div className="mt-20">
+    <div className="light-theme-surface min-h-screen bg-neutral-50 px-4 py-20 text-neutral-950 dark:bg-nb-gray-950 dark:text-nb-gray-100">
       <div className={"flex items-center justify-center"}>
         <PublicBrandingLogo size={"large"} mobile={false} />
       </div>
@@ -181,7 +184,7 @@ export default function InstanceSetupWizard() {
         </h1>
         <div
           className={
-            "text-sm text-nb-gray-300 font-light mt-2 block text-center z-10 relative"
+            "text-sm text-neutral-500 font-light mt-2 block text-center z-10 relative dark:text-nb-gray-300"
           }
         >
           {t("instanceSetup.welcomeDescription")}
@@ -256,7 +259,9 @@ export default function InstanceSetupWizard() {
 
       <div className={"flex items-center justify-center mt-6"}>
         <span
-          className={"text-sm text-nb-gray-400 font-light pb-10 text-center"}
+          className={
+            "text-sm text-neutral-500 font-light pb-10 text-center dark:text-nb-gray-400"
+          }
         >
           {t("instanceSetup.oneTimeSetup")}
         </span>
@@ -276,7 +281,7 @@ const Card = ({
     <div
       className={cn(
         "px-6 sm:px-10 py-8 pt-6",
-        "bg-nb-gray-940 border border-nb-gray-910  rounded-lg   relative",
+        "bg-white border border-neutral-200 rounded-lg relative text-neutral-950 shadow-sm dark:bg-nb-gray-940 dark:border-nb-gray-910 dark:text-nb-gray-100 dark:shadow-none",
         className,
       )}
     >
@@ -288,7 +293,7 @@ const Card = ({
 
 const ErrorMessage = ({ error }: { error?: string }) => {
   return (
-    <div className="text-red-400 bg-red-800/20 border border-red-800/50 rounded-lg px-4 py-3 whitespace-break-spaces my-3 text-sm">
+    <div className="text-red-700 bg-red-50 border border-red-200 rounded-lg px-4 py-3 whitespace-break-spaces my-3 text-sm dark:text-red-400 dark:bg-red-800/20 dark:border-red-800/50">
       {error}
     </div>
   );

@@ -2,10 +2,10 @@ import { DeviceCard } from "@components/DeviceCard";
 import { cn } from "@utils/helpers";
 import { ShieldCheckIcon, ShieldXIcon } from "lucide-react";
 import * as React from "react";
+import { useI18n } from "@/i18n/I18nProvider";
 import { NetworkResource } from "@/interfaces/Network";
 import type { Peer } from "@/interfaces/Peer";
 import { Intent } from "@/modules/onboarding/Onboarding";
-import { useI18n } from "@/i18n/I18nProvider";
 
 type Props = {
   intent?: Intent;
@@ -37,8 +37,10 @@ export const OnboardingDevices = ({
       {firstDevice && secondDevice && (
         <div
           className={cn(
-            "h-[70px] w-[2px] rounded-full border-l border-dashed border-green-400 relative",
-            !enabled && "border-nb-gray-600",
+            "h-[70px] w-[2px] rounded-full border-l border-dashed relative",
+            enabled
+              ? "border-green-400"
+              : "border-neutral-300 dark:border-nb-gray-600",
           )}
         ></div>
       )}
@@ -96,10 +98,9 @@ export const OnboardingDevices = ({
             className={cn(
               firstRoutingPeer && firstDevice && enabled
                 ? "bg-green-400 animate-bg-scroll-faster"
-                : "bg-nb-gray-600",
+                : "bg-neutral-300 dark:bg-nb-gray-600",
             )}
             height={"30px"}
-            bg={"#1c1d21"}
             config={["4px", "4px", "8px", "7.5px"]}
           />
         )}
@@ -112,10 +113,9 @@ export const OnboardingDevices = ({
             className={cn(
               firstRoutingPeer && firstDevice && enabled
                 ? "bg-green-400 animate-bg-scroll"
-                : "bg-nb-gray-600",
+                : "bg-neutral-300 dark:bg-nb-gray-600",
             )}
             height={firstDevice && firstRoutingPeer ? "65px" : "25px"}
-            bg={"#1c1d21"}
           />
         )}
         <DeviceCard device={firstDevice} />
@@ -167,7 +167,7 @@ export const WaitingForDevice = ({
 const Line = ({
   className,
   height = "100%",
-  bg = "#1c1d21",
+  bg = "rgb(var(--onboarding-line-gap))",
   config = ["2px", "3px", "6px", "8.2px"],
 }: {
   className?: string;

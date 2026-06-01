@@ -23,27 +23,27 @@ export function LicenseDomainGuard() {
   return (
     <div
       className={
-        "fixed inset-0 z-[9999] bg-nb-gray-950/95 backdrop-blur-sm flex items-center justify-center px-5"
+        "fixed inset-0 z-[9999] bg-white/95 backdrop-blur-sm flex items-center justify-center px-5 dark:bg-nb-gray-950/95"
       }
     >
       <div
         className={
-          "max-w-lg w-full border border-red-500/30 bg-nb-gray-940 rounded-md p-6 shadow-2xl"
+          "max-w-lg w-full border border-red-200 bg-white rounded-md p-6 shadow-2xl dark:border-red-500/30 dark:bg-nb-gray-940"
         }
       >
         <div className={"flex items-start gap-4"}>
           <div
             className={
-              "h-10 w-10 rounded-md bg-red-950 text-red-300 border border-red-500/30 flex items-center justify-center shrink-0"
+              "h-10 w-10 rounded-md bg-red-50 text-red-600 border border-red-200 flex items-center justify-center shrink-0 dark:bg-red-950 dark:text-red-300 dark:border-red-500/30"
             }
           >
             <AlertTriangleIcon size={20} />
           </div>
           <div>
-            <h2 className={"text-lg font-semibold text-white"}>
+            <h2 className={"text-lg font-semibold text-neutral-900 dark:text-white"}>
               {t("licenseSettings.urlMismatchTitle")}
             </h2>
-            <p className={"text-sm text-nb-gray-300 mt-2 leading-6"}>
+            <p className={"text-sm text-neutral-600 mt-2 leading-6 dark:text-nb-gray-300"}>
               {t("licenseSettings.urlMismatchDescription")}
             </p>
             <div className={"mt-5 space-y-3 text-sm"}>
@@ -69,8 +69,8 @@ function MismatchFact({
 }: Readonly<{ label: string; value: string }>) {
   return (
     <div className={"flex items-center justify-between gap-4"}>
-      <span className={"text-nb-gray-400"}>{label}</span>
-      <span className={"font-mono text-xs text-white truncate"}>{value}</span>
+      <span className={"text-neutral-500 dark:text-nb-gray-400"}>{label}</span>
+      <span className={"font-mono text-xs text-neutral-900 truncate dark:text-white"}>{value}</span>
     </div>
   );
 }

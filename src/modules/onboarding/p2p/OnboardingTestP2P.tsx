@@ -40,9 +40,14 @@ export const OnboardingTestP2P = ({
         <Steps.Step step={1}>
           <p className={"!text-nb-gray-300"}>
             {t("onboarding.runCommandFrom")}{" "}
-            <span className={"text-white"}>{firstDevice?.name}</span>{" "}
+            <span className={"text-neutral-900 font-medium dark:text-white"}>
+              {firstDevice?.name}
+            </span>{" "}
             {t("onboarding.toPing")}{" "}
-            <span className={"text-white"}>{secondDevice?.name}</span>.{" "}
+            <span className={"text-neutral-900 font-medium dark:text-white"}>
+              {secondDevice?.name}
+            </span>
+            .{" "}
             {t("onboarding.testP2PResponseHint")}
           </p>
           <Code message={t("common.copiedToClipboard")}>
