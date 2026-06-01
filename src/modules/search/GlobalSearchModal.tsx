@@ -243,7 +243,7 @@ const GlobalSearchModalContent = ({ open, setOpen }: Props) => {
                         <div>
                           <div
                             className={
-                              "text-[0.65rem] text-nb-gray-250 flex items-center gap-2 leading-none"
+                              "text-[0.65rem] text-neutral-500 flex items-center gap-2 leading-none dark:text-nb-gray-250"
                             }
                           >
                             <LayersIcon
@@ -260,7 +260,7 @@ const GlobalSearchModalContent = ({ open, setOpen }: Props) => {
                         <div>
                           <div
                             className={
-                              "text-[0.62rem] font-mono text-nb-gray-250"
+                              "text-[0.62rem] font-mono text-neutral-500 dark:text-nb-gray-250"
                             }
                           >
                             {item.data?.address}

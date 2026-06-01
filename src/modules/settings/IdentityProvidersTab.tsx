@@ -161,7 +161,10 @@ export default function IdentityProvidersTab() {
       cell: ({ row }) => (
         <div className="flex items-center gap-3">
           {idpIcon(row.original.type) || (
-            <KeyRound size={16} className="text-nb-gray-400" />
+            <KeyRound
+              size={16}
+              className="text-neutral-500 dark:text-nb-gray-400"
+            />
           )}
           <span className="font-medium">{row.original.name}</span>
         </div>
@@ -175,7 +178,7 @@ export default function IdentityProvidersTab() {
         </DataTableHeader>
       ),
       cell: ({ row }) => (
-        <span className="text-nb-gray-400">
+        <span className="text-neutral-500 dark:text-nb-gray-400">
           {getSSOIdentityProviderLabelByType(row.original.type)}
         </span>
       ),

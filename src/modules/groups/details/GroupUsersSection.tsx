@@ -147,7 +147,12 @@ export const GroupUsersSection = ({ users, isLoading = true }: Props) => {
             className={"py-4"}
             title={t("groupUsers.emptyTitle")}
             description={t("groupUsers.emptyDescription")}
-            icon={<TeamIcon size={20} className={"fill-nb-gray-300"} />}
+            icon={
+              <TeamIcon
+                size={20}
+                className={"fill-neutral-400 dark:fill-nb-gray-300"}
+              />
+            }
           >
             {permission?.users?.update && (
               <div className={"flex gap-4 items-center justify-center mt-4"}>

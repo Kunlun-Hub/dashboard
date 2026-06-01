@@ -36,7 +36,7 @@ const Table = React.forwardRef<
           "text-neutral-900 dark:text-nb-gray-100",
           minimal
             ? ""
-            : "border border-neutral-200 dark:border-zinc-700/40 border-l-0 border-r-0",
+            : "border border-neutral-200 dark:border-nb-gray-800/60 border-l-0 border-r-0",
           className,
         )}
         {...props}
@@ -56,7 +56,7 @@ const TableHeader = React.forwardRef<
   <thead
     ref={ref}
     className={cn(
-      !minimal && "[&_tr]:border-b dark:border-zinc-700/40",
+      !minimal && "[&_tr]:border-b dark:border-nb-gray-800/60",
       className,
     )}
     {...props}
@@ -71,7 +71,7 @@ const TableBody = React.forwardRef<
   <tbody
     ref={ref}
     className={cn(
-      "[&_tr:last-child]:border-0 dark:border-zinc-700/40",
+      "[&_tr:last-child]:border-0 dark:border-nb-gray-800/60",
       className,
     )}
     {...props}
@@ -108,7 +108,7 @@ const TableRow = React.forwardRef<
       "dark:data-[state=selected]:border-nb-gray-900",
       minimal
         ? "dark:hover:bg-nb-gray-910/[15%]"
-        : "border-b border-neutral-200 dark:border-zinc-700/40 hover:bg-neutral-50 dark:hover:bg-nb-gray-940",
+        : "border-b border-neutral-200 dark:border-nb-gray-800/60 hover:bg-neutral-50 dark:hover:bg-nb-gray-940",
       className,
     )}
     {...props}
@@ -169,7 +169,7 @@ const TableCaption = React.forwardRef<
   <caption
     ref={ref}
     className={cn(
-      "mt-4 text-sm text-neutral-500 dark:text-neutral-400 ",
+      "mt-4 text-sm text-neutral-500 dark:text-nb-gray-400 ",
       className,
     )}
     {...props}

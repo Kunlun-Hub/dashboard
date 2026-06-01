@@ -350,7 +350,9 @@ export class IronRDPInputHandler {
       "#rdpControls",
     ) as HTMLElement;
     if (!controls) return;
-    controls.style.borderBottom = active ? "2px solid #4CAF50" : "none";
+    controls.style.borderBottom = active
+      ? "2px solid rgb(var(--cloink-brand-500))"
+      : "none";
   }
   private handleGlobalKeyDown(e: KeyboardEvent): void {
     if (!this.isActive) return;

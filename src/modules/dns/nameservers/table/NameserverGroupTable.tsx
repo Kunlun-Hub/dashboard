@@ -191,7 +191,12 @@ export default function NameserverGroupTable({
         getStartedCard={
           isGroupPage ? (
             <NoResults
-              icon={<DNSIcon className={"fill-nb-gray-200"} size={20} />}
+              icon={
+                <DNSIcon
+                  className={"fill-neutral-400 dark:fill-nb-gray-200"}
+                  size={20}
+                />
+              }
               className={"py-4"}
               title={t("nameservers.emptyGroupTitle")}
               description={t("nameservers.emptyGroupDescription")}
@@ -211,7 +216,12 @@ export default function NameserverGroupTable({
             <GetStartedTest
               icon={
                 <SquareIcon
-                  icon={<DNSIcon className={"fill-nb-gray-200"} size={20} />}
+                  icon={
+                    <DNSIcon
+                      className={"fill-neutral-400 dark:fill-nb-gray-200"}
+                      size={20}
+                    />
+                  }
                   color={"gray"}
                   size={"large"}
                 />

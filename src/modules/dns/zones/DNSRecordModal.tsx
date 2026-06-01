@@ -315,7 +315,10 @@ export function DNSRecordModalContent({
                   data-cy={"dns-record-ttl-select"}
                 >
                   <div className={"flex items-center gap-2"}>
-                    <ClockIcon size={14} className={"text-nb-gray-300"} />
+                      <ClockIcon
+                        size={14}
+                        className={"text-neutral-500 dark:text-nb-gray-300"}
+                      />
                     <SelectValue placeholder={t("zones.selectTtl")} />
                   </div>
                 </SelectTrigger>

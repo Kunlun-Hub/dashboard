@@ -28,6 +28,7 @@ import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useI18n } from "@/i18n/I18nProvider";
 import { Account } from "@/interfaces/Account";
 import {
+  applyBrandingColor,
   defaultBrandingColor,
   defaultBrandingTitle,
   getAccountBrandingDarkLogoDataURL,
@@ -126,6 +127,7 @@ export default function BrandingSettingsTab({ account }: Readonly<Props>) {
         })
         .then(() => {
           mutate("/accounts");
+          applyBrandingColor(nextPrimaryColor || defaultBrandingColor);
           setLogoDataURL(nextLogoDataURL);
           setDarkLogoDataURL(nextDarkLogoDataURL);
           setIconDataURL(nextIconDataURL);
@@ -258,7 +260,12 @@ export default function BrandingSettingsTab({ account }: Readonly<Props>) {
             title={t("brandingSettings.darkLogo")}
             helpText={t("brandingSettings.darkLogoHelp")}
             value={darkLogoDataURL}
-            fallback={<NetBirdLogo mobile={false} />}
+            fallback={
+              <NetBirdLogo
+                mobile={false}
+                logoClassName={"!text-nb-gray-100"}
+              />
+            }
             inputRef={darkLogoInputRef}
             disabled={!permission.settings.update}
             onUpload={(event) => handleLogoUpload(event, setDarkLogoDataURL)}
@@ -270,7 +277,7 @@ export default function BrandingSettingsTab({ account }: Readonly<Props>) {
             removeText={t("brandingSettings.removeLogo")}
             previewAlt={t("brandingSettings.logoPreview")}
             icon={<ImageIcon size={15} />}
-            previewClassName={"bg-nb-gray-950"}
+            previewClassName={"!bg-nb-gray-950"}
             testId={"branding-dark-logo"}
           />
 

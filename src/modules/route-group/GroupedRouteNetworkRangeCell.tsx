@@ -27,7 +27,7 @@ export default function GroupedRouteNetworkRangeCell({
         <InfoIcon
           size={14}
           className={
-            "text-nb-gray-500 group-hover:text-nb-gray-400 transition-all"
+            "text-neutral-500 group-hover:text-neutral-700 dark:text-nb-gray-500 dark:group-hover:text-nb-gray-400 transition-all"
           }
         />
       </div>

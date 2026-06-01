@@ -31,7 +31,7 @@ export const OnboardingEnd = ({ onFinish }: Props) => {
         </h1>
         <div
           className={
-            "text-sm text-nb-gray-300 font-light mt-2 block text-center sm:px-4"
+            "text-sm text-neutral-600 dark:text-nb-gray-300 font-light mt-2 block text-center sm:px-4"
           }
         >
           {t("onboarding.endDescription")}
@@ -90,7 +90,7 @@ const VideoGuide = ({
     >
       <Link
         className={
-          "border border-nb-gray-900 rounded-lg p-[2px] bg-nb-gray-920 min-w-[160px] max-w-[160px] relative group hover:bg-nb-gray-900 transition-all"
+          "border border-neutral-200 rounded-lg p-[2px] bg-white min-w-[160px] max-w-[160px] relative group hover:bg-neutral-50 transition-all dark:border-nb-gray-900 dark:bg-nb-gray-920 dark:hover:bg-nb-gray-900"
         }
         target={"_blank"}
         href={href}
@@ -102,7 +102,7 @@ const VideoGuide = ({
         >
           <div
             className={
-              "bg-nb-gray-900/50 group-hover:bg-nb-gray-600/50 backdrop-blur h-8 w-8 flex items-center justify-center rounded-full"
+              "bg-white/80 text-neutral-900 group-hover:bg-white backdrop-blur h-8 w-8 flex items-center justify-center rounded-full dark:bg-nb-gray-900/50 dark:text-white dark:group-hover:bg-nb-gray-600/50"
             }
           >
             <PlayIcon size={14} />
@@ -111,13 +111,15 @@ const VideoGuide = ({
         <Image
           src={src}
           alt={title}
-          className={"border border-nb-gray-900 rounded-md"}
+          className={"border border-neutral-200 rounded-md dark:border-nb-gray-900"}
         />
       </Link>
       <div>
         <div className={"text-md"}>{title}</div>
         <div
-          className={"text-[0.8rem] text-nb-gray-300 font-light mt-1.5 block"}
+          className={
+            "text-[0.8rem] text-neutral-600 dark:text-nb-gray-300 font-light mt-1.5 block"
+          }
         >
           {description}
         </div>

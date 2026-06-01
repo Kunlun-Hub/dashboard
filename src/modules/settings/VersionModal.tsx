@@ -182,7 +182,12 @@ export default function VersionModal({
               placeholder="1.0.0"
               value={version}
               onChange={(e) => setVersion(e.target.value)}
-              customPrefix={<PackageIcon size={16} className="text-nb-gray-300" />}
+              customPrefix={
+                <PackageIcon
+                  size={16}
+                  className="text-neutral-500 dark:text-nb-gray-300"
+                />
+              }
             />
           </div>
 
@@ -241,14 +246,19 @@ export default function VersionModal({
               placeholder="https://example.com/download/installer.exe"
               value={downloadUrl}
               onChange={(e) => setDownloadUrl(e.target.value)}
-              customPrefix={<DownloadIcon size={16} className="text-nb-gray-300" />}
+              customPrefix={
+                <DownloadIcon
+                  size={16}
+                  className="text-neutral-500 dark:text-nb-gray-300"
+                />
+              }
             />
           </div>
 
           <div>
             <Label>或上传文件</Label>
             <HelpText>选择本地文件上传</HelpText>
-            <div className="border border-dashed border-nb-gray-800 rounded-lg p-6 text-center">
+            <div className="border border-dashed border-neutral-300 dark:border-nb-gray-800 rounded-lg p-6 text-center">
               <input
                 type="file"
                 id="file-upload"
@@ -263,17 +273,17 @@ export default function VersionModal({
                 {isUploading ? (
                   <>
                     <div className="w-8 h-8 border-2 border-netbird border-t-transparent rounded-full animate-spin" />
-                    <span className="text-nb-gray-400">上传中...</span>
+                    <span className="text-neutral-500 dark:text-nb-gray-400">上传中...</span>
                   </>
                 ) : uploadedFileId ? (
                   <>
                     <UploadIcon size={32} className="text-netbird" />
-                    <span className="text-nb-gray-400">已上传: {selectedFile?.name}</span>
+                    <span className="text-neutral-500 dark:text-nb-gray-400">已上传: {selectedFile?.name}</span>
                   </>
                 ) : (
                   <>
-                    <UploadIcon size={32} className="text-nb-gray-500" />
-                    <span className="text-nb-gray-400">
+                    <UploadIcon size={32} className="text-neutral-500 dark:text-nb-gray-500" />
+                    <span className="text-neutral-500 dark:text-nb-gray-400">
                       {selectedFile ? selectedFile.name : "点击或拖拽文件到这里上传"}
                     </span>
                   </>

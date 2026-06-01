@@ -259,7 +259,7 @@ export const OnboardingSurvey = ({ domainCategory, onSubmit }: Props) => {
         <h1 className={"text-xl text-center"}>{welcomeMessage}</h1>
         <div
           className={
-            "text-sm text-nb-gray-300 font-light mt-2 block text-center max-w-md px-10"
+            "text-sm text-neutral-600 dark:text-nb-gray-300 font-light mt-2 block text-center max-w-md px-10"
           }
         >
           {t("onboarding.shareDetails")}

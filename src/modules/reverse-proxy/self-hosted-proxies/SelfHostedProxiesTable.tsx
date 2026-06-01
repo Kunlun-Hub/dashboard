@@ -119,7 +119,12 @@ export default function SelfHostedProxiesTable({
           <GetStartedTest
             icon={
               <SquareIcon
-                icon={<ServerIcon className={"text-nb-gray-200"} size={20} />}
+                icon={
+                  <ServerIcon
+                    className={"text-neutral-400 dark:text-nb-gray-200"}
+                    size={20}
+                  />
+                }
                 color={"gray"}
                 size={"large"}
               />

@@ -174,7 +174,12 @@ export default function ResourcesTable({
               ? t("resourcesTable.emptyGroupDescription")
               : t("resourcesTable.emptyNetworkDescription")
           }
-          icon={<Layers3Icon size={20} className={"text-nb-gray-400"} />}
+          icon={
+            <Layers3Icon
+              size={20}
+              className={"text-neutral-500 dark:text-nb-gray-400"}
+            />
+          }
         >
           {isGroupPage && permission?.networks?.create && (
             <>

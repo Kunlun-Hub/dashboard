@@ -38,7 +38,9 @@ export const PostureCheckProcess = ({ value, onChange, disabled }: Props) => {
       title={t("postureChecks.processTitle")}
       description={t("postureChecks.processDescription")}
       icon={<ServerCogIcon size={18} />}
-      iconClass={"bg-gradient-to-tr from-nb-gray-500 to-nb-gray-300"}
+      iconClass={
+        "bg-gradient-to-tr from-neutral-500 to-neutral-300 dark:from-nb-gray-500 dark:to-nb-gray-300"
+      }
       modalWidthClass={"max-w-xl"}
       onReset={() => onChange(undefined)}
     >

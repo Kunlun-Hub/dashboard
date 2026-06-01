@@ -19,16 +19,17 @@ const variants = cva(
       tagBadge: {
         default:
           "bg-neutral-100 text-neutral-700 font-medium dark:bg-nb-gray-200/10 dark:text-nb-gray-100",
-        important: "bg-nb-gray-900 text-nb-gray-200 font-medium",
+        important:
+          "bg-neutral-950 text-neutral-100 font-medium dark:bg-nb-gray-900 dark:text-nb-gray-200",
       },
       closeButton: {
         default:
           "bg-neutral-100 rounded-md p-1 text-neutral-500 hover:bg-neutral-200 hover:text-neutral-900 dark:bg-nb-gray-900 dark:text-nb-gray-300 dark:hover:bg-nb-gray-800",
         important:
-          "bg-netbird rounded-md p-1 text-nb-gray-900 hover:bg-nb-gray-900 hover:text-nb-gray-200",
+          "bg-netbird rounded-md p-1 text-neutral-950 hover:bg-neutral-950 hover:text-neutral-100 dark:text-nb-gray-900 dark:hover:bg-nb-gray-900 dark:hover:text-nb-gray-200",
       },
       inlineLink: {
-        default: "text-netbird-700 hover:underline dark:text-nb-blue-400",
+        default: "text-netbird-700 hover:underline dark:text-netbird-400",
         important: "!text-black underline hover:opacity-80",
       },
     },

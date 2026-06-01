@@ -7,15 +7,23 @@ const iconVariant = cva(
   {
     variants: {
       color: {
-        netbird: "bg-netbird-950 border-netbird text-netbird",
-        blue: "bg-sky-950 border-sky-500 text-sky-100",
-        "blue-darker": "bg-sky-950 border-sky-500 text-sky-500",
-        red: "bg-red-950 border-red-500 text-red-500",
+        netbird:
+          "bg-netbird-50 border-netbird-200 text-netbird-700 dark:bg-netbird-950 dark:border-netbird dark:text-netbird",
+        blue:
+          "bg-netbird-50 border-netbird-200 text-netbird-700 dark:bg-netbird-950 dark:border-netbird-500 dark:text-netbird-500",
+        "blue-darker":
+          "bg-netbird-50 border-netbird-200 text-netbird-700 dark:bg-netbird-950 dark:border-netbird-500 dark:text-netbird-500",
+        red:
+          "bg-red-50 border-red-200 text-red-600 dark:bg-red-950 dark:border-red-500 dark:text-red-500",
         gray: "bg-neutral-100 border-neutral-200 text-neutral-500 dark:bg-nb-gray-930 dark:border-nb-gray-800 dark:text-gray-500",
-        green: "bg-green-950 border-green-500 text-green-500",
-        purple: "bg-purple-950 border-purple-500 text-purple-500",
-        indigo: "bg-indigo-950 border-indigo-500 text-indigo-500",
-        yellow: "bg-yellow-950 border-yellow-400 text-yellow-400",
+        green:
+          "bg-green-50 border-green-200 text-green-700 dark:bg-green-950 dark:border-green-500 dark:text-green-500",
+        purple:
+          "bg-purple-50 border-purple-200 text-purple-700 dark:bg-purple-950 dark:border-purple-500 dark:text-purple-500",
+        indigo:
+          "bg-indigo-50 border-indigo-200 text-indigo-700 dark:bg-indigo-950 dark:border-indigo-500 dark:text-indigo-500",
+        yellow:
+          "bg-yellow-50 border-yellow-200 text-yellow-700 dark:bg-yellow-950 dark:border-yellow-400 dark:text-yellow-400",
       },
       size: {
         small: "w-8 h-8",

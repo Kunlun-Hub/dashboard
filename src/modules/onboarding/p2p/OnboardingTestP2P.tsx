@@ -29,7 +29,7 @@ export const OnboardingTestP2P = ({
         </h1>
         <div
           className={
-            "text-sm text-nb-gray-300 font-light mt-2 block text-center sm:px-4"
+            "text-sm text-neutral-600 dark:text-nb-gray-300 font-light mt-2 block text-center sm:px-4"
           }
         >
           {t("onboarding.testP2PDescription")}
@@ -38,7 +38,7 @@ export const OnboardingTestP2P = ({
 
       <Steps className={"stepper-bg-variant"}>
         <Steps.Step step={1}>
-          <p className={"!text-nb-gray-300"}>
+          <p className={"!text-neutral-600 dark:!text-nb-gray-300"}>
             {t("onboarding.runCommandFrom")}{" "}
             <span className={"text-neutral-900 font-medium dark:text-white"}>
               {firstDevice?.name}
@@ -55,7 +55,7 @@ export const OnboardingTestP2P = ({
           </Code>
         </Steps.Step>
         <Steps.Step step={2} line={false} className={"pb-0"}>
-          <p className={"!text-nb-gray-300"}>
+          <p className={"!text-neutral-600 dark:!text-nb-gray-300"}>
             {t("onboarding.everythingWorking")}
           </p>
           <div className={"mt-2"}>

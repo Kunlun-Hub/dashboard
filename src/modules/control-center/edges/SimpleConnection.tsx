@@ -1,6 +1,7 @@
 import { BaseEdge, type EdgeProps, getSimpleBezierPath } from "@xyflow/react";
 import React from "react";
 import { useSourceGroupEnabled } from "@/modules/control-center/utils/helpers";
+import { controlCenterPlainEdgeColor } from "@/modules/control-center/utils/theme";
 
 type Props = {
   data: {
@@ -36,7 +37,7 @@ export function SimpleConnection({
       path={edgePath}
       style={{
         strokeWidth: 1.5,
-        stroke: "#595959",
+        stroke: controlCenterPlainEdgeColor,
         strokeDasharray: "0, 0",
         opacity: enabled ? 1 : 0.6,
       }}

@@ -50,7 +50,7 @@ export const DomainsTooltip = ({
                 >
                   <div
                     className={
-                      "flex gap-2 items-center text-nb-gray-300 text-xs"
+                      "flex gap-2 items-center text-neutral-600 dark:text-nb-gray-300 text-xs"
                     }
                   >
                     <GlobeIcon size={11} />

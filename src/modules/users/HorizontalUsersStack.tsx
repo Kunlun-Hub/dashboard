@@ -1,7 +1,11 @@
 import FullTooltip from "@components/FullTooltip";
 import { ScrollArea } from "@components/ScrollArea";
 import TextWithTooltip from "@components/ui/TextWithTooltip";
-import { cn, generateColorFromString } from "@utils/helpers";
+import {
+  cn,
+  generateColorFromString,
+  systemAvatarColor,
+} from "@utils/helpers";
 import { orderBy } from "lodash";
 import * as React from "react";
 import { useMemo } from "react";
@@ -95,6 +99,7 @@ export const HorizontalUsersStack = ({
           >
             <UserAvatarCircle
               name={user?.name || user?.id}
+              email={user?.email}
               className={avatarClassName}
               hoverEffect={true}
             />
@@ -117,10 +122,12 @@ export const HorizontalUsersStack = ({
 
 const UserAvatarCircle = ({
   name,
+  email,
   className,
   hoverEffect = false,
 }: {
-  name: string;
+  name?: string;
+  email?: string;
   className?: string;
   hoverEffect?: boolean;
 }) => {
@@ -134,10 +141,13 @@ const UserAvatarCircle = ({
         className,
       )}
       style={{
-        color: generateColorFromString(name),
+        color:
+          email === "NetBird" || !name
+            ? systemAvatarColor
+            : generateColorFromString(name),
       }}
     >
-      <span className={"leading-none"}>{name.charAt(0)}</span>
+      <span className={"leading-none"}>{name?.charAt(0) || "?"}</span>
     </div>
   );
 };

@@ -186,7 +186,7 @@ const GroupOverviewTabs = ({ group }: { group: Group }) => {
             <TeamIcon
               size={12}
               className={
-                "fill-nb-gray-500 group-data-[state=active]/trigger:fill-netbird transition-all"
+                "fill-neutral-500 dark:fill-nb-gray-500 group-data-[state=active]/trigger:fill-netbird dark:group-data-[state=active]/trigger:fill-netbird transition-all"
               }
             />
             {singularize(t("users.title"), usersCount)}
@@ -201,7 +201,7 @@ const GroupOverviewTabs = ({ group }: { group: Group }) => {
             <PeerIcon
               size={12}
               className={
-                "fill-nb-gray-500 group-data-[state=active]/trigger:fill-netbird transition-all"
+                "fill-neutral-500 dark:fill-nb-gray-500 group-data-[state=active]/trigger:fill-netbird dark:group-data-[state=active]/trigger:fill-netbird transition-all"
               }
             />
             {singularize(t("peers.title"), peersCount)}
@@ -215,7 +215,7 @@ const GroupOverviewTabs = ({ group }: { group: Group }) => {
           <AccessControlIcon
             size={12}
             className={
-              "fill-nb-gray-500 group-data-[state=active]/trigger:fill-netbird transition-all"
+              "fill-neutral-500 dark:fill-nb-gray-500 group-data-[state=active]/trigger:fill-netbird dark:group-data-[state=active]/trigger:fill-netbird transition-all"
             }
           />
           {singularize(t("nav.policies"), policiesCount)}
@@ -236,7 +236,7 @@ const GroupOverviewTabs = ({ group }: { group: Group }) => {
           <NetworkRoutesIcon
             size={12}
             className={
-              "fill-nb-gray-500 group-data-[state=active]/trigger:fill-netbird transition-all"
+              "fill-neutral-500 dark:fill-nb-gray-500 group-data-[state=active]/trigger:fill-netbird dark:group-data-[state=active]/trigger:fill-netbird transition-all"
             }
           />
           {singularize(t("networkRoutesPage.title"), routesCount)}
@@ -249,7 +249,7 @@ const GroupOverviewTabs = ({ group }: { group: Group }) => {
           <DNSIcon
             size={12}
             className={
-              "fill-nb-gray-500 group-data-[state=active]/trigger:fill-netbird transition-all"
+              "fill-neutral-500 dark:fill-nb-gray-500 group-data-[state=active]/trigger:fill-netbird dark:group-data-[state=active]/trigger:fill-netbird transition-all"
             }
           />
           {singularize(t("nameservers.title"), nameserversCount)}
@@ -262,7 +262,7 @@ const GroupOverviewTabs = ({ group }: { group: Group }) => {
           <DNSZoneIcon
             size={16}
             className={
-              "fill-nb-gray-500 group-data-[state=active]/trigger:fill-netbird transition-all"
+              "fill-neutral-500 dark:fill-nb-gray-500 group-data-[state=active]/trigger:fill-netbird dark:group-data-[state=active]/trigger:fill-netbird transition-all"
             }
           />
           {singularize(t("zones.title"), zonesCount)}
@@ -276,7 +276,7 @@ const GroupOverviewTabs = ({ group }: { group: Group }) => {
             <SetupKeysIcon
               size={12}
               className={
-                "fill-nb-gray-500 group-data-[state=active]/trigger:fill-netbird transition-all"
+                "fill-neutral-500 dark:fill-nb-gray-500 group-data-[state=active]/trigger:fill-netbird dark:group-data-[state=active]/trigger:fill-netbird transition-all"
               }
             />
             {singularize(t("setupKeys.title"), setupKeysCount)}

@@ -134,7 +134,12 @@ export const GroupPeersSection = ({ peers, isLoading = true }: Props) => {
             className={"py-4"}
             title={t("groupPeers.emptyTitle")}
             description={t("groupPeers.emptyDescription")}
-            icon={<PeerIcon size={20} className={"fill-nb-gray-300"} />}
+            icon={
+              <PeerIcon
+                size={20}
+                className={"fill-neutral-400 dark:fill-nb-gray-300"}
+              />
+            }
           >
             {permission?.peers?.update && permission?.groups?.update && (
               <div className={"flex items-center justify-center mt-4 gap-4"}>

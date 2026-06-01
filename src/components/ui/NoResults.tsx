@@ -57,7 +57,7 @@ export default function NoResults({
     <div className={cn("relative overflow-hidden", className)}>
       <div
         className={
-          "absolute z-20 bg-gradient-to-b dark:to-nb-gray-950 dark:from-nb-gray-950/50 w-full h-full overflow-hidden top-0"
+          "absolute z-20 bg-gradient-to-b from-white/40 to-white dark:from-nb-gray-950/50 dark:to-nb-gray-950 w-full h-full overflow-hidden top-0"
         }
       ></div>
       <div
@@ -86,7 +86,7 @@ export default function NoResults({
 
         <div className={"text-center"}>
           <h1 className={"text-2xl font-medium max-w-lg mx-auto"}>{title ?? t("noResults.title")}</h1>
-          <Paragraph className={"justify-center my-2 !text-nb-gray-400"}>
+          <Paragraph className={"justify-center my-2 !text-neutral-500 dark:!text-nb-gray-400"}>
             {description ?? t("noResults.description")}
           </Paragraph>
           {hasFiltersApplied && onResetFilters && (

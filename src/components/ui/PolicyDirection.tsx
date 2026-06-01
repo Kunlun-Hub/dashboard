@@ -52,9 +52,9 @@ export default function PolicyDirection({
   }, [value, isNetworkResource]);
 
   const topArrowClass = useMemo(() => {
-    if (isNetworkResource) return "fill-sky-500";
+    if (isNetworkResource) return "fill-netbird-500";
     if (value === "bi") return "fill-green-500";
-    if (value === "in") return "fill-sky-500";
+    if (value === "in") return "fill-netbird-500";
     return "fill-gray-500";
   }, [value, isNetworkResource]);
 

@@ -78,7 +78,10 @@ export default function ReverseProxyHTTPTargets({
                     </span>
                   </td>
                   <td className="py-2.5 px-4 align-middle">
-                    <ArrowRight size={12} className="text-nb-gray-400" />
+                    <ArrowRight
+                      size={12}
+                      className="text-neutral-500 dark:text-nb-gray-400"
+                    />
                   </td>
                   <td className="py-2.5 pr-2 align-middle">
                     <TargetDestination target={target} />
@@ -160,7 +163,7 @@ export default function ReverseProxyHTTPTargets({
           }
         >
           {t("reverseProxy.noResourcesPrefix")}{" "}
-          <span className={"text-netbird-100 font-medium"}>
+          <span className={"text-netbird-700 dark:text-netbird-100 font-medium"}>
             {initialNetwork?.name}
           </span>
           {t("reverseProxy.noResourcesSuffix")}{" "}
@@ -177,7 +180,7 @@ export default function ReverseProxyHTTPTargets({
 function TargetDestination({ target }: { target: ReverseProxyTarget }) {
   const { resolveDestination } = useReverseProxies();
   return (
-    <span className="text-[0.76rem] text-nb-gray-200 whitespace-nowrap font-mono">
+    <span className="text-[0.76rem] text-neutral-800 dark:text-nb-gray-200 whitespace-nowrap font-mono">
       {resolveDestination(target)}
     </span>
   );

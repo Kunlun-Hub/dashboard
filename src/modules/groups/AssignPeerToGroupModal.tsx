@@ -290,14 +290,19 @@ export const AssignGroupToPeerModalContent = ({
               className={"mb-8"}
               title={t("groupPeers.emptyAssignTitle")}
               description={t("groupPeers.emptyAssignDescription")}
-              icon={<PeerIcon className={"fill-nb-gray-200"} size={14} />}
+              icon={
+                <PeerIcon
+                  className={"fill-neutral-400 dark:fill-nb-gray-200"}
+                  size={14}
+                />
+              }
             />
           }
           rightSide={(table) => (
             <div className={"ml-auto flex items-center gap-5"}>
               <div className={"text-sm"}>
                 {Object.keys(selectedRows).length > 0 && (
-                  <div className={"text-nb-gray-200"}>
+                  <div className={"text-neutral-900 dark:text-nb-gray-200"}>
                     <span className={"text-netbird font-medium"}>
                       {Object.keys(selectedRows).length}
                     </span>{" "}

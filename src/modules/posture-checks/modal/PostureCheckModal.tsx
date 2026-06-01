@@ -96,7 +96,7 @@ export default function PostureCheckModal({
                 <Text
                   size={16}
                   className={
-                    "text-nb-gray-500 group-data-[state=active]/trigger:text-netbird transition-all"
+                    "text-neutral-500 dark:text-nb-gray-500 group-data-[state=active]/trigger:text-netbird dark:group-data-[state=active]/trigger:text-netbird transition-all"
                   }
                 />
                 {t("postureChecks.nameDescription")}

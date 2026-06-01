@@ -248,7 +248,7 @@ function NetworkOverview({
                 <PeerIcon
                   size={12}
                   className={
-                    "fill-nb-gray-500 group-data-[state=active]/trigger:fill-netbird transition-all"
+                    "fill-neutral-500 dark:fill-nb-gray-500 group-data-[state=active]/trigger:fill-netbird dark:group-data-[state=active]/trigger:fill-netbird transition-all"
                   }
                 />
                 {singularize(
@@ -260,7 +260,7 @@ function NetworkOverview({
                 <ReverseProxyIcon
                   size={16}
                   className={
-                    "fill-nb-gray-500 group-data-[state=active]/trigger:fill-netbird transition-all"
+                    "fill-neutral-500 dark:fill-nb-gray-500 group-data-[state=active]/trigger:fill-netbird dark:group-data-[state=active]/trigger:fill-netbird transition-all"
                   }
                 />
                 {singularize(t("networkDetails.services"), services.length)}
@@ -359,7 +359,7 @@ function NetworkInformationCard({ network }: Readonly<{ network: Network }>) {
     () => (
       <>
         {t("networkDetails.highAvailabilityInactivePrefix")}{" "}
-        <span className={"text-yellow-400 font-medium"}>
+        <span className={"text-yellow-600 dark:text-yellow-400 font-medium"}>
           {t("networkDetails.inactive")}
         </span>{" "}
         {t("networkDetails.highAvailabilitySuffix")}
@@ -372,7 +372,7 @@ function NetworkInformationCard({ network }: Readonly<{ network: Network }>) {
     () => (
       <>
         {t("networkDetails.highAvailabilityActivePrefix")}{" "}
-        <span className={"text-green-500 font-medium"}>
+        <span className={"text-emerald-600 dark:text-green-500 font-medium"}>
           {t("networkDetails.active")}
         </span>{" "}
         {t("networkDetails.highAvailabilitySuffix")}
@@ -440,7 +440,7 @@ function NetworkInformationCard({ network }: Readonly<{ network: Network }>) {
             >
               <div
                 className={cn(
-                  "flex gap-2.5 items-center text-nb-gray-300 text-sm cursor-help",
+                  "flex gap-2.5 items-center text-neutral-700 dark:text-nb-gray-300 text-sm cursor-help",
                 )}
               >
                 <span
@@ -449,8 +449,8 @@ function NetworkInformationCard({ network }: Readonly<{ network: Network }>) {
                     !highAvailabilityEnabled
                       ? "bg-neutral-400 dark:bg-nb-gray-500"
                       : !isHighlyAvailable
-                      ? "bg-yellow-400"
-                      : "bg-green-500",
+                      ? "bg-yellow-500 dark:bg-yellow-400"
+                      : "bg-emerald-500 dark:bg-green-500",
                   )}
                 ></span>
                 {statusLabel}

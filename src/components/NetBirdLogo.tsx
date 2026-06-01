@@ -1,12 +1,16 @@
 import { cn } from "@utils/helpers";
 import Image from "next/image";
 import * as React from "react";
-import NetBirdLogoMark from "@/assets/netbird.svg";
-import NetBirdLogoFull from "@/assets/netbird-full.svg";
+import {
+  BrandedLogoFull,
+  BrandedLogoMark,
+} from "@/assets/icons/BrandedLogo";
 
 type Props = {
   size?: "default" | "large";
   mobile?: boolean;
+  logoClassName?: string;
+  mobileLogoClassName?: string;
   customLogoSrc?: string;
   customDarkLogoSrc?: string;
   customIconSrc?: string;
@@ -27,10 +31,12 @@ const sizes = {
 export const NetBirdLogo = ({
   size = "default",
   mobile = true,
+  logoClassName,
+  mobileLogoClassName,
   customLogoSrc,
   customDarkLogoSrc,
   customIconSrc,
-  alt = "NetBird Logo",
+  alt = "Cloink Logo",
 }: Props) => {
   if (customLogoSrc || customDarkLogoSrc || customIconSrc) {
     const desktopLogo = customLogoSrc || customIconSrc;
@@ -50,16 +56,17 @@ export const NetBirdLogo = ({
             height={sizes[size].desktop}
             alt={alt}
             className={cn(
+              logoClassName,
               mobile && "hidden md:block",
               swapDesktopLogo && "dark:hidden",
             )}
           />
         ) : (
-          <Image
-            src={NetBirdLogoFull}
+          <BrandedLogoFull
             height={sizes[size].desktop}
-            alt={alt}
+            title={alt}
             className={cn(
+              logoClassName,
               "max-w-[180px]",
               mobile && "hidden md:block",
               swapDesktopLogo && "dark:hidden",
@@ -72,7 +79,11 @@ export const NetBirdLogo = ({
             width={180}
             height={sizes[size].desktop}
             alt={alt}
-            className={cn("hidden", mobile ? "md:dark:block" : "dark:block")}
+            className={cn(
+              logoClassName,
+              "hidden",
+              mobile ? "md:dark:block" : "dark:block",
+            )}
           />
         )}
         {mobile && (
@@ -84,17 +95,18 @@ export const NetBirdLogo = ({
                 height={sizes[size].mobile}
                 alt={alt}
                 className={cn(
+                  mobileLogoClassName,
                   "md:hidden ml-4",
                   swapMobileLogo && "dark:hidden",
                 )}
                 square
               />
             ) : (
-              <Image
-                src={NetBirdLogoMark}
-                width={sizes[size].mobile}
-                alt={alt}
+              <BrandedLogoMark
+                size={sizes[size].mobile}
+                title={alt}
                 className={cn(
+                  mobileLogoClassName,
                   "md:hidden ml-4",
                   swapMobileLogo && "dark:hidden",
                 )}
@@ -106,7 +118,10 @@ export const NetBirdLogo = ({
                 width={sizes[size].mobile}
                 height={sizes[size].mobile}
                 alt={alt}
-                className={"hidden dark:block md:dark:hidden ml-4"}
+                className={cn(
+                  mobileLogoClassName,
+                  "hidden dark:block md:dark:hidden ml-4",
+                )}
                 square
               />
             )}
@@ -118,18 +133,16 @@ export const NetBirdLogo = ({
 
   return (
     <>
-      <Image
-        src={NetBirdLogoFull}
+      <BrandedLogoFull
         height={sizes[size].desktop}
-        alt={alt}
-        className={cn(mobile && "hidden md:block")}
+        title={alt}
+        className={cn(logoClassName, mobile && "hidden md:block")}
       />
       {mobile && (
-        <Image
-          src={NetBirdLogoMark}
-          width={sizes[size].mobile}
-          alt={alt}
-          className={cn(mobile && "md:hidden ml-4")}
+        <BrandedLogoMark
+          size={sizes[size].mobile}
+          title={alt}
+          className={cn(mobileLogoClassName, mobile && "md:hidden ml-4")}
         />
       )}
     </>

@@ -76,7 +76,7 @@ export default function GroupBadge({
         <XIcon
           size={12}
           className={
-            "cursor-pointer group-hover:text-nb-gray-100 transition-all shrink-0"
+            "cursor-pointer group-hover:text-neutral-900 dark:group-hover:text-nb-gray-100 transition-all shrink-0"
           }
         />
       )}

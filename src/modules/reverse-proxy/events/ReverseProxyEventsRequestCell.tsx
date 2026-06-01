@@ -16,14 +16,14 @@ type Props = {
 export const ReverseProxyEventsMethodCell = ({ event }: Props) => {
   if (isL4Event(event)) {
     return (
-      <span className="font-mono text-[0.82rem] font-medium py-2 text-nb-gray-200 uppercase">
+      <span className="font-mono text-[0.82rem] font-medium py-2 text-neutral-800 dark:text-nb-gray-200 uppercase">
         {event.protocol}
       </span>
     );
   }
 
   return (
-    <span className="font-mono text-[0.82rem] font-medium py-2 text-nb-gray-300">
+    <span className="font-mono text-[0.82rem] font-medium py-2 text-neutral-600 dark:text-nb-gray-300">
       {event.method}
     </span>
   );
@@ -58,7 +58,9 @@ export const ReverseProxyEventsUrlCell = ({ event, service }: Props) => {
             <span className="text-neutral-600 dark:text-nb-gray-300">:{listenPort}</span>
           )}
           {!isL4 && (
-            <span className="text-nb-gray-300">{event.path}</span>
+            <span className="text-neutral-600 dark:text-nb-gray-300">
+              {event.path}
+            </span>
           )}
         </span>
       </CopyToClipboardText>

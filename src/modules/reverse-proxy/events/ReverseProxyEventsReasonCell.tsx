@@ -42,7 +42,11 @@ export const ReverseProxyEventsReasonCell = ({ event }: Props) => {
                 key={key}
                 icon={<Info size={14} />}
                 label={key.replaceAll("_", " ")}
-                value={<span className="text-nb-gray-200">{val}</span>}
+                value={
+                  <span className="text-neutral-800 dark:text-nb-gray-200">
+                    {val}
+                  </span>
+                }
               />
             ))}
           </div>
@@ -59,7 +63,7 @@ export const ReverseProxyEventsReasonCell = ({ event }: Props) => {
   }
 
   return (
-    <span className="text-nb-gray-300 text-[0.82rem] py-2 text-left">
+    <span className="text-neutral-600 dark:text-nb-gray-300 text-[0.82rem] py-2 text-left">
       {event.reason || "-"}
     </span>
   );

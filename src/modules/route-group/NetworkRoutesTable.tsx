@@ -208,7 +208,10 @@ export default function NetworkRoutesTable({
           isGroupPage ? (
             <NoResults
               icon={
-                <NetworkRoutesIcon className={"fill-nb-gray-200"} size={20} />
+                <NetworkRoutesIcon
+                  className={"fill-neutral-400 dark:fill-nb-gray-200"}
+                  size={20}
+                />
               }
               className={"py-4"}
               title={t("routeTable.emptyGroupTitle")}
@@ -233,7 +236,7 @@ export default function NetworkRoutesTable({
                 <SquareIcon
                   icon={
                     <NetworkRoutesIcon
-                      className={"fill-nb-gray-200"}
+                      className={"fill-neutral-400 dark:fill-nb-gray-200"}
                       size={20}
                     />
                   }

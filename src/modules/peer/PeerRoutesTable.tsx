@@ -105,7 +105,10 @@ export default function PeerRoutesTable({
             title={t("peerRoutes.emptyTitle")}
             description={t("peerRoutes.emptyDescription")}
             icon={
-              <NetworkRoutesIcon size={20} className={"fill-nb-gray-300"} />
+              <NetworkRoutesIcon
+                size={20}
+                className={"fill-neutral-400 dark:fill-nb-gray-300"}
+              />
             }
           />
         }

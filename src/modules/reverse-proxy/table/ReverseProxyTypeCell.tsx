@@ -28,7 +28,7 @@ export const ReverseProxyTypeCell = ({ reverseProxy }: Props) => {
       <Badge variant={"gray"} className={"font-normal"}>
         <ReverseProxyServiceIcon
           reverseProxy={reverseProxy}
-          className={"text-nb-gray-200"}
+          className={"text-neutral-800 dark:text-nb-gray-200"}
           size={11}
         />
         {serviceModeLabel}

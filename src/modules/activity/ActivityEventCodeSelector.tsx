@@ -94,7 +94,7 @@ export function ActivityEventCodeSelector({
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className="w-full p-0 shadow-sm  shadow-nb-gray-950"
+        className="w-full p-0 shadow-sm shadow-neutral-200/70 dark:shadow-nb-gray-950"
         style={{
           width: popoverWidth === "auto" ? width : popoverWidth,
         }}
@@ -119,7 +119,7 @@ export function ActivityEventCodeSelector({
                   "min-h-[42px] w-full relative",
                   "border-b-0 border-t-0 border-r-0 border-l-0 border-neutral-200 dark:border-nb-gray-700 items-center",
                   "bg-transparent text-sm text-neutral-900 outline-none focus-visible:outline-none ring-0 focus-visible:ring-0 dark:text-nb-gray-100",
-                  "dark:placeholder:text-nb-gray-400 font-light placeholder:text-nb-gray-500 pl-10",
+                  "placeholder:text-neutral-500 dark:placeholder:text-nb-gray-400 font-light pl-10",
                 )}
                 ref={searchRef}
                 value={search}
@@ -149,7 +149,7 @@ export function ActivityEventCodeSelector({
                     <div className={"mb-3"}>
                       <p
                         className={
-                          "!text-nb-gray-400 text-xs uppercase font-medium tracking-wider pb-1 pl-2 mb-.5"
+                          "!text-neutral-500 dark:!text-nb-gray-400 text-xs uppercase font-medium tracking-wider pb-1 pl-2 mb-.5"
                         }
                       >
                         {group}

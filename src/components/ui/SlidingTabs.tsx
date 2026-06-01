@@ -92,7 +92,7 @@ export const SlidingTabsTrigger = ({
     <div onClick={() => onChange(value)}>
       <div
         className={
-          "hover:bg-nb-gray-920/80 border border-transparent hover:border-nb-gray-900 rounded-md flex flex-col items-center transition-all cursor-pointer"
+          "hover:bg-neutral-50 border border-transparent hover:border-neutral-200 rounded-md flex flex-col items-center transition-all cursor-pointer dark:hover:bg-nb-gray-920/80 dark:hover:border-nb-gray-900"
         }
       >
         <div className={"flex gap-4 items-center w-full px-4 py-3"}>
@@ -108,7 +108,7 @@ export const SlidingTabsTrigger = ({
             <div className={"text-sm font-medium flex gap-2 items-center"}>
               {title}
             </div>
-            <div className={"text-xs mt-0.5 text-nb-gray-300"}>
+            <div className={"text-xs mt-0.5 text-neutral-500 dark:text-nb-gray-300"}>
               {description}
             </div>
           </div>

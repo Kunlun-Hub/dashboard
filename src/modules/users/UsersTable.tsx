@@ -255,7 +255,12 @@ export default function UsersTable({
           <GetStartedTest
             icon={
               <SquareIcon
-                icon={<TeamIcon className={"fill-nb-gray-200"} size={20} />}
+                icon={
+                  <TeamIcon
+                    className={"fill-neutral-400 dark:fill-nb-gray-200"}
+                    size={20}
+                  />
+                }
                 color={"gray"}
                 size={"large"}
               />

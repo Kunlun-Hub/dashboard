@@ -5,5 +5,5 @@ type Props = {
 };
 
 export default function EmptyRow({ className }: Readonly<Props>) {
-  return <div className={cn("text-nb-gray-600", className)}>-</div>;
+  return <div className={cn("text-neutral-500 dark:text-nb-gray-600", className)}>-</div>;
 }

@@ -23,29 +23,31 @@ export const SessionLost = () => {
   return (
     <div
       className={
-        "flex items-center justify-center flex-col h-screen max-w-md mx-auto px-4"
+        "light-theme-surface flex h-screen flex-col items-center justify-center bg-neutral-50 px-4 text-neutral-900 dark:bg-nb-gray-950 dark:text-nb-gray-100"
       }
     >
-      <div
-        className={
-          "bg-neutral-50 mb-3 border border-neutral-200 h-10 w-10 rounded-md flex items-center justify-center dark:bg-nb-gray-930 dark:border-nb-gray-900"
-        }
-      >
-        <PublicBrandingIcon size={20} />
+      <div className={"flex w-full max-w-md flex-col items-center"}>
+        <div
+          className={
+            "bg-neutral-50 mb-3 border border-neutral-200 h-10 w-10 rounded-md flex items-center justify-center dark:bg-nb-gray-930 dark:border-nb-gray-900"
+          }
+        >
+          <PublicBrandingIcon size={20} />
+        </div>
+        <h1>{t("session.expiredTitle")}</h1>
+        <Paragraph className={"text-center"}>
+          {t("session.expiredDescription")}
+        </Paragraph>
+        <Button
+          variant={"primary"}
+          size={"sm"}
+          className={"mt-5"}
+          onClick={() => logout("", { client_id: config.clientId })}
+        >
+          {t("session.login")}
+          <LogIn size={16} />
+        </Button>
       </div>
-      <h1>{t("session.expiredTitle")}</h1>
-      <Paragraph className={"text-center"}>
-        {t("session.expiredDescription")}
-      </Paragraph>
-      <Button
-        variant={"primary"}
-        size={"sm"}
-        className={"mt-5"}
-        onClick={() => logout("", { client_id: config.clientId })}
-      >
-        {t("session.login")}
-        <LogIn size={16} />
-      </Button>
     </div>
   );
 };

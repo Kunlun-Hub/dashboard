@@ -29,7 +29,7 @@ export const OnboardingDevices = ({
   return intent === Intent.P2P ? (
     <div
       className={cn(
-        "flex h-full flex-col items-center justify-center text-center text-nb-gray-300 py-8 w-full relative",
+        "flex h-full flex-col items-center justify-center text-center text-neutral-500 py-8 w-full relative dark:text-nb-gray-300",
         !firstDevice && !secondDevice ? "gap-y-8" : "gap-y-2",
       )}
     >
@@ -48,7 +48,7 @@ export const OnboardingDevices = ({
       {firstDevice && secondDevice && (
         <div
           className={
-            "absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 bg-nb-gray-940 p-2 "
+            "absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 bg-neutral-50 p-2 dark:bg-nb-gray-940"
           }
         >
           {enabled ? (
@@ -73,13 +73,13 @@ export const OnboardingDevices = ({
   ) : (
     <div
       className={cn(
-        "flex h-full flex-col items-center justify-center text-center text-nb-gray-300 w-full",
+        "flex h-full flex-col items-center justify-center text-center text-neutral-500 w-full dark:text-nb-gray-300",
         "gap-y-2",
         firstRoutingPeer && "h-full",
       )}
     >
       {firstRoutingPeer && resource && (
-        <span className={"text-xs text-nb-gray-500"}>
+        <span className={"text-xs text-neutral-500 dark:text-nb-gray-500"}>
           {t("onboarding.networkLabel")}
         </span>
       )}
@@ -89,7 +89,7 @@ export const OnboardingDevices = ({
           "flex flex-col items-center justify-center gap-y-1",
           resource &&
             firstRoutingPeer &&
-            "border px-4 py-5 bg-nb-gray-940 border-nb-gray-900  rounded-lg border-dashed",
+            "border px-4 py-5 bg-neutral-50 border-neutral-200 rounded-lg border-dashed dark:bg-nb-gray-940 dark:border-nb-gray-900",
         )}
       >
         <DeviceCard resource={resource} />
@@ -131,7 +131,7 @@ export const OnboardingDevices = ({
         {firstDevice && firstRoutingPeer && (
           <div
             className={
-              "absolute top-0 left-1/2 -translate-x-1/2 bg-nb-gray-940 p-1 mt-[20px]"
+              "absolute top-0 left-1/2 -translate-x-1/2 bg-neutral-50 p-1 mt-[20px] dark:bg-nb-gray-940"
             }
           >
             {enabled ? (

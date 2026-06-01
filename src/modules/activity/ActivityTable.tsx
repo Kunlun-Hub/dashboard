@@ -147,7 +147,12 @@ export default function ActivityTable({
         <GetStartedTest
           icon={
             <SquareIcon
-              icon={<PeerIcon className={"fill-nb-gray-200"} size={20} />}
+              icon={
+                <PeerIcon
+                  className={"fill-neutral-400 dark:fill-nb-gray-200"}
+                  size={20}
+                />
+              }
               color={"gray"}
               size={"large"}
             />

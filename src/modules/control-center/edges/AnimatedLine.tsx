@@ -1,6 +1,7 @@
 import { Edge, useInternalNode } from "@xyflow/react";
 import React from "react";
 import { getEdgeParams } from "@/modules/control-center/utils/edge-helper";
+import { controlCenterEdgeColor } from "@/modules/control-center/utils/theme";
 
 type AnimatedLineProps = Edge<
   {
@@ -50,7 +51,7 @@ function AnimatedLine({ id, source, target, data }: AnimatedLineProps) {
   const postLabelX = labelX + nx * gap;
   const postLabelY = labelY + ny * gap;
 
-  const color = data?.color || "#0e9f6e";
+  const color = data?.color || controlCenterEdgeColor;
 
   return (
     <>

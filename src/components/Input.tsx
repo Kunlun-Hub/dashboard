@@ -27,25 +27,23 @@ const inputVariants = cva("", {
   variants: {
     variant: {
       default: [
-        "dark:bg-nb-gray-900 dark:placeholder:text-neutral-400/70 placeholder:text-neutral-500 border-neutral-200 dark:border-nb-gray-700 disabled:bg-neutral-50 disabled:text-neutral-500 disabled:placeholder:text-neutral-400 disabled:border-neutral-200 dark:disabled:bg-nb-gray-900/50 dark:disabled:text-nb-gray-400",
-        "ring-offset-neutral-200/20 dark:ring-offset-neutral-950/50 dark:focus-visible:ring-neutral-500/20 focus-visible:ring-neutral-300/10",
+        "bg-white text-neutral-900 placeholder:text-neutral-500 border-neutral-200 hover:border-neutral-300 dark:bg-nb-gray-900 dark:text-nb-gray-100 dark:placeholder:text-neutral-400/70 dark:border-nb-gray-700 disabled:bg-neutral-50 disabled:text-neutral-500 disabled:placeholder:text-neutral-400 disabled:border-neutral-200 dark:disabled:bg-nb-gray-900/50 dark:disabled:text-nb-gray-400",
+        "ring-offset-white dark:ring-offset-nb-gray-950/50 focus-visible:border-netbird-300 focus-visible:ring-netbird-400/40 dark:focus-visible:border-netbird-500/40 dark:focus-visible:ring-netbird-500/40",
       ],
       darker: [
-        "dark:bg-nb-gray-920 dark:placeholder:text-neutral-400/70 placeholder:text-neutral-500 border-neutral-300 dark:border-nb-gray-800 disabled:bg-neutral-50 disabled:text-neutral-500 disabled:placeholder:text-neutral-400 disabled:border-neutral-200 dark:disabled:bg-nb-gray-900/50 dark:disabled:text-nb-gray-400",
-        "ring-offset-neutral-200/20 dark:ring-offset-neutral-950/50 dark:focus-visible:ring-neutral-500/20 focus-visible:ring-neutral-300/10",
+        "bg-white text-neutral-900 placeholder:text-neutral-500 border-neutral-300 hover:border-neutral-400 dark:bg-nb-gray-920 dark:text-nb-gray-100 dark:placeholder:text-neutral-400/70 dark:border-nb-gray-800 disabled:bg-neutral-50 disabled:text-neutral-500 disabled:placeholder:text-neutral-400 disabled:border-neutral-200 dark:disabled:bg-nb-gray-900/50 dark:disabled:text-nb-gray-400",
+        "ring-offset-white dark:ring-offset-nb-gray-950/50 focus-visible:border-netbird-300 focus-visible:ring-netbird-400/40 dark:focus-visible:border-netbird-500/40 dark:focus-visible:ring-netbird-500/40",
       ],
       error: [
-        "dark:bg-nb-gray-900 dark:placeholder:text-neutral-400/70 placeholder:text-neutral-500 border-neutral-200 dark:border-red-500 text-red-500",
+        "bg-white placeholder:text-neutral-500 border-red-500 dark:bg-nb-gray-900 dark:placeholder:text-neutral-400/70 dark:border-red-500 text-red-500",
         "ring-offset-red-500/10 dark:ring-offset-red-500/10 dark:focus-visible:ring-red-500/10 focus-visible:ring-red-500/10",
       ],
     },
     prefixSuffixVariant: {
       default: [
-        "dark:bg-nb-gray-900 border-neutral-200 dark:border-nb-gray-700 text-neutral-600 dark:text-nb-gray-300",
+        "bg-white border-neutral-200 text-neutral-600 dark:bg-nb-gray-900 dark:border-nb-gray-700 dark:text-nb-gray-300",
       ],
-      error: [
-        "dark:bg-nb-gray-900 border-red-500 text-red-500",
-      ],
+      error: ["bg-white border-red-500 text-red-500 dark:bg-nb-gray-900"],
     },
   },
 });
@@ -79,7 +77,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         <button
           type="button"
           onClick={() => setShowPassword(!showPassword)}
-          className={"hover:text-neutral-900 transition-all dark:hover:text-white"}
+          className={
+            "text-neutral-500 hover:text-neutral-900 transition-all dark:text-nb-gray-300 dark:hover:text-white"
+          }
           aria-label={t("input.togglePasswordVisibility")}
         >
           {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -109,7 +109,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
           <div
             className={cn(
-              "absolute left-0 top-0 h-full flex items-center text-xs dark:text-nb-gray-300 pl-3 leading-[0]",
+              "absolute left-0 top-0 h-full flex items-center text-xs text-neutral-500 dark:text-nb-gray-300 pl-3 leading-[0]",
               props.disabled && "opacity-70",
             )}
           >
@@ -137,7 +137,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
           <div
             className={cn(
-              "absolute right-0 top-0 h-full flex items-center text-xs dark:text-nb-gray-300 pr-4 leading-[0] select-none",
+              "absolute right-0 top-0 h-full flex items-center text-xs text-neutral-500 dark:text-nb-gray-300 pr-4 leading-[0] select-none",
               props.disabled && "opacity-70",
             )}
           >

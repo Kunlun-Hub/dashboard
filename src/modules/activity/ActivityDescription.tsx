@@ -830,7 +830,10 @@ export default function ActivityDescription({ event }: Props) {
             </div>
           }
         >
-          <IconInfoCircle className={"text-nb-gray-500"} size={16} />
+          <IconInfoCircle
+            className={"text-neutral-500 dark:text-nb-gray-500"}
+            size={16}
+          />
         </FullTooltip>
       )}
     </div>
@@ -883,7 +886,10 @@ function PeerConnectionInfo({ meta }: { meta: any }) {
       {meta?.location_country_code && (
         <Value>
           {isEmpty(meta?.location_country_code) ? (
-            <GlobeIcon size={9} className={"text-nb-gray-300"} />
+            <GlobeIcon
+              size={9}
+              className={"text-neutral-500 dark:text-nb-gray-300"}
+            />
           ) : (
             <RoundedFlag country={meta?.location_country_code} size={9} />
           )}

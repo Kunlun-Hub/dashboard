@@ -131,7 +131,7 @@ export default function NetworksTable({
                   <SquareIcon
                     icon={
                       <NetworkRoutesIcon
-                        className={"fill-nb-gray-200"}
+                        className={"fill-neutral-400 dark:fill-nb-gray-200"}
                         size={20}
                       />
                     }

@@ -15,7 +15,7 @@ import { RestrictedAccess } from "@components/ui/RestrictedAccess";
 import useRedirect from "@hooks/useRedirect";
 import { IconCirclePlus, IconSettings2 } from "@tabler/icons-react";
 import useFetchApi, { useApiCall } from "@utils/api";
-import { generateColorFromString } from "@utils/helpers";
+import { generateColorFromString, systemAvatarColor } from "@utils/helpers";
 import dayjs from "dayjs";
 import {
   Ban,
@@ -189,7 +189,7 @@ function UserOverview({ user, initialGroups }: Readonly<Props>) {
                           ? generateColorFromString(
                               user?.name || user?.id || t("users.system"),
                             )
-                          : "#808080",
+                          : systemAvatarColor,
                       }
                 }
               >

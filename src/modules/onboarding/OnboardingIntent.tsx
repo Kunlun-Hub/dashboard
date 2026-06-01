@@ -63,7 +63,7 @@ export const OnboardingIntent = ({onSelect, useCases, isBusiness}: Props) => {
                 <h1 className={"text-xl text-center"}>{t("onboarding.getStartedWithNetBird")}</h1>
                 <div
                     className={
-                        "text-sm text-nb-gray-300 font-light mt-2 block text-center sm:px-4"
+                        "text-sm text-neutral-500 font-light mt-2 block text-center sm:px-4 dark:text-nb-gray-300"
                     }
                 >
                     {t("onboarding.netbirdFlexibility")}
@@ -71,7 +71,7 @@ export const OnboardingIntent = ({onSelect, useCases, isBusiness}: Props) => {
                 <div
                     className={cn(
                         "grid grid-cols-1 mt-8",
-                        "border border-nb-gray-900 rounded-lg flex items-start flex-col relative bg-nb-gray-930/60 transition-all ",
+                        "border border-neutral-200 rounded-lg flex items-start flex-col relative bg-white transition-all dark:border-nb-gray-900 dark:bg-nb-gray-930/60",
                     )}
                 >
                     <IntentCard
@@ -117,7 +117,7 @@ const IntentCard = ({
     return (
         <button
             className={
-                "px-6 py-6 flex items-start flex-col relative hover:bg-nb-gray-920 transition-all group first:border-b border-nb-gray-900"
+                "px-6 py-6 flex items-start flex-col relative hover:bg-neutral-50 transition-all group first:border-b border-neutral-200 dark:border-nb-gray-900 dark:hover:bg-nb-gray-920"
             }
             onClick={onClick}
         >
@@ -125,7 +125,7 @@ const IntentCard = ({
                 <div
                     className={cn(
                         "h-10 w-10 flex items-center justify-center rounded-md shrink-0 mt-2",
-                        "bg-nb-gray-900 border border-nb-gray-800 ",
+                        "bg-neutral-50 border border-neutral-200 dark:bg-nb-gray-900 dark:border-nb-gray-800",
                     )}
                 >
                     {icon}
@@ -159,10 +159,10 @@ const IntentCard = ({
                                 </FullTooltip>
                             )}
                         </h2>
-                        <p className={"!text-nb-gray-300 text-[.85rem]"}>{description}</p>
+                        <p className={"!text-neutral-500 text-[.85rem] dark:!text-nb-gray-300"}>{description}</p>
                     </div>
                     <div
-                        className={"h-full items-center text-nb-gray-400 hidden sm:flex"}
+                        className={"h-full items-center text-neutral-400 hidden sm:flex dark:text-nb-gray-400"}
                     >
                         <IconArrowRight
                             size={24}

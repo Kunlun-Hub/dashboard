@@ -248,7 +248,10 @@ export default function ReverseProxyEventsTable({
           icon={
             <SquareIcon
               icon={
-                <ReverseProxyIcon className={"fill-nb-gray-200"} size={20} />
+                <ReverseProxyIcon
+                  className={"fill-neutral-400 dark:fill-nb-gray-200"}
+                  size={20}
+                />
               }
               color={"gray"}
               size={"large"}

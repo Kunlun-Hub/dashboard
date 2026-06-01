@@ -18,10 +18,52 @@
     --cloink-brand-900: 122 43 20;
     --cloink-brand-950: 66 19 8;
     --onboarding-line-gap: 255 255 255;
+    --control-center-background-color: #ffffff;
+    --control-center-background-grid-color: #d4d4d4;
+    --control-center-disabled-edge-color: #a3a3a3;
+    --control-center-handle-color: #d4d4d4;
+    --control-center-plain-edge-color: #c7c7c7;
+    --user-system-avatar-color: #737373;
+    --overview-device-color-android: #7c8994;
+    --overview-device-color-ios: #a3adb5;
+    --overview-device-color-linux: #374151;
+    --overview-device-color-macos: #616e79;
+    --overview-device-color-windows: #8f9ca8;
+    --overview-device-color-unknown: #cbd2d6;
+    --overview-device-color-other: rgb(var(--cloink-brand-500));
+    --overview-device-chart-shadow-color: #111827;
+    --overview-chart-grid-color: #e5e7eb;
+    --overview-chart-axis-color: #6b7280;
+    --overview-chart-label-color: #64748b;
+    --overview-chart-hover-line-color: #737373;
+    --overview-chart-tooltip-bg: #ffffff;
+    --overview-chart-tooltip-border: #d4d4d4;
+    --overview-chart-tooltip-text: #171717;
 }
 
 .dark {
     --onboarding-line-gap: 28 30 33;
+    --control-center-background-color: #181a1d;
+    --control-center-background-grid-color: #717171;
+    --control-center-disabled-edge-color: #787878;
+    --control-center-handle-color: #3f444b;
+    --control-center-plain-edge-color: #595959;
+    --user-system-avatar-color: #a3a3a3;
+    --overview-device-color-android: #7c8994;
+    --overview-device-color-ios: #cbd2d6;
+    --overview-device-color-linux: #f4f6f7;
+    --overview-device-color-macos: #a3adb5;
+    --overview-device-color-windows: #b7c0c6;
+    --overview-device-color-unknown: #616e79;
+    --overview-device-color-other: rgb(var(--cloink-brand-300));
+    --overview-device-chart-shadow-color: #000000;
+    --overview-chart-grid-color: #374151;
+    --overview-chart-axis-color: #9ca3af;
+    --overview-chart-label-color: #94a3b8;
+    --overview-chart-hover-line-color: #64748b;
+    --overview-chart-tooltip-bg: #1e293b;
+    --overview-chart-tooltip-border: #334155;
+    --overview-chart-tooltip-text: #ffffff;
 }
 
 html{
@@ -97,7 +139,7 @@ p {
 }
 
 .stepper-bg-variant .step-circle {
-    @apply !border-nb-gray-940;
+    @apply !border-neutral-50 dark:!border-nb-gray-940;
 }
 
 .webkit-scroll{
@@ -229,6 +271,182 @@ p {
  * This is scoped to page surfaces so terminals and other intentionally dark
  * embeds keep their own styling.
  */
+html:not(.dark) .light-theme-surface.bg-nb-gray,
+html:not(.dark) .light-theme-surface.bg-nb-gray-960,
+html:not(.dark) .light-theme-surface.bg-nb-gray-950,
+html:not(.dark) .light-theme-surface.bg-nb-gray-940,
+html:not(.dark) .light-theme-surface.bg-nb-gray-935,
+html:not(.dark) .light-theme-surface.bg-nb-gray-850,
+html:not(.dark) .light-theme-surface.bg-nb-gray-800,
+html:not(.dark) .light-theme-surface.bg-nb-gray-700,
+html:not(.dark) .light-theme-surface.bg-nb-gray-600,
+html:not(.dark) .light-theme-surface.bg-nb-gray-500,
+html:not(.dark) .light-theme-surface.bg-nb-gray-400,
+html:not(.dark) .light-theme-surface.bg-nb-gray-300,
+html:not(.dark) .light-theme-surface.bg-nb-gray-200,
+html:not(.dark) .light-theme-surface.bg-nb-gray-100,
+html:not(.dark) .light-theme-surface.bg-nb-gray-50 {
+    background-color: #ffffff;
+}
+
+html:not(.dark) .light-theme-surface.bg-nb-gray-930,
+html:not(.dark) .light-theme-surface.bg-nb-gray-925,
+html:not(.dark) .light-theme-surface.bg-nb-gray-920,
+html:not(.dark) .light-theme-surface.bg-nb-gray-910,
+html:not(.dark) .light-theme-surface.bg-nb-gray-900,
+html:not(.dark) .light-theme-surface.bg-nb-gray-940\/95,
+html:not(.dark) .light-theme-surface.bg-nb-gray-940\/50,
+html:not(.dark) .light-theme-surface.bg-nb-gray-940\/40,
+html:not(.dark) .light-theme-surface.bg-nb-gray-930\/95,
+html:not(.dark) .light-theme-surface.bg-nb-gray-930\/90,
+html:not(.dark) .light-theme-surface.bg-nb-gray-930\/80,
+html:not(.dark) .light-theme-surface.bg-nb-gray-930\/70,
+html:not(.dark) .light-theme-surface.bg-nb-gray-930\/60,
+html:not(.dark) .light-theme-surface.bg-nb-gray-930\/50,
+html:not(.dark) .light-theme-surface.bg-nb-gray-930\/40,
+html:not(.dark) .light-theme-surface.bg-nb-gray-930\/30,
+html:not(.dark) .light-theme-surface.bg-nb-gray-920\/30,
+html:not(.dark) .light-theme-surface.bg-nb-gray-920\/70,
+html:not(.dark) .light-theme-surface.bg-nb-gray-920\/80,
+html:not(.dark) .light-theme-surface.bg-nb-gray-920\/90,
+html:not(.dark) .light-theme-surface.bg-nb-gray-900\/90,
+html:not(.dark) .light-theme-surface.bg-nb-gray-900\/80,
+html:not(.dark) .light-theme-surface.bg-nb-gray-900\/75,
+html:not(.dark) .light-theme-surface.bg-nb-gray-900\/70,
+html:not(.dark) .light-theme-surface.bg-nb-gray-900\/60,
+html:not(.dark) .light-theme-surface.bg-nb-gray-900\/50,
+html:not(.dark) .light-theme-surface.bg-nb-gray-900\/40,
+html:not(.dark) .light-theme-surface.bg-nb-gray-900\/30,
+html:not(.dark) .light-theme-surface.bg-nb-gray-900\/20,
+html:not(.dark) .light-theme-surface.bg-nb-gray-200\/10,
+html:not(.dark) .light-theme-surface.bg-nb-gray-600\/50,
+html:not(.dark) .light-theme-surface.bg-nb-gray-800\/60,
+html:not(.dark) .light-theme-surface.bg-nb-gray-800\/50,
+html:not(.dark) .light-theme-surface.bg-nb-gray-800\/30,
+html:not(.dark) .light-theme-surface.bg-nb-gray-800\/20,
+html:not(.dark) .light-theme-surface.bg-nb-gray-800\/10,
+html:not(.dark) .light-theme-surface.bg-nb-gray-950\/60,
+html:not(.dark) .light-theme-surface.bg-nb-gray-950\/70,
+html:not(.dark) .light-theme-surface.bg-nb-gray-950\/90,
+html:not(.dark) .light-theme-surface.bg-nb-gray-950\/95,
+html:not(.dark) .light-theme-surface.bg-nb-gray\/20 {
+    background-color: #f9fafb;
+}
+
+html:not(.dark) .light-theme-surface.border-nb-gray,
+html:not(.dark) .light-theme-surface.border-nb-gray-950,
+html:not(.dark) .light-theme-surface.border-nb-gray-940,
+html:not(.dark) .light-theme-surface.border-nb-gray-930,
+html:not(.dark) .light-theme-surface.border-nb-gray-920,
+html:not(.dark) .light-theme-surface.border-nb-gray-910,
+html:not(.dark) .light-theme-surface.border-nb-gray-900,
+html:not(.dark) .light-theme-surface.border-nb-gray-800,
+html:not(.dark) .light-theme-surface.border-nb-gray-700,
+html:not(.dark) .light-theme-surface.border-nb-gray-600,
+html:not(.dark) .light-theme-surface.border-nb-gray-500,
+html:not(.dark) .light-theme-surface.border-nb-gray-400,
+html:not(.dark) .light-theme-surface.border-nb-gray-100,
+html:not(.dark) .light-theme-surface.border-nb-gray-950,
+html:not(.dark) .light-theme-surface.border-nb-gray-900\/70,
+html:not(.dark) .light-theme-surface.border-nb-gray-900\/50,
+html:not(.dark) .light-theme-surface.border-nb-gray-800\/80,
+html:not(.dark) .light-theme-surface.border-nb-gray-800\/70,
+html:not(.dark) .light-theme-surface.border-nb-gray-800\/50,
+html:not(.dark) .light-theme-surface.border-nb-gray-800\/40,
+html:not(.dark) .light-theme-surface.border-nb-gray-800\/30,
+html:not(.dark) .light-theme-surface.border-nb-gray-800\/20,
+html:not(.dark) .light-theme-surface.border-nb-gray-700\/40,
+html:not(.dark) .light-theme-surface.border-nb-gray-600\/80,
+html:not(.dark) .light-theme-surface.border-nb-gray-600\/60,
+html:not(.dark) .light-theme-surface.border-nb-gray-600\/50,
+html:not(.dark) .light-theme-surface.border-nb-gray-600\/40 {
+    border-color: #e5e7eb;
+}
+
+html:not(.dark) .light-theme-surface.text-nb-gray-50,
+html:not(.dark) .light-theme-surface.text-nb-gray,
+html:not(.dark) .light-theme-surface.text-nb-gray-100,
+html:not(.dark) .light-theme-surface.text-nb-gray-200,
+html:not(.dark) .light-theme-surface.text-nb-gray-800,
+html:not(.dark) .light-theme-surface.text-nb-gray-900 {
+    color: #171717;
+}
+
+html:not(.dark) .light-theme-surface.text-nb-gray-300,
+html:not(.dark) .light-theme-surface.text-nb-gray-250,
+html:not(.dark) .light-theme-surface.text-nb-gray-350,
+html:not(.dark) .light-theme-surface.text-nb-gray-400,
+html:not(.dark) .light-theme-surface.text-nb-gray-500,
+html:not(.dark) .light-theme-surface.text-nb-gray-600,
+html:not(.dark) .light-theme-surface.text-nb-gray-700,
+html:not(.dark) .light-theme-surface.text-nb-gray-300\/80,
+html:not(.dark) .light-theme-surface.text-nb-gray-200\/60,
+html:not(.dark) .light-theme-surface.text-nb-gray-100\/90 {
+    color: #525252;
+}
+
+html:not(.dark) .light-theme-surface.\!text-nb-gray-200,
+html:not(.dark) .light-theme-surface.\!text-nb-gray-300,
+html:not(.dark) .light-theme-surface.\!text-nb-gray-400 {
+    color: #525252 !important;
+}
+
+html:not(.dark) .light-theme-surface.\!bg-nb-gray-930,
+html:not(.dark) .light-theme-surface.\!bg-nb-gray-925,
+html:not(.dark) .light-theme-surface.\!bg-nb-gray-920,
+html:not(.dark) .light-theme-surface.\!bg-nb-gray-910 {
+    background-color: #f9fafb !important;
+}
+
+html:not(.dark) .light-theme-surface.\!border-nb-gray-940,
+html:not(.dark) .light-theme-surface.\!border-nb-gray-930,
+html:not(.dark) .light-theme-surface.\!border-nb-gray-900,
+html:not(.dark) .light-theme-surface.\!border-nb-gray-900\/20,
+html:not(.dark) .light-theme-surface.\!border-nb-gray-800 {
+    border-color: #e5e7eb !important;
+}
+
+html:not(.dark) .light-theme-surface.fill-nb-gray-100,
+html:not(.dark) .light-theme-surface.fill-nb-gray-200,
+html:not(.dark) .light-theme-surface.fill-nb-gray-300,
+html:not(.dark) .light-theme-surface.fill-nb-gray-400,
+html:not(.dark) .light-theme-surface.fill-nb-gray-500,
+html:not(.dark) .light-theme-surface.fill-nb-gray-800,
+html:not(.dark) .light-theme-surface.fill-nb-gray-900 {
+    fill: #a3a3a3;
+}
+
+html:not(.dark) .light-theme-surface.stroke-nb-gray-300,
+html:not(.dark) .light-theme-surface.stroke-nb-gray-800,
+html:not(.dark) .light-theme-surface.stroke-nb-gray-930 {
+    stroke: #a3a3a3;
+}
+
+html:not(.dark) .light-theme-surface.decoration-nb-gray-300 {
+    text-decoration-color: #a3a3a3;
+}
+
+html:not(.dark) .light-theme-surface.from-nb-gray-500,
+html:not(.dark) .light-theme-surface.from-nb-gray-900\/20,
+html:not(.dark) .light-theme-surface.from-nb-gray-950\/40,
+html:not(.dark) .light-theme-surface.from-nb-gray-950\/50 {
+    --tw-gradient-from: #f3f4f6 var(--tw-gradient-from-position);
+    --tw-gradient-to: rgb(243 244 246 / 0) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+html:not(.dark) .light-theme-surface.via-nb-gray-940\/20 {
+    --tw-gradient-to: rgb(249 250 251 / 0) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-from), #f9fafb var(--tw-gradient-via-position), var(--tw-gradient-to);
+}
+
+html:not(.dark) .light-theme-surface.to-nb-gray-200,
+html:not(.dark) .light-theme-surface.to-nb-gray-300,
+html:not(.dark) .light-theme-surface.to-nb-gray-940,
+html:not(.dark) .light-theme-surface.to-nb-gray-950 {
+    --tw-gradient-to: #e5e7eb var(--tw-gradient-to-position);
+}
+
 html:not(.dark) .light-theme-surface .bg-nb-gray,
 html:not(.dark) .light-theme-surface .bg-nb-gray-960,
 html:not(.dark) .light-theme-surface .bg-nb-gray-950,
@@ -239,6 +457,11 @@ html:not(.dark) .light-theme-surface .bg-nb-gray-800,
 html:not(.dark) .light-theme-surface .bg-nb-gray-700,
 html:not(.dark) .light-theme-surface .bg-nb-gray-600,
 html:not(.dark) .light-theme-surface .bg-nb-gray-500,
+html:not(.dark) .light-theme-surface .bg-nb-gray-400,
+html:not(.dark) .light-theme-surface .bg-nb-gray-300,
+html:not(.dark) .light-theme-surface .bg-nb-gray-200,
+html:not(.dark) .light-theme-surface .bg-nb-gray-100,
+html:not(.dark) .light-theme-surface .bg-nb-gray-50,
 html:not(.dark) .light-theme-surface .hover\:bg-nb-gray:hover,
 html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-960:hover,
 html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-950:hover,
@@ -249,10 +472,20 @@ html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-800:hover,
 html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-700:hover,
 html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-600:hover,
 html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-500:hover,
+html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-400:hover,
+html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-300:hover,
+html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-200:hover,
+html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-100:hover,
+html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-50:hover,
 html:not(.dark) .light-theme-surface .group:hover .group-hover\:bg-nb-gray-800,
 html:not(.dark) .light-theme-surface .group:hover .group-hover\:bg-nb-gray-700,
 html:not(.dark) .light-theme-surface .group:hover .group-hover\:bg-nb-gray-600,
-html:not(.dark) .light-theme-surface .group:hover .group-hover\:bg-nb-gray-500 {
+html:not(.dark) .light-theme-surface .group:hover .group-hover\:bg-nb-gray-500,
+html:not(.dark) .light-theme-surface .group:hover .group-hover\:bg-nb-gray-400,
+html:not(.dark) .light-theme-surface .group:hover .group-hover\:bg-nb-gray-300,
+html:not(.dark) .light-theme-surface .group:hover .group-hover\:bg-nb-gray-200,
+html:not(.dark) .light-theme-surface .group:hover .group-hover\:bg-nb-gray-100,
+html:not(.dark) .light-theme-surface .group:hover .group-hover\:bg-nb-gray-50 {
     background-color: #ffffff;
 }
 
@@ -260,6 +493,7 @@ html:not(.dark) .light-theme-surface .bg-nb-gray-930,
 html:not(.dark) .light-theme-surface .bg-nb-gray-925,
 html:not(.dark) .light-theme-surface .bg-nb-gray-920,
 html:not(.dark) .light-theme-surface .bg-nb-gray-910,
+html:not(.dark) .light-theme-surface .bg-nb-gray-910\/\[15\%\],
 html:not(.dark) .light-theme-surface .bg-nb-gray-900,
 html:not(.dark) .light-theme-surface .bg-nb-gray-940\/95,
 html:not(.dark) .light-theme-surface .bg-nb-gray-940\/50,
@@ -271,20 +505,32 @@ html:not(.dark) .light-theme-surface .bg-nb-gray-930\/70,
 html:not(.dark) .light-theme-surface .bg-nb-gray-930\/60,
 html:not(.dark) .light-theme-surface .bg-nb-gray-930\/50,
 html:not(.dark) .light-theme-surface .bg-nb-gray-930\/40,
+html:not(.dark) .light-theme-surface .bg-nb-gray-930\/30,
 html:not(.dark) .light-theme-surface .bg-nb-gray-920\/30,
+html:not(.dark) .light-theme-surface .bg-nb-gray-920\/70,
+html:not(.dark) .light-theme-surface .bg-nb-gray-920\/80,
+html:not(.dark) .light-theme-surface .bg-nb-gray-920\/90,
 html:not(.dark) .light-theme-surface .bg-nb-gray-900\/90,
 html:not(.dark) .light-theme-surface .bg-nb-gray-900\/80,
+html:not(.dark) .light-theme-surface .bg-nb-gray-900\/75,
 html:not(.dark) .light-theme-surface .bg-nb-gray-900\/70,
 html:not(.dark) .light-theme-surface .bg-nb-gray-900\/60,
 html:not(.dark) .light-theme-surface .bg-nb-gray-900\/50,
 html:not(.dark) .light-theme-surface .bg-nb-gray-900\/40,
 html:not(.dark) .light-theme-surface .bg-nb-gray-900\/30,
 html:not(.dark) .light-theme-surface .bg-nb-gray-900\/20,
+html:not(.dark) .light-theme-surface .bg-nb-gray-200\/10,
+html:not(.dark) .light-theme-surface .bg-nb-gray-600\/50,
 html:not(.dark) .light-theme-surface .bg-nb-gray-800\/60,
 html:not(.dark) .light-theme-surface .bg-nb-gray-800\/50,
 html:not(.dark) .light-theme-surface .bg-nb-gray-800\/30,
 html:not(.dark) .light-theme-surface .bg-nb-gray-800\/20,
 html:not(.dark) .light-theme-surface .bg-nb-gray-800\/10,
+html:not(.dark) .light-theme-surface .bg-nb-gray-950\/60,
+html:not(.dark) .light-theme-surface .bg-nb-gray-950\/70,
+html:not(.dark) .light-theme-surface .bg-nb-gray-950\/90,
+html:not(.dark) .light-theme-surface .bg-nb-gray-950\/95,
+html:not(.dark) .light-theme-surface .bg-nb-gray\/20,
 html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-930:hover,
 html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-925:hover,
 html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-920\/80:hover,
@@ -296,7 +542,8 @@ html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-900\/80:hover,
 html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-900\/60:hover,
 html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-930\/60:hover,
 html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-900\/50:hover,
-html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-900\/40:hover {
+html:not(.dark) .light-theme-surface .hover\:bg-nb-gray-900\/40:hover,
+html:not(.dark) .light-theme-surface .group:hover .group-hover\:bg-nb-gray-600\/50 {
     background-color: #f9fafb;
 }
 
@@ -311,8 +558,11 @@ html:not(.dark) .light-theme-surface .border-nb-gray-800,
 html:not(.dark) .light-theme-surface .border-nb-gray-700,
 html:not(.dark) .light-theme-surface .border-nb-gray-600,
 html:not(.dark) .light-theme-surface .border-nb-gray-500,
+html:not(.dark) .light-theme-surface .border-nb-gray-400,
+html:not(.dark) .light-theme-surface .border-nb-gray-100,
 html:not(.dark) .light-theme-surface .border-nb-gray-900\/70,
 html:not(.dark) .light-theme-surface .border-nb-gray-900\/50,
+html:not(.dark) .light-theme-surface .border-nb-gray-800\/80,
 html:not(.dark) .light-theme-surface .border-nb-gray-800\/70,
 html:not(.dark) .light-theme-surface .border-nb-gray-800\/50,
 html:not(.dark) .light-theme-surface .border-nb-gray-800\/40,
@@ -327,12 +577,16 @@ html:not(.dark) .light-theme-surface .border-nb-gray-600\/40 {
 }
 
 html:not(.dark) .light-theme-surface .text-nb-gray-50,
+html:not(.dark) .light-theme-surface .text-nb-gray,
 html:not(.dark) .light-theme-surface .text-nb-gray-100,
-html:not(.dark) .light-theme-surface .text-nb-gray-200 {
+html:not(.dark) .light-theme-surface .text-nb-gray-200,
+html:not(.dark) .light-theme-surface .text-nb-gray-800,
+html:not(.dark) .light-theme-surface .text-nb-gray-900 {
     color: #171717;
 }
 
 html:not(.dark) .light-theme-surface .text-nb-gray-300,
+html:not(.dark) .light-theme-surface .text-nb-gray-250,
 html:not(.dark) .light-theme-surface .text-nb-gray-350,
 html:not(.dark) .light-theme-surface .text-nb-gray-400,
 html:not(.dark) .light-theme-surface .text-nb-gray-500,
@@ -363,6 +617,7 @@ html:not(.dark) .light-theme-surface .\!bg-nb-gray-910 {
 
 html:not(.dark) .light-theme-surface .\!border-nb-gray-940,
 html:not(.dark) .light-theme-surface .\!border-nb-gray-930,
+html:not(.dark) .light-theme-surface .\!border-nb-gray-900,
 html:not(.dark) .light-theme-surface .\!border-nb-gray-900\/20,
 html:not(.dark) .light-theme-surface .\!border-nb-gray-800 {
     border-color: #e5e7eb !important;
@@ -386,4 +641,29 @@ html:not(.dark) .light-theme-surface .stroke-nb-gray-930 {
 
 html:not(.dark) .light-theme-surface .ring-nb-gray-500\/20 {
     --tw-ring-color: rgb(212 212 212 / 0.35);
+}
+
+html:not(.dark) .light-theme-surface .decoration-nb-gray-300 {
+    text-decoration-color: #a3a3a3;
+}
+
+html:not(.dark) .light-theme-surface .from-nb-gray-500,
+html:not(.dark) .light-theme-surface .from-nb-gray-900\/20,
+html:not(.dark) .light-theme-surface .from-nb-gray-950\/40,
+html:not(.dark) .light-theme-surface .from-nb-gray-950\/50 {
+    --tw-gradient-from: #f3f4f6 var(--tw-gradient-from-position);
+    --tw-gradient-to: rgb(243 244 246 / 0) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+html:not(.dark) .light-theme-surface .via-nb-gray-940\/20 {
+    --tw-gradient-to: rgb(249 250 251 / 0) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-from), #f9fafb var(--tw-gradient-via-position), var(--tw-gradient-to);
+}
+
+html:not(.dark) .light-theme-surface .to-nb-gray-200,
+html:not(.dark) .light-theme-surface .to-nb-gray-300,
+html:not(.dark) .light-theme-surface .to-nb-gray-940,
+html:not(.dark) .light-theme-surface .to-nb-gray-950 {
+    --tw-gradient-to: #e5e7eb var(--tw-gradient-to-position);
 }

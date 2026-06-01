@@ -93,7 +93,10 @@ export function ServiceUserModalContent({ onSuccess }: Readonly<ModalProps>) {
             <Input
               customPrefix={
                 <div className={"flex items-center gap-2"}>
-                  <User2 size={16} className={"text-nb-gray-300"} />
+                  <User2
+                    size={16}
+                    className={"text-neutral-500 dark:text-nb-gray-300"}
+                  />
                 </div>
               }
               placeholder={t("invite.namePlaceholder")}

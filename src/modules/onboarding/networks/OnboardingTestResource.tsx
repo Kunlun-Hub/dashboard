@@ -50,7 +50,7 @@ export const OnboardingTestResource = ({
         </h1>
         <div
           className={
-            "text-sm text-nb-gray-300 font-light mt-2 block text-center sm:px-4"
+            "text-sm text-neutral-600 dark:text-nb-gray-300 font-light mt-2 block text-center sm:px-4"
           }
         >
           {t("onboarding.testConnectionDescription")}
@@ -59,7 +59,7 @@ export const OnboardingTestResource = ({
 
       <Steps className={"stepper-bg-variant"}>
         <Steps.Step step={1}>
-          <p className={"!text-nb-gray-300"}>
+          <p className={"!text-neutral-600 dark:!text-nb-gray-300"}>
             {t("onboarding.openCommandLine")}{" "}
             {device?.name || t("onboarding.yourDevice")}{" "}
             {t("onboarding.toPingResource")}
@@ -69,7 +69,7 @@ export const OnboardingTestResource = ({
           </Code>
         </Steps.Step>
         <Steps.Step step={2} line={false} className={"pb-0"} disabled={!device}>
-          <p className={"!text-nb-gray-300"}>
+          <p className={"!text-neutral-600 dark:!text-nb-gray-300"}>
             {t("onboarding.everythingWorking")}
           </p>
           <div className={"mt-2"}>

@@ -1,5 +1,6 @@
 import { BaseEdge, type EdgeProps, getSmoothStepPath } from "@xyflow/react";
 import React from "react";
+import { controlCenterEdgeColor } from "@/modules/control-center/utils/theme";
 
 export function BidirectionalEdges({
   id,
@@ -35,7 +36,7 @@ export function BidirectionalEdges({
         path={forwardPath}
         style={{
           strokeWidth: 2,
-          stroke: "#0e9f6e",
+          stroke: controlCenterEdgeColor,
           strokeDasharray: "5, 5",
         }}
       >
@@ -53,7 +54,7 @@ export function BidirectionalEdges({
         path={backwardPath}
         style={{
           strokeWidth: 2,
-          stroke: "#0e9f6e",
+          stroke: controlCenterEdgeColor,
           strokeDasharray: "5, 5",
         }}
       >

@@ -6,6 +6,7 @@ import {
 } from "@xyflow/react";
 import React from "react";
 import { getEdgeParams } from "@/modules/control-center/utils/edge-helper";
+import { controlCenterEdgeColor } from "@/modules/control-center/utils/theme";
 
 function FloatingEdge({ id, source, target, markerEnd, style }: EdgeProps) {
   const sourceNode = useInternalNode(source);
@@ -35,7 +36,7 @@ function FloatingEdge({ id, source, target, markerEnd, style }: EdgeProps) {
       path={edgePath}
       style={{
         strokeWidth: 2,
-        stroke: "#0e9f6e",
+        stroke: controlCenterEdgeColor,
         strokeDasharray: "5, 5",
       }}
     >

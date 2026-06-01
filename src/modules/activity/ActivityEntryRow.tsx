@@ -69,10 +69,14 @@ export const ActivityEntryRow = ({ event }: { event: ActivityEvent }) => {
         <div
           className={cn(
             "w-6 h-6 absolute -right-1 -bottom-1 bg-white rounded-full flex items-center justify-center border-4 border-white dark:bg-nb-gray-930 dark:border-nb-gray-950",
-            color == "red" && "bg-red-950 text-red-500 ",
-            color == "green" && "bg-green-950 text-green-400 ",
-            color == "blue-darker" && "bg-sky-950 text-sky-500 ",
-            color == "netbird" && "bg-netbird-950 text-netbird-500",
+            color == "red" &&
+              "bg-red-50 text-red-600 dark:bg-red-950 dark:text-red-500",
+            color == "green" &&
+              "bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-400",
+            color == "blue-darker" &&
+              "bg-netbird-50 text-netbird-700 dark:bg-netbird-950 dark:text-netbird-500",
+            color == "netbird" &&
+              "bg-netbird-50 text-netbird-700 dark:bg-netbird-950 dark:text-netbird-500",
           )}
         >
           {color && ActionIcons[color as ActionColor]}

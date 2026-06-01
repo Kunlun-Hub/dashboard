@@ -492,7 +492,7 @@ export function DeviceDistributionMap() {
                     className={cn(
                       "fill-neutral-100 stroke-neutral-300 transition-colors dark:fill-nb-gray-900 dark:stroke-nb-gray-800",
                       isHovered &&
-                      "fill-sky-100 stroke-slate-500 dark:fill-nb-gray-800 dark:stroke-sky-400",
+                        "fill-netbird-100 stroke-netbird-500 dark:fill-nb-gray-800 dark:stroke-netbird-400",
                     )}
                     strokeWidth={isHovered ? 1.6 * strokeScale : 0.7 * strokeScale}
                     vectorEffect="non-scaling-stroke"
@@ -588,7 +588,7 @@ export function DeviceDistributionMap() {
           </div>
           <div className="space-y-2 pt-2">
             {topCities.length === 0 ? (
-              <div className="py-5 text-center text-nb-gray-300">
+              <div className="py-5 text-center text-neutral-500 dark:text-nb-gray-300">
                 {t("overview.noLocationData")}
               </div>
             ) : (
@@ -612,7 +612,7 @@ export function DeviceDistributionMap() {
         </div>
 
         {isLoading && (
-          <div className="absolute inset-0 z-30 flex items-center justify-center bg-white/30 text-sm text-nb-gray-300 backdrop-blur-[1px] dark:bg-nb-gray/20">
+          <div className="absolute inset-0 z-30 flex items-center justify-center bg-white/30 text-sm text-neutral-500 backdrop-blur-[1px] dark:bg-nb-gray/20 dark:text-nb-gray-300">
             {t("overview.loadingDistribution")}
           </div>
         )}

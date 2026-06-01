@@ -195,7 +195,12 @@ export default function SetupKeysTable({
         getStartedCard={
           isGroupPage ? (
             <NoResults
-              icon={<SetupKeysIcon className={"fill-nb-gray-200"} size={20} />}
+              icon={
+                <SetupKeysIcon
+                  className={"fill-neutral-400 dark:fill-nb-gray-200"}
+                  size={20}
+                />
+              }
               className={"py-4"}
               title={t("setupKeys.groupEmptyTitle")}
               description={t("setupKeys.groupEmptyDescription")}
@@ -214,7 +219,12 @@ export default function SetupKeysTable({
             <GetStartedTest
               icon={
                 <SquareIcon
-                  icon={<SetupKeysIcon className={"fill-nb-gray-200"} size={20} />}
+                  icon={
+                    <SetupKeysIcon
+                      className={"fill-neutral-400 dark:fill-nb-gray-200"}
+                      size={20}
+                    />
+                  }
                   color={"gray"}
                   size={"large"}
                 />

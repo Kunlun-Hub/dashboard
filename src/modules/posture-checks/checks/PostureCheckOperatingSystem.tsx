@@ -61,7 +61,9 @@ export const PostureCheckOperatingSystem = ({
       title={t("postureChecks.operatingSystemTitle")}
       modalWidthClass={"max-w-xl"}
       description={t("postureChecks.operatingSystemDescription")}
-      iconClass={"bg-gradient-to-tr from-nb-gray-500 to-nb-gray-300"}
+      iconClass={
+        "bg-gradient-to-tr from-neutral-500 to-neutral-300 dark:from-nb-gray-500 dark:to-nb-gray-300"
+      }
       active={value !== undefined}
       onReset={() => onChange(undefined)}
     >
@@ -136,7 +138,7 @@ const CheckContent = ({ value, onChange, disabled }: Props) => {
           <TabsTrigger value={String(OperatingSystem.LINUX)}>
             <LinuxIcon
               className={
-                "fill-nb-gray-500 group-data-[state=active]/trigger:fill-netbird transition-all"
+                "fill-neutral-500 group-data-[state=active]/trigger:fill-netbird dark:fill-nb-gray-500 transition-all"
               }
             />
             {t("postureChecks.osLinux")}
@@ -144,7 +146,7 @@ const CheckContent = ({ value, onChange, disabled }: Props) => {
           <TabsTrigger value={String(OperatingSystem.WINDOWS)}>
             <WindowsIcon
               className={
-                "fill-nb-gray-500 group-data-[state=active]/trigger:fill-netbird transition-all"
+                "fill-neutral-500 group-data-[state=active]/trigger:fill-netbird dark:fill-nb-gray-500 transition-all"
               }
             />
             {t("postureChecks.osWindows")}
@@ -152,7 +154,7 @@ const CheckContent = ({ value, onChange, disabled }: Props) => {
           <TabsTrigger value={String(OperatingSystem.APPLE)}>
             <AppleIcon
               className={
-                "fill-nb-gray-500 group-data-[state=active]/trigger:fill-netbird transition-all"
+                "fill-neutral-500 group-data-[state=active]/trigger:fill-netbird dark:fill-nb-gray-500 transition-all"
               }
             />
             {t("postureChecks.osMacos")}
@@ -160,7 +162,7 @@ const CheckContent = ({ value, onChange, disabled }: Props) => {
           <TabsTrigger value={String(OperatingSystem.IOS)}>
             <IOSIcon
               className={
-                "fill-nb-gray-500 group-data-[state=active]/trigger:fill-netbird transition-all"
+                "fill-neutral-500 group-data-[state=active]/trigger:fill-netbird dark:fill-nb-gray-500 transition-all"
               }
             />
             {t("postureChecks.osIos")}
@@ -168,7 +170,7 @@ const CheckContent = ({ value, onChange, disabled }: Props) => {
           <TabsTrigger value={String(OperatingSystem.ANDROID)}>
             <AndroidIcon
               className={
-                "fill-nb-gray-500 group-data-[state=active]/trigger:fill-netbird transition-all"
+                "fill-neutral-500 group-data-[state=active]/trigger:fill-netbird dark:fill-nb-gray-500 transition-all"
               }
             />
             {t("postureChecks.osAndroid")}

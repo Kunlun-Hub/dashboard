@@ -228,7 +228,12 @@ export default function IdentityProviderModal({
               placeholder={t("identityProviderModal.namePlaceholder")}
               value={name}
               onChange={(e) => setName(e.target.value)}
-              customPrefix={<TagIcon size={16} className="text-nb-gray-300" />}
+              customPrefix={
+                <TagIcon
+                  size={16}
+                  className="text-neutral-500 dark:text-nb-gray-300"
+                />
+              }
             />
           </div>
 
@@ -241,7 +246,10 @@ export default function IdentityProviderModal({
                 value={issuer}
                 onChange={(e) => setIssuer(e.target.value)}
                 customPrefix={
-                  <GlobeIcon size={16} className="text-nb-gray-300" />
+                  <GlobeIcon
+                    size={16}
+                    className="text-neutral-500 dark:text-nb-gray-300"
+                  />
                 }
               />
             </div>
@@ -266,7 +274,12 @@ export default function IdentityProviderModal({
               }
               value={clientId}
               onChange={(e) => setClientId(e.target.value)}
-              customPrefix={<IdCard size={16} className="text-nb-gray-300" />}
+              customPrefix={
+                <IdCard
+                  size={16}
+                  className="text-neutral-500 dark:text-nb-gray-300"
+                />
+              }
             />
           </div>
 
@@ -280,7 +293,12 @@ export default function IdentityProviderModal({
                 placeholder={t("identityProviderModal.agentIdPlaceholder")}
                 value={agentId}
                 onChange={(e) => setAgentId(e.target.value)}
-                customPrefix={<IdCard size={16} className="text-nb-gray-300" />}
+                customPrefix={
+                  <IdCard
+                    size={16}
+                    className="text-neutral-500 dark:text-nb-gray-300"
+                  />
+                }
               />
             </div>
           )}
@@ -315,7 +333,12 @@ export default function IdentityProviderModal({
               }
               value={clientSecret}
               onChange={(e) => setClientSecret(e.target.value)}
-              customPrefix={<KeyIcon size={16} className="text-nb-gray-300" />}
+              customPrefix={
+                <KeyIcon
+                  size={16}
+                  className="text-neutral-500 dark:text-nb-gray-300"
+                />
+              }
             />
           </div>
 

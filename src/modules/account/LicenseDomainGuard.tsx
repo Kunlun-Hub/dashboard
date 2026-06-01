@@ -23,7 +23,7 @@ export function LicenseDomainGuard() {
   return (
     <div
       className={
-        "fixed inset-0 z-[9999] bg-white/95 backdrop-blur-sm flex items-center justify-center px-5 dark:bg-nb-gray-950/95"
+        "light-theme-surface fixed inset-0 z-[9999] bg-white/95 backdrop-blur-sm flex items-center justify-center px-5 dark:bg-nb-gray-950/95"
       }
     >
       <div

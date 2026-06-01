@@ -12,6 +12,7 @@ import * as React from "react";
 import { OperatingSystem } from "@/interfaces/OperatingSystem";
 import type { Peer } from "@/interfaces/Peer";
 import { OSLogo } from "@/modules/peers/PeerOSCell";
+import { controlCenterHandleColor } from "@/modules/control-center/utils/theme";
 
 type PeerNodeProps = Node<
   {
@@ -91,7 +92,7 @@ export const SelectPeerNode = ({ data, id }: PeerNodeProps) => {
           height: 20,
           width: "1px",
           border: "none",
-          backgroundColor: "#3f444b",
+          backgroundColor: controlCenterHandleColor,
           borderRadius: "0px 4px 4px 0px",
           right: -2,
         }}

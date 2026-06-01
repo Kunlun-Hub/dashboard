@@ -142,66 +142,68 @@ export default function ErrorPage() {
   };
 
   return (
-    <div className="flex items-center justify-center flex-col h-screen max-w-xl mx-auto">
-      <div className="bg-neutral-50 mb-3 border border-neutral-200 h-12 w-12 rounded-md flex items-center justify-center dark:bg-nb-gray-930 dark:border-nb-gray-900">
-        <PublicBrandingIcon size={23} />
-      </div>
+    <div className="light-theme-surface flex h-screen flex-col items-center justify-center bg-neutral-50 px-4 text-neutral-900 dark:bg-nb-gray-950 dark:text-nb-gray-100">
+      <div className="flex w-full max-w-xl flex-col items-center">
+        <div className="bg-neutral-50 mb-3 border border-neutral-200 h-12 w-12 rounded-md flex items-center justify-center dark:bg-nb-gray-930 dark:border-nb-gray-900">
+          <PublicBrandingIcon size={23} />
+        </div>
 
-      <h1 className="text-center mt-2">{getTitle()}</h1>
+        <h1 className="text-center mt-2">{getTitle()}</h1>
 
-      <Paragraph className="text-center mt-2 block">
-        {getDescription()}
-      </Paragraph>
+        <Paragraph className="text-center mt-2 block">
+          {getDescription()}
+        </Paragraph>
 
-      {error && (
-        <div className="bg-neutral-50 border border-neutral-200 rounded-md p-4 mt-4 max-w-md font-mono mb-2 dark:bg-nb-gray-930 dark:border-nb-gray-800">
-          <div className="text-center text-sm text-netbird">
-            <div>
-              {t("errorPage.responseMessage")}: {error.message}
+        {error && (
+          <div className="bg-neutral-50 border border-neutral-200 rounded-md p-4 mt-4 max-w-md font-mono mb-2 dark:bg-nb-gray-930 dark:border-nb-gray-800">
+            <div className="text-center text-sm text-netbird">
+              <div>
+                {t("errorPage.responseMessage")}: {error.message}
+              </div>
             </div>
           </div>
+        )}
+
+        <Paragraph className="text-center mt-2 text-sm">
+          {t("errorPage.contactAdmin")}
+        </Paragraph>
+
+        <div className="mt-5 space-y-3">
+          {isPendingApproval && (
+            <Button
+              variant="default-outline"
+              size="sm"
+              onClick={handleCheckStatus}
+              disabled={isCheckingStatus}
+            >
+              {isCheckingStatus ? (
+                <>
+                  <Loader2 size={16} className="mr-2 animate-spin" />
+                  检查状态中...
+                </>
+              ) : (
+                <>
+                  <RefreshCw size={16} className="mr-2" />
+                  检查审批状态
+                </>
+              )}
+            </Button>
+          )}
+
+          {!isBlockedUser && !isPendingApproval && (
+            <Button variant="default-outline" size="sm" onClick={handleRetry}>
+              <RefreshCw size={16} className="mr-2" />
+              {t("errorPage.tryAgain")}
+            </Button>
+          )}
+
+          <Button variant="primary" size="sm" onClick={handleLogout}>
+            {isBlockedUser || isPendingApproval
+              ? t("errorPage.signOut")
+              : t("user.logout")}
+            <ArrowRightIcon size={16} />
+          </Button>
         </div>
-      )}
-
-      <Paragraph className="text-center mt-2 text-sm">
-        {t("errorPage.contactAdmin")}
-      </Paragraph>
-
-      <div className="mt-5 space-y-3">
-        {isPendingApproval && (
-          <Button
-            variant="default-outline"
-            size="sm"
-            onClick={handleCheckStatus}
-            disabled={isCheckingStatus}
-          >
-            {isCheckingStatus ? (
-              <>
-                <Loader2 size={16} className="mr-2 animate-spin" />
-                检查状态中...
-              </>
-            ) : (
-              <>
-                <RefreshCw size={16} className="mr-2" />
-                检查审批状态
-              </>
-            )}
-          </Button>
-        )}
-
-        {!isBlockedUser && !isPendingApproval && (
-          <Button variant="default-outline" size="sm" onClick={handleRetry}>
-            <RefreshCw size={16} className="mr-2" />
-            {t("errorPage.tryAgain")}
-          </Button>
-        )}
-
-        <Button variant="primary" size="sm" onClick={handleLogout}>
-          {isBlockedUser || isPendingApproval
-            ? t("errorPage.signOut")
-            : t("user.logout")}
-          <ArrowRightIcon size={16} />
-        </Button>
       </div>
     </div>
   );

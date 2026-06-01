@@ -53,7 +53,7 @@ export const PostureCheckCard = ({
       <ScaleIcon
         size={14}
         className={
-          "text-nb-gray-400 hover:text-nb-gray-200 transition-all cursor-pointer -top-[1px] relative"
+          "text-neutral-500 hover:text-neutral-900 dark:text-nb-gray-400 dark:hover:text-nb-gray-200 transition-all cursor-pointer -top-[1px] relative"
         }
       />
     </FullTooltip>

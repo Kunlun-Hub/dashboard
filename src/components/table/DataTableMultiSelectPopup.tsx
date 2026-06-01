@@ -45,7 +45,7 @@ export function DataTableMultiSelectPopup<T>({
                   duration: 0.35,
                 }}
                 className={cn(
-                  "max-w-xl mx-auto border relative z-[50] bg-white border-neutral-200 shadow-2xl border-b-0 overflow-hidden pointer-events-auto dark:bg-nb-gray-800 dark:border-nb-gray-900",
+                  "light-theme-surface max-w-xl mx-auto border relative z-[50] bg-white border-neutral-200 shadow-2xl border-b-0 overflow-hidden pointer-events-auto dark:bg-nb-gray-800 dark:border-nb-gray-900",
                   "rounded-t-lg",
                 )}
               >

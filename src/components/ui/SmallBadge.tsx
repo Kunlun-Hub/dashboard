@@ -8,9 +8,9 @@ const smallBadgeVariants = cva("", {
       green:
         "bg-emerald-50 border border-emerald-200 text-emerald-700 dark:bg-green-900 dark:border-green-500/20 dark:text-green-400",
       blue:
-        "bg-blue-50 border border-blue-200 text-blue-700 dark:bg-blue-900 dark:border-blue-500/20 dark:text-blue-400",
+        "bg-netbird-50 border border-netbird-200 text-netbird-700 dark:bg-netbird-900 dark:border-netbird-500/20 dark:text-netbird-300",
       white: "bg-white/20 border border-white/10 text-white",
-      sky: "bg-sky-50 border border-sky-200 text-sky-700 dark:bg-sky-900 dark:border-sky-500/20 dark:text-white",
+      sky: "bg-netbird-50 border border-netbird-200 text-netbird-700 dark:bg-netbird-900 dark:border-netbird-500/20 dark:text-netbird-300",
       netbird:
         "bg-netbird-50 border border-netbird-200 text-netbird-700 dark:bg-netbird-900 dark:border-netbird-400 dark:text-netbird-300",
       yellow:

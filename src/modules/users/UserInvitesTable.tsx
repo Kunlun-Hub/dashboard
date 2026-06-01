@@ -73,7 +73,9 @@ function InviteNameCell({ invite }: { invite: UserInvite }) {
         <span className={cn("text-base font-medium flex items-center gap-3")}>
           {invite.name}
         </span>
-        <span className={cn("text-sm text-nb-gray-400")}>{invite.email}</span>
+        <span className={cn("text-sm text-neutral-500 dark:text-nb-gray-400")}>
+          {invite.email}
+        </span>
       </div>
     </div>
   );
@@ -85,7 +87,11 @@ function InviteRoleCell({ invite }: { invite: UserInvite }) {
   const role = invite.role as Role;
 
   return (
-    <div className={cn("flex gap-3 items-center text-nb-gray-200")}>
+    <div
+      className={cn(
+        "flex gap-3 items-center text-neutral-800 dark:text-nb-gray-200",
+      )}
+    >
       <Badge variant={role === "owner" ? "netbird" : "gray"}>
         {role === Role.User && (
           <>
@@ -221,7 +227,9 @@ function InviteRegenerateCell({ invite }: { invite: UserInvite }) {
             </Code>
             {regeneratedData && (
               <Paragraph
-                className={"mt-3 text-xs text-nb-gray-400 text-center"}
+                className={
+                  "mt-3 text-xs text-neutral-500 dark:text-nb-gray-400 text-center"
+                }
               >
                 {t("invite.expiresOn")}{" "}
                 {new Date(regeneratedData.invite_expires_at).toLocaleString()}
@@ -277,7 +285,9 @@ function InviteStatusCell({ invite }: { invite: UserInvite }) {
 
   return (
     <div
-      className={cn("flex gap-2.5 items-center text-nb-gray-300 text-sm")}
+      className={cn(
+        "flex gap-2.5 items-center text-neutral-600 dark:text-nb-gray-300 text-sm",
+      )}
       data-cy={"invite-status-cell"}
     >
       <span className={cn("h-2 w-2 rounded-full", color)}></span>
@@ -403,7 +413,7 @@ function useInviteTableColumns(): ColumnDef<UserInvite>[] {
       },
       sortingFn: "datetime",
       cell: ({ row }) => (
-        <span className="text-nb-gray-400">
+        <span className="text-neutral-500 dark:text-nb-gray-400">
           {dayjs(row.original.expires_at).format("D MMM, YYYY")}
         </span>
       ),
@@ -463,7 +473,12 @@ export default function UserInvitesTable({
         <GetStartedTest
           icon={
             <SquareIcon
-              icon={<Link2 className={"fill-nb-gray-200"} size={20} />}
+              icon={
+                <Link2
+                  className={"text-neutral-700 dark:text-nb-gray-200"}
+                  size={20}
+                />
+              }
               color={"gray"}
               size={"large"}
             />

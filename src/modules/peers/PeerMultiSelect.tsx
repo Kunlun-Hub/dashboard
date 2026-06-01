@@ -270,7 +270,7 @@ const PeerGroupMassAssignmentContent = ({
                 duration: 0.35,
               }}
               className={
-                "max-w-xl mx-auto rounded-t-lg -bottom-14 relative z-[49] flex gap-4 flex-col px-6 pt-6 pb-20 bg-white border border-neutral-200 shadow-2xl border-b-0 overflow-hidden pointer-events-auto dark:bg-nb-gray-920 dark:border-nb-gray-900"
+                "light-theme-surface max-w-xl mx-auto rounded-t-lg -bottom-14 relative z-[49] flex gap-4 flex-col px-6 pt-6 pb-20 bg-white border border-neutral-200 shadow-2xl border-b-0 overflow-hidden pointer-events-auto dark:bg-nb-gray-920 dark:border-nb-gray-900"
               }
             >
               <AnimatePresence>
@@ -360,7 +360,7 @@ const PeerGroupMassAssignmentContent = ({
               duration: 0.35,
             }}
             className={cn(
-              "max-w-xl mx-auto border relative z-[50] bg-white border-neutral-200 shadow-2xl border-b-0 overflow-hidden pointer-events-auto dark:bg-nb-gray-800 dark:border-nb-gray-900",
+              "light-theme-surface max-w-xl mx-auto border relative z-[50] bg-white border-neutral-200 shadow-2xl border-b-0 overflow-hidden pointer-events-auto dark:bg-nb-gray-800 dark:border-nb-gray-900",
               !showGroupAssignment && "rounded-t-lg",
             )}
           >

@@ -21,10 +21,10 @@ export default function RouteMetricCell({
         </div>
       }
     >
-      <div className={"flex gap-2 items-center dark:text-nb-gray-300"}>
+      <div className={"flex gap-2 items-center text-neutral-700 dark:text-nb-gray-300"}>
         <ArrowUpDown size={14} className={""} />
         {metric}
-        <InfoIcon size={14} className={"text-nb-gray-500"} />
+        <InfoIcon size={14} className={"text-neutral-500 dark:text-nb-gray-500"} />
       </div>
     </FullTooltip>
   );

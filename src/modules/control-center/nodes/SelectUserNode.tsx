@@ -12,6 +12,7 @@ import { ChevronsUpDown, Cog } from "lucide-react";
 import * as React from "react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { User } from "@/interfaces/User";
+import { controlCenterHandleColor } from "@/modules/control-center/utils/theme";
 import { SmallUserAvatar } from "@/modules/users/SmallUserAvatar";
 
 type UserNodeProps = Node<
@@ -112,7 +113,7 @@ export const SelectUserNode = ({ data, id }: UserNodeProps) => {
           height: 20,
           width: "1px",
           border: "none",
-          backgroundColor: "#3f444b",
+          backgroundColor: controlCenterHandleColor,
           borderRadius: "0px 4px 4px 0px",
           right: -2,
         }}

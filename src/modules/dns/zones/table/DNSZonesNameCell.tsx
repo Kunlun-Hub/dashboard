@@ -16,14 +16,14 @@ export const DNSZonesNameCell = ({ zone }: Props) => {
       <ChevronRightIcon
         size={20}
         className={cn(
-          "group-data-[accordion=opened]/accordion:hidden text-nb-gray-400 shrink-0",
+          "group-data-[accordion=opened]/accordion:hidden text-neutral-400 dark:text-nb-gray-400 shrink-0",
           !hasRecords && "cursor-default opacity-0",
         )}
       />
       <ChevronDown
         size={20}
         className={cn(
-          "group-data-[accordion=closed]/accordion:hidden text-nb-gray-400 shrink-0",
+          "group-data-[accordion=closed]/accordion:hidden text-neutral-400 dark:text-nb-gray-400 shrink-0",
           !hasRecords && "cursor-default opacity-0",
         )}
       />

@@ -73,7 +73,7 @@ const ModalContent = React.forwardRef<
           <DialogPrimitive.Content
             ref={ref}
             className={cn(
-              "mx-auto relative top-0 z-[52] grid w-full focus:outline-0 border border-neutral-200 bg-white py-6 text-neutral-950 dark:shadow-lg shadow-sm duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1  data-[state=open]:slide-in-from-left-1 sm:rounded-lg md:w-full dark:border-nb-gray-900 dark:bg-nb-gray dark:text-nb-gray-100",
+              "light-theme-surface mx-auto relative top-0 z-[52] grid w-full focus:outline-0 border border-neutral-200 bg-white py-6 text-neutral-950 dark:shadow-lg shadow-sm duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1  data-[state=open]:slide-in-from-left-1 sm:rounded-lg md:w-full dark:border-nb-gray-900 dark:bg-nb-gray dark:text-nb-gray-100",
               className,
               maxWidthClass,
             )}
@@ -106,7 +106,7 @@ const ModalContent = React.forwardRef<
             {showClose && (
               <DialogPrimitive.Close
                 data-cy={"modal-close"}
-                className="absolute right-4 z-10 top-4 rounded-sm opacity-70 ring-offset-white transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-neutral-950 focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-neutral-100 data-[state=open]:text-neutral-500 dark:ring-offset-neutral-950 dark:focus:ring-neutral-300 dark:data-[state=open]:bg-neutral-800 dark:data-[state=open]:text-neutral-400"
+                className="absolute right-4 z-10 top-4 rounded-sm opacity-70 ring-offset-white transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-netbird-400/50 focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-netbird-50 data-[state=open]:text-netbird-700 dark:ring-offset-nb-gray-950 dark:focus:ring-netbird-500/40 dark:data-[state=open]:bg-netbird-950/30 dark:data-[state=open]:text-netbird-100"
               >
                 <X className="h-4 w-4" />
                 <span className="sr-only">{t("common.close")}</span>
@@ -146,7 +146,7 @@ const SidebarModalContent = React.forwardRef<
           <DialogPrimitive.Content
             ref={ref}
             className={cn(
-              "ml-auto mt-auto relative bottom-0 z-[52] grid w-full border border-zinc-700/40 bg-white py-6 text-neutral-950 dark:shadow-lg shadow-sm duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0  data-[state=closed]:slide-out-to-left-1  data-[state=open]:slide-in-from-left-1 md:w-full dark:border-nb-gray-900 dark:bg-nb-gray dark:text-nb-gray-100",
+              "light-theme-surface ml-auto mt-auto relative bottom-0 z-[52] grid w-full border border-neutral-200 bg-white py-6 text-neutral-950 dark:shadow-lg shadow-sm duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0  data-[state=closed]:slide-out-to-left-1  data-[state=open]:slide-in-from-left-1 md:w-full dark:border-nb-gray-900 dark:bg-nb-gray dark:text-nb-gray-100",
               "border-t-0 border-r-0 border-b-0 shadow-2xl",
               className,
               maxWidthClass,
@@ -171,7 +171,7 @@ const SidebarModalContent = React.forwardRef<
             {showClose && (
               <DialogPrimitive.Close
                 data-cy={"modal-close"}
-                className="absolute right-4 z-10 top-4 rounded-sm opacity-70 ring-offset-white transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-neutral-950 focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-neutral-100 data-[state=open]:text-neutral-500 dark:ring-offset-neutral-950 dark:focus:ring-neutral-300 dark:data-[state=open]:bg-neutral-800 dark:data-[state=open]:text-neutral-400"
+                className="absolute right-4 z-10 top-4 rounded-sm opacity-70 ring-offset-white transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-netbird-400/50 focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-netbird-50 data-[state=open]:text-netbird-700 dark:ring-offset-nb-gray-950 dark:focus:ring-netbird-500/40 dark:data-[state=open]:bg-netbird-950/30 dark:data-[state=open]:text-netbird-100"
               >
                 <X className="h-4 w-4" />
                 <span className="sr-only">{t("common.close")}</span>
@@ -197,7 +197,7 @@ const ModalFooter = ({
 }: React.HTMLAttributes<HTMLDivElement> & ModalFooterProps) => (
   <div
     className={cn(
-      "dark:border-nb-gray-800/70 border-nb-gray-100",
+      "border-neutral-200 dark:border-nb-gray-800/70",
       separator && "border-t",
     )}
   >
@@ -235,7 +235,7 @@ const ModalDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
-    className={cn("text-sm text-neutral-500 dark:text-neutral-400", className)}
+    className={cn("text-sm text-neutral-500 dark:text-nb-gray-400", className)}
     {...props}
   />
 ));

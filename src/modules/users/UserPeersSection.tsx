@@ -60,7 +60,12 @@ export const UserPeersSection = ({ user }: Props) => {
                 className={"py-4"}
                 title={t("users.noRegisteredPeersTitle")}
                 description={t("users.noRegisteredPeersDescription")}
-                icon={<PeerIcon size={20} className={"fill-nb-gray-300"} />}
+                icon={
+                  <PeerIcon
+                    size={20}
+                    className={"fill-neutral-400 dark:fill-nb-gray-300"}
+                  />
+                }
               />
             }
           />

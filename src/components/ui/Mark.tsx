@@ -17,9 +17,9 @@ export const Mark = ({ children, copy = false }: Props) => {
         onClick={() => copy && copyToClipBoard()}
         ref={ref}
         className={cn(
-          "inline-flex not-italic gap-2 bg-nb-gray-900 py-[2px] px-2 rounded-md text-[12px] items-center mx-[1px] -top-[1px] relative my-[2.5px]",
+          "inline-flex not-italic gap-2 bg-neutral-100 text-neutral-700 py-[2px] px-2 rounded-md text-[12px] items-center mx-[1px] -top-[1px] relative my-[2.5px] dark:bg-nb-gray-900 dark:text-nb-gray-300",
           copy &&
-            "cursor-pointer hover:text-nb-gray-100 hover:bg-nb-gray-800 transition-all",
+            "cursor-pointer hover:bg-neutral-200 hover:text-neutral-900 transition-all dark:hover:bg-nb-gray-800 dark:hover:text-nb-gray-100",
         )}
       >
         {children}

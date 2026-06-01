@@ -109,7 +109,7 @@ export default function LicenseSettingsTab({ account }: Readonly<Props>) {
         <div className={"flex items-start justify-between gap-6"}>
           <div>
             <h1>{t("settings.license")}</h1>
-            <p className={"text-sm text-nb-gray-400 mt-2"}>
+            <p className={"text-sm text-neutral-500 dark:text-nb-gray-400 mt-2"}>
               {t("licenseSettings.description")}
             </p>
           </div>
@@ -246,7 +246,9 @@ function LicenseInfoRow({
         "grid grid-cols-[minmax(8rem,12rem)_minmax(0,1fr)] gap-4 border-t first:border-t-0 border-neutral-200 dark:border-nb-gray-920 px-5 py-4"
       }
     >
-      <div className={"text-sm text-nb-gray-400"}>{label}</div>
+      <div className={"text-sm text-neutral-500 dark:text-nb-gray-400"}>
+        {label}
+      </div>
       <div className={"flex items-center gap-2 min-w-0 text-sm"}>
         {icon}
         <div className={"min-w-0 truncate"}>{value}</div>

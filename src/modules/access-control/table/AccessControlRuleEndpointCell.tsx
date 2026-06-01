@@ -352,7 +352,7 @@ const RuleDirectionIndicator = ({
   isDrop: boolean;
 }) => {
   const isBidirectional = getRuleDirectionKey(rule) === "bidirectional";
-  const iconClass = isDrop ? "fill-red-400" : "fill-sky-400";
+  const iconClass = isDrop ? "fill-red-400" : "fill-netbird-500";
 
   return (
     <div
@@ -362,7 +362,7 @@ const RuleDirectionIndicator = ({
           ? "border-red-200 bg-red-50 dark:border-red-500/40 dark:bg-red-950/30"
           : isBidirectional
           ? "border-emerald-200 bg-emerald-50 dark:border-green-500/40 dark:bg-green-950/30"
-          : "border-sky-200 bg-sky-50 dark:border-sky-500/40 dark:bg-sky-950/30",
+          : "border-netbird-200 bg-netbird-50 dark:border-netbird-500/40 dark:bg-netbird-950/30",
       )}
     >
       {isBidirectional ? (

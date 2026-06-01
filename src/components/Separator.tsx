@@ -1,3 +1,7 @@
 export default function Separator() {
-  return <span className={"h-[1px] w-full bg-zinc-700/40 block"}></span>;
+  return (
+    <span
+      className={"block h-[1px] w-full bg-neutral-200 dark:bg-zinc-700/40"}
+    ></span>
+  );
 }

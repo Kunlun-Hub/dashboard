@@ -8,7 +8,7 @@ export const SkeletonIntegration = ({ loadingHeight = 147 }: Props) => {
   return (
     <Skeleton
       className={
-        "rounded-lg top-0 relative border border-nb-gray-900/50 flex flex-col"
+        "rounded-lg top-0 relative border border-neutral-200 dark:border-nb-gray-900/50 flex flex-col"
       }
       height={loadingHeight}
       width={360}

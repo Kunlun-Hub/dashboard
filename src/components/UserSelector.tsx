@@ -90,7 +90,7 @@ export function UserSelector({
         >
           <div
             className={
-              "flex items-center w-full gap-2 border-nb-gray-700 flex-wrap h-full"
+              "flex items-center w-full gap-2 border-neutral-200 dark:border-nb-gray-700 flex-wrap h-full"
             }
           >
             {value ? (
@@ -109,7 +109,7 @@ export function UserSelector({
       </PopoverTrigger>
       <PopoverContent
         hideWhenDetached={false}
-        className="w-full p-0 shadow-sm shadow-nb-gray-950"
+        className="w-full p-0 shadow-sm shadow-neutral-200/70 dark:shadow-nb-gray-950"
         style={{
           width: width,
         }}
@@ -197,7 +197,7 @@ export const UserListItem = ({
       >
         <span
           className={cn(
-            "text-nb-gray-200 flex items-center relative gap-1.5 w-full text-xs",
+            "text-neutral-800 dark:text-nb-gray-200 flex items-center relative gap-1.5 w-full text-xs",
             variant === "selected" && "text-[0.85rem]",
           )}
         >
@@ -209,7 +209,7 @@ export const UserListItem = ({
 
         <span
           className={cn(
-            "text-nb-gray-350 font-light flex items-center gap-1 text-xs",
+            "text-neutral-500 dark:text-nb-gray-350 font-light flex items-center gap-1 text-xs",
             variant === "selected" && "text-xs pr-3 font-normal",
           )}
         >

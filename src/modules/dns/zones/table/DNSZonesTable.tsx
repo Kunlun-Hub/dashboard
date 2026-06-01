@@ -183,7 +183,12 @@ export default function DNSZonesTable({
       getStartedCard={
         isGroupPage ? (
           <NoResults
-            icon={<DNSZoneIcon className={"fill-nb-gray-200"} size={24} />}
+            icon={
+              <DNSZoneIcon
+                className={"fill-neutral-400 dark:fill-nb-gray-200"}
+                size={24}
+              />
+            }
             className={"py-4"}
             contentClassName={"max-w-lg"}
             title={t("zones.emptyGroupTitle")}
@@ -197,7 +202,12 @@ export default function DNSZonesTable({
           <GetStartedTest
             icon={
               <SquareIcon
-                icon={<DNSZoneIcon className={"fill-nb-gray-200"} size={24} />}
+                icon={
+                  <DNSZoneIcon
+                    className={"fill-neutral-400 dark:fill-nb-gray-200"}
+                    size={24}
+                  />
+                }
                 color={"gray"}
                 size={"large"}
               />

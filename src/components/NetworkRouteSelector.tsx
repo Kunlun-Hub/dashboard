@@ -105,7 +105,7 @@ export function NetworkRouteSelector({
         >
           <div
             className={
-              "flex items-center w-full gap-2 border-nb-gray-700 flex-wrap h-full"
+              "flex items-center w-full gap-2 border-neutral-200 dark:border-nb-gray-700 flex-wrap h-full"
             }
           >
             {value ? (
@@ -137,7 +137,7 @@ export function NetworkRouteSelector({
         </button>
       </PopoverTrigger>
       <PopoverContent
-        className="w-full p-0 shadow-sm  shadow-nb-gray-950"
+        className="w-full p-0 shadow-sm shadow-neutral-200/70 dark:shadow-nb-gray-950"
         style={{
           width: width,
         }}

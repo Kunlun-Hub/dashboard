@@ -44,6 +44,17 @@ const HEIGHT = 380;
 const MARGIN = { top: 28, right: 24, bottom: 46, left: 64 };
 const CHART_GAP = 26;
 const ROUTED_CONNECTION_TYPE = "ROUTED";
+const chartColors = {
+  axis: "var(--overview-chart-axis-color)",
+  download: "rgb(var(--cloink-brand-600))",
+  grid: "var(--overview-chart-grid-color)",
+  hoverLine: "var(--overview-chart-hover-line-color)",
+  label: "var(--overview-chart-label-color)",
+  tooltipBg: "var(--overview-chart-tooltip-bg)",
+  tooltipBorder: "var(--overview-chart-tooltip-border)",
+  tooltipText: "var(--overview-chart-tooltip-text)",
+  upload: "rgb(var(--cloink-brand-300))",
+};
 
 const rangeOptions: Array<{ value: RangeValue; hours: number; labelKey: string }> = [
   { value: "6h", hours: 6, labelKey: "overview.last6Hours" },
@@ -308,14 +319,14 @@ export function RelayTrafficStats() {
             .attr("x2", WIDTH - MARGIN.right)
             .attr("y1", scale(tick))
             .attr("y2", scale(tick))
-            .attr("stroke", "#e5e7eb");
+            .attr("stroke", chartColors.grid);
 
           gridGroup
             .append("text")
             .attr("x", MARGIN.left - 8)
             .attr("y", scale(tick) + 4)
             .attr("text-anchor", "end")
-            .attr("fill", "#6b7280")
+            .attr("fill", chartColors.axis)
             .attr("font-size", "11px")
             .text(tick === 0 ? "0" : formatRate(tick));
         });
@@ -323,7 +334,7 @@ export function RelayTrafficStats() {
         g.append("text")
           .attr("x", MARGIN.left)
           .attr("y", bounds.top - 8)
-          .attr("fill", "#94a3b8")
+          .attr("fill", chartColors.label)
           .attr("font-size", "12px")
           .attr("font-weight", 500)
           .text(label);
@@ -360,24 +371,24 @@ export function RelayTrafficStats() {
 
       chartGroup.append("path")
         .attr("d", uploadArea(points) ?? "")
-        .attr("fill", "#9aa5b1")
+        .attr("fill", chartColors.upload)
         .attr("opacity", 0.85);
 
       chartGroup.append("path")
         .attr("d", downloadArea(points) ?? "")
-        .attr("fill", "#64748b")
+        .attr("fill", chartColors.download)
         .attr("opacity", 0.86);
 
       chartGroup.append("path")
         .attr("d", uploadLine(points) ?? "")
         .attr("fill", "none")
-        .attr("stroke", "#64748b")
+        .attr("stroke", chartColors.upload)
         .attr("stroke-width", 1.2);
 
       chartGroup.append("path")
         .attr("d", downloadLine(points) ?? "")
         .attr("fill", "none")
-        .attr("stroke", "#9aa5b1")
+        .attr("stroke", chartColors.download)
         .attr("stroke-width", 1.2);
 
       const xAxisGroup = g.append("g");
@@ -387,7 +398,7 @@ export function RelayTrafficStats() {
           .attr("x", currentX(tick))
           .attr("y", HEIGHT - 16)
           .attr("text-anchor", "middle")
-          .attr("fill", "#6b7280")
+          .attr("fill", chartColors.axis)
           .attr("font-size", "11px")
           .text(dayjs(tick).format(timeFormat));
       });
@@ -409,19 +420,19 @@ export function RelayTrafficStats() {
         .attr("class", "x-hover-line hover-line")
         .attr("y1", uploadBounds.top)
         .attr("y2", downloadBounds.bottom)
-        .attr("stroke", "#64748b")
+        .attr("stroke", chartColors.hoverLine)
         .attr("stroke-dasharray", "3,3")
         .attr("stroke-width", 1);
 
       const tooltipRect = tooltip.append("rect")
         .attr("rx", 6)
         .attr("ry", 6)
-        .attr("fill", "#1e293b")
+        .attr("fill", chartColors.tooltipBg)
         .attr("fill-opacity", 0.95)
-        .attr("stroke", "#334155");
+        .attr("stroke", chartColors.tooltipBorder);
 
       const tooltipText = tooltip.append("text")
-        .attr("fill", "white")
+        .attr("fill", chartColors.tooltipText)
         .attr("font-size", "12px")
         .style("pointer-events", "none");
 
@@ -556,16 +567,16 @@ export function RelayTrafficStats() {
           <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">
             {t("overview.relayTrafficStats")}
           </h2>
-          <span className="text-xs text-nb-gray-300">
+          <span className="text-xs text-neutral-500 dark:text-nb-gray-300">
             {t("overview.uploadPeak")}：{formatRate(peaks.upload)}
           </span>
-          <span className="text-xs text-nb-gray-300">
+          <span className="text-xs text-neutral-500 dark:text-nb-gray-300">
             {t("overview.downloadPeak")}：{formatRate(peaks.download)}
           </span>
-          <span className="text-xs text-nb-gray-300">
+          <span className="text-xs text-neutral-500 dark:text-nb-gray-300">
             {t("overview.uploadTotal")}：{formatTotal(totals.upload)}
           </span>
-          <span className="text-xs text-nb-gray-300">
+          <span className="text-xs text-neutral-500 dark:text-nb-gray-300">
             {t("overview.downloadTotal")}：{formatTotal(totals.download)}
           </span>
           <button
@@ -604,15 +615,15 @@ export function RelayTrafficStats() {
         </svg>
 
         <div className="absolute bottom-0 left-0 right-0 flex justify-center gap-8 text-xs text-neutral-600 dark:text-nb-gray-300">
-          <LegendDot color="#9aa5b1" label={t("overview.uploadRate")} />
-          <LegendDot color="#64748b" label={t("overview.downloadRate")} />
+          <LegendDot color={chartColors.upload} label={t("overview.uploadRate")} />
+          <LegendDot color={chartColors.download} label={t("overview.downloadRate")} />
           <div className="text-xs text-slate-400 dark:text-nb-gray-500">
             {t("overview.zoomHint")}
           </div>
         </div>
 
         {isLoading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-white/30 text-sm text-nb-gray-300 backdrop-blur-[1px] dark:bg-nb-gray/20">
+          <div className="absolute inset-0 flex items-center justify-center bg-white/30 text-sm text-neutral-500 backdrop-blur-[1px] dark:bg-nb-gray/20 dark:text-nb-gray-300">
             {t("overview.loadingDistribution")}
           </div>
         )}

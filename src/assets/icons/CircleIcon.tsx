@@ -23,7 +23,7 @@ export default function CircleIcon({
         active
           ? "bg-green-400"
           : inactiveDot == "gray"
-          ? "bg-nb-gray-500"
+          ? "bg-neutral-400 dark:bg-nb-gray-500"
           : "bg-red-500",
         className,
       )}

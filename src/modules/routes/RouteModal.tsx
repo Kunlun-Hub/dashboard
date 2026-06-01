@@ -422,7 +422,7 @@ export function RouteModalContent({
               <RouteIcon
                 size={16}
                 className={
-                  "text-nb-gray-500 group-data-[state=active]/trigger:text-netbird transition-all"
+                  "text-neutral-500 dark:text-nb-gray-500 group-data-[state=active]/trigger:text-netbird dark:group-data-[state=active]/trigger:text-netbird transition-all"
                 }
               />
               {t("routeModal.routeTab")}
@@ -433,7 +433,7 @@ export function RouteModalContent({
             <FolderGit2
               size={16}
               className={
-                "text-nb-gray-500 group-data-[state=active]/trigger:text-netbird transition-all"
+                "text-neutral-500 dark:text-nb-gray-500 group-data-[state=active]/trigger:text-netbird dark:group-data-[state=active]/trigger:text-netbird transition-all"
               }
             />
             {t("routeModal.groupsTab")}
@@ -446,7 +446,7 @@ export function RouteModalContent({
             <Text
               size={16}
               className={
-                "text-nb-gray-500 group-data-[state=active]/trigger:text-netbird transition-all"
+                "text-neutral-500 dark:text-nb-gray-500 group-data-[state=active]/trigger:text-netbird dark:group-data-[state=active]/trigger:text-netbird transition-all"
               }
             />
             {t("routeModal.generalTab")}
@@ -458,7 +458,7 @@ export function RouteModalContent({
             <Settings2
               size={16}
               className={
-                "text-nb-gray-500 group-data-[state=active]/trigger:text-netbird transition-all"
+                "text-neutral-500 dark:text-nb-gray-500 group-data-[state=active]/trigger:text-netbird dark:group-data-[state=active]/trigger:text-netbird transition-all"
               }
             />
             {t("routeModal.settingsTab")}
@@ -577,7 +577,7 @@ export function RouteModalContent({
                             {t("routeModal.keepRoutes")}
                             <CircleHelp
                               size={12}
-                              className={"top-[1px] relative text-nb-gray-300"}
+                              className={"top-[1px] relative text-neutral-500 dark:text-nb-gray-300"}
                             />
                           </div>
                         </>
@@ -756,7 +756,7 @@ export function RouteModalContent({
                 customPrefix={
                   <ArrowDownWideNarrow
                     size={16}
-                    className={"text-nb-gray-300"}
+                    className={"text-neutral-500 dark:text-nb-gray-300"}
                   />
                 }
               />

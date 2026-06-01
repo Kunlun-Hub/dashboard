@@ -15,7 +15,11 @@ export default function UserRoleCell({ user }: Readonly<Props>) {
   const role = user.role;
 
   return (
-    <div className={cn("flex gap-3 items-center text-nb-gray-200")}>
+    <div
+      className={cn(
+        "flex gap-3 items-center text-neutral-800 dark:text-nb-gray-200",
+      )}
+    >
       <Badge variant={role == "owner" ? "netbird" : "gray"}>
         {role === Role.User && (
           <>

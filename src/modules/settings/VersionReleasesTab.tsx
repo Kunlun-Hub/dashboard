@@ -179,11 +179,16 @@ export default function VersionReleasesTab() {
       sortingFn: "text",
       cell: ({ row }) => (
         <div className="flex items-center gap-3">
-          <PackageIcon size={16} className="text-nb-gray-400" />
+          <PackageIcon
+            size={16}
+            className="text-neutral-500 dark:text-nb-gray-400"
+          />
           <span className="font-medium">{row.original.version}</span>
           {row.original.isLatest && (
-        <span className="text-xs bg-blue-600 text-white px-2 py-0.5 rounded">Latest</span>
-      )}
+            <span className="text-xs bg-netbird-600 text-white px-2 py-0.5 rounded">
+              Latest
+            </span>
+          )}
         </div>
       ),
     },
@@ -193,7 +198,9 @@ export default function VersionReleasesTab() {
         <DataTableHeader column={column}>平台</DataTableHeader>
       ),
       cell: ({ row }) => (
-        <span className="text-nb-gray-400">{platformTypeLabels[row.original.platform]}</span>
+        <span className="text-neutral-500 dark:text-nb-gray-400">
+          {platformTypeLabels[row.original.platform]}
+        </span>
       ),
     },
     {
@@ -202,7 +209,10 @@ export default function VersionReleasesTab() {
         <DataTableHeader column={column}>架构</DataTableHeader>
       ),
       cell: ({ row }) => (
-        <span className="text-nb-gray-400">{architectureTypeLabels[row.original.architecture] || row.original.architecture}</span>
+        <span className="text-neutral-500 dark:text-nb-gray-400">
+          {architectureTypeLabels[row.original.architecture] ||
+            row.original.architecture}
+        </span>
       ),
     },
     {
@@ -211,7 +221,9 @@ export default function VersionReleasesTab() {
         <DataTableHeader column={column}>描述</DataTableHeader>
       ),
       cell: ({ row }) => (
-        <span className="text-nb-gray-400">{row.original.description}</span>
+        <span className="text-neutral-500 dark:text-nb-gray-400">
+          {row.original.description}
+        </span>
       ),
     },
     {
@@ -220,8 +232,8 @@ export default function VersionReleasesTab() {
         <DataTableHeader column={column}>发布时间</DataTableHeader>
       ),
       cell: ({ row }) => (
-        <span className="text-nb-gray-400">
-        {new Date(row.original.createdAt).toLocaleString("zh-CN")}
+        <span className="text-neutral-500 dark:text-nb-gray-400">
+          {new Date(row.original.createdAt).toLocaleString("zh-CN")}
         </span>
       ),
     },

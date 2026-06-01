@@ -81,14 +81,21 @@ export function UserRoleSelector({
   const { t } = useI18n();
 
   const getRoleName = (roleValue: Role) => {
-    switch(roleValue) {
-      case Role.Owner: return t("userRoles.owner");
-      case Role.Admin: return t("userRoles.admin");
-      case Role.NetworkAdmin: return t("userRoles.networkAdmin");
-      case Role.BillingAdmin: return t("userRoles.billingAdmin");
-      case Role.Auditor: return t("userRoles.auditor");
-      case Role.User: return t("userRoles.user");
-      default: return "";
+    switch (roleValue) {
+      case Role.Owner:
+        return t("userRoles.owner");
+      case Role.Admin:
+        return t("userRoles.admin");
+      case Role.NetworkAdmin:
+        return t("userRoles.networkAdmin");
+      case Role.BillingAdmin:
+        return t("userRoles.billingAdmin");
+      case Role.Auditor:
+        return t("userRoles.auditor");
+      case Role.User:
+        return t("userRoles.user");
+      default:
+        return "";
     }
   };
 
@@ -162,7 +169,7 @@ export function UserRoleSelector({
                 <div className={"flex items-center gap-2.5"}>
                   <selectedRole.icon size={14} width={14} />
                   <div className={"flex flex-col text-sm font-medium"}>
-                    <span className={"text-nb-gray-200 whitespace-nowrap"}>
+                    <span className={"text-neutral-800 dark:text-nb-gray-200 whitespace-nowrap"}>
                       {getRoleName(selectedRole.value)}
                     </span>
                   </div>
@@ -177,7 +184,7 @@ export function UserRoleSelector({
         )}
       </PopoverTrigger>
       <PopoverContent
-        className="w-full p-0 shadow-sm shadow-nb-gray-950"
+        className="w-full p-0 shadow-sm shadow-neutral-200/70 dark:shadow-nb-gray-950"
         style={{
           width: popoverWidth === "auto" ? width : popoverWidth,
         }}
@@ -223,7 +230,7 @@ export function UserRoleSelector({
                           <item.icon size={14} width={14} />
                           <div
                             className={
-                              "flex flex-col text-sm font-medium text-nb-gray-200 whitespace-nowrap"
+                              "flex flex-col text-sm font-medium text-neutral-800 dark:text-nb-gray-200 whitespace-nowrap"
                             }
                           >
                             {getRoleName(item.value)}

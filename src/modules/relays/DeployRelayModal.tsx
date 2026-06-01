@@ -280,7 +280,7 @@ docker compose up -d`,
 
           <div
             className={
-              "rounded-md border border-yellow-500/30 bg-yellow-950/20 px-4 py-3 text-sm text-yellow-100"
+              "rounded-md border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm text-yellow-800 dark:border-yellow-500/30 dark:bg-yellow-950/20 dark:text-yellow-100"
             }
           >
             {t("relays.certificateRequirement")}

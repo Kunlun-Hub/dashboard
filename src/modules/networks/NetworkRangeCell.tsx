@@ -18,13 +18,13 @@ export default function NetworkRangeCell({ network, domains }: Props) {
     <DomainListBadge domains={domains} />
   ) : isExitNode ? (
     <ExitNodeHelpTooltip>
-      <div className={"flex gap-2 items-center dark:text-nb-gray-300 group"}>
+      <div className={"flex gap-2 items-center text-neutral-700 dark:text-nb-gray-300 group"}>
         <IconDirectionSign size={16} className={"text-yellow-400"} />
         {t("common.exitNode")}{" "}
         <InfoIcon
           size={14}
           className={
-            "text-nb-gray-500 group-hover:text-nb-gray-400 transition-all"
+            "text-neutral-500 group-hover:text-neutral-600 dark:text-nb-gray-500 dark:group-hover:text-nb-gray-400 transition-all"
           }
         />
       </div>

@@ -112,7 +112,7 @@ export default function PeerActionCell() {
           <FullTooltip
             content={
               <div
-                className={"flex gap-2 items-center !text-nb-gray-300 text-xs"}
+                className={"flex gap-2 items-center !text-neutral-600 dark:!text-nb-gray-300 text-xs"}
               >
                 <IconInfoCircle size={14} />
                 <span>{t("peerActionCell.expirationDisabledTooltip")}</span>

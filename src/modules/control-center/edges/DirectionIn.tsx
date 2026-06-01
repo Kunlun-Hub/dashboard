@@ -6,6 +6,10 @@ import {
   getStraightPath,
 } from "@xyflow/react";
 import React from "react";
+import {
+  controlCenterDisabledEdgeColor,
+  controlCenterEdgeColor,
+} from "@/modules/control-center/utils/theme";
 
 type Props = {
   data: {
@@ -74,7 +78,7 @@ export function DirectionIn({
       style={{
         opacity: enabled ? 1 : 0.6,
         strokeWidth: 2,
-        stroke: enabled ? "#0e9f6e" : "#787878",
+        stroke: enabled ? controlCenterEdgeColor : controlCenterDisabledEdgeColor,
         strokeDasharray: "5, 5",
       }}
     >

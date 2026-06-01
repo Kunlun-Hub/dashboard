@@ -122,14 +122,19 @@ export const AssignUserToGroupModalContent = ({
             className={"mb-8"}
             title={t("groupUsers.emptyAssignTitle")}
             description={t("groupUsers.emptyAssignDescription")}
-            icon={<TeamIcon className={"fill-nb-gray-200"} size={14} />}
+            icon={
+              <TeamIcon
+                className={"fill-neutral-400 dark:fill-nb-gray-200"}
+                size={14}
+              />
+            }
           />
         }
         rightSide={(table) => (
           <div className={"ml-auto flex items-center gap-5"}>
             <div className={"text-sm"}>
               {Object.keys(selectedRows).length > 0 && (
-                <div className={"text-nb-gray-200"}>
+                <div className={"text-neutral-900 dark:text-nb-gray-200"}>
                     <span className={"text-netbird font-medium"}>
                       {Object.keys(selectedRows).length}
                     </span>{" "}

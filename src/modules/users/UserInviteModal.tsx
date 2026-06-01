@@ -168,12 +168,14 @@ export default function UserInviteModal({ children, groups }: Readonly<Props>) {
               )}
             </Code>
             {isInviteSuccess && (
-              <Paragraph
-                className={"mt-3 text-xs text-nb-gray-400 text-center"}
-              >
-                {t("invite.expiresOn")}{" "}
-                {new Date(successData.invite.expires_at).toLocaleString()}
-              </Paragraph>
+                <Paragraph
+                  className={
+                    "mt-3 text-xs text-neutral-500 dark:text-nb-gray-400 text-center"
+                  }
+                >
+                  {t("invite.expiresOn")}{" "}
+                  {new Date(successData.invite.expires_at).toLocaleString()}
+                </Paragraph>
             )}
           </div>
           <ModalFooter className={"items-center"}>
@@ -326,7 +328,7 @@ export function UserInviteModalContent({
       >
         <div
           className={
-            "bg-gradient-to-b from-nb-gray-900/20 via-transparent to-transparent w-full h-full rounded-md"
+            "bg-gradient-to-b from-neutral-100 via-transparent to-transparent w-full h-full rounded-md dark:from-nb-gray-900/20"
           }
         ></div>
       </div>
@@ -368,7 +370,10 @@ export function UserInviteModalContent({
           <Input
             customPrefix={
               <div className={"flex items-center gap-2"}>
-                <User2 size={16} className={"text-nb-gray-300"} />
+                <User2
+                  size={16}
+                  className={"text-neutral-500 dark:text-nb-gray-300"}
+                />
               </div>
             }
             placeholder={t("invite.namePlaceholder")}
@@ -380,7 +385,10 @@ export function UserInviteModalContent({
             className={"w-full"}
             customPrefix={
               <div className={"flex items-center gap-2"}>
-                <MailIcon size={16} className={"text-nb-gray-300"} />
+                <MailIcon
+                  size={16}
+                  className={"text-neutral-500 dark:text-nb-gray-300"}
+                />
               </div>
             }
             placeholder={t("invite.emailPlaceholder")}
@@ -406,7 +414,10 @@ export function UserInviteModalContent({
                 type={"number"}
                 onChange={(e) => setExpiresIn(e.target.value)}
                 customPrefix={
-                  <AlarmClock size={16} className={"text-nb-gray-300"} />
+                  <AlarmClock
+                    size={16}
+                    className={"text-neutral-500 dark:text-nb-gray-300"}
+                  />
                 }
                 customSuffix={t("invite.days")}
               />

@@ -392,7 +392,7 @@ export default function NetworkLogsTable({ headingTarget }: Readonly<Props>) {
         header: "",
         enableSorting: false,
         cell: () => (
-          <div className="flex items-center text-nb-gray-300">
+          <div className="flex items-center text-neutral-500 dark:text-nb-gray-300">
             <ChevronRightIcon
               size={16}
               className="group-data-[accordion=opened]/accordion:hidden shrink-0"
@@ -424,7 +424,7 @@ export default function NetworkLogsTable({ headingTarget }: Readonly<Props>) {
           <div className="flex flex-col">
             <span className="font-medium">{row.original.user.name || row.original.user.email}</span>
             {row.original.user.name && (
-              <span className="text-xs text-nb-gray-300">{row.original.user.email}</span>
+              <span className="text-xs text-neutral-500 dark:text-nb-gray-300">{row.original.user.email}</span>
             )}
           </div>
         ),
@@ -439,7 +439,7 @@ export default function NetworkLogsTable({ headingTarget }: Readonly<Props>) {
           <div className="flex flex-col">
             <span className="font-medium">{row.original.client.name || row.original.client.address}</span>
             {row.original.client.name && (
-              <span className="text-xs text-nb-gray-300">{row.original.client.address}</span>
+              <span className="text-xs text-neutral-500 dark:text-nb-gray-300">{row.original.client.address}</span>
             )}
           </div>
         ),

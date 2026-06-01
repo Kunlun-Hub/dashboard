@@ -283,7 +283,7 @@ function RoutingPeerModalContent({
             <Share2Icon
               size={16}
               className={
-                "text-nb-gray-500 group-data-[state=active]/trigger:text-netbird transition-all"
+                "text-neutral-500 dark:text-nb-gray-500 group-data-[state=active]/trigger:text-netbird dark:group-data-[state=active]/trigger:text-netbird transition-all"
               }
             />
             {t("networkRoutingPeers.tabs.routingPeers")}
@@ -293,7 +293,7 @@ function RoutingPeerModalContent({
             <Settings2
               size={16}
               className={
-                "text-nb-gray-500 group-data-[state=active]/trigger:text-netbird transition-all"
+                "text-neutral-500 dark:text-nb-gray-500 group-data-[state=active]/trigger:text-netbird dark:group-data-[state=active]/trigger:text-netbird transition-all"
               }
             />
             {t("networkRoutingPeers.tabs.advanced")}
@@ -404,7 +404,7 @@ function RoutingPeerModalContent({
                 customPrefix={
                   <ArrowDownWideNarrow
                     size={16}
-                    className={"text-nb-gray-300"}
+                    className={"text-neutral-500 dark:text-nb-gray-300"}
                   />
                 }
               />

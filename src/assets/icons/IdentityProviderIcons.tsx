@@ -18,14 +18,14 @@ export const idpIcon = (
     google: <GoogleIcon size={size} />,
     microsoft: <MicrosoftIcon size={size} />,
     entra: <EntraIcon size={size} />,
-    okta: <OktaIcon size={size} className="text-nb-gray-300" />,
+    okta: <OktaIcon size={size} className="text-neutral-500 dark:text-nb-gray-300" />,
     pocketid: <PocketIdIcon size={size} />,
     zitadel: <ZitadelIcon size={size} />,
     authentik: <AuthentikIcon size={size} />,
     keycloak: <KeycloakIcon size={size} />,
     adfs: <MicrosoftIcon size={size} />,
-    oidc: <KeyRound size={size} className="text-nb-gray-400" />,
-    wechatwork: <KeyRound size={size} className="text-nb-gray-400" />,
+    oidc: <KeyRound size={size} className="text-neutral-500 dark:text-nb-gray-400" />,
+    wechatwork: <KeyRound size={size} className="text-neutral-500 dark:text-nb-gray-400" />,
   };
 
   return icons[type];

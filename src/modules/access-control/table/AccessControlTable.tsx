@@ -321,7 +321,10 @@ export default function AccessControlTable({
               title={t("accessPolicies.emptyGroupTitle")}
               description={t("accessPolicies.emptyGroupDescription")}
               icon={
-                <AccessControlIcon size={20} className={"fill-nb-gray-300"} />
+                <AccessControlIcon
+                  size={20}
+                  className={"fill-neutral-400 dark:fill-nb-gray-300"}
+                />
               }
             >
               <div className={"flex gap-4 items-center justify-center"}>
@@ -343,7 +346,7 @@ export default function AccessControlTable({
                 <SquareIcon
                   icon={
                     <AccessControlIcon
-                      className={"fill-nb-gray-200"}
+                      className={"fill-neutral-400 dark:fill-nb-gray-200"}
                       size={20}
                     />
                   }

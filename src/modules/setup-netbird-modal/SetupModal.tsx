@@ -161,7 +161,7 @@ export function SetupModalContent({
           <TabsTrigger value={String(OperatingSystem.LINUX)}>
             <ShellIcon
               className={
-                "fill-nb-gray-500 group-data-[state=active]/trigger:fill-netbird transition-all"
+                "fill-neutral-500 dark:fill-nb-gray-500 group-data-[state=active]/trigger:fill-netbird dark:group-data-[state=active]/trigger:fill-netbird transition-all"
               }
             />
             {t("setupModal.linux")}
@@ -170,7 +170,7 @@ export function SetupModalContent({
           <TabsTrigger value={String(OperatingSystem.WINDOWS)}>
             <WindowsIcon
               className={
-                "fill-nb-gray-500 group-data-[state=active]/trigger:fill-netbird transition-all"
+                "fill-neutral-500 dark:fill-nb-gray-500 group-data-[state=active]/trigger:fill-netbird dark:group-data-[state=active]/trigger:fill-netbird transition-all"
               }
             />
             {t("setupModal.windows")}
@@ -178,7 +178,7 @@ export function SetupModalContent({
           <TabsTrigger value={String(OperatingSystem.APPLE)}>
             <AppleIcon
               className={
-                "fill-nb-gray-500 group-data-[state=active]/trigger:fill-netbird transition-all"
+                "fill-neutral-500 dark:fill-nb-gray-500 group-data-[state=active]/trigger:fill-netbird dark:group-data-[state=active]/trigger:fill-netbird transition-all"
               }
             />
             {t("setupModal.macos")}
@@ -189,7 +189,7 @@ export function SetupModalContent({
               <TabsTrigger value={String(OperatingSystem.IOS)}>
                 <IOSIcon
                   className={
-                    "fill-nb-gray-500 group-data-[state=active]/trigger:fill-netbird transition-all"
+                    "fill-neutral-500 dark:fill-nb-gray-500 group-data-[state=active]/trigger:fill-netbird dark:group-data-[state=active]/trigger:fill-netbird transition-all"
                   }
                 />
                 {t("setupModal.ios")}
@@ -197,7 +197,7 @@ export function SetupModalContent({
               <TabsTrigger value={String(OperatingSystem.ANDROID)}>
                 <AndroidIcon
                   className={
-                    "fill-nb-gray-500 group-data-[state=active]/trigger:fill-netbird transition-all"
+                    "fill-neutral-500 dark:fill-nb-gray-500 group-data-[state=active]/trigger:fill-netbird dark:group-data-[state=active]/trigger:fill-netbird transition-all"
                   }
                 />
                 {t("setupModal.android")}
@@ -209,7 +209,7 @@ export function SetupModalContent({
             <TabsTrigger value={String(OperatingSystem.DOCKER)}>
               <DockerIcon
                 className={
-                  "fill-nb-gray-500 group-data-[state=active]/trigger:fill-netbird transition-all"
+                  "fill-neutral-500 dark:fill-nb-gray-500 group-data-[state=active]/trigger:fill-netbird dark:group-data-[state=active]/trigger:fill-netbird transition-all"
                 }
               />
               {t("setupModal.docker")}
@@ -292,7 +292,7 @@ export const RoutingPeerSetupKeyInfo = () => {
   return (
     <div
       className={
-        "flex gap-2 mt-1 items-center text-xs text-nb-gray-300 font-normal mb-1"
+        "flex gap-2 mt-1 items-center text-xs text-neutral-500 font-normal mb-1 dark:text-nb-gray-300"
       }
     >
       {t("setupModal.setupKeyInfoLine1")}

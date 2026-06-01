@@ -42,7 +42,7 @@ export const PostureCheckPeerNetworkRange = ({
       title={t("postureChecks.peerNetworkRangeTitle")}
       modalWidthClass={"max-w-xl"}
       description={t("postureChecks.peerNetworkRangeDescription")}
-      iconClass={"bg-gradient-to-tr from-blue-500 to-blue-400"}
+      iconClass={"bg-gradient-to-tr from-netbird-500 to-netbird-400"}
       active={value !== undefined}
       onReset={() => onChange(undefined)}
     >

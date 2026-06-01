@@ -117,7 +117,12 @@ export default function AccessTokensTable({ user }: Readonly<Props>) {
               className={"py-3"}
               title={t("accessTokens.emptyTitle")}
               description={t("accessTokens.emptyDescription")}
-              icon={<IconApi size={20} className={"fill-nb-gray-300"} />}
+              icon={
+                <IconApi
+                  size={20}
+                  className={"fill-neutral-400 dark:fill-nb-gray-300"}
+                />
+              }
             />
           </div>
         )}

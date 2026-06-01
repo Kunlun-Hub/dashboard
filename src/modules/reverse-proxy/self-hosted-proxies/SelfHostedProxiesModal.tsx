@@ -233,7 +233,7 @@ export const SelfHostedProxiesModal = ({ open, onOpenChange }: Props) => {
                 codeToCopy={dockerCommand}
                 className={cn(
                   "overflow-hidden",
-                  isGeneratingToken && "!border-nb-gray-930",
+                  isGeneratingToken && "!border-neutral-200 dark:!border-nb-gray-930",
                 )}
                 showCopyIcon={!isGeneratingToken}
               >

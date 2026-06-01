@@ -4,6 +4,9 @@ import deepClone from "lodash/cloneDeep";
 import { twMerge } from "tailwind-merge";
 import { defaultBrandingColor } from "@/modules/account/accountBranding";
 
+export const systemAvatarColor = "var(--user-system-avatar-color)";
+const systemAvatarColorFallback = "#737373";
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -28,7 +31,7 @@ export function removeAllSpaces(str?: string) {
 
 export const generateColorFromString = (str?: string) => {
   if (!str) return defaultBrandingColor;
-  if (str.includes("System")) return "#808080";
+  if (str.includes("System")) return systemAvatarColorFallback;
   if (str.toLowerCase().startsWith("netbird")) return defaultBrandingColor;
   let hash = 0;
   str.split("").forEach((char) => {
@@ -47,13 +50,15 @@ export const generateColorFromUser = (user?: {
   name?: string;
   email?: string;
 }) => {
-  if (user?.email === "NetBird") return "#9c9c9c";
+  if (user?.email === "NetBird" || user?.name?.includes("System")) {
+    return systemAvatarColor;
+  }
   return user?.name
     ? chroma(generateColorFromString(user?.name || user?.id || "System User"))
         .saturate(2)
         .luminance(0.4)
         .hex()
-    : "#9c9c9c";
+    : systemAvatarColor;
 };
 
 export const sleep = (ms: number) => {

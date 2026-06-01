@@ -152,7 +152,12 @@ export default function MinimalPeersTable({
             className={"py-4"}
             title={t("minimalPeers.emptyTitle")}
             description={t("minimalPeers.emptyDescription")}
-            icon={<PeerIcon size={20} className={"fill-nb-gray-300"} />}
+            icon={
+              <PeerIcon
+                size={20}
+                className={"fill-neutral-400 dark:fill-nb-gray-300"}
+              />
+            }
           />
         ) : (
           getStartedCard

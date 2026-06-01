@@ -39,7 +39,7 @@ const DirectionBadge = ({ direction }: { direction: string }) => {
         <LongArrowLeftIcon
           size={60}
           autoHeight={true}
-          className={"fill-sky-400 rotate-180"}
+          className={"fill-netbird-400 rotate-180"}
         />
       )}
     </Badge>

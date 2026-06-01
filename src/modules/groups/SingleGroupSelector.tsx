@@ -62,7 +62,9 @@ export const SingleGroupSelector = ({
       </div>
       <PopoverContent
         hideWhenDetached={false}
-        className={cn("w-full p-0 m-0 shadow-sm shadow-nb-gray-950")}
+        className={cn(
+          "w-full p-0 m-0 shadow-sm shadow-neutral-200/70 dark:shadow-nb-gray-950",
+        )}
         style={{
           width: popoverWidth + "px",
         }}
@@ -99,7 +101,9 @@ export const SingleGroupSelector = ({
             <VirtualScrollAreaList
               scrollAreaClassName={"py-0"}
               itemWrapperClassName={""}
-              itemClassName={"dark:aria-selected:bg-nb-gray-910"}
+              itemClassName={
+                "dark:aria-selected:bg-netbird-950/30 dark:aria-selected:text-netbird-100"
+              }
               items={filteredItems}
               onSelect={(group) => {
                 onSelect(group);

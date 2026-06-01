@@ -19,11 +19,11 @@ export const JobOutputCell = ({ job }: Props) => {
       <div className="flex flex-col gap-1 items-start justify-center pb-1">
         {Object.entries(job.workload.result).map(([key, value]) => (
           <div key={key} className="text-sm max-w-[200px]">
-            <span className="font-normal capitalize text-nb-gray-300 text-xs">
+            <span className="font-normal capitalize text-neutral-500 dark:text-nb-gray-300 text-xs">
               {key.replaceAll("_", " ")}
             </span>
             <br />
-            <span className="text-nb-gray-200 truncate">
+            <span className="text-neutral-800 dark:text-nb-gray-200 truncate">
               <CopyToClipboardText
                 message={t("jobs.outputCopied")}
                 alwaysShowIcon={true}

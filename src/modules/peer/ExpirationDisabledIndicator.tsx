@@ -19,7 +19,10 @@ export const ExpirationDisabledIndicator = ({ peer }: Props) => {
     <FullTooltip
       content={<div className={"text-xs max-w-xs"}>{tooltipContent}</div>}
     >
-      <TimerResetIcon size={14} className={"shrink-0 text-nb-gray-300"} />
+      <TimerResetIcon
+        size={14}
+        className={"shrink-0 text-neutral-500 dark:text-nb-gray-300"}
+      />
     </FullTooltip>
   );
 };

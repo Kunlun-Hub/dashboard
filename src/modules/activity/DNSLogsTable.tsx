@@ -257,7 +257,7 @@ export default function DNSLogsTable({ headingTarget }: Readonly<Props>) {
           <div className="flex flex-col">
             <span className="font-medium">{row.original.user.name || row.original.user.email}</span>
             {row.original.user.name && (
-              <span className="text-xs text-nb-gray-300">{row.original.user.email}</span>
+              <span className="text-xs text-neutral-500 dark:text-nb-gray-300">{row.original.user.email}</span>
             )}
           </div>
         ),
@@ -272,7 +272,7 @@ export default function DNSLogsTable({ headingTarget }: Readonly<Props>) {
           <div className="flex flex-col">
             <span className="font-medium">{endpointLabel(row.original.device)}</span>
             {row.original.device.address && (
-              <span className="text-xs text-nb-gray-300">{row.original.device.address}</span>
+              <span className="text-xs text-neutral-500 dark:text-nb-gray-300">{row.original.device.address}</span>
             )}
           </div>
         ),

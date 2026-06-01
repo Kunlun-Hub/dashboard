@@ -20,14 +20,14 @@ export default function GetStarted({
   return (
     <tfoot
       className={
-        "absolute w-full h-full bg-nb-gray-950/70 z-20 left-0 top-0 flex backdrop-blur-sm"
+        "absolute w-full h-full bg-white/70 z-20 left-0 top-0 flex backdrop-blur-sm dark:bg-nb-gray-950/70"
       }
     >
       <tr className={"inline-flex justify-center w-full mt-24"}>
         <td>
           <div
             className={
-              "max-w-lg relative z-50 bg-nb-gray-940  border border-nb-gray-900 rounded-lg shadow-2xl"
+              "max-w-lg relative z-50 bg-white border border-neutral-200 rounded-lg shadow-2xl dark:bg-nb-gray-940 dark:border-nb-gray-900"
             }
           >
             <div className={"text-center flex flex-col gap-2 p-8"}>

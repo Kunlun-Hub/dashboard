@@ -90,8 +90,8 @@ export default function SidebarItem({
                 ? "pl-7 pr-2 py-[.45rem] mt-1 mb-0.5"
                 : "py-[.45rem] px-3",
               isActive
-                ? "text-gray-900 bg-gray-200 dark:text-white dark:bg-nb-gray-900"
-                : "text-gray-600 hover:bg-gray-200 dark:text-nb-gray-400 dark:hover:bg-nb-gray-900/50",
+                ? "bg-netbird-50 text-netbird-800 ring-1 ring-netbird-200/70 dark:bg-netbird-950/30 dark:text-netbird-150 dark:ring-netbird-500/25"
+                : "text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:text-nb-gray-400 dark:hover:bg-nb-gray-900/50 dark:hover:text-nb-gray-100",
             )}
             onClick={handleClick}
             data-cy={"left-navigation-item"}

@@ -69,6 +69,10 @@ import {
   DEFAULT_MIN_ZOOM,
 } from "@/modules/control-center/utils/layouts";
 import { NODE_TYPES } from "@/modules/control-center/utils/nodes";
+import {
+  controlCenterBackgroundColor,
+  controlCenterBackgroundGridColor,
+} from "@/modules/control-center/utils/theme";
 import { OSLogo } from "@/modules/peers/PeerOSCell";
 
 const MAX_EXPANDED_DESTINATION_PEERS = 6;
@@ -1972,7 +1976,7 @@ function ControlCenterView() {
                   <SquareIcon
                     icon={
                       <NetworkRoutesIcon
-                        className={"fill-nb-gray-200"}
+                        className={"fill-neutral-400 dark:fill-nb-gray-200"}
                         size={20}
                       />
                     }
@@ -2187,9 +2191,9 @@ function ControlCenterView() {
             colorMode={isDarkTheme ? "dark" : "light"}
           >
             <Background
-              bgColor={isDarkTheme ? "#181a1d" : "#ffffff"}
+              bgColor={controlCenterBackgroundColor}
               gap={20}
-              color={isDarkTheme ? "#717171" : "#d4d4d4"}
+              color={controlCenterBackgroundGridColor}
             />
           </ReactFlow>
         </PeersProvider>

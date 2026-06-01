@@ -121,7 +121,7 @@ function NameserverTemplate({
       <div
         className={cn(
           "w-1/4",
-          "bg-gradient-to-b h-full flex items-center justify-center from-white to-nb-gray-200 overflow-hidden p-4 border-r border-nb-gray-800",
+          "bg-gradient-to-b h-full flex items-center justify-center from-white to-neutral-100 overflow-hidden p-4 border-r border-neutral-200 dark:to-nb-gray-200 dark:border-nb-gray-800",
         )}
       >
         {src && <Image src={src} alt={title} width={100} />}
@@ -132,7 +132,7 @@ function NameserverTemplate({
           <p className={"font-medium text-sm"}>{title}</p>
         </div>
         {description && (
-          <p className={"text-xs !text-nb-gray-300 mt-1"}>{description}</p>
+          <p className={"text-xs !text-neutral-500 mt-1 dark:!text-nb-gray-300"}>{description}</p>
         )}
       </div>
     </button>

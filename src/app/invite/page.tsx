@@ -107,7 +107,7 @@ function InviteAcceptContent() {
   if (error && !inviteInfo) {
     if (isRateLimited) {
       return (
-        <div className="min-h-screen flex items-center justify-center bg-neutral-50 p-4 dark:bg-nb-gray-950">
+        <div className="light-theme-surface min-h-screen flex items-center justify-center bg-neutral-50 p-4 text-neutral-900 dark:bg-nb-gray-950 dark:text-nb-gray-100">
           <div className="max-w-md w-full text-center">
             <div className="mb-6 flex justify-center">
               <div className="w-16 h-16 bg-yellow-500/10 rounded-full flex items-center justify-center">
@@ -133,7 +133,7 @@ function InviteAcceptContent() {
     }
 
     return (
-      <div className="min-h-screen flex items-center justify-center bg-neutral-50 p-4 dark:bg-nb-gray-950">
+      <div className="light-theme-surface min-h-screen flex items-center justify-center bg-neutral-50 p-4 text-neutral-900 dark:bg-nb-gray-950 dark:text-nb-gray-100">
         <div className="max-w-md w-full text-center">
           <div className="mb-6 flex justify-center">
             <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center">
@@ -160,7 +160,7 @@ function InviteAcceptContent() {
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-neutral-50 p-4 dark:bg-nb-gray-950">
+      <div className="light-theme-surface min-h-screen flex items-center justify-center bg-neutral-50 p-4 text-neutral-900 dark:bg-nb-gray-950 dark:text-nb-gray-100">
         <div className="max-w-md w-full text-center">
           <div className="mb-6 flex justify-center">
             <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center">
@@ -187,7 +187,7 @@ function InviteAcceptContent() {
 
   if (isExpired || !inviteInfo?.valid) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-neutral-50 p-4 dark:bg-nb-gray-950">
+      <div className="light-theme-surface min-h-screen flex items-center justify-center bg-neutral-50 p-4 text-neutral-900 dark:bg-nb-gray-950 dark:text-nb-gray-100">
         <div className="max-w-md w-full text-center">
           <div className="mb-6 flex justify-center">
             <div className="w-16 h-16 bg-yellow-500/10 rounded-full flex items-center justify-center">
@@ -213,7 +213,7 @@ function InviteAcceptContent() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-neutral-50 p-4 dark:bg-nb-gray-950">
+    <div className="light-theme-surface min-h-screen flex items-center justify-center bg-neutral-50 p-4 text-neutral-900 dark:bg-nb-gray-950 dark:text-nb-gray-100">
       <div className="max-w-md w-full">
         <div className="mb-8 flex justify-center">
           <PublicBrandingLogo size={"large"} mobile={false} />

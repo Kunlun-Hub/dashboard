@@ -29,7 +29,11 @@ export default function SSHPage() {
 
   if (error) {
     return (
-      <div className={"w-screen h-screen overflow-hidden"}>
+      <div
+        className={
+          "light-theme-surface w-screen h-screen overflow-hidden bg-neutral-50 text-neutral-900 dark:bg-nb-gray-950 dark:text-nb-gray-100"
+        }
+      >
         <ErrorMessage
           error={{
             message: t("remoteAccess.peerNotFound"),
@@ -41,7 +45,11 @@ export default function SSHPage() {
   }
 
   return (
-    <div className={"w-screen h-screen overflow-hidden"}>
+    <div
+      className={
+        "light-theme-surface w-screen h-screen overflow-hidden bg-neutral-50 text-neutral-900 dark:bg-nb-gray-950 dark:text-nb-gray-100"
+      }
+    >
       {peerId && peer && !isLoading && username && port ? (
         <SSHTerminal
           key={peer.id}
@@ -205,7 +213,7 @@ const LoadingMessage = ({ message }: MessageProps) => {
         "w-full h-full flex items-center justify-center flex-col text-center"
       }
     >
-      <div className="text-nb-gray-200 font-normal text-base flex gap-2 items-center justify-center">
+      <div className="text-neutral-700 font-normal text-base flex gap-2 items-center justify-center dark:text-nb-gray-200">
         <Loader2Icon size={16} className={"animate-spin shrink-0"} />
         {message}
       </div>
@@ -220,7 +228,7 @@ const ErrorMessage = ({ error }: MessageProps) => {
         "w-full h-full flex items-center justify-center flex-col text-center"
       }
     >
-      <div className="text-nb-gray-200 font-normal text-base flex gap-2 items-center justify-center">
+      <div className="text-neutral-700 font-normal text-base flex gap-2 items-center justify-center dark:text-nb-gray-200">
         <CircleXIcon size={16} className={"shrink-0 text-red-500"} />
         {error?.message}
       </div>
@@ -247,8 +255,8 @@ const DisconnectedMessage = ({
         "w-full h-full flex items-center justify-center flex-col text-center gap-4"
       }
     >
-      <div className="text-nb-gray-200 font-normal text-base flex gap-2 items-center justify-center">
-        <InfoIcon size={16} className={"shrink-0 text-nb-gray-200"} />
+      <div className="text-neutral-700 font-normal text-base flex gap-2 items-center justify-center dark:text-nb-gray-200">
+        <InfoIcon size={16} className={"shrink-0 text-neutral-500 dark:text-nb-gray-200"} />
         {t("remoteAccess.sshDisconnectedFrom", {
           target: `${username}@${peerIp}`,
         })}

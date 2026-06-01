@@ -17,7 +17,7 @@ export default function SetupKeyNameCell({
       text={name || ""}
     >
       {secret && (
-        <span className={"font-mono text-xs text-nb-gray-400 mt-1"}>
+        <span className={"font-mono text-xs text-neutral-500 dark:text-nb-gray-400 mt-1"}>
           {secret.substring(0, 5) + "****"}
         </span>
       )}

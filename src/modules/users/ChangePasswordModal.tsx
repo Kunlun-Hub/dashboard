@@ -1,7 +1,9 @@
 "use client";
 
 import Button from "@components/Button";
+import HelpText from "@components/HelpText";
 import { Input } from "@components/Input";
+import { Label } from "@components/Label";
 import {
   Modal,
   ModalClose,
@@ -12,8 +14,6 @@ import {
 import ModalHeader from "@components/modal/ModalHeader";
 import { notify } from "@components/Notification";
 import Separator from "@components/Separator";
-import { Label } from "@components/Label";
-import HelpText from "@components/HelpText";
 import { useApiCall } from "@utils/api";
 import { KeyRound, LockIcon } from "lucide-react";
 import React, { useMemo, useState } from "react";
@@ -135,7 +135,12 @@ export function ChangePasswordModalContent({
             onKeyDown={handleKeyDown}
             showPasswordToggle
             error={currentPasswordError}
-            customPrefix={<LockIcon size={16} className={"text-nb-gray-300"} />}
+            customPrefix={
+              <LockIcon
+                size={16}
+                className={"text-neutral-500 dark:text-nb-gray-300"}
+              />
+            }
             name={"current-password"}
             autoComplete={"current-password"}
           />
@@ -154,7 +159,12 @@ export function ChangePasswordModalContent({
             onKeyDown={handleKeyDown}
             showPasswordToggle
             error={newPasswordError}
-            customPrefix={<LockIcon size={16} className={"text-nb-gray-300"} />}
+            customPrefix={
+              <LockIcon
+                size={16}
+                className={"text-neutral-500 dark:text-nb-gray-300"}
+              />
+            }
             name={"new-password"}
             autoComplete={"new-password"}
           />
@@ -171,7 +181,12 @@ export function ChangePasswordModalContent({
             onKeyDown={handleKeyDown}
             showPasswordToggle
             error={confirmPasswordError}
-            customPrefix={<LockIcon size={16} className={"text-nb-gray-300"} />}
+            customPrefix={
+              <LockIcon
+                size={16}
+                className={"text-neutral-500 dark:text-nb-gray-300"}
+              />
+            }
             name={"confirm-password"}
             autoComplete={"confirm-password"}
           />

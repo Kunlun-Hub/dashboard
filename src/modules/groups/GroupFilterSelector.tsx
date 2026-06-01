@@ -84,7 +84,7 @@ export function GroupFilterSelector({
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className="w-full p-0 shadow-sm  shadow-nb-gray-950"
+        className="w-full p-0 shadow-sm shadow-neutral-200/70 dark:shadow-nb-gray-950"
         style={{
           width: popoverWidth === "auto" ? width : popoverWidth,
         }}
@@ -176,7 +176,7 @@ export function GroupFilterSelector({
                               </div>
                               <div
                                 className={
-                                  "flex items-center gap-2 text-xs text-nb-gray-200/60"
+                                  "flex items-center gap-2 text-xs text-neutral-500 dark:text-nb-gray-200/60"
                                 }
                               >
                                 <MonitorSmartphoneIcon size={13} />

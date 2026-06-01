@@ -18,14 +18,20 @@ export const ReverseProxyEventsBytesCell = ({ event }: Props) => {
     return <EmptyRow />;
 
   return (
-    <div className={"flex flex-col text-xs gap-1 text-nb-gray-300 font-medium"}>
+    <div className={"flex flex-col text-xs gap-1 text-neutral-600 dark:text-nb-gray-300 font-medium"}>
       <div className={"flex gap-2 items-center whitespace-nowrap"}>
-        <ArrowDownIcon size={15} className={cn("text-sky-400")} />
+        <ArrowDownIcon
+          size={15}
+          className={cn("text-netbird-600 dark:text-netbird-300")}
+        />
         <span className="sr-only">{t("reverseProxy.download")}</span>
         {formatBytes(event.bytes_download ?? 0)}
       </div>
       <div className={"flex gap-2 items-center whitespace-nowrap"}>
-        <ArrowUpIcon size={15} className={cn("text-netbird")} />
+        <ArrowUpIcon
+          size={15}
+          className={cn("text-netbird-700 dark:text-netbird-400")}
+        />
         <span className="sr-only">{t("reverseProxy.upload")}</span>
         {formatBytes(event.bytes_upload ?? 0)}
       </div>

@@ -53,7 +53,7 @@ export const PeerExpirationToggle = ({
   const tooltipContent = useMemo(() => {
     if (noPermissionOrNoUser) {
       return (
-        <div className={"flex gap-2 items-center !text-nb-gray-300 text-xs"}>
+        <div className={"flex gap-2 items-center !text-neutral-600 dark:!text-nb-gray-300 text-xs"}>
           {!peer.user_id ? (
             <>
               <IconInfoCircle size={14} />

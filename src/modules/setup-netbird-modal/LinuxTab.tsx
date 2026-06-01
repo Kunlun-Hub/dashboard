@@ -94,7 +94,7 @@ function LinuxTabContent({
         </p>
         <Steps>
           <Steps.Step step={1}>
-            <p className="text-sm text-nb-gray-400 mb-2">
+            <p className="text-sm text-neutral-500 mb-2 dark:text-nb-gray-400">
               运行下面的命令一键安装 Cloink（支持主流 Linux
               发行版：Ubuntu、Debian、CentOS、Fedora、Arch 等）
             </p>

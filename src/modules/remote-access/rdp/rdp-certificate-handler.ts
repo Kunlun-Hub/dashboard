@@ -285,7 +285,7 @@ export class RDPCertificateHandler implements CertificateHandler {
       <div class="rdp-cert-overlay"></div>
       <div class="rdp-cert-dialog">
         <h2>${this.labels.verificationTitle}</h2>
-        <div class="cert-warning" style="color: #ff9800; margin-bottom: 15px;"></div>
+        <div class="cert-warning"></div>
         <p>${
           this.labels.serverPresentsCertificate
         } <strong>${hostname}</strong> ${
@@ -353,12 +353,30 @@ export class RDPCertificateHandler implements CertificateHandler {
   private getModalStyles(): string {
     return `
       .rdp-cert-modal {
+        --rdp-cert-surface: #ffffff;
+        --rdp-cert-panel: #f9fafb;
+        --rdp-cert-border: #e5e7eb;
+        --rdp-cert-text: #171717;
+        --rdp-cert-muted: #525252;
+        --rdp-cert-secondary: #e5e7eb;
+        --rdp-cert-secondary-hover: #d4d4d4;
+        --rdp-cert-shadow: rgba(0, 0, 0, 0.16);
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
         z-index: 10000;
+      }
+      html.dark .rdp-cert-modal {
+        --rdp-cert-surface: #1c1e21;
+        --rdp-cert-panel: #25282d;
+        --rdp-cert-border: #3f444b;
+        --rdp-cert-text: #e4e7e9;
+        --rdp-cert-muted: #a3adb5;
+        --rdp-cert-secondary: #2e3238;
+        --rdp-cert-secondary-hover: #3f444b;
+        --rdp-cert-shadow: rgba(0, 0, 0, 0.35);
       }
       .rdp-cert-overlay {
         position: absolute;
@@ -373,22 +391,28 @@ export class RDPCertificateHandler implements CertificateHandler {
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        background: white;
+        background: var(--rdp-cert-surface);
+        color: var(--rdp-cert-text);
         border-radius: 8px;
+        border: 1px solid var(--rdp-cert-border);
         padding: 25px;
         max-width: 600px;
         width: 90%;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 4px 20px var(--rdp-cert-shadow);
       }
       .rdp-cert-dialog h2 {
         margin-top: 0;
-        color: #333;
-        border-bottom: 2px solid #0078d4;
+        color: var(--rdp-cert-text);
+        border-bottom: 2px solid rgb(var(--cloink-brand-500));
         padding-bottom: 10px;
       }
+      .cert-warning {
+        color: rgb(var(--cloink-brand-500));
+        margin-bottom: 15px;
+      }
       .cert-details {
-        background: #f5f5f5;
-        border: 1px solid #ddd;
+        background: var(--rdp-cert-panel);
+        border: 1px solid var(--rdp-cert-border);
         border-radius: 4px;
         padding: 15px;
         margin: 15px 0;
@@ -405,6 +429,7 @@ export class RDPCertificateHandler implements CertificateHandler {
         width: 100px;
         text-align: right;
         padding-right: 10px;
+        color: var(--rdp-cert-muted);
       }
       .cert-question {
         margin: 20px 0;
@@ -432,18 +457,18 @@ export class RDPCertificateHandler implements CertificateHandler {
         transition: background-color 0.2s;
       }
       .cert-btn-accept {
-        background: #0078d4;
+        background: rgb(var(--cloink-brand-500));
         color: white;
       }
       .cert-btn-accept:hover {
-        background: #106ebe;
+        background: rgb(var(--cloink-brand-600));
       }
       .cert-btn-reject {
-        background: #e0e0e0;
-        color: #333;
+        background: var(--rdp-cert-secondary);
+        color: var(--rdp-cert-text);
       }
       .cert-btn-reject:hover {
-        background: #d0d0d0;
+        background: var(--rdp-cert-secondary-hover);
       }
     `;
   }

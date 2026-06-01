@@ -6,6 +6,7 @@ import { PublicBranding } from "@/interfaces/PublicBranding";
 export const defaultBrandingTitle = globalMetaTitle;
 export const defaultBrandingColor = "#f68330";
 export const brandColorVariablePrefix = "--cloink-brand";
+export const brandColorAppliedEvent = "cloink-brand-color-applied";
 
 export function getBrandingLogoDataURL(branding?: PublicBranding) {
   return branding?.branding_logo_data_url?.trim() ?? "";
@@ -108,6 +109,8 @@ export function getBrandingColorPalette(color = defaultBrandingColor) {
 }
 
 export function applyBrandingColor(color = defaultBrandingColor) {
+  if (typeof document === "undefined") return;
+
   const palette = getBrandingColorPalette(color);
   Object.entries(palette).forEach(([shade, value]) => {
     document.documentElement.style.setProperty(
@@ -115,4 +118,7 @@ export function applyBrandingColor(color = defaultBrandingColor) {
       value,
     );
   });
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new CustomEvent(brandColorAppliedEvent));
+  }
 }

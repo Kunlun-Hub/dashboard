@@ -71,7 +71,10 @@ export default function ReverseProxyAccessControlCell({
           "cursor-pointer !rounded-r-none !border-r-0 !h-[34px] min-w-[100px] !justify-start hover:bg-neutral-100 dark:hover:bg-nb-gray-930 transition-all"
         }
       >
-        <ShieldCheck size={12} className="text-green-500" />
+        <ShieldCheck
+          size={12}
+          className="text-emerald-600 dark:text-green-500"
+        />
         <span className={"font-medium text-xs"}>
           {t("reverseProxy.ruleCount", { count: ruleCount })}
         </span>
@@ -208,12 +211,12 @@ export default function ReverseProxyAccessControlCell({
                     <div
                       key={key}
                       className={
-                        "flex justify-between gap-12 py-2 px-4 border-b border-nb-gray-920 last:border-b-0"
+                        "flex justify-between gap-12 py-2 px-4 border-b border-neutral-200 last:border-b-0 dark:border-nb-gray-920"
                       }
                     >
                       <div
                         className={
-                          "flex items-start gap-2 font-medium whitespace-nowrap text-nb-gray-100 pt-0.5"
+                          "flex items-start gap-2 font-medium whitespace-nowrap text-neutral-800 dark:text-nb-gray-100 pt-0.5"
                         }
                       >
                         <Icon
@@ -225,7 +228,9 @@ export default function ReverseProxyAccessControlCell({
                         {label}
                       </div>
                       <div
-                        className={"max-w-[200px] text-nb-gray-300 text-right"}
+                        className={
+                          "max-w-[200px] text-neutral-600 dark:text-nb-gray-300 text-right"
+                        }
                       >
                         {value}
                       </div>
@@ -243,7 +248,10 @@ export default function ReverseProxyAccessControlCell({
               "cursor-pointer !rounded-r-none !border-r-0 !h-[34px] min-w-[100px] !justify-start hover:bg-neutral-100 dark:hover:bg-nb-gray-930 transition-all"
             }
           >
-            <ShieldOff size={12} className="text-red-500" />
+            <ShieldOff
+              size={12}
+              className="text-red-600 dark:text-red-500"
+            />
             <span className={"font-medium text-xs"}>
               {t("reverseProxy.noRules")}
             </span>

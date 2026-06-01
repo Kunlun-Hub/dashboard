@@ -6,7 +6,7 @@ import { SmallBadge } from "@components/ui/SmallBadge";
 import TextWithTooltip from "@components/ui/TextWithTooltip";
 import { VirtualScrollAreaList } from "@components/VirtualScrollAreaList";
 import { useSearch } from "@hooks/useSearch";
-import { generateColorFromString } from "@utils/helpers";
+import { generateColorFromString, systemAvatarColor } from "@utils/helpers";
 import { sortBy, uniqBy } from "lodash";
 import { ChevronsUpDown, Cog, UserCircle2 } from "lucide-react";
 import * as React from "react";
@@ -120,7 +120,7 @@ export function UsersDropdownSelector({
                   style={{
                     color:
                       selectedUser?.email === "NetBird"
-                        ? "#808080"
+                        ? systemAvatarColor
                         : generateColorFromString(
                             selectedUser?.name ||
                               selectedUser?.id ||
@@ -155,7 +155,7 @@ export function UsersDropdownSelector({
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className="w-full p-0 shadow-sm  shadow-nb-gray-950 min-w-[300px]"
+        className="w-full p-0 shadow-sm shadow-neutral-200/70 dark:shadow-nb-gray-950 min-w-[300px]"
         style={{
           width: popoverWidth === "auto" ? width : popoverWidth,
         }}
@@ -208,7 +208,7 @@ export function UsersDropdownSelector({
                     {user.id === "all-users" ? (
                       <div
                         className={
-                          "w-7 h-7 shrink-0 rounded-full flex items-center justify-center uppercase text-[9px] font-medium bg-sky-400 text-white"
+                          "w-7 h-7 shrink-0 rounded-full flex items-center justify-center uppercase text-[9px] font-medium bg-netbird text-white"
                         }
                       >
                         <UserCircle2 size={16} />
@@ -224,7 +224,7 @@ export function UsersDropdownSelector({
                     <div className={"flex flex-col text-xs w-full"}>
                       <span
                         className={
-                          "text-nb-gray-200 flex items-center gap-1.5 w-full"
+                          "text-neutral-800 dark:text-nb-gray-200 flex items-center gap-1.5 w-full"
                         }
                       >
                         <TextWithTooltip
@@ -236,7 +236,7 @@ export function UsersDropdownSelector({
                       </span>
                       <span
                         className={
-                          "text-nb-gray-400 font-light flex items-center gap-1"
+                          "text-neutral-500 dark:text-nb-gray-400 font-light flex items-center gap-1"
                         }
                       >
                         <TextWithTooltip

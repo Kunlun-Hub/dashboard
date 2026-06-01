@@ -21,14 +21,14 @@ export default function MultipleDomains({ domains }: Props) {
         <TooltipTrigger asChild={true}>
           <div className={"inline-flex items-center gap-2"}>
             {firstDomain && (
-              <Badge variant={"blue-darker"}>
+              <Badge variant={"netbird"}>
                 <GlobeIcon size={10} />
                 {firstDomain}
               </Badge>
             )}
             {otherDomains && otherDomains.length > 0 && (
               <Badge
-                variant={"blue-darker"}
+                variant={"netbird"}
                 className={"px-3 gap-2 whitespace-nowrap"}
               >
                 + {otherDomains.length}
@@ -48,7 +48,7 @@ export default function MultipleDomains({ domains }: Props) {
                         "flex gap-2 items-center justify-between w-full"
                       }
                     >
-                      <Badge variant={"blue-darker"}>
+                      <Badge variant={"netbird"}>
                         <GlobeIcon size={10} />
                         {domain}
                       </Badge>
@@ -63,7 +63,7 @@ export default function MultipleDomains({ domains }: Props) {
     </TooltipProvider>
   ) : (
     <Badge
-      variant={"blue-darker"}
+      variant={"netbird"}
       className={"uppercase tracking-wider font-medium"}
     >
       <GlobeIcon size={10} />

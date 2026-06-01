@@ -5,6 +5,7 @@ import FullScreenLoading from "@components/ui/FullScreenLoading";
 import { PageNotFound } from "@components/ui/PageNotFound";
 import { IconCircleX } from "@tabler/icons-react";
 import useFetchApi from "@utils/api";
+import { cn } from "@utils/helpers";
 import { Loader2Icon } from "lucide-react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
@@ -21,7 +22,6 @@ import {
   NetBirdStatus,
   useNetBirdClient,
 } from "@/modules/remote-access/useNetBirdClient";
-import { cn } from "@utils/helpers";
 
 export default function RDPPage() {
   const { t } = useI18n();
@@ -43,7 +43,11 @@ export default function RDPPage() {
   }
 
   return (
-    <div className={"w-screen h-screen overflow-hidden fixed inset-0"}>
+    <div
+      className={
+        "light-theme-surface fixed inset-0 h-screen w-screen overflow-hidden bg-neutral-50 text-neutral-900 dark:bg-nb-gray-950 dark:text-nb-gray-100"
+      }
+    >
       {peerId && peer && !isLoading ? (
         <RDPSession key={peer.id} peer={peer} />
       ) : (
@@ -225,7 +229,7 @@ function RDPSession({ peer }: Props) {
         ref={rdp.canvasRef}
         className={cn(
           rdp.status === RDPStatus.CONNECTED ? "block" : "hidden",
-          "w-full h-full select-none bg-nb-gray-950",
+          "w-full h-full select-none bg-neutral-50 dark:bg-nb-gray-950",
         )}
         style={{ imageRendering: "pixelated" }}
       />

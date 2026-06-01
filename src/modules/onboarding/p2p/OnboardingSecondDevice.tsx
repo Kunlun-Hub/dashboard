@@ -79,10 +79,10 @@ export const OnboardingSecondDevice = ({ secondDevice, onFinish }: Props) => {
         <h1 className={"text-xl text-center max-w-sm mx-auto"}>
           {t("onboarding.bringSecondDevice")}
         </h1>
-        <div className="text-sm text-nb-gray-300 font-light mt-2 block text-center">
+        <div className="text-sm text-neutral-600 dark:text-nb-gray-300 font-light mt-2 block text-center">
             {t("onboarding.eachDeviceGetsPrivateIP")}
         </div>
-        <div className="text-sm text-nb-gray-300 font-light mt-2 block text-center">
+        <div className="text-sm text-neutral-600 dark:text-nb-gray-300 font-light mt-2 block text-center">
             {t("onboarding.shareLinkToCompleteSetup")}
         </div>
       </div>
@@ -111,7 +111,7 @@ export const OnboardingSecondDevice = ({ secondDevice, onFinish }: Props) => {
           </Button>
         )}
       </div>
-      <div className="text-sm text-nb-gray-300 font-light mt-2 block text-center sm:px-4">
+      <div className="text-sm text-neutral-600 dark:text-nb-gray-300 font-light mt-2 block text-center sm:px-4">
           {t("onboarding.useHeadlessSetup")}
           <InlineLink onClick={installUsingSetupKey} href={"#"}>
             {t("onboarding.installWithSetupKey")}

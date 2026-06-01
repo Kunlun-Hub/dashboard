@@ -89,7 +89,7 @@ export default function GroupsSettings({ account }: Props) {
           children: (
             <div
               className={
-                "flex gap-2 items-center text-xs bg-netbird-950 px-4 justify-center py-3 rounded-md border border-netbird-500 text-netbird-200"
+                "flex gap-2 items-center text-xs bg-netbird-50 px-4 justify-center py-3 rounded-md border border-netbird-200 text-netbird-700 dark:bg-netbird-950 dark:border-netbird-500 dark:text-netbird-200"
               }
             >
               <AlertCircle size={14} />
@@ -300,7 +300,7 @@ export default function GroupsSettings({ account }: Props) {
                     {jwtAllowGroupsWarning && (
                       <div
                         className={
-                          "flex gap-2 items-center text-xs bg-netbird-950 px-4 justify-center py-3 rounded-md border border-netbird-500 text-netbird-200"
+                          "flex gap-2 items-center text-xs bg-netbird-50 px-4 justify-center py-3 rounded-md border border-netbird-200 text-netbird-700 dark:bg-netbird-950 dark:border-netbird-500 dark:text-netbird-200"
                         }
                       >
                         <AlertCircle size={14} />

@@ -17,12 +17,12 @@ const inputVariants = cva("", {
   variants: {
     variant: {
       default: [
-        "dark:bg-nb-gray-900 dark:placeholder:text-neutral-400/70 placeholder:text-neutral-500 border-neutral-200 dark:border-nb-gray-700",
-        "ring-offset-neutral-200/20 dark:ring-offset-neutral-950/50 dark:focus-visible:ring-neutral-500/20 focus-visible:ring-neutral-300/10",
+        "bg-white text-neutral-900 placeholder:text-neutral-500 border-neutral-200 hover:border-neutral-300 dark:bg-nb-gray-900 dark:text-nb-gray-100 dark:placeholder:text-neutral-400/70 dark:border-nb-gray-700",
+        "ring-offset-white dark:ring-offset-nb-gray-950/50 focus-visible:border-netbird-300 focus-visible:ring-netbird-400/40 dark:focus-visible:border-netbird-500/40 dark:focus-visible:ring-netbird-500/40",
       ],
       darker: [
-        "dark:bg-nb-gray-900/40 dark:placeholder:text-neutral-400/70 placeholder:text-neutral-500 border-neutral-200 dark:border-nb-gray-900",
-        "ring-offset-neutral-200/20 dark:ring-offset-neutral-950/50 dark:focus-visible:ring-neutral-500/20 focus-visible:ring-neutral-300/10",
+        "bg-white text-neutral-900 placeholder:text-neutral-500 border-neutral-200 hover:border-neutral-300 dark:bg-nb-gray-900/40 dark:text-nb-gray-100 dark:placeholder:text-neutral-400/70 dark:border-nb-gray-900",
+        "ring-offset-white dark:ring-offset-nb-gray-950/50 focus-visible:border-netbird-300 focus-visible:ring-netbird-400/40 dark:focus-visible:border-netbird-500/40 dark:focus-visible:ring-netbird-500/40",
       ],
       error: [
         "dark:bg-red-950/30 dark:placeholder:text-red-400/70 placeholder:text-red-500 border-red-500 dark:border-red-500 text-red-500",

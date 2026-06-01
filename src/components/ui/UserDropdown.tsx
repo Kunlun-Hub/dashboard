@@ -62,14 +62,14 @@ export default function UserDropdown() {
         <DropdownMenuContent className="w-56" align="end" forceMount>
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col space-y-0.5 px-1">
-              <div className="text-sm font-medium leading-none dark:text-gray-300">
+              <div className="text-sm font-medium leading-none dark:text-nb-gray-300">
                 <TextWithTooltip
                   text={user?.name}
                   maxChars={20}
                   hideTooltip={true}
                 />
               </div>
-              <div className="text-xs leading-none dark:text-gray-400">
+              <div className="text-xs leading-none dark:text-nb-gray-400">
                 <TextWithTooltip
                   text={user?.email}
                   maxChars={28}

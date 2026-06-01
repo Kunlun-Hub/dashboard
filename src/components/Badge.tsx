@@ -15,15 +15,16 @@ const variants = cva("", {
   variants: {
     variant: {
       blue: [
-        "bg-sky-100 border-sky-500 text-sky-800 border border-transparent",
+        "bg-netbird-50 border-netbird-200 text-netbird-700 border",
+        "dark:bg-netbird-950 dark:border-netbird-500 dark:text-netbird-500",
       ],
       blueDark: [
-        "bg-sky-100 border-sky-300 text-sky-700 border",
-        "dark:bg-sky-900 dark:border-sky-500 dark:text-white",
+        "bg-netbird-100 border-netbird-300 text-netbird-700 border",
+        "dark:bg-netbird-900 dark:border-netbird-500 dark:text-white",
       ],
       "blue-darker": [
-        "bg-sky-100 border-sky-300 text-sky-700 border",
-        "dark:bg-sky-900 dark:border-sky-500 dark:text-white",
+        "bg-netbird-100 border-netbird-300 text-netbird-700 border",
+        "dark:bg-netbird-900 dark:border-netbird-500 dark:text-white",
       ],
       red: [
         "bg-red-50 border-red-200 border text-red-600",
@@ -64,11 +65,11 @@ const variants = cva("", {
     },
     hover: {
       none: [],
-      blue: ["hover:bg-sky-200"],
+      blue: ["hover:bg-netbird-100 dark:hover:bg-netbird-950/50"],
       purple: ["hover:bg-purple-100 dark:hover:bg-purple-950/40"],
       yellow: ["hover:bg-yellow-100 dark:hover:bg-yellow-950/40"],
-      blueDark: ["hover:bg-sky-200 dark:hover:bg-sky-800"],
-      "blue-darker": ["hover:bg-sky-200 dark:hover:bg-sky-800"],
+      blueDark: ["hover:bg-netbird-200 dark:hover:bg-netbird-800"],
+      "blue-darker": ["hover:bg-netbird-200 dark:hover:bg-netbird-800"],
       red: ["hover:bg-red-100 dark:hover:bg-red-950/40"],
       gray: ["hover:bg-neutral-100 dark:hover:bg-nb-gray-900"],
       grayer: ["hover:bg-neutral-100 dark:hover:bg-nb-gray-900"],

@@ -13,7 +13,9 @@ export const JobTypeCell = ({ job }: Props) => {
   if (job.workload.type === "bundle") {
     return (
       <div
-        className={"flex items-center gap-2 whitespace-nowrap text-nb-gray-200"}
+        className={
+          "flex items-center gap-2 whitespace-nowrap text-neutral-800 dark:text-nb-gray-200"
+        }
       >
         <BugIcon size={14} />
         <span>{t("jobs.debugBundle")}</span>

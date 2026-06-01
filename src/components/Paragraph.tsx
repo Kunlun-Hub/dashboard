@@ -9,7 +9,7 @@ export default function Paragraph({ children, className }: Props) {
   return (
     <p
       className={cn(
-        "text-neutral-500 dark:text-gray-400 text-base flex flex-wrap gap-x-1.5",
+        "text-neutral-500 dark:text-nb-gray-400 text-base flex flex-wrap gap-x-1.5",
         className,
       )}
     >

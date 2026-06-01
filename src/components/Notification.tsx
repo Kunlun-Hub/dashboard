@@ -162,7 +162,7 @@ export default function Notification<T>({
     >
       <div
         className={cn(
-          "w-full justify-between bg-white dark:bg-nb-gray-940 shadow-lg rounded-md px-4 py-2.5 pointer-events-auto flex border dark:border-nb-gray-900",
+          "light-theme-surface w-full justify-between bg-white text-neutral-900 dark:bg-nb-gray-940 dark:text-nb-gray-100 shadow-lg rounded-md px-4 py-2.5 pointer-events-auto flex border border-neutral-200 dark:border-nb-gray-900",
         )}
       >
         <div className={"flex items-center gap-4"}>
@@ -170,7 +170,7 @@ export default function Notification<T>({
             className={classNames(
               "h-8 w-8  shadow-sm text-white flex items-center justify-center rounded-md shrink-0",
               loading
-                ? "bg-nb-gray-900"
+                ? "bg-neutral-900 dark:bg-nb-gray-900"
                 : error
                 ? "bg-red-500"
                 : backgroundColor || "bg-green-500",

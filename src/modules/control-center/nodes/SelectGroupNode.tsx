@@ -11,6 +11,7 @@ import * as React from "react";
 import { useMemo } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { Group } from "@/interfaces/Group";
+import { controlCenterHandleColor } from "@/modules/control-center/utils/theme";
 
 type NodeProps = Node<
   {
@@ -121,7 +122,7 @@ export const SelectGroupNode = ({ data, id }: NodeProps) => {
           height: 20,
           width: "1px",
           border: "none",
-          backgroundColor: "#3f444b",
+          backgroundColor: controlCenterHandleColor,
           borderRadius: "0px 4px 4px 0px",
           right: -2,
         }}

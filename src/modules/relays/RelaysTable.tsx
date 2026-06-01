@@ -111,14 +111,18 @@ export default function RelaysTable({ headingTarget }: Readonly<Props>) {
               margin={"mt-0"}
             />
             <div className={"flex flex-col"}>
-              <span className={"font-medium text-nb-gray-100"}>
+              <span className={"font-medium text-neutral-900 dark:text-nb-gray-100"}>
                 {row.original.name || row.original.id || row.original.address}
               </span>
-              <span className={"text-xs text-nb-gray-400"}>
+              <span className={"text-xs text-neutral-500 dark:text-nb-gray-400"}>
                 {row.original.address}
               </span>
               {row.original.error && (
-                <span className={"text-xs text-nb-gray-400 max-w-xl truncate"}>
+                <span
+                  className={
+                    "text-xs text-neutral-500 dark:text-nb-gray-400 max-w-xl truncate"
+                  }
+                >
                   {row.original.error}
                 </span>
               )}
@@ -280,7 +284,10 @@ export default function RelaysTable({ headingTarget }: Readonly<Props>) {
             icon={
               <SquareIcon
                 icon={
-                  <RadioTowerIcon className={"text-nb-gray-200"} size={20} />
+                  <RadioTowerIcon
+                    className={"text-neutral-700 dark:text-nb-gray-200"}
+                    size={20}
+                  />
                 }
                 color={"gray"}
                 size={"large"}
@@ -369,7 +376,7 @@ function RelayPriorityModal({
           description={relay?.name || relay?.id || relay?.address || ""}
           className={"px-6 pb-5 pt-6"}
         />
-        <div className={"border-y border-nb-gray-900 px-6 py-5"}>
+        <div className={"border-y border-neutral-200 px-6 py-5 dark:border-nb-gray-900"}>
           <Label>{t("relays.priority")}</Label>
           <Input
             variant={"darker"}

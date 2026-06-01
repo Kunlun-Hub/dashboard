@@ -102,7 +102,7 @@ export default function UserNameCell({ user }: Readonly<Props>) {
           {isCurrent && (
             <span
               className={
-                "bg-sky-900 border border-sky-700 text-sky-200 rounded-full text-[9px] uppercase tracking-wider px-2 py-2 leading-[0]"
+                "bg-netbird-50 border border-netbird-200 text-netbird-700 rounded-full text-[9px] uppercase tracking-wider px-2 py-2 leading-[0] dark:bg-netbird-950 dark:border-netbird-500 dark:text-netbird-500"
               }
             >
               You

@@ -94,7 +94,10 @@ export default function ReverseProxyLayer4Content({
             />
           </div>
         </div>
-        <ArrowRight size={16} className="text-nb-gray-400 shrink-0 mt-6" />
+        <ArrowRight
+          size={16}
+          className="text-neutral-500 dark:text-nb-gray-400 shrink-0 mt-6"
+        />
         <div className={"w-full flex"}>
           <div className={"w-full"}>
             <Label>

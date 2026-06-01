@@ -20,7 +20,7 @@ export const OIDCError = () => {
   const invalidRequest = errorParam === "invalid_request";
   const [title, setTitle] = useState(params.get("error_description"));
   const errorDescription = params.get("error_description");
-  const { logout, login } = useOidc();
+  const { logout } = useOidc();
 
   useEffect(() => {
     if (accessDenied) {
@@ -35,62 +35,64 @@ export const OIDCError = () => {
   return (
     <div
       className={
-        "flex items-center justify-center flex-col h-screen max-w-lg mx-auto px-4"
+        "light-theme-surface flex h-screen flex-col items-center justify-center bg-neutral-50 px-4 text-neutral-900 dark:bg-nb-gray-950 dark:text-nb-gray-100"
       }
     >
-      <div
-        className={
-          "bg-neutral-50 mb-3 border border-neutral-200 h-12 w-12 rounded-md flex items-center justify-center dark:bg-nb-gray-930 dark:border-nb-gray-900"
-        }
-      >
-        <PublicBrandingIcon size={23} />
+      <div className={"flex w-full max-w-lg flex-col items-center"}>
+        <div
+          className={
+            "bg-neutral-50 mb-3 border border-neutral-200 h-12 w-12 rounded-md flex items-center justify-center dark:bg-nb-gray-930 dark:border-nb-gray-900"
+          }
+        >
+          <PublicBrandingIcon size={23} />
+        </div>
+        <h1 className={"text-center mt-2"}>{title}</h1>
+
+        {accessDenied ? (
+          <>
+            <Paragraph className={"text-center mt-2"}>
+              {t("auth.alreadyVerifiedEmail")}
+            </Paragraph>
+
+            <Button
+              variant={"primary"}
+              size={"sm"}
+              className={"mt-5"}
+              onClick={() => logout("/", { client_id: config.clientId })}
+            >
+              {t("actions.continue")}
+              <ArrowRightIcon size={16} />
+            </Button>
+
+            <Button
+              variant={"default-outline"}
+              size={"sm"}
+              className={"mt-5"}
+              onClick={() => logout("/", { client_id: config.clientId })}
+            >
+              {t("auth.troubleLoggingIn")}
+            </Button>
+          </>
+        ) : (
+          <>
+            <Paragraph className={"text-center mt-2 block"}>
+              {t("auth.errorLoggingIn")} <br />
+              {t("auth.error")}:
+              {invalidRequest && errorDescription
+                ? errorDescription
+                : oidcUserLoadingState}
+            </Paragraph>
+            <Button
+              variant={"primary"}
+              size={"sm"}
+              className={"mt-5"}
+              onClick={() => logout("/", { client_id: config.clientId })}
+            >
+              {t("auth.logout")}
+            </Button>
+          </>
+        )}
       </div>
-      <h1 className={"text-center mt-2"}>{title}</h1>
-
-      {accessDenied ? (
-        <>
-          <Paragraph className={"text-center mt-2"}>
-            {t("auth.alreadyVerifiedEmail")}
-          </Paragraph>
-
-          <Button
-            variant={"primary"}
-            size={"sm"}
-            className={"mt-5"}
-            onClick={() => logout("/", { client_id: config.clientId })}
-          >
-            {t("actions.continue")}
-            <ArrowRightIcon size={16} />
-          </Button>
-
-          <Button
-            variant={"default-outline"}
-            size={"sm"}
-            className={"mt-5"}
-            onClick={() => logout("/", { client_id: config.clientId })}
-          >
-            {t("auth.troubleLoggingIn")}
-          </Button>
-        </>
-      ) : (
-        <>
-          <Paragraph className={"text-center mt-2 block"}>
-            {t("auth.errorLoggingIn")} <br />
-            {t("auth.error")}:
-            {invalidRequest && errorDescription
-              ? errorDescription
-              : oidcUserLoadingState}
-          </Paragraph>
-          <Button
-            variant={"primary"}
-            size={"sm"}
-            className={"mt-5"}
-            onClick={() => logout("/", { client_id: config.clientId })}
-          >
-            {t("auth.logout")}
-          </Button>
-        </>
-      )}
     </div>
   );
 };

@@ -305,7 +305,10 @@ function ClientSettingsTabContent({ account }: Readonly<Props>) {
           <div>
             <div>
               <Label>
-                <ReverseProxyIcon size={15} className={"fill-nb-gray-300"} />
+                <ReverseProxyIcon
+                  size={15}
+                  className={"fill-neutral-400 dark:fill-nb-gray-300"}
+                />
                 {t("clientSettings.exposeServices")}
               </Label>
               <HelpText>

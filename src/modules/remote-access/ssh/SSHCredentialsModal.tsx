@@ -19,9 +19,9 @@ import {
 } from "lucide-react";
 import * as React from "react";
 import { useMemo, useState } from "react";
+import { useI18n } from "@/i18n/I18nProvider";
 import { OperatingSystem } from "@/interfaces/OperatingSystem";
 import { Peer } from "@/interfaces/Peer";
-import { useI18n } from "@/i18n/I18nProvider";
 
 type Props = {
   open: boolean;
@@ -95,7 +95,10 @@ export const SSHCredentialsModal = ({ open, onOpenChange, peer }: Props) => {
                 errorTooltip={true}
                 errorTooltipPosition={"top-right"}
                 customPrefix={
-                  <User2 size={16} className={"text-nb-gray-300"} />
+                  <User2
+                    size={16}
+                    className={"text-neutral-500 dark:text-nb-gray-300"}
+                  />
                 }
               />
               <Input
@@ -112,7 +115,7 @@ export const SSHCredentialsModal = ({ open, onOpenChange, peer }: Props) => {
                 customPrefix={
                   <ChevronsLeftRightEllipsis
                     size={16}
-                    className={"text-nb-gray-300"}
+                    className={"text-neutral-500 dark:text-nb-gray-300"}
                   />
                 }
               />

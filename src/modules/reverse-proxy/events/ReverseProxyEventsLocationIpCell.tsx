@@ -1,15 +1,15 @@
 import CopyToClipboardText from "@components/CopyToClipboardText";
 import FullTooltip from "@components/FullTooltip";
+import { ListItem } from "@components/ListItem";
 import { cn } from "@utils/helpers";
 import { isEmpty } from "lodash";
 import { FlagIcon, GlobeIcon } from "lucide-react";
 import * as React from "react";
+import Skeleton from "react-loading-skeleton";
 import { useMemo } from "react";
 import RoundedFlag from "@/assets/countries/RoundedFlag";
 import { useCountries } from "@/contexts/CountryProvider";
 import { ReverseProxyEvent } from "@/interfaces/ReverseProxy";
-import Skeleton from "react-loading-skeleton";
-import { ListItem } from "@components/ListItem";
 
 type Props = {
   event: ReverseProxyEvent;
@@ -78,7 +78,10 @@ export const ReverseProxyEventsLocationIpCell = ({ event }: Props) => {
       >
         <div className="flex items-center justify-center shrink-0">
           {isEmpty(event.country_code) ? (
-            <GlobeIcon size={13} className={"text-nb-gray-300"} />
+            <GlobeIcon
+              size={13}
+              className={"text-neutral-500 dark:text-nb-gray-300"}
+            />
           ) : (
             <RoundedFlag country={event.country_code!} size={12} />
           )}
@@ -86,7 +89,11 @@ export const ReverseProxyEventsLocationIpCell = ({ event }: Props) => {
         <CopyToClipboardText
           message={"IP address has been copied to your clipboard"}
         >
-          <span className={"text-nb-gray-200 font-mono text-[0.82rem]"}>
+          <span
+            className={
+              "text-neutral-800 dark:text-nb-gray-200 font-mono text-[0.82rem]"
+            }
+          >
             {event.source_ip}
           </span>
         </CopyToClipboardText>

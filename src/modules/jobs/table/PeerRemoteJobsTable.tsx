@@ -130,7 +130,12 @@ export default function PeerRemoteJobsTable({
           className="py-4"
           title={t("jobs.emptyTitle")}
           description={t("jobs.emptyDescription")}
-          icon={<ClipboardList size={20} className="text-nb-gray-300" />}
+          icon={
+            <ClipboardList
+              size={20}
+              className="text-neutral-500 dark:text-nb-gray-300"
+            />
+          }
         />
       }
       paginationPaddingClassName="px-0 pt-8"

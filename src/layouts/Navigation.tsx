@@ -44,7 +44,7 @@ export default function Navigation({
     <div
       data-navigation
       className={cn(
-        "whitespace-nowrap md:border-r dark:border-zinc-700/40 bg-gray-50 dark:bg-nb-gray relative group/navigation transition-all",
+        "light-theme-surface whitespace-nowrap md:border-r border-neutral-200 bg-gray-50 dark:border-nb-gray-800/60 dark:bg-nb-gray relative group/navigation transition-all",
         hideOnMobile ? "hidden md:block" : "",
         fullWidth
           ? "w-auto max-w-[22rem]"
@@ -252,7 +252,7 @@ export function SidebarItemGroup({ children }: SidebarItemGroupProps) {
   return (
     <div
       className={
-        "mt-4 border-t border-gray-200 pt-4 first:mt-0 first:border-t-0 first:pt-0 dark:border-zinc-700/40 space-y-[3px]"
+        "mt-4 border-t border-gray-200 pt-4 first:mt-0 first:border-t-0 first:pt-0 dark:border-nb-gray-800/60 space-y-[3px]"
       }
     >
       {children}

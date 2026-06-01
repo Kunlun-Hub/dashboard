@@ -187,7 +187,12 @@ export default function CustomDomainsTable({ headingTarget }: Readonly<Props>) {
           <GetStartedTest
             icon={
               <SquareIcon
-                icon={<GlobeIcon className={"text-nb-gray-200"} size={20} />}
+                icon={
+                  <GlobeIcon
+                    className={"text-neutral-700 dark:text-nb-gray-200"}
+                    size={20}
+                  />
+                }
                 color={"gray"}
                 size={"large"}
               />
@@ -271,7 +276,7 @@ type CellProps = {
 function CustomDomainNameCell({ domain }: Readonly<CellProps>) {
   return (
     <div className="flex items-center gap-2 ml-2">
-      <GlobeIcon size={14} className="text-nb-gray-200" />
+      <GlobeIcon size={14} className="text-neutral-500 dark:text-nb-gray-200" />
       <CopyToClipboardText>
         <span className="font-medium">{domain.domain}</span>
       </CopyToClipboardText>
@@ -288,7 +293,11 @@ function CustomDomainStatusCell({ domain }: Readonly<CellProps>) {
 
   if (isValidated) {
     return (
-      <div className={cn("flex gap-2.5 items-center text-nb-gray-300 text-sm")}>
+      <div
+        className={cn(
+          "flex gap-2.5 items-center text-neutral-600 dark:text-nb-gray-300 text-sm",
+        )}
+      >
         <span className="h-2 w-2 rounded-full bg-green-500"></span>
         {t("table.active")}
       </div>

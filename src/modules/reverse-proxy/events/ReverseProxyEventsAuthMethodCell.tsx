@@ -24,7 +24,11 @@ export const ReverseProxyEventsAuthMethodCell = ({ event }: Props) => {
   const authMethod = event.auth_method_used;
 
   if (!authMethod) {
-    return <span className="text-nb-gray-400 text-sm px-3 py-2">-</span>;
+    return (
+      <span className="text-neutral-500 dark:text-nb-gray-400 text-sm px-3 py-2">
+        -
+      </span>
+    );
   }
 
   const getAuthMethodDisplay = () => {

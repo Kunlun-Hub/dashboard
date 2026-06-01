@@ -27,12 +27,12 @@ const CENTER_Y = HEIGHT / 2 + 28;
 const RADIUS = 150;
 
 const osColors: Record<string, string> = {
-  android: "#7f8a97",
-  ios: "#aeb5c0",
-  linux: "#202631",
-  macos: "#748190",
-  windows: "#a8afb9",
-  unknown: "#c4cad2",
+  android: "var(--overview-device-color-android)",
+  ios: "var(--overview-device-color-ios)",
+  linux: "var(--overview-device-color-linux)",
+  macos: "var(--overview-device-color-macos)",
+  windows: "var(--overview-device-color-windows)",
+  unknown: "var(--overview-device-color-unknown)",
 };
 
 const osOrder = ["android", "ios", "linux", "macos", "windows", "unknown"];
@@ -86,7 +86,7 @@ export function DeviceTypeDistribution() {
         key,
         label: key === "macos" ? "macOS" : key,
         value,
-        color: osColors[key] ?? "#8f98a6",
+        color: osColors[key] ?? "var(--overview-device-color-other)",
       }))
       .sort((a, b) => {
         const aOrder = osOrder.indexOf(a.key);
@@ -133,7 +133,7 @@ export function DeviceTypeDistribution() {
         </div>
 
         {total === 0 && !isLoading ? (
-          <div className="flex h-full items-center justify-center text-sm text-nb-gray-300">
+          <div className="flex h-full items-center justify-center text-sm text-neutral-500 dark:text-nb-gray-300">
             {t("overview.noDeviceTypeData")}
           </div>
         ) : (
@@ -150,7 +150,7 @@ export function DeviceTypeDistribution() {
                     dx="0"
                     dy="4"
                     stdDeviation="5"
-                    floodColor="#111827"
+                    floodColor="var(--overview-device-chart-shadow-color)"
                     floodOpacity="0.24"
                   />
                 </filter>
@@ -253,7 +253,7 @@ export function DeviceTypeDistribution() {
         )}
 
         {isLoading && (
-          <div className="absolute inset-0 z-30 flex items-center justify-center bg-white/30 text-sm text-nb-gray-300 backdrop-blur-[1px] dark:bg-nb-gray/20">
+          <div className="absolute inset-0 z-30 flex items-center justify-center bg-white/30 text-sm text-neutral-500 backdrop-blur-[1px] dark:bg-nb-gray/20 dark:text-nb-gray-300">
             {t("overview.loadingDistribution")}
           </div>
         )}

@@ -107,7 +107,12 @@ export function CreateDebugJobModalContent({ peerID, onSuccess }: Props) {
             value={logFileCount}
             onChange={(e) => setLogFileCount(e.target.value)}
             maxWidthClass="w-[220px]"
-            customPrefix={<FileText size={16} className="text-nb-gray-300" />}
+            customPrefix={
+              <FileText
+                size={16}
+                className="text-neutral-500 dark:text-nb-gray-300"
+              />
+            }
             customSuffix={t("jobs.filesSuffix")}
           />
         </div>
@@ -148,7 +153,10 @@ export function CreateDebugJobModalContent({ peerID, onSuccess }: Props) {
                 maxWidthClass="w-[220px]"
                 placeholder={"2"}
                 customPrefix={
-                  <AlarmClock size={16} className="text-nb-gray-300" />
+                  <AlarmClock
+                    size={16}
+                    className="text-neutral-500 dark:text-nb-gray-300"
+                  />
                 }
                 customSuffix={t("jobs.minutesSuffix")}
               />

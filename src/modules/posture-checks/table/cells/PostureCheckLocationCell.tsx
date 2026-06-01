@@ -13,7 +13,6 @@ export const PostureCheckLocationCell = ({ check }: Props) => {
 
   return countries ? (
     <div className={"flex gap-2 items-center"}>
-      <span className={"font-medium text-nb-gray-200"}></span>
       {countries.map((country, index) => {
         return (
           <div

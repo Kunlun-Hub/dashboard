@@ -131,7 +131,7 @@ export const ResourcePolicyCell = ({ resource }: Props) => {
                 className={cn(
                   enabledPolicies?.length > 0
                     ? "text-green-500"
-                    : "text-nb-gray-400",
+                    : "text-neutral-400 dark:text-nb-gray-400",
                 )}
               />
               <div>

@@ -14,13 +14,13 @@ export default function GroupedRouteNameCell({
       <ChevronRightIcon
         size={20}
         className={
-          "group-data-[accordion=opened]/accordion:hidden text-nb-gray-400 shrink-0"
+          "group-data-[accordion=opened]/accordion:hidden text-neutral-400 dark:text-nb-gray-400 shrink-0"
         }
       />
       <ChevronDown
         size={20}
         className={
-          "group-data-[accordion=closed]/accordion:hidden text-nb-gray-400 shrink-0"
+          "group-data-[accordion=closed]/accordion:hidden text-neutral-400 dark:text-nb-gray-400 shrink-0"
         }
       />
       <ActiveInactiveRow

@@ -57,7 +57,7 @@ function DashboardPageContent({
       {mobileNavOpen && (
         <motion.div
           className={
-            "h-screen bg-gray-50 dark:bg-nb-gray-950 w-11/12 max-w-[22rem]"
+            "light-theme-surface h-screen bg-gray-50 text-neutral-900 dark:bg-nb-gray-950 dark:text-nb-gray-100 w-11/12 max-w-[22rem]"
           }
           layout={true}
           transition={{
@@ -82,10 +82,10 @@ function DashboardPageContent({
             <div className={"flex items-center gap-3 max-w-[22rem]"}>
               <UserAvatar size={"small"} />
               <div className="flex flex-col space-y-1">
-                <p className="font-medium leading-none dark:text-gray-300">
+                <p className="font-medium leading-none text-neutral-900 dark:text-nb-gray-300">
                   {user?.name}
                 </p>
-                <p className="text-xs leading-none dark:text-gray-400">
+                <p className="text-xs leading-none text-neutral-500 dark:text-nb-gray-400">
                   {user?.email}
                 </p>
               </div>

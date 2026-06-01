@@ -42,14 +42,14 @@ export default function ReverseProxyNameCell({
           <ChevronRightIcon
             size={20}
             className={cn(
-              "group-data-[accordion=opened]/accordion:hidden text-nb-gray-400 shrink-0",
+              "group-data-[accordion=opened]/accordion:hidden text-neutral-400 dark:text-nb-gray-400 shrink-0",
               !hasExpandableTargets && "cursor-default opacity-0",
             )}
           />
           <ChevronDown
             size={20}
             className={cn(
-              "group-data-[accordion=closed]/accordion:hidden text-nb-gray-400 shrink-0",
+              "group-data-[accordion=closed]/accordion:hidden text-neutral-400 dark:text-nb-gray-400 shrink-0",
               !hasExpandableTargets && "cursor-default opacity-0",
             )}
           />
@@ -60,7 +60,7 @@ export default function ReverseProxyNameCell({
           size={14}
           className={cn(
             "shrink-0",
-            isEnabled ? "text-green-500" : "text-nb-gray-400",
+            isEnabled ? "text-green-500" : "text-neutral-400 dark:text-nb-gray-400",
           )}
         />
         <div className="flex flex-col gap-0 dark:text-neutral-300 text-neutral-500 truncate">

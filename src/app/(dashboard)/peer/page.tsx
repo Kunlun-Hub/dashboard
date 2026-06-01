@@ -393,7 +393,7 @@ const PeerOverviewTabs = () => {
           <TabsTrigger value={"reverse-proxies"}>
             <ReverseProxyIcon
               size={16}
-              className="fill-nb-gray-400 group-data-[state=active]/trigger:fill-netbird"
+              className="fill-neutral-500 dark:fill-nb-gray-400 group-data-[state=active]/trigger:fill-netbird dark:group-data-[state=active]/trigger:fill-netbird"
             />
             {t("nav.services")}
           </TabsTrigger>
@@ -668,9 +668,7 @@ function PeerInformationCard({ peer }: Readonly<{ peer: Peer }>) {
                     <Skeleton width={140} />
                   ) : (
                     <div className={"flex gap-2 items-center"}>
-                      <div
-                        className={"border-0 border-nb-gray-800 rounded-full"}
-                      >
+                      <div className={"border-0 dark:border-nb-gray-800 rounded-full"}>
                         <RoundedFlag country={peer.country_code} size={12} />
                       </div>
                       {countryText}

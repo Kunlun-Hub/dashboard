@@ -347,7 +347,7 @@ function RouteUpdateModalContent({ onSuccess, route, cell }: ModalProps) {
             <RouteIcon
               size={16}
               className={
-                "text-nb-gray-500 group-data-[state=active]/trigger:text-netbird transition-all"
+                "text-neutral-500 dark:text-nb-gray-500 group-data-[state=active]/trigger:text-netbird dark:group-data-[state=active]/trigger:text-netbird transition-all"
               }
             />
             {t("routeModal.routeTab")}
@@ -359,7 +359,7 @@ function RouteUpdateModalContent({ onSuccess, route, cell }: ModalProps) {
             <Text
               size={16}
               className={
-                "text-nb-gray-500 group-data-[state=active]/trigger:text-netbird transition-all"
+                "text-neutral-500 dark:text-nb-gray-500 group-data-[state=active]/trigger:text-netbird dark:group-data-[state=active]/trigger:text-netbird transition-all"
               }
             />
             {t("routeUpdate.descriptionTab")}
@@ -368,7 +368,7 @@ function RouteUpdateModalContent({ onSuccess, route, cell }: ModalProps) {
             <Settings2
               size={16}
               className={
-                "text-nb-gray-500 group-data-[state=active]/trigger:text-netbird transition-all"
+                "text-neutral-500 dark:text-nb-gray-500 group-data-[state=active]/trigger:text-netbird dark:group-data-[state=active]/trigger:text-netbird transition-all"
               }
             />
             {t("routeUpdate.settingsTab")}
@@ -493,7 +493,7 @@ function RouteUpdateModalContent({ onSuccess, route, cell }: ModalProps) {
                 customPrefix={
                   <ArrowDownWideNarrow
                     size={16}
-                    className={"text-nb-gray-300"}
+                    className={"text-neutral-500 dark:text-nb-gray-300"}
                   />
                 }
               />

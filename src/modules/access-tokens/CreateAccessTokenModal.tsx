@@ -198,7 +198,10 @@ export function AccessTokenModalContent({
             type={"number"}
             onChange={(e) => setExpiresIn(e.target.value)}
             customPrefix={
-              <AlarmClock size={16} className={"text-nb-gray-300"} />
+              <AlarmClock
+                size={16}
+                className={"text-neutral-500 dark:text-nb-gray-300"}
+              />
             }
             customSuffix={t("accessTokens.days")}
           />

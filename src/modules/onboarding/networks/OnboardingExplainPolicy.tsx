@@ -24,7 +24,7 @@ export const OnboardingExplainPolicy = ({
         </h1>
         <div
           className={
-            "text-sm text-nb-gray-300 font-light mt-2 block text-center sm:px-4"
+            "text-sm text-neutral-600 dark:text-nb-gray-300 font-light mt-2 block text-center sm:px-4"
           }
         >
           {t("onboarding.networkPolicyDescription")}
@@ -33,7 +33,7 @@ export const OnboardingExplainPolicy = ({
         {policy && (
           <div
             className={
-              "text-sm text-nb-gray-300 font-light mt-2 block text-center sm:px-4"
+              "text-sm text-neutral-600 dark:text-nb-gray-300 font-light mt-2 block text-center sm:px-4"
             }
           >
             {t("onboarding.networkPolicyToggleHint")}

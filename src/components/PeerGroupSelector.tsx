@@ -360,7 +360,7 @@ export function PeerGroupSelector({
           >
             <div
               className={
-                "flex items-center gap-2 border-nb-gray-700 flex-wrap h-full"
+                "flex items-center gap-2 border-neutral-200 dark:border-nb-gray-700 flex-wrap h-full"
               }
             >
               {resource && (
@@ -441,7 +441,7 @@ export function PeerGroupSelector({
               <ChevronsUpDown
                 size={18}
                 className={
-                  "shrink-0 group-hover:text-nb-gray-300 transition-all"
+                  "shrink-0 group-hover:text-neutral-700 dark:group-hover:text-nb-gray-300 transition-all"
                 }
               />
             </div>
@@ -449,7 +449,7 @@ export function PeerGroupSelector({
         )}
       </PopoverTrigger>
       <PopoverContent
-        className="w-full p-0 shadow-sm shadow-nb-gray-950"
+        className="w-full p-0 shadow-sm shadow-neutral-200/70 dark:shadow-nb-gray-950"
         style={{
           width: popoverWidth === "auto" ? width : popoverWidth,
         }}
@@ -702,7 +702,7 @@ const TabTriggers = ({
     >
       <FolderGit2
         className={
-          "text-nb-gray-500 group-data-[state=active]/trigger:text-netbird transition-all"
+          "text-neutral-500 dark:text-nb-gray-500 group-data-[state=active]/trigger:text-netbird dark:group-data-[state=active]/trigger:text-netbird transition-all"
         }
         size={14}
       />
@@ -719,7 +719,7 @@ const TabTriggers = ({
     >
       <Layers3Icon
         className={
-          "text-nb-gray-500 group-data-[state=active]/trigger:text-netbird transition-all"
+          "text-neutral-500 dark:text-nb-gray-500 group-data-[state=active]/trigger:text-netbird dark:group-data-[state=active]/trigger:text-netbird transition-all"
         }
         size={14}
       />
@@ -736,7 +736,7 @@ const TabTriggers = ({
     >
       <MonitorSmartphoneIcon
         className={
-          "text-nb-gray-500 group-data-[state=active]/trigger:text-netbird transition-all"
+          "text-neutral-500 dark:text-nb-gray-500 group-data-[state=active]/trigger:text-netbird dark:group-data-[state=active]/trigger:text-netbird transition-all"
         }
         size={14}
       />
@@ -952,7 +952,9 @@ const ResourcesList = ({
         items={filteredItems}
         onSelect={onChange}
         estimatedItemHeight={42}
-        itemClassName={"dark:aria-selected:bg-nb-gray-800/20"}
+        itemClassName={
+          "dark:aria-selected:bg-netbird-950/30 dark:aria-selected:text-netbird-100"
+        }
         renderItem={(res) => {
           return (
             <Fragment key={res.id}>
@@ -1069,7 +1071,9 @@ const PeersList = ({
         items={filteredItems}
         onSelect={onChange}
         estimatedItemHeight={42}
-        itemClassName={"dark:aria-selected:bg-nb-gray-800/20"}
+        itemClassName={
+          "dark:aria-selected:bg-netbird-950/30 dark:aria-selected:text-netbird-100"
+        }
         renderItem={(res) => {
           if (!res?.id) return;
 

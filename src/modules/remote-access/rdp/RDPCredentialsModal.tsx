@@ -1,22 +1,22 @@
-import * as React from "react";
-import { useCallback, useMemo, useState } from "react";
+import Button from "@components/Button";
+import HelpText from "@components/HelpText";
+import { Input } from "@components/Input";
+import { Label } from "@components/Label";
 import { Modal, ModalContent, ModalFooter } from "@components/modal/Modal";
 import ModalHeader from "@components/modal/ModalHeader";
-import { Peer } from "@/interfaces/Peer";
+import Separator from "@components/Separator";
+import { IconLoader2 } from "@tabler/icons-react";
 import {
   ChevronsLeftRightEllipsis,
   KeyRoundIcon,
   MonitorIcon,
   User2,
 } from "lucide-react";
-import Separator from "@components/Separator";
-import Button from "@components/Button";
-import { Label } from "@components/Label";
-import HelpText from "@components/HelpText";
-import { Input } from "@components/Input";
-import { RDPCredentials } from "@/modules/remote-access/rdp/useRemoteDesktop";
-import { IconLoader2 } from "@tabler/icons-react";
+import * as React from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
+import { Peer } from "@/interfaces/Peer";
+import { RDPCredentials } from "@/modules/remote-access/rdp/useRemoteDesktop";
 
 type Props = {
   open: boolean;
@@ -140,7 +140,10 @@ export const RDPCredentialsModal = ({
                 errorTooltip={true}
                 errorTooltipPosition={"top-right"}
                 customPrefix={
-                  <User2 size={16} className={"text-nb-gray-300"} />
+                  <User2
+                    size={16}
+                    className={"text-neutral-500 dark:text-nb-gray-300"}
+                  />
                 }
               />
               <Input
@@ -155,7 +158,10 @@ export const RDPCredentialsModal = ({
                 errorTooltip={true}
                 errorTooltipPosition={"top-right"}
                 customPrefix={
-                  <KeyRoundIcon size={16} className={"text-nb-gray-300"} />
+                  <KeyRoundIcon
+                    size={16}
+                    className={"text-neutral-500 dark:text-nb-gray-300"}
+                  />
                 }
               />
             </div>
@@ -178,7 +184,7 @@ export const RDPCredentialsModal = ({
               customPrefix={
                 <ChevronsLeftRightEllipsis
                   size={16}
-                  className={"text-nb-gray-300"}
+                  className={"text-neutral-500 dark:text-nb-gray-300"}
                 />
               }
             />

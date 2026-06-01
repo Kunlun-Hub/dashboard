@@ -7,7 +7,7 @@ export type IconProps = {
 export const defaultIconProps: IconProps = {
   size: 15,
   className:
-    "dark:fill-nb-gray-400 fill-gray-500 peer-data-[active=true]/icon:dark:fill-white peer-data-[active=true]/icon:fill-gray-900 shrink-0",
+    "fill-gray-500 dark:fill-nb-gray-400 peer-data-[active=true]/icon:fill-netbird-700 peer-data-[active=true]/icon:dark:fill-netbird-150 shrink-0",
   autoHeight: false,
 };
 

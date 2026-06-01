@@ -16,7 +16,7 @@ export const Lightbox = ({ image }: Props) => {
         <div
           onClick={() => setOpen(true)}
           className={
-            "bg-nb-gray-900 p-2 mt-2 select-none relative rounded-lg border border-nb-gray-800 cursor-pointer group/lightbox transition-all"
+            "bg-neutral-100 p-2 mt-2 select-none relative rounded-lg border border-neutral-200 cursor-pointer group/lightbox transition-all dark:bg-nb-gray-900 dark:border-nb-gray-800"
           }
         >
           <div
@@ -31,7 +31,7 @@ export const Lightbox = ({ image }: Props) => {
             >
               <ZoomIn
                 className={
-                  "text-nb-gray-700 group-hover/lightbox:text-nb-gray-600"
+                  "text-neutral-500 group-hover/lightbox:text-neutral-700 dark:text-nb-gray-300 dark:group-hover/lightbox:text-white"
                 }
                 size={20}
               />
@@ -53,7 +53,7 @@ export const Lightbox = ({ image }: Props) => {
             <div
               onClick={() => setOpen(false)}
               className={
-                "p-2 bg-nb-gray-900/80 backdrop-blur-2xl rounded-md border border-nb-gray-500 hover:bg-nb-gray-900/90 transition-all cursor-pointer"
+                "p-2 bg-white/90 text-neutral-800 backdrop-blur-2xl rounded-md border border-neutral-200 hover:bg-neutral-50 transition-all cursor-pointer dark:bg-nb-gray-900/80 dark:text-white dark:border-nb-gray-500 dark:hover:bg-nb-gray-900/90"
               }
             >
               <X size={20} />

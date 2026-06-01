@@ -103,7 +103,7 @@ export const PeerSSHToggle = () => {
     <>
       <FullTooltip
         content={
-          <div className={"flex gap-2 items-center !text-nb-gray-300 text-xs"}>
+          <div className={"flex gap-2 items-center !text-neutral-600 dark:!text-nb-gray-300 text-xs"}>
             <LockIcon size={14} />
             <span>{t("peerSsh.noPermission")}</span>
           </div>
@@ -275,7 +275,7 @@ export const PeerSSHToggle = () => {
                 className={cn(
                   enabledPolicies?.length > 0
                     ? "text-green-500"
-                    : "text-nb-gray-300",
+                    : "text-neutral-500 dark:text-nb-gray-300",
                 )}
               />
               <div>

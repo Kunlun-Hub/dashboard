@@ -132,12 +132,12 @@ function RouteListCell({
   emptyLabel,
 }: Readonly<{ routes?: string[]; emptyLabel: string }>) {
   if (!routes || routes.length === 0) {
-    return <span className={"text-nb-gray-400 text-xs"}>{emptyLabel}</span>;
+    return <span className={"text-neutral-500 dark:text-nb-gray-400 text-xs"}>{emptyLabel}</span>;
   }
 
   const firstRoute = routes[0];
   return (
-    <span className={"text-xs text-nb-gray-600 dark:text-nb-gray-300"}>
+    <span className={"text-xs text-neutral-600 dark:text-nb-gray-300"}>
       {firstRoute}
       {routes.length > 1 ? ` +${routes.length - 1}` : ""}
     </span>
@@ -186,7 +186,12 @@ export default function NetworkRoutingPeersTable({
           className={"py-4"}
           title={t("networkRouting.emptyTitle")}
           description={t("networkRouting.emptyDescription")}
-          icon={<PeerIcon size={18} className={"fill-nb-gray-400"} />}
+          icon={
+            <PeerIcon
+              size={18}
+              className={"fill-neutral-500 dark:fill-nb-gray-400"}
+            />
+          }
         />
       }
       columnVisibility={{ search: false }}

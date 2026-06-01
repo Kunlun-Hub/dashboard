@@ -26,7 +26,7 @@ export default function NetworkRoutingPeerCell({ network }: Props) {
     () => (
       <>
         {t("networkDetails.highAvailabilityInactivePrefix")}{" "}
-        <span className={"text-yellow-400 font-medium"}>
+        <span className={"text-yellow-600 dark:text-yellow-400 font-medium"}>
           {t("networkDetails.inactive")}
         </span>{" "}
         {t("networkDetails.highAvailabilitySuffix")}
@@ -39,7 +39,7 @@ export default function NetworkRoutingPeerCell({ network }: Props) {
     () => (
       <>
         {t("networkDetails.highAvailabilityActivePrefix")}{" "}
-        <span className={"text-green-500 font-medium"}>
+        <span className={"text-emerald-600 dark:text-green-500 font-medium"}>
           {t("networkDetails.active")}
         </span>{" "}
         {t("networkDetails.highAvailabilitySuffix")}
@@ -121,8 +121,8 @@ export default function NetworkRoutingPeerCell({ network }: Props) {
                   !highAvailabilityEnabled
                     ? "bg-neutral-400 dark:bg-nb-gray-500"
                     : isHighlyAvailable
-                    ? "bg-green-500"
-                    : "bg-yellow-400",
+                    ? "bg-emerald-500 dark:bg-green-500"
+                    : "bg-yellow-500 dark:bg-yellow-400",
                 )}
               ></div>
               {!highAvailabilityEnabled ? (
