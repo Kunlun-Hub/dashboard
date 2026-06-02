@@ -29,14 +29,22 @@ type TrafficPoint = {
 
 type TrafficSummaryPoint = {
   timestamp?: string;
-  bucket_start?: string;
-  bucket_end?: string;
+  bucket_start: string;
+  bucket_end: string;
+  covered_seconds: number;
+  download_rate: number;
   rx_bytes: number;
+  upload_rate: number;
   tx_bytes: number;
 };
 
 type TrafficSummaryResponse = {
+  bucket_seconds: number;
   data: TrafficSummaryPoint[];
+  download_peak: number;
+  download_total: number;
+  upload_peak: number;
+  upload_total: number;
 };
 
 const WIDTH = 1320;
@@ -44,6 +52,15 @@ const HEIGHT = 380;
 const MARGIN = { top: 28, right: 24, bottom: 46, left: 64 };
 const CHART_GAP = 26;
 const ROUTED_CONNECTION_TYPE = "ROUTED";
+const TRAFFIC_SUMMARY_BUCKET_SECONDS = 60;
+const emptyTrafficSummary: TrafficSummaryResponse = {
+  bucket_seconds: TRAFFIC_SUMMARY_BUCKET_SECONDS,
+  data: [],
+  download_peak: 0,
+  download_total: 0,
+  upload_peak: 0,
+  upload_total: 0,
+};
 const chartColors = {
   axis: "var(--overview-chart-axis-color)",
   download: "rgb(var(--cloink-brand-600))",
@@ -63,14 +80,6 @@ const rangeOptions: Array<{ value: RangeValue; hours: number; labelKey: string }
   { value: "3d", hours: 72, labelKey: "overview.last3Days" },
   { value: "7d", hours: 168, labelKey: "overview.last7Days" },
 ];
-
-const bucketSecondsForHours = (hours: number) => {
-  if (hours <= 6) return 5 * 60;
-  if (hours <= 12) return 10 * 60;
-  if (hours <= 24) return 20 * 60;
-  if (hours <= 72) return 60 * 60;
-  return 2 * 60 * 60;
-};
 
 const formatRate = (bytesPerSecond: number) => {
   return `${formatBytes(bytesPerSecond, bytesPerSecond >= 1024 * 1024 ? 2 : 1)}/s`;
@@ -94,7 +103,9 @@ export function RelayTrafficStats() {
   const { t } = useI18n();
   const [range, setRange] = useState<RangeValue>("6h");
   const [now, setNow] = useState(() => dayjs());
-  const [summary, setSummary] = useState<TrafficSummaryPoint[]>([]);
+  const [summary, setSummary] = useState<TrafficSummaryResponse>(
+    emptyTrafficSummary,
+  );
   const [isLoading, setIsLoading] = useState(false);
   const selectedRange = rangeOptions.find((option) => option.value === range) ?? rangeOptions[0];
   const endDate = now;
@@ -134,9 +145,9 @@ export function RelayTrafficStats() {
     params.set("start_date", startDate.toISOString());
     params.set("end_date", endDate.toISOString());
     params.set("connection_type", ROUTED_CONNECTION_TYPE);
-    params.set("bucket_seconds", String(bucketSecondsForHours(selectedRange.hours)));
+    params.set("bucket_seconds", String(TRAFFIC_SUMMARY_BUCKET_SECONDS));
     return params;
-  }, [endDate, selectedRange.hours, startDate]);
+  }, [endDate, startDate]);
 
   useEffect(() => {
     let cancelled = false;
@@ -148,7 +159,7 @@ export function RelayTrafficStats() {
         const response = await networkTrafficApiRef.current.get(`?${queryParams.toString()}`);
         if (cancelled) return;
 
-        setSummary(response?.data ?? []);
+        setSummary(response ?? emptyTrafficSummary);
       } finally {
         if (!cancelled) {
           setIsLoading(false);
@@ -164,92 +175,43 @@ export function RelayTrafficStats() {
   }, [queryParams]);
 
   const { points, totals, peaks, maxRates } = useMemo(() => {
-    const bucketSeconds = bucketSecondsForHours(selectedRange.hours);
-    const bucketMs = bucketSeconds * 1000;
-    const buckets = new Map<
-      number,
-      { upload: number; download: number; bucketEndMs: number }
-    >();
-    const startMs = startDate.valueOf();
-    const endMs = endDate.valueOf();
-    const firstBucketStart = Math.floor(startMs / bucketMs) * bucketMs;
-    const lastBucketStart =
-      Math.floor(Math.max(endMs - 1, startMs) / bucketMs) * bucketMs;
-
-    for (let ts = firstBucketStart; ts <= lastBucketStart; ts += bucketMs) {
-      buckets.set(ts, {
-        upload: 0,
-        download: 0,
-        bucketEndMs: Math.min(ts + bucketMs, endMs),
-      });
-    }
-
-    for (const point of summary) {
-      const parsedBucketStart =
-        parseSummaryDate(point.bucket_start) ?? parseSummaryDate(point.timestamp);
-      if (parsedBucketStart === null) continue;
-
-      const bucketStartMs =
-        Math.floor(parsedBucketStart / bucketMs) * bucketMs;
-      const bucketEndMs =
-        parseSummaryDate(point.bucket_end) ?? bucketStartMs + bucketMs;
-      const current = buckets.get(bucketStartMs) ?? {
-        upload: 0,
-        download: 0,
-        bucketEndMs,
-      };
-      current.upload += point.tx_bytes ?? 0;
-      current.download += point.rx_bytes ?? 0;
-      current.bucketEndMs = bucketEndMs;
-      buckets.set(bucketStartMs, current);
-    }
-
-    const chartPoints = Array.from(buckets.entries())
-      .sort(([a], [b]) => a - b)
-      .map(([bucketStartMs, value]) => {
-        const visibleBucketStartMs = Math.max(bucketStartMs, startMs);
-        const visibleBucketEndMs = Math.min(value.bucketEndMs, endMs);
-        const coveredSeconds = Math.max(
-          (visibleBucketEndMs - visibleBucketStartMs) / 1000,
-          1,
-        );
+    const chartPoints = summary.data
+      .map((point) => {
+        const parsedBucketStart =
+          parseSummaryDate(point.bucket_start) ??
+          parseSummaryDate(point.timestamp);
+        const parsedBucketEnd = parseSummaryDate(point.bucket_end);
+        if (parsedBucketStart === null || parsedBucketEnd === null) return null;
 
         return {
-          bucketStart: new Date(visibleBucketStartMs),
-          bucketEnd: new Date(visibleBucketEndMs),
-          coveredSeconds,
-          uploadRate: value.upload / coveredSeconds,
-          downloadRate: value.download / coveredSeconds,
-          uploadTotal: value.upload,
-          downloadTotal: value.download,
+          bucketStart: new Date(parsedBucketStart),
+          bucketEnd: new Date(parsedBucketEnd),
+          coveredSeconds: point.covered_seconds,
+          uploadRate: point.upload_rate,
+          downloadRate: point.download_rate,
+          uploadTotal: point.tx_bytes,
+          downloadTotal: point.rx_bytes,
         };
-      });
-
-    const totalUpload = Array.from(buckets.values()).reduce(
-      (sum, value) => sum + value.upload,
-      0,
-    );
-    const totalDownload = Array.from(buckets.values()).reduce(
-      (sum, value) => sum + value.download,
-      0,
-    );
-
-    const uploadPeak = Math.max(0, ...chartPoints.map((point) => point.uploadRate));
-    const downloadPeak = Math.max(0, ...chartPoints.map((point) => point.downloadRate));
+      })
+      .filter((point): point is TrafficPoint => point !== null)
+      .sort((a, b) => a.bucketStart.getTime() - b.bucketStart.getTime());
 
     return {
       points: chartPoints,
-      totals: { upload: totalUpload, download: totalDownload },
+      totals: {
+        upload: summary.upload_total,
+        download: summary.download_total,
+      },
       peaks: {
-        upload: uploadPeak,
-        download: downloadPeak,
+        upload: summary.upload_peak,
+        download: summary.download_peak,
       },
       maxRates: {
-        upload: Math.max(1, uploadPeak),
-        download: Math.max(1, downloadPeak),
+        upload: Math.max(1, summary.upload_peak),
+        download: Math.max(1, summary.download_peak),
       },
     };
-  }, [endDate, selectedRange.hours, startDate, summary]);
+  }, [summary]);
 
   useEffect(() => {
     if (!gRef.current || points.length > 0) return;

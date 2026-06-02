@@ -36,6 +36,7 @@ type Props = {
   setupKey?: string;
   showOnlyRoutingPeerOS?: boolean;
   className?: string;
+  defaultOperatingSystem?: OperatingSystem;
 };
 
 export default function SetupModal({
@@ -44,6 +45,7 @@ export default function SetupModal({
   setupKey,
   showOnlyRoutingPeerOS = false,
   className,
+  defaultOperatingSystem,
 }: Readonly<Props>) {
   return (
     <ModalContent showClose={showClose} className={className}>
@@ -51,6 +53,7 @@ export default function SetupModal({
         user={user}
         setupKey={setupKey}
         showOnlyRoutingPeerOS={showOnlyRoutingPeerOS}
+        defaultOperatingSystem={defaultOperatingSystem}
       />
     </ModalContent>
   );
@@ -65,6 +68,7 @@ type SetupModalContentProps = {
   title?: string;
   hostname?: string;
   hideDocker?: boolean;
+  defaultOperatingSystem?: OperatingSystem;
 };
 
 export function SetupModalContent({
@@ -76,6 +80,7 @@ export function SetupModalContent({
   title,
   hostname,
   hideDocker = false,
+  defaultOperatingSystem,
 }: Readonly<SetupModalContentProps>) {
   const { t } = useI18n();
   const os = useOperatingSystem();
@@ -150,11 +155,12 @@ export function SetupModalContent({
 
       <Tabs
         defaultValue={String(
-          setupKey
+          defaultOperatingSystem ??
+            (setupKey
             ? OperatingSystem.LINUX
             : isInstallPage
             ? OperatingSystem.WINDOWS
-            : os,
+            : os),
         )}
       >
         <TabsList justify={tabAlignment} className={"pt-2 px-3"}>

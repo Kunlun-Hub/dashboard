@@ -6,6 +6,7 @@ import { PlusCircle } from "lucide-react";
 import React, { memo, useState } from "react";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useI18n } from "@/i18n/I18nProvider";
+import { OperatingSystem } from "@/interfaces/OperatingSystem";
 import { Peer } from "@/interfaces/Peer";
 import {
   ResourceLimitTooltip,
@@ -65,7 +66,10 @@ function AddPeerButton() {
   return (
     <Modal open={installModal} onOpenChange={handleOpenChange}>
       <ModalTrigger asChild>{button}</ModalTrigger>
-      <SetupModal user={user} />
+      <SetupModal
+        user={user}
+        defaultOperatingSystem={OperatingSystem.WINDOWS}
+      />
     </Modal>
   );
 }
