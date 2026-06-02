@@ -34,7 +34,7 @@ export default function Code({
   };
 
   return (
-    <div className={"relative w-full"}>
+    <div className={"relative w-full min-w-0 max-w-full"}>
       <div
         ref={wrapper}
         className={cn(
@@ -45,14 +45,14 @@ export default function Code({
           dark
             ? "text-neutral-700 hover:text-neutral-900 dark:text-nb-gray-300 dark:hover:text-nb-gray-300"
             : "text-neutral-700 dark:text-nb-gray-200 dark:hover:text-nb-gray-200",
-          "overflow-x-auto relative z-0 w-full",
+          "overflow-x-auto relative z-0 w-full min-w-0 max-w-full",
           className,
         )}
       >
-        <ScrollArea className={"w-full"}>
+        <ScrollArea className={"w-full min-w-0 max-w-full"}>
           <code
             className={cn(
-              "font-light pl-3 pr-12  inline-block cursor-text w-full text-sm",
+              "font-light pl-3 pr-12 inline-block cursor-text min-w-full w-max text-sm",
               className,
               small ? "py-[6.8px]" : "py-2.5",
             )}

@@ -42,7 +42,7 @@ const Step = ({
       className={cn(
         "flex gap-4 items-start  justify-start relative pb-6 -mx-1.5 group px-[2px]",
         center && "items-center",
-        horizontal ? "flex-col items-center" : "min-w-full",
+        horizontal ? "flex-col items-center" : "w-full min-w-0",
         disabled && "opacity-40 pointer-events-none",
         className,
       )}
@@ -71,7 +71,8 @@ const Step = ({
 
       <div
         className={cn(
-          "gap-2 font-medium text-base pr-1 min-w-0 flex flex-col w-full",
+          "gap-2 font-medium text-base pr-1 min-w-0 flex flex-col",
+          horizontal ? "w-full" : "flex-1",
           !center && "mt-[5px]",
         )}
       >

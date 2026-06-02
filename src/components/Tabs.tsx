@@ -47,17 +47,21 @@ const TabsList = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.List>,
   React.ComponentPropsWithoutRef<typeof TabsPrimitive.List> & TabListProps
 >(({ className, justify = "center", hidden = false, ...props }, ref) => {
+  const justifyClass = cn(
+    justify == "center" && "justify-center justify-items-end",
+    justify == "start" && "justify-start",
+    justify == "end" && "justify-end",
+    justify == "between" && "justify-between",
+  );
+
   return (
     !hidden && (
       <TabsPrimitive.List
         ref={ref}
         className={cn(
-          "flex flex-nowrap text-neutral-500 dark:text-nb-gray-400 w-full relative",
+          "flex flex-nowrap text-neutral-500 dark:text-nb-gray-400 w-full min-w-0 overflow-hidden relative",
           className,
-          justify == "center" && "justify-center justify-items-end",
-          justify == "start" && "justify-start",
-          justify == "end" && "justify-end",
-          justify == "between" && "justify-between",
+          justifyClass,
         )}
         {...props}
       >
@@ -66,8 +70,13 @@ const TabsList = React.forwardRef<
             "absolute left-0 bg-neutral-200 dark:bg-nb-gray-900 w-full h-[1px] bottom-0 z-0"
           }
         />
-        <ScrollArea>
-          <div className={"relative z-[1] flex flex-nowrap w-full "}>
+        <ScrollArea className={"w-full min-w-0"}>
+          <div
+            className={cn(
+              "relative z-[1] flex flex-nowrap min-w-full w-max",
+              justifyClass,
+            )}
+          >
             {props.children}
           </div>
           <ScrollBar orientation="horizontal" />

@@ -122,7 +122,7 @@ export function SetupModalContent({
   }, [isFirstRun, isInstallPage, setupKey, t, title, user?.given_name]);
 
   return (
-    <div className={"light-theme-surface"}>
+    <div className={"light-theme-surface min-w-0 max-w-full overflow-hidden"}>
       {isInstallPage && (
         <div className={"flex justify-center pt-6"}>
           <PublicBrandingLogo size={"large"} mobile={false} />
