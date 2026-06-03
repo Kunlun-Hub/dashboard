@@ -13,7 +13,6 @@ import IOSIcon from "@/assets/icons/IOSIcon";
 import ShellIcon from "@/assets/icons/ShellIcon";
 import WindowsIcon from "@/assets/icons/WindowsIcon";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
-import useOperatingSystem from "@/hooks/useOperatingSystem";
 import { useI18n } from "@/i18n/I18nProvider";
 import { OperatingSystem } from "@/interfaces/OperatingSystem";
 import { PublicBrandingLogo } from "@/modules/account/PublicBrandingProvider";
@@ -83,7 +82,6 @@ export function SetupModalContent({
   defaultOperatingSystem,
 }: Readonly<SetupModalContentProps>) {
   const { t } = useI18n();
-  const os = useOperatingSystem();
   const [isFirstRun] = useLocalStorage<boolean>("netbird-first-run", true);
   const pathname = usePathname();
   const isInstallPage = pathname === "/install";
@@ -126,6 +124,16 @@ export function SetupModalContent({
       : t("setupModal.installNetBird");
   }, [isFirstRun, isInstallPage, setupKey, t, title, user?.given_name]);
 
+  const defaultTabValue = String(
+    defaultOperatingSystem ??
+      (setupKey ? OperatingSystem.LINUX : OperatingSystem.WINDOWS),
+  );
+  const [selectedTab, setSelectedTab] = useState(defaultTabValue);
+
+  useEffect(() => {
+    setSelectedTab(defaultTabValue);
+  }, [defaultTabValue]);
+
   return (
     <div className={"light-theme-surface min-w-0 max-w-full overflow-hidden"}>
       {isInstallPage && (
@@ -154,14 +162,9 @@ export function SetupModalContent({
       )}
 
       <Tabs
-        defaultValue={String(
-          defaultOperatingSystem ??
-            (setupKey
-            ? OperatingSystem.LINUX
-            : isInstallPage
-            ? OperatingSystem.WINDOWS
-            : os),
-        )}
+        value={selectedTab}
+        defaultValue={defaultTabValue}
+        onValueChange={setSelectedTab}
       >
         <TabsList justify={tabAlignment} className={"pt-2 px-3"}>
           <TabsTrigger value={String(OperatingSystem.LINUX)}>
