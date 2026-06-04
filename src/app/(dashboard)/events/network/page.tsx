@@ -20,7 +20,7 @@ export default function NetworkEventsPage() {
 
   const defaultFilters = useMemo(
     () => ({
-      start_date: dayjs().subtract(5, "minute").toISOString(),
+      start_date: dayjs().subtract(14, "day").startOf("day").toISOString(),
       end_date: dayjs().toISOString(),
       network_only: "true",
       aggregate_flows: "true",
@@ -54,7 +54,7 @@ export default function NetworkEventsPage() {
         hasAccess={permission?.events?.read}
       >
         <ServerPaginationProvider
-          url="/events/network-traffic"
+          url="/events/network-traffic/groups"
           defaultPageSize={20}
           defaultFilters={defaultFilters}
         >

@@ -19,6 +19,24 @@ interface Props {
   disabled?: boolean;
 }
 
+const maxRangeDays = 15;
+const maxRangeMilliseconds = maxRangeDays * 24 * 60 * 60 * 1000;
+
+const clampDateRange = (range: DateRange | undefined) => {
+  if (!range?.from) return range;
+
+  const from = range.from;
+  let to = range.to;
+  if (to && dayjs(to).diff(from, "millisecond") > maxRangeMilliseconds) {
+    to = dayjs(from)
+      .add(maxRangeDays, "day")
+      .subtract(1, "millisecond")
+      .toDate();
+  }
+
+  return { from, to };
+};
+
 const defaultRanges = {
   last5Minutes: {
     from: dayjs().subtract(5, "minute").toDate(),
@@ -48,20 +66,16 @@ const defaultRanges = {
     from: dayjs().subtract(14, "day").startOf("day").toDate(),
     to: dayjs().endOf("day").toDate(),
   },
+  last15Days: {
+    from: dayjs().subtract(14, "day").startOf("day").toDate(),
+    to: dayjs().endOf("day").toDate(),
+  },
   last2Days: {
     from: dayjs().subtract(2, "day").startOf("day").toDate(),
     to: dayjs().endOf("day").toDate(),
   },
   last7Days: {
     from: dayjs().subtract(7, "day").startOf("day").toDate(),
-    to: dayjs().endOf("day").toDate(),
-  },
-  lastMonth: {
-    from: dayjs().subtract(1, "month").startOf("day").toDate(),
-    to: dayjs().endOf("day").toDate(),
-  },
-  allTime: {
-    from: dayjs("1970-01-01").startOf("day").toDate(),
     to: dayjs().endOf("day").toDate(),
   },
 };
@@ -95,18 +109,16 @@ export function DatePickerWithRange({
       today: isEqualDateRange(value, defaultRanges.today),
       yesterday: isEqualDateRange(value, defaultRanges.yesterday),
       last14Days: isEqualDateRange(value, defaultRanges.last14Days),
+      last15Days: isEqualDateRange(value, defaultRanges.last15Days),
       last2Days: isEqualDateRange(value, defaultRanges.last2Days),
       last7Days: isEqualDateRange(value, defaultRanges.last7Days),
-      lastMonth: isEqualDateRange(value, defaultRanges.lastMonth),
-      allTime: isEqualDateRange(value, defaultRanges.allTime),
     };
   }, [value]);
 
   const displayDateValue = useMemo(() => {
     if (!value) return t("datePicker.selectDateRange");
 
-    if (isActive.allTime) return t("datePicker.allTime");
-    if (isActive.lastMonth) return t("datePicker.lastMonth");
+    if (isActive.last15Days) return t("datePicker.last15Days");
     if (isActive.last14Days) return t("datePicker.last14Days");
     if (isActive.last2Days) return t("datePicker.last2Days");
     if (isActive.last7Days) return t("datePicker.last7Days");
@@ -126,11 +138,16 @@ export function DatePickerWithRange({
   const [calendarOpen, setCalendarOpen] = useState(false);
 
   const updateRangeAndClose = (range: DateRange) => {
-    onChange?.(range);
+    onChange?.(clampDateRange(range));
   };
 
   const debouncedOnChange = useMemo(() => {
-    return onChange ? debounce(onChange, 500) : undefined;
+    return onChange
+      ? debounce(
+          (range: DateRange | undefined) => onChange(clampDateRange(range)),
+          500,
+        )
+      : undefined;
   }, [onChange]);
 
   const handleOnSelect = (range?: DateRange) => {
@@ -142,7 +159,7 @@ export function DatePickerWithRange({
       onChange?.(undefined);
       return;
     }
-    onChange?.({ from, to });
+    onChange?.(clampDateRange({ from, to }));
   };
 
   return (
@@ -210,14 +227,9 @@ export function DatePickerWithRange({
                 onClick={() => updateRangeAndClose(defaultRanges.last7Days)}
               />
               <CalendarButton
-                label={
-                  <>
-                    <CalendarIcon size={14} className={"shrink-0"} />
-                    {t("datePicker.allTime")}
-                  </>
-                }
-                active={isActive.allTime}
-                onClick={() => updateRangeAndClose(defaultRanges.allTime)}
+                label={t("datePicker.last15Days")}
+                active={isActive.last15Days}
+                onClick={() => updateRangeAndClose(defaultRanges.last15Days)}
               />
             </div>
           </div>
@@ -228,6 +240,7 @@ export function DatePickerWithRange({
             selected={value}
             onSelect={handleOnSelect}
             numberOfMonths={2}
+            max={maxRangeDays}
           />
           <AbsoluteDateTimeInput value={value} onChange={debouncedOnChange} />
         </PopoverContent>

@@ -19,7 +19,6 @@ import { NavigationVersionInfo } from "@/components/VersionInfo";
 import { useApplicationContext } from "@/contexts/ApplicationProvider";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useI18n } from "@/i18n/I18nProvider";
-import { headerHeight } from "@/layouts/Header";
 import { useAccountEntitlements } from "@/modules/account/useAccountEntitlements";
 import { NetworkNavigation } from "@/modules/networks/misc/NetworkNavigation";
 
@@ -44,22 +43,19 @@ export default function Navigation({
     <div
       data-navigation
       className={cn(
-        "light-theme-surface whitespace-nowrap md:border-r border-neutral-200 bg-gray-50 dark:border-nb-gray-800/60 dark:bg-nb-gray relative group/navigation transition-all",
+        "light-theme-surface h-full whitespace-nowrap md:border-r border-neutral-200 bg-gray-50 dark:border-nb-gray-800/60 dark:bg-nb-gray relative group/navigation transition-all",
         hideOnMobile ? "hidden md:block" : "",
         fullWidth
           ? "w-auto max-w-[22rem]"
           : "w-[15rem] max-w-[15rem] min-w-[15rem] overflow-y-auto",
         isNavigationCollapsed &&
-          "md:w-[70px] md:min-w-[70px] md:fixed md:overflow-hidden md:hover:w-[15rem] md:hover:max-w-[15rem] md:hover:min-w-[15rem] md:z-50",
+          "md:w-[70px] md:min-w-[70px] md:absolute md:overflow-hidden md:hover:w-[15rem] md:hover:max-w-[15rem] md:hover:min-w-[15rem] md:z-50",
       )}
-      style={{
-        height: `calc(100vh - ${headerHeight}px)`,
-      }}
     >
-      <div className={cn(fullWidth ? "w-10/12" : "fixed z-0")}>
+      <div className={cn("h-full", fullWidth ? "w-10/12" : "z-0")}>
         <ScrollArea
           style={{
-            height: !fullWidth ? `calc(100vh - ${headerHeight}px)` : "100%",
+            height: "100%",
           }}
         >
           <div
@@ -69,7 +65,7 @@ export default function Navigation({
                 "md:w-[70px] md:min-w-[70px] md:group-hover/navigation:w-[15rem] md:group-hover/navigation:max-w-[15rem] md:group-hover/navigation:min-w-[15rem] md:overflow-x-clip",
             )}
             style={{
-              height: !fullWidth ? `calc(100vh - ${headerHeight}px)` : "100%",
+              height: "100%",
             }}
           >
             <div>

@@ -17,6 +17,7 @@ import {
   getAccountBrandingLogoDataURL,
   getEffectiveBrandingTitle,
 } from "@/modules/account/accountBranding";
+import { LicenseExpiryBanner } from "@/modules/account/LicenseExpiryBanner";
 import { useAccount } from "@/modules/account/useAccount";
 
 export const headerHeight = 65;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
@@ -34,10 +35,7 @@ export default function NavbarWithDropdown() {
   return (
     <>
       <div
-        className={"fixed z-50 w-full"}
-        style={{
-          height: headerHeight,
-        }}
+        className={"relative z-50 w-full shrink-0"}
       >
         <div
           className={cn(
@@ -85,12 +83,8 @@ export default function NavbarWithDropdown() {
             <UserDropdown />
           </div>
         </div>
+        <LicenseExpiryBanner />
       </div>
-      <div
-        style={{
-          height: headerHeight,
-        }}
-      ></div>
     </>
   );
 }

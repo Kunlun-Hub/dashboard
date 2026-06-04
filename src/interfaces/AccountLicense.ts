@@ -22,6 +22,7 @@ export interface AccountLicense {
   plan: EntitlementPlan;
   license_key_masked?: string;
   license: LicenseType[];
+  resource_limits?: Partial<Record<EntitlementLimit, number>>;
   message?: string;
   start_time?: string;
   end_time?: string;

@@ -20,11 +20,9 @@ import { useSWRConfig } from "swr";
 import SettingsIcon from "@/assets/icons/SettingsIcon";
 import { useI18n } from "@/i18n/I18nProvider";
 import { Account } from "@/interfaces/Account";
-import { EntitlementPlan } from "@/interfaces/AccountEntitlements";
 import {
   AccountLicense,
   LicenseStatus,
-  LicenseType,
   UpdateAccountLicenseRequest,
 } from "@/interfaces/AccountLicense";
 import { ResourceUsagePanel } from "@/modules/account/ResourceUsage";
@@ -45,13 +43,14 @@ export default function LicenseSettingsTab({ account }: Readonly<Props>) {
   const entitlementsPath = `/accounts/${account.id}/entitlements`;
   const updateRequest = useApiCall<AccountLicense>(licensePath, true);
 
-  const updatedAt = useMemo(() => {
-    if (!license?.updated_at) return t("licenseSettings.never");
-    return new Intl.DateTimeFormat(undefined, {
-      dateStyle: "medium",
-      timeStyle: "short",
-    }).format(new Date(license.updated_at));
-  }, [license?.updated_at, t]);
+  const startsAt = useMemo(
+    () => formatLicenseDate(license?.start_time, t),
+    [license?.start_time, t],
+  );
+  const expiresAt = useMemo(
+    () => formatLicenseDate(license?.end_time, t),
+    [license?.end_time, t],
+  );
 
   const refreshLicenseState = (nextLicense: AccountLicense) => {
     mutate(licensePath, nextLicense, false);
@@ -123,7 +122,7 @@ export default function LicenseSettingsTab({ account }: Readonly<Props>) {
         >
           <LicenseInfoRow
             label={t("licenseSettings.plan")}
-            value={planLabel(t, license?.plan)}
+            value={planLabel(t, license?.license)}
             icon={
               active ? (
                 <BadgeCheckIcon size={15} />
@@ -167,16 +166,16 @@ export default function LicenseSettingsTab({ account }: Readonly<Props>) {
             value={license?.name || t("licenseSettings.noKey")}
           />
           <LicenseInfoRow
-            label={t("licenseSettings.licenseType")}
-            value={licenseTypeLabel(t, license?.license)}
+            label={t("licenseSettings.startTime")}
+            value={startsAt}
+          />
+          <LicenseInfoRow
+            label={t("licenseSettings.endTime")}
+            value={expiresAt}
           />
           <LicenseInfoRow
             label={t("licenseSettings.installedKey")}
             value={license?.license_key_masked || t("licenseSettings.noKey")}
-          />
-          <LicenseInfoRow
-            label={t("licenseSettings.updatedAt")}
-            value={updatedAt}
           />
         </div>
 
@@ -196,6 +195,14 @@ export default function LicenseSettingsTab({ account }: Readonly<Props>) {
           featureItems={["ha_routes"]}
           limits={license?.limits}
           usage={license?.usage}
+          items={[
+            "users",
+            "peers",
+            "self_hosted_relays",
+            "reverse_proxy_servers",
+            "custom_domains",
+            "custom_rules",
+          ]}
         />
 
         <div className={"mt-8"}>
@@ -305,35 +312,35 @@ function statusLabel(
   }
 }
 
-function licenseTypeLabel(
+function planLabel(
   t: ReturnType<typeof useI18n>["t"],
-  licenseTypes?: LicenseType[],
+  licenseTypes?: AccountLicense["license"],
 ) {
-  if (!licenseTypes || licenseTypes.length === 0) {
-    return t("licenseSettings.noKey");
+  if (licenseTypes?.includes("enterprise")) {
+    return t("licenseSettings.plan.enterprise");
   }
-  return licenseTypes
-    .map((licenseType) => {
-      switch (licenseType) {
-        case "try":
-          return t("licenseSettings.license.try");
-        case "year":
-          return t("licenseSettings.license.year");
-        case "enterprise":
-          return t("licenseSettings.license.enterprise");
-        default:
-          return licenseType;
-      }
-    })
-    .join(", ");
+  if (licenseTypes?.includes("try")) {
+    return t("licenseSettings.plan.trial");
+  }
+  return t("licenseSettings.plan.basic");
 }
 
-function planLabel(t: ReturnType<typeof useI18n>["t"], plan?: EntitlementPlan) {
-  switch (plan) {
-    case "pro":
-      return t("licenseSettings.plan.pro");
-    case "basic":
-    default:
-      return t("licenseSettings.plan.basic");
+function formatLicenseDate(
+  value: string | undefined,
+  t: ReturnType<typeof useI18n>["t"],
+) {
+  if (!value) {
+    return t("licenseSettings.noKey");
   }
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  return new Intl.DateTimeFormat(undefined, {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(date);
 }

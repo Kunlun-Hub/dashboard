@@ -21,7 +21,7 @@ import Navigation from "@/layouts/Navigation";
 import AccountBrandingTitle from "@/modules/account/AccountBrandingTitle";
 import { LicenseDomainGuard } from "@/modules/account/LicenseDomainGuard";
 import { OnboardingProvider } from "@/modules/onboarding/OnboardingProvider";
-import Header, { headerHeight } from "./Header";
+import Header from "./Header";
 
 export default function DashboardLayout({
   children,
@@ -122,7 +122,7 @@ function DashboardPageContent({
           animate={{
             x: mobileNavOpen ? navOpenPageWidth : 0,
             width: "100%",
-            height: mobileNavOpen ? "90vh" : "auto",
+            height: mobileNavOpen ? "90vh" : "100vh",
             y: mobileNavOpen ? "6.5%" : 0,
           }}
         >
@@ -139,10 +139,10 @@ function DashboardPageContent({
           )}
           <motion.div
             layout={"position"}
-            className={"relative"}
+            className={"relative flex h-screen flex-col overflow-hidden"}
             animate={{
               scale: mobileNavOpen ? 0.75 : 1,
-              height: mobileNavOpen ? "90vh" : "auto",
+              height: mobileNavOpen ? "90vh" : "100vh",
               originX: 0,
               originY: 0,
             }}
@@ -158,10 +158,7 @@ function DashboardPageContent({
             <Header />
             <LicenseDomainGuard />
             <div
-              className={"flex flex-row flex-grow"}
-              style={{
-                height: `calc(100vh - ${headerHeight}px)`,
-              }}
+              className={"flex min-h-0 flex-1 flex-row overflow-hidden"}
             >
               {!isRestricted && <Navigation hideOnMobile />}
               {children}
