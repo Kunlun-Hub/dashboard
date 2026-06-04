@@ -20,7 +20,7 @@ export default function NetworkEventsPage() {
 
   const defaultFilters = useMemo(
     () => ({
-      start_date: dayjs().subtract(14, "day").startOf("day").toISOString(),
+      start_date: dayjs().subtract(5, "minute").toISOString(),
       end_date: dayjs().toISOString(),
       network_only: "true",
       aggregate_flows: "true",
