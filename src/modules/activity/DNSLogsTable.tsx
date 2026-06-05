@@ -15,33 +15,44 @@ import DataTableHeader from "@components/table/DataTableHeader";
 import DataTableRefreshButton from "@components/table/DataTableRefreshButton";
 import { DataTableRowsPerPage } from "@components/table/DataTableRowsPerPage";
 import GetStartedTest from "@components/ui/GetStartedTest";
-import type { ColumnDef, PaginationState, SortingState } from "@tanstack/react-table";
+import type {
+  ColumnDef,
+  SortingState,
+} from "@tanstack/react-table";
 import dayjs from "dayjs";
 import { Globe2 } from "lucide-react";
 import React, { useCallback, useMemo, useState } from "react";
 import { DateRange } from "react-day-picker";
 import { useServerPagination } from "@/contexts/ServerPaginationProvider";
 import { useI18n } from "@/i18n/I18nProvider";
-import { NetworkLog, NetworkLogEndpoint } from "@/interfaces/NetworkLog";
+import { NetworkLogEndpoint, NetworkLogUser } from "@/interfaces/NetworkLog";
+
+type DNSLog = {
+  id: string;
+  timestamp: string;
+  reporter_id: string;
+  user: NetworkLogUser;
+  device: NetworkLogEndpoint;
+  source: NetworkLogEndpoint;
+  destination: NetworkLogEndpoint;
+  domain: string;
+  query_type: string;
+  answers?: string[] | string | null;
+  rcode?: string | null;
+};
 
 type DNSLogRow = {
   id: string;
   timestamp: string;
-  user: NetworkLog["user"];
+  user: NetworkLogUser;
   device: NetworkLogEndpoint;
   domain: string;
   recordType: string;
   result: string;
-  source: string;
-  destination: string;
-  flowCount: number;
-  flowIds: Set<string>;
 };
 
-const DNS_PORTS = new Set([53, 5353, 22054]);
-const DNS_TYPES = ["A", "AAAA", "CNAME", "MX", "NS", "PTR", "SRV", "TXT"];
-
-const latestEventTimestamp = (log: NetworkLog) => log.events[0]?.timestamp ?? "";
+const DNS_TYPES = ["A", "AAAA", "CNAME"];
+const DNS_TYPE_SET = new Set(DNS_TYPES);
 
 const normalizeList = (value?: string[] | string | null) => {
   if (!value) return [];
@@ -56,137 +67,45 @@ const endpointLabel = (endpoint: NetworkLogEndpoint) => {
   return endpoint.name || endpoint.dns_label || endpoint.address || "-";
 };
 
-const endpointAddress = (endpoint: NetworkLogEndpoint) => endpoint.address || "-";
-
-const stripPort = (address?: string | null) => {
-  if (!address) return "";
-  const ipv6Match = address.match(/^\[(.*)]:(\d+)$/);
-  if (ipv6Match) return ipv6Match[1];
-
-  const lastColon = address.lastIndexOf(":");
-  if (lastColon === -1) return address;
-
-  const port = Number(address.slice(lastColon + 1));
-  if (!Number.isFinite(port)) return address;
-
-  return address.slice(0, lastColon);
+const isAllowedDNSType = (type?: string | null) => {
+  return DNS_TYPE_SET.has((type ?? "").trim().toUpperCase());
 };
 
-const portFromAddress = (address?: string | null) => {
-  if (!address) return undefined;
-  const ipv6Match = address.match(/^\[.*]:(\d+)$/);
-  if (ipv6Match) return Number(ipv6Match[1]);
+const hasDNSAnswers = (log: DNSLog) => normalizeList(log.answers).length > 0;
 
-  const lastColon = address.lastIndexOf(":");
-  if (lastColon === -1) return undefined;
-
-  const port = Number(address.slice(lastColon + 1));
-  return Number.isFinite(port) ? port : undefined;
+const shouldShowDNSLog = (log: DNSLog) => {
+  if (!isAllowedDNSType(log.query_type)) return false;
+  const rcode = log.rcode?.trim().toUpperCase();
+  return rcode !== "NOERROR" || hasDNSAnswers(log);
 };
 
-const isDNSFlow = (log: NetworkLog) => {
-  return Boolean(
-    log.dns ||
-      log.dns_domain ||
-      log.dns_query ||
-      log.dns_query_name
-  );
-};
-
-const dnsDomain = (log: NetworkLog) => {
-  return (
-    log.dns?.domain ||
-    log.dns?.query ||
-    log.dns?.query_name ||
-    log.dns_domain ||
-    log.dns_query ||
-    log.dns_query_name ||
-    "-"
-  );
-};
-
-const dnsType = (log: NetworkLog) => {
-  return (
-    log.dns?.type ||
-    log.dns?.query_type ||
-    log.dns?.record_type ||
-    log.dns_type ||
-    log.dns_query_type ||
-    log.dns_record_type ||
-    "-"
-  );
-};
-
-const dnsResult = (log: NetworkLog) => {
-  const answers = [
-    ...normalizeList(log.dns?.answers),
-    ...normalizeList(log.dns?.resolved_ips),
-    ...normalizeList(log.dns?.result),
-    ...normalizeList(log.dns_answers),
-    ...normalizeList(log.dns_resolved_ips),
-    ...normalizeList(log.dns_result),
-  ];
-
+const dnsResult = (log: DNSLog) => {
+  const answers = normalizeList(log.answers);
   if (answers.length > 0) return Array.from(new Set(answers)).join(", ");
 
-  const destinationPort =
-    log.destination_port ?? log.dest_port ?? portFromAddress(log.destination.address);
-  if (destinationPort !== undefined && DNS_PORTS.has(destinationPort)) {
-    return "-";
-  }
+  const rcode = log.rcode?.trim().toUpperCase();
+  if (!rcode || rcode === "NOERROR") return "-";
 
-  return stripPort(log.destination.address) || "-";
+  return rcode;
 };
 
-const toDNSRows = (logs?: NetworkLog[]) => {
-  const groups = new Map<string, DNSLogRow>();
-
-  for (const log of logs ?? []) {
-    if (!isDNSFlow(log)) continue;
-
-    const timestamp = latestEventTimestamp(log);
-    const row: DNSLogRow = {
-      id: log.flow_id,
-      timestamp,
-      user: log.user,
-      device: log.source,
-      domain: dnsDomain(log),
-      recordType: dnsType(log),
-      result: dnsResult(log),
-      source: endpointAddress(log.source),
-      destination: endpointAddress(log.destination),
-      flowCount: 1,
-      flowIds: new Set([log.flow_id]),
-    };
-
-    const bucket = dayjs(timestamp).startOf("minute").minute(
-      Math.floor(dayjs(timestamp).minute() / 5) * 5,
+const toDNSRows = (logs?: DNSLog[]) => {
+  return (logs ?? [])
+    .filter(shouldShowDNSLog)
+    .map((log) => {
+      return {
+        id: log.id,
+        timestamp: log.timestamp,
+        user: log.user,
+        device: log.device || log.source,
+        domain: log.domain || "-",
+        recordType: log.query_type || "-",
+        result: dnsResult(log),
+      };
+    })
+    .sort(
+      (a, b) => dayjs(b.timestamp).valueOf() - dayjs(a.timestamp).valueOf(),
     );
-    const key = [
-      bucket.toISOString(),
-      row.user.id || row.user.email,
-      row.device.id || row.device.name || row.device.address,
-      row.domain,
-      row.recordType,
-      row.result,
-    ].join("|");
-
-    const existing = groups.get(key);
-    if (!existing) {
-      groups.set(key, row);
-      continue;
-    }
-
-    existing.flowIds.add(log.flow_id);
-    existing.flowCount = existing.flowIds.size;
-    if (dayjs(timestamp).isAfter(dayjs(existing.timestamp))) {
-      existing.timestamp = timestamp;
-    }
-  }
-
-  return Array.from(groups.values()).sort(
-    (a, b) => dayjs(b.timestamp).valueOf() - dayjs(a.timestamp).valueOf(),
-  );
 };
 
 type Props = {
@@ -201,9 +120,15 @@ export default function DNSLogsTable({ headingTarget }: Readonly<Props>) {
     mutate,
     setFilter,
     getFilter,
+    pagination,
+    onPaginationChange,
+    pageCount,
+    totalRecords,
     globalFilter,
     onGlobalFilterChange,
-  } = useServerPagination<NetworkLog[]>();
+    hasServerSideFilters,
+    onFilterReset,
+  } = useServerPagination<DNSLog[]>();
 
   const dateRange = useMemo<DateRange | undefined>(() => {
     const startDate = getFilter("start_date");
@@ -217,8 +142,14 @@ export default function DNSLogsTable({ headingTarget }: Readonly<Props>) {
 
   const handleDateFilterChange = useCallback(
     (range?: DateRange) => {
-      setFilter("start_date", range?.from ? dayjs(range.from).toISOString() : undefined);
-      setFilter("end_date", range?.to ? dayjs(range.to).toISOString() : undefined);
+      setFilter(
+        "start_date",
+        range?.from ? dayjs(range.from).toISOString() : undefined,
+      );
+      setFilter(
+        "end_date",
+        range?.to ? dayjs(range.to).toISOString() : undefined,
+      );
     },
     [setFilter],
   );
@@ -229,11 +160,6 @@ export default function DNSLogsTable({ headingTarget }: Readonly<Props>) {
   const [sorting, setSorting] = useState<SortingState>([
     { id: "timestamp", desc: true },
   ]);
-  const [{ pageIndex, pageSize }, setPagination] = useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: 20,
-  });
-
   const rows = useMemo(() => toDNSRows(rawData), [rawData]);
   const columns = useMemo<ColumnDef<DNSLogRow>[]>(
     () => [
@@ -245,7 +171,8 @@ export default function DNSLogsTable({ headingTarget }: Readonly<Props>) {
             {t("dnsLogs.time")}
           </DataTableHeader>
         ),
-        cell: ({ row }) => dayjs(row.original.timestamp).format("YYYY/MM/DD HH:mm:ss"),
+        cell: ({ row }) =>
+          dayjs(row.original.timestamp).format("YYYY/MM/DD HH:mm:ss"),
       },
       {
         id: "user",
@@ -255,9 +182,13 @@ export default function DNSLogsTable({ headingTarget }: Readonly<Props>) {
         ),
         cell: ({ row }) => (
           <div className="flex flex-col">
-            <span className="font-medium">{row.original.user.name || row.original.user.email}</span>
+            <span className="font-medium">
+              {row.original.user.name || row.original.user.email}
+            </span>
             {row.original.user.name && (
-              <span className="text-xs text-neutral-500 dark:text-nb-gray-300">{row.original.user.email}</span>
+              <span className="text-xs text-neutral-500 dark:text-nb-gray-300">
+                {row.original.user.email}
+              </span>
             )}
           </div>
         ),
@@ -266,13 +197,19 @@ export default function DNSLogsTable({ headingTarget }: Readonly<Props>) {
         id: "device",
         accessorFn: (row) => endpointLabel(row.device),
         header: ({ column }) => (
-          <DataTableHeader column={column}>{t("dnsLogs.device")}</DataTableHeader>
+          <DataTableHeader column={column}>
+            {t("dnsLogs.device")}
+          </DataTableHeader>
         ),
         cell: ({ row }) => (
           <div className="flex flex-col">
-            <span className="font-medium">{endpointLabel(row.original.device)}</span>
+            <span className="font-medium">
+              {endpointLabel(row.original.device)}
+            </span>
             {row.original.device.address && (
-              <span className="text-xs text-neutral-500 dark:text-nb-gray-300">{row.original.device.address}</span>
+              <span className="text-xs text-neutral-500 dark:text-nb-gray-300">
+                {row.original.device.address}
+              </span>
             )}
           </div>
         ),
@@ -281,9 +218,13 @@ export default function DNSLogsTable({ headingTarget }: Readonly<Props>) {
         id: "domain",
         accessorFn: (row) => row.domain,
         header: ({ column }) => (
-          <DataTableHeader column={column}>{t("dnsLogs.domain")}</DataTableHeader>
+          <DataTableHeader column={column}>
+            {t("dnsLogs.domain")}
+          </DataTableHeader>
         ),
-        cell: ({ row }) => <span className="font-medium">{row.original.domain}</span>,
+        cell: ({ row }) => (
+          <span className="font-medium">{row.original.domain}</span>
+        ),
       },
       {
         id: "recordType",
@@ -297,23 +238,17 @@ export default function DNSLogsTable({ headingTarget }: Readonly<Props>) {
         id: "result",
         accessorFn: (row) => row.result,
         header: ({ column }) => (
-          <DataTableHeader column={column}>{t("dnsLogs.result")}</DataTableHeader>
+          <DataTableHeader column={column}>
+            {t("dnsLogs.result")}
+          </DataTableHeader>
         ),
-        cell: ({ row }) => <span className="break-all">{row.original.result}</span>,
-      },
-      {
-        id: "flowCount",
-        accessorKey: "flowCount",
-        header: ({ column }) => (
-          <DataTableHeader column={column}>{t("dnsLogs.flowCount")}</DataTableHeader>
+        cell: ({ row }) => (
+          <span className="break-all">{row.original.result}</span>
         ),
-        cell: ({ row }) => row.original.flowCount,
       },
     ],
     [t],
   );
-
-  const pageCount = useMemo(() => Math.ceil(rows.length / pageSize), [rows.length, pageSize]);
 
   return (
     <DataTable
@@ -325,15 +260,16 @@ export default function DNSLogsTable({ headingTarget }: Readonly<Props>) {
       sorting={sorting}
       setSorting={setSorting}
       columns={columns}
-      pagination={{ pageIndex, pageSize }}
-      onPaginationChange={setPagination}
+      pagination={pagination}
+      onPaginationChange={onPaginationChange}
       pageCount={pageCount}
-      totalRecords={rows.length}
+      totalRecords={totalRecords}
       manualPagination={true}
-      serverSidePagination={false}
+      serverSidePagination={true}
       keepStateInLocalStorage={false}
       manualFiltering={true}
-      hasServerSideFilters={true}
+      hasServerSideFilters={hasServerSideFilters}
+      onFilterReset={onFilterReset}
       globalFilter={globalFilter}
       onGlobalFilterChange={onGlobalFilterChange}
       searchPlaceholder={t("dnsLogs.searchPlaceholder")}
@@ -375,7 +311,10 @@ export default function DNSLogsTable({ headingTarget }: Readonly<Props>) {
               ))}
             </SelectContent>
           </Select>
-          <DatePickerWithRange value={dateRange} onChange={handleDateFilterChange} />
+          <DatePickerWithRange
+            value={dateRange}
+            onChange={handleDateFilterChange}
+          />
           <ButtonGroup>
             <DataTableRefreshButton
               isDisabled={isLoading}

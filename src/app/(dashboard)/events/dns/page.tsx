@@ -23,8 +23,6 @@ export default function DNSEventsPage() {
     () => ({
       start_date: dayjs().subtract(5, "minute").toISOString(),
       end_date: dayjs().toISOString(),
-      dns: "true",
-      internal_dns: "true",
       sort_by: "timestamp",
       sort_order: "desc",
     }),
@@ -55,8 +53,8 @@ export default function DNSEventsPage() {
         hasAccess={permission?.events?.read}
       >
         <ServerPaginationProvider
-          url="/events/network-traffic"
-          defaultPageSize={500}
+          url="/events/dns"
+          defaultPageSize={20}
           defaultFilters={defaultFilters}
         >
           <DNSLogsTable headingTarget={portalTarget} />
