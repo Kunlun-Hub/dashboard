@@ -1,14 +1,20 @@
 import Breadcrumbs from "@components/Breadcrumbs";
 import Button from "@components/Button";
+import { Callout } from "@components/Callout";
 import FancyToggleSwitch from "@components/FancyToggleSwitch";
+import { notify } from "@components/Notification";
 import { RadioGroup, RadioGroupItem, RadioGroupItems } from "@components/RadioGroup";
 import { Textarea } from "@components/Textarea";
-import { Callout } from "@components/Callout";
-import { notify } from "@components/Notification";
 import { useHasChanges } from "@hooks/useHasChanges";
 import * as Tabs from "@radix-ui/react-tabs";
 import { useApiCall } from "@utils/api";
-import { ActivityIcon, InfoIcon, SettingsIcon as LucideSettingsIcon, HardDrive, Network } from "lucide-react";
+import {
+  ActivityIcon,
+  HardDrive,
+  InfoIcon,
+  Network,
+  SettingsIcon as LucideSettingsIcon,
+} from "lucide-react";
 import React, { useMemo, useState } from "react";
 import { useSWRConfig } from "swr";
 import SettingsIcon from "@/assets/icons/SettingsIcon";
@@ -346,7 +352,7 @@ export default function FlowLogsSettingsTab({ account }: Readonly<Props>) {
               </>
             }
             helpText={t("flowLogsSettings.enableDnsCollectionHelp")}
-            disabled={!permission.settings.update || !flowEnabled}
+            disabled={!permission.settings.update}
           />
 
           <div className="border border-neutral-200 rounded-md p-4 dark:border-nb-gray-700">
@@ -391,7 +397,6 @@ export default function FlowLogsSettingsTab({ account }: Readonly<Props>) {
                   className="min-h-[112px]"
                   disabled={
                     !permission.settings.update ||
-                    !flowEnabled ||
                     !flowDNSCollectionEnabled
                   }
                 />
