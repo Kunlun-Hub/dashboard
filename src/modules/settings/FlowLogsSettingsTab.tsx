@@ -165,6 +165,7 @@ export default function FlowLogsSettingsTab({ account }: Readonly<Props>) {
   );
 
   const flowGroups = useMemo(() => readFlowGroups(account), [account]);
+  const flowTransportEnabled = flowEnabled || flowDNSCollectionEnabled;
 
   const { hasChanges, updateRef } = useHasChanges([
     flowEnabled,
@@ -438,7 +439,7 @@ export default function FlowLogsSettingsTab({ account }: Readonly<Props>) {
                 </>
               }
               helpText={t("flowLogsSettings.enableLocalStorageHelp")}
-              disabled={!permission.settings.update || !flowEnabled}
+              disabled={!permission.settings.update || !flowTransportEnabled}
             />
 
             {flowLocalStorageEnabled && (
@@ -499,7 +500,7 @@ export default function FlowLogsSettingsTab({ account }: Readonly<Props>) {
                 </>
               }
               helpText={t("flowLogsSettings.enableSyslogHelp")}
-              disabled={!permission.settings.update || !flowEnabled}
+              disabled={!permission.settings.update || !flowTransportEnabled}
             />
 
             {flowSyslogEnabled && (
