@@ -2,7 +2,6 @@
 
 import ButtonGroup from "@components/ButtonGroup";
 import { DatePickerWithRange } from "@components/DatePickerWithRange";
-import { Input } from "@components/Input";
 import {
   Select,
   SelectContent,
@@ -76,6 +75,7 @@ const hasDNSAnswers = (log: DNSLog) => normalizeList(log.answers).length > 0;
 const shouldShowDNSLog = (log: DNSLog) => {
   if (!isAllowedDNSType(log.query_type)) return false;
   const rcode = log.rcode?.trim().toUpperCase();
+  if (rcode === "NXDOMAIN") return false;
   return rcode !== "NOERROR" || hasDNSAnswers(log);
 };
 
@@ -154,7 +154,6 @@ export default function DNSLogsTable({ headingTarget }: Readonly<Props>) {
     [setFilter],
   );
 
-  const dnsDomainFilter = getFilter("dns_domain") ?? "";
   const dnsTypeFilter = getFilter("dns_type") ?? "";
 
   const [sorting, setSorting] = useState<SortingState>([
@@ -282,14 +281,6 @@ export default function DNSLogsTable({ headingTarget }: Readonly<Props>) {
       }
       rightSide={(table) => (
         <div className="flex flex-wrap items-center gap-2">
-          <Input
-            defaultValue={dnsDomainFilter}
-            onChange={(event) => {
-              setFilter("dns_domain", event.target.value || undefined);
-            }}
-            placeholder={t("dnsLogs.domainFilterPlaceholder")}
-            className="h-10 w-[220px]"
-          />
           <Select
             value={dnsTypeFilter || "all"}
             onValueChange={(value) => {
