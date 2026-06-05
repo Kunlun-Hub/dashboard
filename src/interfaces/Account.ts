@@ -13,6 +13,12 @@ export interface Account {
       network_traffic_packet_counter_enabled?: boolean;
       network_traffic_exit_node_collection_enabled?: boolean;
       network_traffic_dns_collection_enabled?: boolean;
+      dns_domain_filter_mode?: string;
+      flow_dns_domain_filter_mode?: string;
+      network_traffic_dns_domain_filter_mode?: string;
+      dns_domain_filter_list?: string[];
+      flow_dns_domain_filter_list?: string[];
+      network_traffic_dns_domain_filter_list?: string[];
       flow_enabled?: boolean;
       flow_groups?: string[];
       flow_packet_counter_enabled?: boolean;
@@ -39,6 +45,8 @@ export interface Account {
       counters?: boolean;
       dns_collection?: boolean;
       exit_node_collection?: boolean;
+      dns_domain_filter_mode?: string;
+      dns_domain_filter_list?: string[];
     };
     flow_logs?: {
       enabled?: boolean;
@@ -46,6 +54,8 @@ export interface Account {
       counters?: boolean;
       dns_collection?: boolean;
       exit_node_collection?: boolean;
+      dns_domain_filter_mode?: string;
+      dns_domain_filter_list?: string[];
     };
     peer_login_expiration_enabled: boolean;
     peer_expose_enabled?: boolean;

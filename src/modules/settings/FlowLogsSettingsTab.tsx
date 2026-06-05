@@ -1,6 +1,8 @@
 import Breadcrumbs from "@components/Breadcrumbs";
 import Button from "@components/Button";
 import FancyToggleSwitch from "@components/FancyToggleSwitch";
+import { RadioGroup, RadioGroupItem, RadioGroupItems } from "@components/RadioGroup";
+import { Textarea } from "@components/Textarea";
 import { Callout } from "@components/Callout";
 import { notify } from "@components/Notification";
 import { useHasChanges } from "@hooks/useHasChanges";
@@ -17,6 +19,21 @@ import { Account } from "@/interfaces/Account";
 type Props = {
   account: Account;
 };
+
+const DNS_LOG_FILTER_MODE_ALL = "all";
+const DNS_LOG_FILTER_MODE_ALLOW = "allow";
+const DNS_LOG_FILTER_MODE_EXCLUDE = "exclude";
+
+function parseDNSDomainFilterList(value: string) {
+  return value
+    .split("\n")
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function stringifyDNSDomainFilterList(value?: string[]) {
+  return (value ?? []).join("\n");
+}
 
 function readFlowEnabled(account: Account) {
   return (
@@ -58,6 +75,28 @@ function readFlowExitNode(account: Account) {
   );
 }
 
+function readFlowDNSDomainFilterMode(account: Account) {
+  return (
+    account.settings?.flow?.dns_domain_filter_mode ??
+    account.settings?.flow_logs?.dns_domain_filter_mode ??
+    account.settings?.extra?.dns_domain_filter_mode ??
+    account.settings?.extra?.flow_dns_domain_filter_mode ??
+    account.settings?.extra?.network_traffic_dns_domain_filter_mode ??
+    DNS_LOG_FILTER_MODE_ALL
+  );
+}
+
+function readFlowDNSDomainFilterList(account: Account) {
+  return (
+    account.settings?.flow?.dns_domain_filter_list ??
+    account.settings?.flow_logs?.dns_domain_filter_list ??
+    account.settings?.extra?.dns_domain_filter_list ??
+    account.settings?.extra?.flow_dns_domain_filter_list ??
+    account.settings?.extra?.network_traffic_dns_domain_filter_list ??
+    []
+  );
+}
+
 function readFlowGroups(account: Account) {
   return (
     account.settings?.flow?.groups ??
@@ -80,6 +119,12 @@ export default function FlowLogsSettingsTab({ account }: Readonly<Props>) {
   );
   const [flowDNSCollectionEnabled, setFlowDNSCollectionEnabled] = useState(() =>
     readFlowDNS(account),
+  );
+  const [flowDNSDomainFilterMode, setFlowDNSDomainFilterMode] = useState(() =>
+    readFlowDNSDomainFilterMode(account),
+  );
+  const [flowDNSDomainFilterText, setFlowDNSDomainFilterText] = useState(() =>
+    stringifyDNSDomainFilterList(readFlowDNSDomainFilterList(account)),
   );
   const [flowExitNodeCollectionEnabled, setFlowExitNodeCollectionEnabled] =
     useState(() => readFlowExitNode(account));
@@ -119,6 +164,8 @@ export default function FlowLogsSettingsTab({ account }: Readonly<Props>) {
     flowEnabled,
     flowCountersEnabled,
     flowDNSCollectionEnabled,
+    flowDNSDomainFilterMode,
+    flowDNSDomainFilterText,
     flowExitNodeCollectionEnabled,
     flowLocalStorageEnabled,
     flowLocalStoragePath,
@@ -147,6 +194,18 @@ export default function FlowLogsSettingsTab({ account }: Readonly<Props>) {
               network_traffic_packet_counter_enabled: flowCountersEnabled,
               network_traffic_dns_collection_enabled:
                 flowDNSCollectionEnabled,
+              dns_domain_filter_mode: flowDNSDomainFilterMode,
+              flow_dns_domain_filter_mode: flowDNSDomainFilterMode,
+              network_traffic_dns_domain_filter_mode: flowDNSDomainFilterMode,
+              dns_domain_filter_list: parseDNSDomainFilterList(
+                flowDNSDomainFilterText,
+              ),
+              flow_dns_domain_filter_list: parseDNSDomainFilterList(
+                flowDNSDomainFilterText,
+              ),
+              network_traffic_dns_domain_filter_list: parseDNSDomainFilterList(
+                flowDNSDomainFilterText,
+              ),
               network_traffic_exit_node_collection_enabled:
                 flowExitNodeCollectionEnabled,
               flow_enabled: flowEnabled,
@@ -170,6 +229,10 @@ export default function FlowLogsSettingsTab({ account }: Readonly<Props>) {
               groups: flowGroups,
               counters: flowCountersEnabled,
               dns_collection: flowDNSCollectionEnabled,
+              dns_domain_filter_mode: flowDNSDomainFilterMode,
+              dns_domain_filter_list: parseDNSDomainFilterList(
+                flowDNSDomainFilterText,
+              ),
               exit_node_collection: flowExitNodeCollectionEnabled,
             },
             flow_logs: {
@@ -177,6 +240,10 @@ export default function FlowLogsSettingsTab({ account }: Readonly<Props>) {
               groups: flowGroups,
               counters: flowCountersEnabled,
               dns_collection: flowDNSCollectionEnabled,
+              dns_domain_filter_mode: flowDNSDomainFilterMode,
+              dns_domain_filter_list: parseDNSDomainFilterList(
+                flowDNSDomainFilterText,
+              ),
               exit_node_collection: flowExitNodeCollectionEnabled,
             },
           },
@@ -187,6 +254,8 @@ export default function FlowLogsSettingsTab({ account }: Readonly<Props>) {
             flowEnabled,
             flowCountersEnabled,
             flowDNSCollectionEnabled,
+            flowDNSDomainFilterMode,
+            flowDNSDomainFilterText,
             flowExitNodeCollectionEnabled,
             flowLocalStorageEnabled,
             flowLocalStoragePath,
@@ -279,6 +348,59 @@ export default function FlowLogsSettingsTab({ account }: Readonly<Props>) {
             helpText={t("flowLogsSettings.enableDnsCollectionHelp")}
             disabled={!permission.settings.update || !flowEnabled}
           />
+
+          <div className="border border-neutral-200 rounded-md p-4 dark:border-nb-gray-700">
+            <div className="flex flex-col gap-2">
+              <div className="text-sm font-medium text-neutral-900 dark:text-nb-gray-100">
+                {t("flowLogsSettings.dnsDomainFilterTitle")}
+              </div>
+              <p className="text-sm text-neutral-500 dark:text-nb-gray-400">
+                {t("flowLogsSettings.dnsDomainFilterHelp")}
+              </p>
+            </div>
+
+            <div className="mt-4">
+              <RadioGroup
+                value={flowDNSDomainFilterMode}
+                onChange={setFlowDNSDomainFilterMode}
+              >
+                <RadioGroupItems>
+                  <RadioGroupItem value={DNS_LOG_FILTER_MODE_ALL}>
+                    {t("flowLogsSettings.dnsDomainFilterModeAll")}
+                  </RadioGroupItem>
+                  <RadioGroupItem value={DNS_LOG_FILTER_MODE_ALLOW}>
+                    {t("flowLogsSettings.dnsDomainFilterModeAllow")}
+                  </RadioGroupItem>
+                  <RadioGroupItem value={DNS_LOG_FILTER_MODE_EXCLUDE}>
+                    {t("flowLogsSettings.dnsDomainFilterModeExclude")}
+                  </RadioGroupItem>
+                </RadioGroupItems>
+              </RadioGroup>
+            </div>
+
+            {flowDNSDomainFilterMode !== DNS_LOG_FILTER_MODE_ALL && (
+              <div className="mt-4">
+                <Textarea
+                  value={flowDNSDomainFilterText}
+                  onChange={(event) =>
+                    setFlowDNSDomainFilterText(event.target.value)
+                  }
+                  placeholder={t(
+                    "flowLogsSettings.dnsDomainFilterPlaceholder",
+                  )}
+                  className="min-h-[112px]"
+                  disabled={
+                    !permission.settings.update ||
+                    !flowEnabled ||
+                    !flowDNSCollectionEnabled
+                  }
+                />
+                <p className="mt-2 text-sm text-neutral-500 dark:text-nb-gray-400">
+                  {t("flowLogsSettings.dnsDomainFilterExamples")}
+                </p>
+              </div>
+            )}
+          </div>
 
           <FancyToggleSwitch
             value={flowExitNodeCollectionEnabled}

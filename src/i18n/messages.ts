@@ -1710,6 +1710,16 @@ export const messages = {
     "flowLogsSettings.enableDnsCollection": "Enable DNS Collection",
     "flowLogsSettings.enableDnsCollectionHelp":
       "Collect DNS query-related flow events from supported clients.",
+    "flowLogsSettings.dnsDomainFilterTitle": "DNS Upload Scope",
+    "flowLogsSettings.dnsDomainFilterHelp":
+      "Choose whether DNS logs should upload all domains, only matching domains, or everything except matching domains.",
+    "flowLogsSettings.dnsDomainFilterModeAll": "Record All",
+    "flowLogsSettings.dnsDomainFilterModeAllow": "Only Matching Domains",
+    "flowLogsSettings.dnsDomainFilterModeExclude": "Exclude Matching Domains",
+    "flowLogsSettings.dnsDomainFilterPlaceholder":
+      "baidu.com\n*.baidu.com",
+    "flowLogsSettings.dnsDomainFilterExamples":
+      "One rule per line. Exact match: baidu.com. Wildcard match: *.baidu.com.",
     "flowLogsSettings.enableExitNodeCollection": "Enable Exit Node Collection",
     "flowLogsSettings.enableExitNodeCollectionHelp":
       "Collect flow events generated while a client acts as an exit node.",
@@ -5056,6 +5066,16 @@ export const messages = {
     "flowLogsSettings.enableDnsCollection": "启用 DNS 采集",
     "flowLogsSettings.enableDnsCollectionHelp":
       "在支持的客户端上采集与 DNS 查询相关的流事件。",
+    "flowLogsSettings.dnsDomainFilterTitle": "DNS 上报范围",
+    "flowLogsSettings.dnsDomainFilterHelp":
+      "选择上传全部 DNS 日志、仅上传匹配域名，或排除匹配域名后上传其他日志。",
+    "flowLogsSettings.dnsDomainFilterModeAll": "记录全部",
+    "flowLogsSettings.dnsDomainFilterModeAllow": "仅记录匹配域名",
+    "flowLogsSettings.dnsDomainFilterModeExclude": "排除匹配域名",
+    "flowLogsSettings.dnsDomainFilterPlaceholder":
+      "baidu.com\n*.baidu.com",
+    "flowLogsSettings.dnsDomainFilterExamples":
+      "每行一条规则。精确匹配示例：baidu.com。通配匹配示例：*.baidu.com。",
     "flowLogsSettings.enableExitNodeCollection": "启用出口节点采集",
     "flowLogsSettings.enableExitNodeCollectionHelp":
       "采集客户端作为出口节点时产生的流日志事件。",
