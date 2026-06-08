@@ -20,6 +20,7 @@ import * as React from "react";
 import { useMemo, useState } from "react";
 import PeerIcon from "@/assets/icons/PeerIcon";
 import { usePermissions } from "@/contexts/PermissionsProvider";
+import { useI18n } from "@/i18n/I18nProvider";
 import { NetworkRouter } from "@/interfaces/Network";
 import { useNetworksContext } from "@/modules/networks/NetworkProvider";
 import { NetworkRoutingPeerName } from "@/modules/networks/routing-peers/NetworkRoutingPeerName";
@@ -33,12 +34,14 @@ type Props = {
   headingTarget?: HTMLHeadingElement | null;
 };
 
-const NetworkRouterColumns: ColumnDef<NetworkRouter>[] = [
+const createNetworkRouterColumns = (
+  t: ReturnType<typeof useI18n>["t"],
+): ColumnDef<NetworkRouter>[] => [
   {
     id: "name",
     accessorKey: "id",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Peer</DataTableHeader>;
+      return <DataTableHeader column={column}>{t("networkRouting.peer")}</DataTableHeader>;
     },
     sortingFn: "text",
     cell: ({ row }) => <NetworkRoutingPeerName router={row.original} />,
@@ -51,7 +54,7 @@ const NetworkRouterColumns: ColumnDef<NetworkRouter>[] = [
     id: "metric",
     accessorKey: "metric",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Metric</DataTableHeader>;
+      return <DataTableHeader column={column}>{t("networkRouting.metric")}</DataTableHeader>;
     },
     cell: ({ row }) => (
       <RouteMetricCell metric={row.original.metric} useHoverStyle={false} />
@@ -61,7 +64,7 @@ const NetworkRouterColumns: ColumnDef<NetworkRouter>[] = [
     id: "masquerade",
     accessorKey: "masquerade",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Masquerade</DataTableHeader>;
+      return <DataTableHeader column={column}>{t("networkRouting.masquerade")}</DataTableHeader>;
     },
     cell: ({ row }) => <RoutingPeersMasqueradeCell router={row.original} />,
   },
@@ -88,6 +91,8 @@ export default function NetworkRoutingPeersTable({
 }: Readonly<Props>) {
   const { permission } = usePermissions();
   const { openAddRoutingPeerModal, network } = useNetworksContext();
+  const { t } = useI18n();
+  const columns = useMemo(() => createNetworkRouterColumns(t), [t]);
 
   const [sorting, setSorting] = useState<SortingState>([
     {
@@ -98,18 +103,18 @@ export default function NetworkRoutingPeersTable({
 
   const statusOptions = useMemo<RadioOption<boolean | undefined>[]>(
     () => [
-      { value: undefined, label: "All", dotClass: "bg-nb-gray-500" },
-      { value: true, label: "Active", dotClass: "bg-green-500" },
-      { value: false, label: "Inactive", dotClass: "bg-nb-gray-700" },
+      { value: undefined, label: t("common.all"), dotClass: "bg-nb-gray-500" },
+      { value: true, label: t("common.active"), dotClass: "bg-green-500" },
+      { value: false, label: t("reverseProxy.inactive"), dotClass: "bg-nb-gray-700" },
     ],
-    [],
+    [t],
   );
 
   const filterDefs = useMemo<TableFilterDef[]>(
     () => [
       {
         id: "enabled",
-        label: "Status",
+        label: t("common.status"),
         renderPicker: (p) => (
           <RadioPicker
             value={p.value as boolean | undefined}
@@ -122,7 +127,7 @@ export default function NetworkRoutingPeersTable({
           formatRadioChip(v as boolean | undefined, statusOptions),
       },
     ],
-    [statusOptions],
+    [statusOptions, t],
   );
 
   return (
@@ -136,8 +141,8 @@ export default function NetworkRoutingPeersTable({
       showSearchAndFilters={true}
       inset={false}
       tableClassName={"mt-0"}
-      text={"Routing Peers"}
-      columns={NetworkRouterColumns}
+      text={t("networks.routingPeers")}
+      columns={columns}
       keepStateInLocalStorage={false}
       initialPageSize={25}
       showResetFilterButton={false}
@@ -145,15 +150,12 @@ export default function NetworkRoutingPeersTable({
         <TableFilterChips table={table} filters={filterDefs} />
       )}
       data={routers}
-      searchPlaceholder={"Search by peer name, group name..."}
+      searchPlaceholder={t("networkRouting.searchPlaceholder")}
       isLoading={isLoading}
       getStartedCard={
         <NoResults
           className={"py-4"}
-          title={"This network has no routing peers"}
-          description={
-            "Add routing peers to this network to access resources inside this network."
-          }
+          title={t("networkRouting.emptyTitle")}
           icon={<PeerIcon size={18} className={"fill-nb-gray-400"} />}
         />
       }
@@ -168,7 +170,7 @@ export default function NetworkRoutingPeersTable({
           disabled={!permission.networks.update}
         >
           <IconCirclePlus size={16} />
-          Add
+          {t("actions.add")}
         </Button>
       )}
     >

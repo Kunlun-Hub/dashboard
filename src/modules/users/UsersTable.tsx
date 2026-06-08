@@ -65,11 +65,13 @@ import UserStatusCell from "@/modules/users/table-cells/UserStatusCell";
 import UserInviteModal from "@/modules/users/UserInviteModal";
 import UserInvitesTable from "@/modules/users/UserInvitesTable";
 
-export const UsersTableColumns: ColumnDef<User>[] = [
+export const createUsersTableColumns = (
+  t: ReturnType<typeof useI18n>["t"],
+): ColumnDef<User>[] => [
   {
     accessorKey: "name",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Name</DataTableHeader>;
+      return <DataTableHeader column={column}>{t("table.name")}</DataTableHeader>;
     },
     accessorFn: (row) => row.name + " " + row.email,
     sortingFn: "text",
@@ -82,7 +84,7 @@ export const UsersTableColumns: ColumnDef<User>[] = [
   {
     accessorKey: "role",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Role</DataTableHeader>;
+      return <DataTableHeader column={column}>{t("table.role")}</DataTableHeader>;
     },
     sortingFn: "text",
     cell: ({ row }) => <UserRoleCell user={row.original} />,
@@ -99,7 +101,7 @@ export const UsersTableColumns: ColumnDef<User>[] = [
       return row.status ?? "";
     },
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Status</DataTableHeader>;
+      return <DataTableHeader column={column}>{t("table.status")}</DataTableHeader>;
     },
     sortingFn: "text",
     cell: ({ row }) => <UserStatusCell user={row.original} />,
@@ -108,7 +110,7 @@ export const UsersTableColumns: ColumnDef<User>[] = [
   {
     accessorKey: "auto_groups",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Groups</DataTableHeader>;
+      return <DataTableHeader column={column}>{t("table.groups")}</DataTableHeader>;
     },
     sortingFn: "text",
     cell: ({ row }) => <UserGroupCell user={row.original} />,
@@ -117,13 +119,13 @@ export const UsersTableColumns: ColumnDef<User>[] = [
   {
     accessorKey: "last_login",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Last Login</DataTableHeader>;
+      return <DataTableHeader column={column}>{t("table.lastLogin")}</DataTableHeader>;
     },
     sortingFn: "text",
     cell: ({ row }) => (
       <LastTimeRow
         date={dayjs(row.original.last_login).toDate()}
-        text={"Last login on"}
+        text={t("users.lastLoginOn")}
       />
     ),
   },
@@ -185,6 +187,7 @@ export default function UsersTable({
   const path = usePathname();
   const account = useAccount();
   const { t } = useI18n();
+  const defaultColumns = useMemo(() => createUsersTableColumns(t), [t]);
 
   const isCloud = isNetBirdHosted();
   const embeddedIdpEnabled = account?.settings.embedded_idp_enabled;
@@ -240,32 +243,32 @@ export default function UsersTable({
 
   const statusOptions = useMemo<RadioOption<string | undefined>[]>(
     () => [
-      { value: undefined, label: "All", dotClass: "bg-nb-gray-500" },
-      { value: "active", label: "Active", dotClass: "bg-green-500" },
-      { value: "pending", label: "Pending", dotClass: "bg-netbird" },
-      { value: "invited", label: "Invited", dotClass: "bg-yellow-400" },
-      { value: "blocked", label: "Blocked", dotClass: "bg-red-500" },
+      { value: undefined, label: t("common.all"), dotClass: "bg-nb-gray-500" },
+      { value: "active", label: t("users.status.active"), dotClass: "bg-green-500" },
+      { value: "pending", label: t("users.status.pending"), dotClass: "bg-netbird" },
+      { value: "invited", label: t("users.status.invited"), dotClass: "bg-yellow-400" },
+      { value: "blocked", label: t("users.status.blocked"), dotClass: "bg-red-500" },
     ],
-    [],
+    [t],
   );
 
   const roleOptions = useMemo<CheckboxOption<string>[]>(
     () => [
-      { value: "owner", label: "Owner" },
-      { value: "admin", label: "Admin" },
-      { value: "user", label: "User" },
-      { value: "network_admin", label: "Network Admin" },
-      { value: "billing_admin", label: "Billing Admin" },
-      { value: "auditor", label: "Auditor" },
+      { value: "owner", label: t("userRoles.owner") },
+      { value: "admin", label: t("userRoles.admin") },
+      { value: "user", label: t("userRoles.user") },
+      { value: "network_admin", label: t("userRoles.networkAdmin") },
+      { value: "billing_admin", label: t("userRoles.billingAdmin") },
+      { value: "auditor", label: t("userRoles.auditor") },
     ],
-    [],
+    [t],
   );
 
   const filterDefs = useMemo<TableFilterDef[]>(
     () => [
       {
         id: "status",
-        label: "Status",
+        label: t("common.status"),
         renderPicker: (p) => (
           <RadioPicker
             value={p.value as string | undefined}
@@ -279,7 +282,7 @@ export default function UsersTable({
       },
       {
         id: "role_filter",
-        label: "Role",
+        label: t("table.role"),
         renderPicker: (p) => (
           <CheckboxListPicker
             value={p.value as string[] | undefined}
@@ -293,7 +296,7 @@ export default function UsersTable({
       },
       {
         id: "group_names_filter",
-        label: "Groups",
+        label: t("table.groups"),
         renderPicker: (p) => (
           <GroupsPicker
             value={p.value as string[] | undefined}
@@ -302,10 +305,10 @@ export default function UsersTable({
             groups={tableGroups}
           />
         ),
-        formatChip: (v) => formatGroupsChip(v as string[] | undefined),
+        formatChip: (v) => formatGroupsChip(v as string[] | undefined, t),
       },
     ],
-    [statusOptions, roleOptions, tableGroups],
+    [statusOptions, roleOptions, tableGroups, t],
   );
 
   if (showInvites) {
@@ -322,7 +325,7 @@ export default function UsersTable({
   // (e.g. GroupUsersSection), so a hardcoded filter for `role_filter` /
   // `group_names_filter` would silently no-op when those columns aren't
   // registered.
-  const effectiveColumns = columns ?? UsersTableColumns;
+  const effectiveColumns = columns ?? defaultColumns;
   const columnIds = new Set<string>();
   for (const c of effectiveColumns) {
     const id =

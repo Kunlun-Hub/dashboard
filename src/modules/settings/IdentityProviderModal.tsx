@@ -1,7 +1,6 @@
 import Button from "@components/Button";
 import Code from "@components/Code";
 import HelpText from "@components/HelpText";
-import InlineLink from "@components/InlineLink";
 import { Input } from "@components/Input";
 import { Label } from "@components/Label";
 import {
@@ -74,8 +73,6 @@ type Props = {
   provider?: SSOIdentityProvider | null;
 };
 
-const copyMessage = "Redirect URL was copied to your clipboard!";
-const logoutCopyMessage = "Logout URL was copied to your clipboard!";
 const config = loadConfig();
 const redirectUrl = `${config.apiOrigin}/oauth2/callback`;
 const logoutUrl = `${config.apiOrigin}/oauth2/logout/callback`;
@@ -350,8 +347,8 @@ export default function IdentityProviderModal({
 
           <div className={"px-8 py-6 flex flex-col gap-6"}>
             <div>
-              <Label>Provider Type</Label>
-              <HelpText>Select the type of identity provider</HelpText>
+              <Label>{t("identityProviderModal.providerType")}</Label>
+              <HelpText>{t("identityProviderModal.providerTypeHelp")}</HelpText>
               <Select
                 value={type}
                 onValueChange={(v) => {
@@ -363,7 +360,9 @@ export default function IdentityProviderModal({
                 }}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select provider type..." />
+                  <SelectValue
+                    placeholder={t("identityProviderModal.selectProviderType")}
+                  />
                 </SelectTrigger>
                 <SelectContent>
                   {SSOIdentityProviderOptions.map((idp) => (
@@ -379,10 +378,10 @@ export default function IdentityProviderModal({
             </div>
 
             <div>
-              <Label>Name</Label>
-              <HelpText>A friendly name to identify this provider</HelpText>
+              <Label>{t("identityProviderModal.name")}</Label>
+              <HelpText>{t("identityProviderModal.nameHelp")}</HelpText>
               <Input
-                placeholder={"e.g., Corporate SSO"}
+                placeholder={t("identityProviderModal.namePlaceholder")}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 customPrefix={
@@ -393,8 +392,8 @@ export default function IdentityProviderModal({
 
             {requiresIssuer && (
               <div>
-                <Label>Issuer URL</Label>
-                <HelpText>The OIDC issuer URL for this provider</HelpText>
+                <Label>{t("identityProviderModal.issuerUrl")}</Label>
+                <HelpText>{t("identityProviderModal.issuerUrlHelp")}</HelpText>
                 <Input
                   placeholder={issuerHints[type] ?? "https://login.example.com"}
                   value={issuer}
@@ -407,10 +406,10 @@ export default function IdentityProviderModal({
             )}
 
             <div>
-              <Label>Client ID</Label>
-              <HelpText>The OAuth2 confidential client ID</HelpText>
+              <Label>{t("identityProviderModal.clientId")}</Label>
+              <HelpText>{t("identityProviderModal.clientIdHelp")}</HelpText>
               <Input
-                placeholder={"Enter client ID"}
+                placeholder={t("identityProviderModal.clientIdPlaceholder")}
                 value={clientId}
                 onChange={(e) => setClientId(e.target.value)}
                 customPrefix={<IdCard size={16} className="text-nb-gray-300" />}
@@ -418,17 +417,21 @@ export default function IdentityProviderModal({
             </div>
 
             <div>
-              <Label>Client Secret</Label>
+              <Label>{t("identityProviderModal.clientSecret")}</Label>
               <HelpText>
                 {isEditing
                   ? clientIdChanged
-                    ? "Required when client ID is changed"
-                    : "Leave empty to keep the existing secret, or enter a new one"
-                  : "The OAuth2 client secret"}
+                    ? t("identityProviderModal.clientSecretChangedHelp")
+                    : t("identityProviderModal.clientSecretOptionalHelp")
+                  : t("identityProviderModal.clientSecretHelp")}
               </HelpText>
               <Input
                 type="password"
-                placeholder={isEditing ? "••••••••" : "Enter client secret"}
+                placeholder={
+                  isEditing
+                    ? t("identityProviderModal.clientSecretMaskedPlaceholder")
+                    : t("identityProviderModal.clientSecretPlaceholder")
+                }
                 value={clientSecret}
                 onChange={(e) => setClientSecret(e.target.value)}
                 customPrefix={
@@ -441,35 +444,31 @@ export default function IdentityProviderModal({
 
             <div className={"flex flex-col gap-3"}>
               <div>
-                <Label>Endpoint URLs</Label>
-                <HelpText margin={false}>
-                  Add these to your identity provider configuration
-                </HelpText>
+                <Label>{t("identityProviderModal.endpointUrls")}</Label>
               </div>
 
               <div>
-                <Label className={"text-xs mb-1"}>Redirect / Callback</Label>
-                <Code codeToCopy={redirectUrl} message={copyMessage}>
+                <Label className={"text-xs mb-1"}>
+                  {t("identityProviderModal.redirectCallback")}
+                </Label>
+                <Code
+                  codeToCopy={redirectUrl}
+                  message={t("identityProviderModal.redirectCopied")}
+                >
                   <Code.Line>{redirectUrl}</Code.Line>
                 </Code>
               </div>
 
               <div>
-                <Label className={"text-xs mb-1"}>Logout</Label>
-                <Code codeToCopy={logoutUrl} message={logoutCopyMessage}>
+                <Label className={"text-xs mb-1"}>
+                  {t("identityProviderModal.logout")}
+                </Label>
+                <Code
+                  codeToCopy={logoutUrl}
+                  message={t("identityProviderModal.logoutCopied")}
+                >
                   <Code.Line>{logoutUrl}</Code.Line>
                 </Code>
-                <HelpText margin={false} className={"mt-1.5"}>
-                  Not all identity providers support logout.{" "}
-                  <InlineLink
-                    href={
-                      "https://docs.netbird.io/selfhosted/identity-providers"
-                    }
-                    target={"_blank"}
-                  >
-                    Learn more
-                  </InlineLink>
-                </HelpText>
               </div>
             </div>
           </div>

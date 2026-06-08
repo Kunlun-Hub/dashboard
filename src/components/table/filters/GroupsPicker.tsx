@@ -11,6 +11,7 @@ import { orderBy, trim } from "lodash";
 import { MonitorSmartphoneIcon, SearchIcon } from "lucide-react";
 import * as React from "react";
 import { useRef } from "react";
+import { useI18n } from "@/i18n/I18nProvider";
 import { Group } from "@/interfaces/Group";
 
 // GroupsPicker — multi-select search list of group names. The value
@@ -24,6 +25,7 @@ type Props = {
 };
 
 export function GroupsPicker({ value, onChange, groups }: Props) {
+  const { t } = useI18n();
   const searchRef = useRef<HTMLInputElement>(null);
   const selected = value ?? [];
 
@@ -50,15 +52,15 @@ export function GroupsPicker({ value, onChange, groups }: Props) {
           <CommandInput
             className={cn(
               "min-h-[38px] w-full relative bg-transparent text-sm",
-              "border-b border-nb-gray-900 outline-none",
+              "border-b border-neutral-200 dark:border-nb-gray-900 outline-none",
               "dark:placeholder:text-nb-gray-400 font-light placeholder:text-neutral-500 pl-9",
             )}
             ref={searchRef}
-            placeholder={"Search group..."}
+            placeholder={t("groups.searchPlaceholder")}
           />
           <div
             className={
-              "absolute left-0 top-0 h-full flex items-center pl-3 text-nb-gray-400"
+              "absolute left-0 top-0 h-full flex items-center pl-3 text-neutral-500 dark:text-nb-gray-400"
             }
           >
             <SearchIcon size={13} />
@@ -89,7 +91,7 @@ export function GroupsPicker({ value, onChange, groups }: Props) {
                   >
                     <div
                       className={
-                        "text-nb-gray-300 font-medium flex items-center gap-2.5 py-1 px-1 w-full"
+                        "text-neutral-700 dark:text-nb-gray-300 font-medium flex items-center gap-2.5 py-1 px-1 w-full"
                       }
                     >
                       <Checkbox checked={isSelected} />
@@ -104,7 +106,7 @@ export function GroupsPicker({ value, onChange, groups }: Props) {
                       {group?.peers_count !== undefined && (
                         <span
                           className={
-                            "ml-auto text-xs text-nb-gray-400 flex items-center gap-1"
+                            "ml-auto text-xs text-neutral-500 dark:text-nb-gray-400 flex items-center gap-1"
                           }
                         >
                           <MonitorSmartphoneIcon size={11} />
@@ -123,8 +125,13 @@ export function GroupsPicker({ value, onChange, groups }: Props) {
   );
 }
 
-export function formatGroupsChip(value: string[] | undefined): string | null {
+type Translate = ReturnType<typeof useI18n>["t"];
+
+export function formatGroupsChip(
+  value: string[] | undefined,
+  t: Translate,
+): string | null {
   if (!value || value.length === 0) return null;
   if (value.length === 1) return value[0];
-  return `${value.length} groups`;
+  return t("groups.groupCount", { count: value.length });
 }

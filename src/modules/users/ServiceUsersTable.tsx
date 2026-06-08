@@ -43,11 +43,13 @@ import UserActionCell from "@/modules/users/table-cells/UserActionCell";
 import UserRoleCell from "@/modules/users/table-cells/UserRoleCell";
 import UserStatusCell from "@/modules/users/table-cells/UserStatusCell";
 
-export const ServiceUsersTableColumns: ColumnDef<User>[] = [
+export const createServiceUsersTableColumns = (
+  t: ReturnType<typeof useI18n>["t"],
+): ColumnDef<User>[] => [
   {
     accessorKey: "name",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Name</DataTableHeader>;
+      return <DataTableHeader column={column}>{t("table.name")}</DataTableHeader>;
     },
     sortingFn: "text",
     cell: ({ row }) => <ServiceUserNameCell user={row.original} />,
@@ -59,7 +61,7 @@ export const ServiceUsersTableColumns: ColumnDef<User>[] = [
   {
     accessorKey: "role",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Role</DataTableHeader>;
+      return <DataTableHeader column={column}>{t("table.role")}</DataTableHeader>;
     },
     sortingFn: "text",
     cell: ({ row }) => <UserRoleCell user={row.original} />,
@@ -67,7 +69,7 @@ export const ServiceUsersTableColumns: ColumnDef<User>[] = [
   {
     accessorKey: "status",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Status</DataTableHeader>;
+      return <DataTableHeader column={column}>{t("table.status")}</DataTableHeader>;
     },
     sortingFn: "text",
     cell: ({ row }) => <UserStatusCell user={row.original} />,
@@ -104,6 +106,7 @@ export default function ServiceUsersTable({
   const path = usePathname();
   const { permission } = usePermissions();
   const { t } = useI18n();
+  const columns = useMemo(() => createServiceUsersTableColumns(t), [t]);
 
   const [sorting, setSorting] = useLocalStorage<SortingState>(
     "netbird-table-sort" + path,
@@ -121,29 +124,29 @@ export default function ServiceUsersTable({
 
   const statusOptions = useMemo<RadioOption<string | undefined>[]>(
     () => [
-      { value: undefined, label: "All", dotClass: "bg-nb-gray-500" },
-      { value: "active", label: "Active", dotClass: "bg-green-500" },
-      { value: "blocked", label: "Blocked", dotClass: "bg-red-500" },
+      { value: undefined, label: t("common.all"), dotClass: "bg-nb-gray-500" },
+      { value: "active", label: t("users.status.active"), dotClass: "bg-green-500" },
+      { value: "blocked", label: t("users.status.blocked"), dotClass: "bg-red-500" },
     ],
-    [],
+    [t],
   );
 
   const roleOptions = useMemo<CheckboxOption<string>[]>(
     () => [
-      { value: "admin", label: "Admin" },
-      { value: "user", label: "User" },
-      { value: "network_admin", label: "Network Admin" },
-      { value: "billing_admin", label: "Billing Admin" },
-      { value: "auditor", label: "Auditor" },
+      { value: "admin", label: t("userRoles.admin") },
+      { value: "user", label: t("userRoles.user") },
+      { value: "network_admin", label: t("userRoles.networkAdmin") },
+      { value: "billing_admin", label: t("userRoles.billingAdmin") },
+      { value: "auditor", label: t("userRoles.auditor") },
     ],
-    [],
+    [t],
   );
 
   const filterDefs = useMemo<TableFilterDef[]>(
     () => [
       {
         id: "status",
-        label: "Status",
+        label: t("common.status"),
         renderPicker: (p) => (
           <RadioPicker
             value={p.value as string | undefined}
@@ -157,7 +160,7 @@ export default function ServiceUsersTable({
       },
       {
         id: "role_filter",
-        label: "Role",
+        label: t("table.role"),
         renderPicker: (p) => (
           <CheckboxListPicker
             value={p.value as string[] | undefined}
@@ -170,7 +173,7 @@ export default function ServiceUsersTable({
           formatCheckboxChip(v as string[] | undefined, roleOptions, "roles"),
       },
     ],
-    [statusOptions, roleOptions],
+    [statusOptions, roleOptions, t],
   );
 
   return (
@@ -180,7 +183,7 @@ export default function ServiceUsersTable({
       text={t("serviceUsers.title")}
       sorting={sorting}
       setSorting={setSorting}
-      columns={ServiceUsersTableColumns}
+      columns={columns}
       data={users}
       onRowClick={(row) => {
         router.push(`/team/user?id=${row.original.id}&service_user=true`);

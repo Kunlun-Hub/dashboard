@@ -128,22 +128,14 @@ export default function ReverseProxyTargetSelector({
             </HelpTooltip>
             {showClusters && (
               <>
-                {" "}or{" "}
+                {" "}
+                {t("networkResources.or")}{" "}
                 <HelpTooltip
                   className={"max-w-sm"}
-                  content={
-                    <>
-                      A <span className={"text-white font-medium"}>
-                        proxy cluster
-                      </span>{" "}
-                      forwards inbound traffic to an upstream the proxy reaches
-                        without WireGuard. Useful for external APIs and services
-                        co-located with the proxy.
-                    </>
-                  }
+                  content={t("reverseProxy.proxyClusterHelp")}
                   interactive={true}
                 >
-                  Proxy Cluster
+                  {t("reverseProxy.proxyCluster")}
                 </HelpTooltip>
               </>
             )}
@@ -152,18 +144,18 @@ export default function ReverseProxyTargetSelector({
       </Label>
       <HelpText>
         {initialNetwork
-          ? "Select the resource from your network you want to expose."
-          : "Choose where the proxy should forward incoming requests."}
+          ? t("reverseProxy.targetSelectResourceHelp")
+          : t("reverseProxy.targetSelectPeerOrResourceHelp")}
       </HelpText>
       <PeerGroupSelector
         values={[]}
         onChange={() => {}}
         placeholder={
           initialNetwork
-            ? "Select a resource..."
+            ? t("reverseProxy.targetSelectResourcePlaceholder")
             : showClusters
-            ? "Select a peer, resource, or proxy cluster..."
-            : "Select a peer or resource..."
+            ? t("reverseProxy.targetSelectPeerResourceOrClusterPlaceholder")
+            : t("reverseProxy.targetSelectPeerOrResourcePlaceholder")
         }
         showPeers={!initialNetwork}
         showResources={true}

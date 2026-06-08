@@ -80,7 +80,9 @@ function peerOsKey(os: string | undefined): string {
   }
 }
 
-const PeersTableColumns: ColumnDef<Peer>[] = [
+const createPeersTableColumns = (
+  t: ReturnType<typeof useI18n>["t"],
+): ColumnDef<Peer>[] => [
   {
     id: "select",
     header: ({ table }) => (
@@ -88,7 +90,7 @@ const PeersTableColumns: ColumnDef<Peer>[] = [
         <Checkbox
           checked={table.getIsAllPageRowsSelected()}
           onCheckedChange={(value) => table.toggleAllRowsSelected(!!value)}
-          aria-label="Select all"
+          aria-label={t("table.selectAll")}
         />
       </div>
     ),
@@ -98,7 +100,7 @@ const PeersTableColumns: ColumnDef<Peer>[] = [
           checked={row.getIsSelected()}
           variant={"tableCell"}
           onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
+          aria-label={t("table.selectRow")}
         />
       </div>
     ),
@@ -109,7 +111,9 @@ const PeersTableColumns: ColumnDef<Peer>[] = [
     id: "name",
     accessorFn: (peer) => `${peer?.name}${peer?.dns_label}`,
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Name</DataTableHeader>;
+      return (
+        <DataTableHeader column={column}>{t("table.name")}</DataTableHeader>
+      );
     },
     sortingFn: "text",
     cell: ({ row }) => <PeerNameCell peer={row.original} />,
@@ -131,18 +135,22 @@ const PeersTableColumns: ColumnDef<Peer>[] = [
   },
   {
     id: "user_name",
-    accessorFn: (peer) => (peer.user ? peer.user?.name : "Unknown"),
+    accessorFn: (peer) => (peer.user ? peer.user?.name : t("common.unknown")),
   },
   {
     id: "user_email",
-    accessorFn: (peer) => (peer.user ? peer.user?.email : "Unknown"),
+    accessorFn: (peer) => (peer.user ? peer.user?.email : t("common.unknown")),
     filterFn: "equalsString",
   },
   {
     id: "dns_label",
     accessorKey: "dns_label",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Address</DataTableHeader>;
+      return (
+        <DataTableHeader column={column}>
+          {t("peerDetails.netbirdIpAddress")}
+        </DataTableHeader>
+      );
     },
     cell: ({ row }) => <PeerAddressCell peer={row.original} />,
   },
@@ -161,7 +169,9 @@ const PeersTableColumns: ColumnDef<Peer>[] = [
     accessorFn: (peer) => peer.groups?.length,
     id: "groups",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Groups</DataTableHeader>;
+      return (
+        <DataTableHeader column={column}>{t("groups.title")}</DataTableHeader>
+      );
     },
     cell: ({ row }) => (
       <PeerProvider peer={row.original}>
@@ -180,7 +190,7 @@ const PeersTableColumns: ColumnDef<Peer>[] = [
             table.setSorting([{ id: "last_seen", desc: !desc }]);
           }}
         >
-          Last seen
+          {t("peerDetails.lastSeen")}
         </DataTableHeader>
       );
     },
@@ -191,7 +201,11 @@ const PeersTableColumns: ColumnDef<Peer>[] = [
     id: "os",
     accessorFn: (peer) => removeAllSpaces(peer?.os),
     header: ({ column }) => {
-      return <DataTableHeader column={column}>OS</DataTableHeader>;
+      return (
+        <DataTableHeader column={column}>
+          {t("peerDetails.operatingSystem")}
+        </DataTableHeader>
+      );
     },
     cell: ({ row }) => (
       <PeerOSCell os={row.original.os} serial={row.original.serial_number} />
@@ -205,7 +219,11 @@ const PeersTableColumns: ColumnDef<Peer>[] = [
   {
     id: "serial",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Serial number</DataTableHeader>;
+      return (
+        <DataTableHeader column={column}>
+          {t("peerDetails.serialNumber")}
+        </DataTableHeader>
+      );
     },
     accessorFn: (peer) => peer.serial_number,
     sortingFn: "text",
@@ -213,7 +231,11 @@ const PeersTableColumns: ColumnDef<Peer>[] = [
   {
     accessorKey: "version",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Version</DataTableHeader>;
+      return (
+        <DataTableHeader column={column}>
+          {t("table.version")}
+        </DataTableHeader>
+      );
     },
     cell: ({ row }) => (
       <PeerVersionCell
@@ -286,6 +308,7 @@ export default function PeersTable({
   const { mutate } = useSWRConfig();
   const { permission } = usePermissions();
   const path = usePathname();
+  const columns = useMemo(() => createPeersTableColumns(t), [t]);
 
   // Default sorting state of the table
   const [sorting, setSorting] = useLocalStorage<SortingState>(
@@ -394,7 +417,7 @@ export default function PeersTable({
     const defs: TableFilterDef[] = [
       {
         id: "connected",
-        label: "Status",
+        label: t("common.status"),
         renderPicker: (p) => (
           <StatusPicker
             value={p.value as boolean | undefined}
@@ -402,11 +425,11 @@ export default function PeersTable({
             close={p.close}
           />
         ),
-        formatChip: (v) => formatStatusChip(v as boolean | undefined),
+        formatChip: (v) => formatStatusChip(v as boolean | undefined, t),
       },
       {
         id: "os_kind",
-        label: "OS",
+        label: t("peerDetails.operatingSystem"),
         renderPicker: (p) => (
           <CheckboxListPicker
             value={p.value as string[] | undefined}
@@ -422,7 +445,7 @@ export default function PeersTable({
     if (!isUser) {
       defs.push({
         id: "group_names",
-        label: "Groups",
+        label: t("groups.title"),
         renderPicker: (p) => (
           <GroupsPicker
             value={p.value as string[] | undefined}
@@ -431,13 +454,13 @@ export default function PeersTable({
             groups={tableGroups}
           />
         ),
-        formatChip: (v) => formatGroupsChip(v as string[] | undefined),
+        formatChip: (v) => formatGroupsChip(v as string[] | undefined, t),
       });
     }
     if (kind === "users" && !isUser && tableUsers.length > 0) {
       defs.push({
         id: "user_email",
-        label: "Users",
+        label: t("users.title"),
         renderPicker: (p) => (
           <UsersPicker
             value={p.value as string | undefined}
@@ -468,7 +491,7 @@ export default function PeersTable({
         setSorting={setSorting}
         initialPageSize={25}
         showResetFilterButton={false}
-        columns={PeersTableColumns}
+        columns={columns}
         data={showBrowserPeers ? browserPeers : regularPeers}
         searchPlaceholder={t("peers.searchPlaceholder")}
         columnVisibility={{

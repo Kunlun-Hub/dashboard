@@ -33,10 +33,16 @@ export const messages = {
     "common.active": "Active",
     "common.status": "Status",
     "common.save": "Save",
+    "common.saveChanges": "Save Changes",
     "common.enable": "Enable",
+    "common.disable": "Disable",
+    "common.continue": "Continue",
+    "common.back": "Back",
     "common.exitNode": "Exit Node",
     "common.none": "None",
     "common.all": "All",
+    "common.online": "Online",
+    "common.offline": "Offline",
     "common.moreCount": "+ {count} more",
     "common.resourceCount": "{count} Resources",
     "common.remove": "Remove",
@@ -335,6 +341,7 @@ export const messages = {
     "groups.useGroupsToControlAccess":
       "Use groups to control what this peer can access",
     "groups.searchPlaceholder": "Search groups...",
+    "groups.groupCount": "{count} Group(s)",
     "groups.count.peers": "Peer(s)",
     "groups.count.resources": "Resource(s)",
     "groups.creating": "Creating group...",
@@ -617,6 +624,7 @@ export const messages = {
     "reverseProxy.type": "Type",
     "reverseProxy.cluster": "Cluster",
     "reverseProxy.targets": "Target(s)",
+    "reverseProxy.authAndAccess": "Auth & Access",
     "reverseProxy.authMethods": "Auth Methods",
     "reverseProxy.accessControl": "Access Control",
     "reverseProxy.inactive": "Inactive",
@@ -883,9 +891,13 @@ export const messages = {
       "Select the resource from your network you want to expose.",
     "reverseProxy.targetSelectPeerOrResourceHelp":
       "Select the peer or resource where your service is running.",
+    "reverseProxy.proxyClusterHelp":
+      "Proxy clusters forward inbound traffic to an upstream the proxy can reach without WireGuard.",
     "reverseProxy.targetSelectResourcePlaceholder": "Select a resource...",
     "reverseProxy.targetSelectPeerOrResourcePlaceholder":
       "Select a peer or resource...",
+    "reverseProxy.targetSelectPeerResourceOrClusterPlaceholder":
+      "Select a peer, resource, or proxy cluster...",
     "reverseProxy.customHeaders": "Custom Headers",
     "reverseProxy.customHeadersHelp":
       "Add additional headers to include when forwarding requests. Hop-by-hop headers like Host or Connection are not allowed.",
@@ -933,6 +945,11 @@ export const messages = {
     "reverseProxy.setupProxyDescription": "Set up a self-hosted reverse proxy",
     "reverseProxy.proxyCluster": "Proxy Cluster",
     "reverseProxy.connectedProxies": "Connected Proxies",
+    "reverseProxy.features": "Features",
+    "reverseProxy.sharedCluster": "Shared",
+    "reverseProxy.selfHostedCluster": "Self-Hosted",
+    "reverseProxy.noClustersAvailable": "No clusters available",
+    "reverseProxy.setupSelfHostedCluster": "Setup Self-Hosted Cluster",
     "reverseProxy.noProxiesConnected": "No Proxies Connected",
     "reverseProxy.deleteClusterTitle": "Delete '{name}'?",
     "reverseProxy.deleteClusterDescription":
@@ -960,6 +977,16 @@ export const messages = {
     "reverseProxy.runProxyWithDocker": "Run the Proxy with Docker",
     "reverseProxy.runProxyWithDockerHelp":
       "Run the following command on your machine to start the proxy.",
+    "reverseProxy.runProxyWithCompose": "Run the Proxy with Docker Compose",
+    "reverseProxy.runProxyWithKubernetes": "Deploy the Proxy on Kubernetes",
+    "reverseProxy.runProxyWithKubernetesHelp":
+      "Apply the following manifest to your cluster to start the proxy.",
+    "reverseProxy.selfHostedRoutingWarning":
+      "For self-hosted deployments, make sure the proxy service routes are configured on your Cloink management server before starting the proxy.",
+    "reverseProxy.requiredRoutingEndpoints": "Required routing endpoints",
+    "reverseProxy.envReferenceHelp":
+      "Need to fine-tune the proxy? See all available",
+    "reverseProxy.environmentVariables": "environment variables",
     "reverseProxy.finishSetup": "Finish Setup",
     "networks.title": "Networks",
     "networks.description":
@@ -997,6 +1024,8 @@ export const messages = {
     "networks.addResource": "Add Resource",
     "networks.addPolicy": "Add Policy",
     "table.name": "Name",
+    "table.selectAll": "Select all",
+    "table.selectRow": "Select row",
     "table.address": "Address",
     "table.os": "OS",
     "table.role": "Role",
@@ -1035,11 +1064,14 @@ export const messages = {
     "users.status.pendingApproval": "Pending Approval",
     "users.status.blocked": "Blocked",
     "users.status.pending": "Pending",
+    "users.status.invited": "Invited",
     "users.status.active": "Active",
     "users.localAuthDisabledDescription":
       "Local authentication is disabled. This user can no longer log in. Use your IdP for authentication.",
     "users.pendingApprovalDescription":
       "This user needs to be approved by an administrator before it can join your organization.",
+    "users.invitedDescription":
+      "This user was invited but has not accepted the invitation yet. Use the resend action to send another invitation email.",
     "users.pendingApprovalSettingsPrefix":
       "If you want to disable approval for new users, go to",
     "users.pendingApprovalSettingsSuffix": "and disable",
@@ -1064,6 +1096,8 @@ export const messages = {
     "setupKeys.groupEmptyDescription":
       "Assign this group when creating a new setup key to see them listed here.",
     "setupKeys.lastUsedOn": "Last used on",
+    "setupKeys.oneOff": "One-off",
+    "setupKeys.reusable": "Reusable",
     "setupKeys.defaultName": "Setup Key",
     "setupKeys.revokeTitle": "Revoke '{name}'?",
     "setupKeys.revokeDescription":
@@ -1087,6 +1121,7 @@ export const messages = {
     "setupKeys.ephemeral": "Ephemeral",
     "setupKeys.ephemeralDescription":
       "Peers that are offline for over 10 minutes will be removed automatically.",
+    "setupKeys.usageLimitText": "of {limit} Peers",
     "invite.passwordCopied": "Password was copied to your clipboard!",
     "invite.linkCopied": "Invite link was copied to your clipboard!",
     "invite.userCreatedSuccess": "User created successfully!",
@@ -1442,6 +1477,23 @@ export const messages = {
     "userInvites.sending": "Sending invitation...",
     "userInvites.sendingShort": "Sending...",
     "userInvites.resend": "Resend Invite",
+    "userInvites.actions": "Invite actions",
+    "userInvites.fallbackName": "Invite",
+    "userInvites.regeneratingDescription":
+      "Regenerating invite link for {name}...",
+    "userInvites.regenerating": "Regenerating...",
+    "userInvites.regeneratedTitle": "Invite link regenerated",
+    "userInvites.regeneratedDescription":
+      "Share this link with the user. They will be able to set their own password.",
+    "userInvites.linkCopied": "Invite link was copied to your clipboard.",
+    "userInvites.expiresOn": "Expires on",
+    "userInvites.copyAndClose": "Copy & Close",
+    "userInvites.deletedTitle": "'{name}' deleted",
+    "userInvites.deletedDescription": "Invite was successfully deleted.",
+    "userInvites.deleting": "Deleting the invite...",
+    "userInvites.deleteTitle": "Delete invite for '{name}'?",
+    "userInvites.deleteDescription":
+      "Deleting this invite will revoke the invite link. The user will no longer be able to join using this invite.",
     "actions.cancel": "Cancel",
     "setupKey.copyMessage": "Setup-Key was copied to your clipboard!",
     "setupKey.createdSuccess": "Setup key created successfully!",
@@ -2030,6 +2082,9 @@ export const messages = {
     "routeTable.createTitle": "Create New Route",
     "routeTable.emptyTitleDescription":
       "It looks like you don't have any routes. Access LANs and VPC by adding a network route.",
+    "routeTable.autoApply": "Auto Apply",
+    "routeTable.highAvailability": "High Availability",
+    "routeTable.addRoute": "Add Route",
     "networkRouting.peer": "Peer",
     "networkRouting.advertisedRoutes": "Advertised Routes",
     "networkRouting.excludedRoutes": "Excluded Routes",
@@ -2041,6 +2096,9 @@ export const messages = {
     "networkRouting.emptyDescription":
       "Add routing peers to this network to access resources inside this network.",
     "networkRouting.add": "Add Routing Peer",
+    "networkRouting.actions": "Routing peer actions",
+    "networkRouting.toggleDescription": "Routing peer is now {status}",
+    "networkRouting.updating": "Updating routing peer...",
     "groupUsers.selectAll": "Select all",
     "groupUsers.selectRow": "Select row",
     "groupUsers.searchPlaceholder": "Search by name, email or role...",
@@ -2208,6 +2266,25 @@ export const messages = {
       "Lets you publish services that are only reachable from peers in your Cloink network. Required for",
     "reverseProxy.privateClusterDescriptionMiddle": "and",
     "reverseProxy.privateClusterDescriptionSuffix": "target types.",
+    "reverseProxy.featureCustomPorts": "Custom Ports",
+    "reverseProxy.featureCustomPortsDescription":
+      "Cluster can bind arbitrary TCP/UDP ports for services.",
+    "reverseProxy.featureSubdomainRequired": "Subdomain Required",
+    "reverseProxy.featureSubdomainRequiredDescription":
+      "Services on this cluster must use a subdomain. The bare cluster domain is not addressable.",
+    "reverseProxy.featureCrowdSecDescription":
+      "Cluster has CrowdSec IP reputation configured across all active proxies.",
+    "reverseProxy.featurePrivate": "Private",
+    "reverseProxy.accountClusterTitle": "Account cluster.",
+    "reverseProxy.accountClusterDescription":
+      "Self-hosted on your own infrastructure. You operate the proxy nodes and control where traffic terminates.",
+    "reverseProxy.sharedClusterTitle": "Shared cluster.",
+    "reverseProxy.sharedClusterDescription":
+      "Deployed at the server level and available to every account on this instance.",
+    "reverseProxy.cloinkOnlyNoGroupsWarning":
+      "Cloink-only access is on, but no access groups are set. Open it on the Authentication tab and pick at least one group.",
+    "reverseProxy.cloinkOnlyAccessControlCallout":
+      "This service is accessible via Cloink only. An allow rule for the Cloink network range is applied by default. Any rules you add here are layered on top.",
     "reverseProxy.ruleCount": "{count} Rule(s)",
     "reverseProxy.allowedCountries": "Allowed Countries",
     "reverseProxy.blockedCountries": "Blocked Countries",
@@ -2248,6 +2325,8 @@ export const messages = {
     "reverseProxy.configureAuthentication": "Configure authentication",
     "proxyEvents.time": "Time",
     "proxyEvents.locationIp": "Location / IP",
+    "proxyEvents.locationIpPlaceholder": "e.g. 10.0.0.5 or Berlin",
+    "proxyEvents.request": "Request",
     "proxyEvents.method": "Method",
     "proxyEvents.hostUrl": "Host / URL",
     "proxyEvents.duration": "Duration",
@@ -2260,6 +2339,8 @@ export const messages = {
       "We haven't detected any proxy events yet. This could be because you haven't configured any reverse proxy services, or there hasn't been any traffic.",
     "proxyEvents.success": "Success",
     "proxyEvents.failed": "Failed",
+    "proxyEvents.otherMetadata": "Other metadata",
+    "proxyEvents.noMetadata": "No metadata recorded for this request.",
     "onboarding.endTitle": "Congratulations!",
     "onboarding.endTitleWithName": "Congratulations, {name}!",
     "onboarding.endSubtitle": "You've completed the onboarding.",
@@ -2499,6 +2580,7 @@ export const messages = {
     "groups.renameExists":
       "This group already exists. Please choose another name.",
     "accessPolicies.searchPlaceholder": "Search by name and description...",
+    "accessPolicies.accessControlGroups": "Access Control Groups",
     "accessPolicies.emptyGroupTitle":
       "This group is not used within any policies yet",
     "accessPolicies.emptyGroupDescription":
@@ -2509,6 +2591,10 @@ export const messages = {
     "accessPolicies.addPolicy": "Add Policy",
     "accessPolicies.active": "Active",
     "accessPolicies.inactive": "Inactive",
+    "accessPolicies.withPostureChecks": "With",
+    "accessPolicies.withoutPostureChecks": "Without",
+    "accessPolicies.bidirectional": "Bidirectional",
+    "accessPolicies.oneWay": "One-way",
     "accessPolicies.temporaryTooltip":
       "Show temporary policies created by the Cloink browser client. These policies are ephemeral and will be deleted automatically after a short period of time.",
     "networks.searchPlaceholder": "Search by network name or description...",
@@ -2535,6 +2621,11 @@ export const messages = {
     "actions.viewDetails": "View Details",
     "actions.delete": "Delete",
     "actions.edit": "Edit",
+    "actions.openMenu": "Open actions menu",
+    "actions.policyActions": "Policy actions",
+    "actions.routeActions": "Route actions",
+    "actions.resourceActions": "Resource actions",
+    "actions.userActions": "User actions",
     "actions.configure": "Configure",
     "actions.continue": "Continue",
     "actions.back": "Back",
@@ -2610,6 +2701,7 @@ export const messages = {
     "identityProviderModal.providerTypeHelp":
       "Select the type of identity provider",
     "identityProviderModal.selectProviderType": "Select provider type...",
+    "identityProviderModal.name": "Name",
     "identityProviderModal.nameHelp":
       "A friendly name to identify this provider",
     "identityProviderModal.namePlaceholder": "e.g., Corporate SSO",
@@ -2648,6 +2740,11 @@ export const messages = {
       "Copy this URL to your identity provider configuration",
     "identityProviderModal.redirectCopied":
       "Redirect URL was copied to your clipboard!",
+    "identityProviderModal.endpointUrls": "Endpoint URLs",
+    "identityProviderModal.redirectCallback": "Redirect / Callback",
+    "identityProviderModal.logout": "Logout",
+    "identityProviderModal.logoutCopied":
+      "Logout URL was copied to your clipboard!",
     "identityProviderModal.addProvider": "Add Provider",
     "networkResources.addModalTitle": "Add Resource",
     "networkResources.editModalTitle": "Edit Resource",
@@ -2774,6 +2871,8 @@ export const messages = {
     "networkResourceAccessControl.addPolicy": "Add Policy",
     "resourcesTable.address": "Address",
     "resourcesTable.active": "Active",
+    "resourcesTable.exposed": "Exposed",
+    "resourcesTable.notExposed": "Not Exposed",
     "resourcesTable.searchPlaceholder": "Search by name, address or group...",
     "resourcesTable.emptyGroupTitle": "This group has no assigned resources",
     "resourcesTable.emptyNetworkTitle": "This network has no resources",
@@ -3129,6 +3228,8 @@ export const messages = {
     "setupModal.runNetBirdContainer": "Run Cloink container",
     "setupModal.readDocumentation": "Read our documentation",
     "setupModal.runningNetBirdDocker": "Running Cloink in Docker",
+    "setupModal.setupKeyGeneratedDescription":
+      "A one-off setup key was generated for this install.",
     "accessControl.modalUpdateTitle": "Update Access Control Policy",
     "accessControl.modalCreateTitle": "Create New Access Control Policy",
     "accessControl.modalDescription":
@@ -3311,6 +3412,7 @@ export const messages = {
     "dataTable.noMatchingFilters": "There are no filters matching your search.",
     "dataTable.filter": "Filter",
     "dataTable.filters": "Filter(s)",
+    "dataTable.removeFilter": "Remove {label} filter",
     "input.togglePasswordVisibility": "Toggle password visibility",
     "datePicker.selectDateRange": "Select date range",
     "datePicker.allTime": "All Time",
@@ -3470,12 +3572,22 @@ export const messages = {
     "peerActionCell.enableSshAccess": "Enable SSH Access",
     "peerActionCell.expirationDisabledTooltip":
       "Expiration is disabled for all peers added with an setup-key.",
+    "peerActionCell.approveTitle": "Approve peer '{name}'?",
+    "peerActionCell.approveDescription":
+      "Are you sure you want to approve this peer?",
+    "peerActionCell.approve": "Approve",
+    "peerActionCell.approvedTitle": "Peer {name} approved",
+    "peerActionCell.approvedDescription":
+      "This peer was approved and can now connect to other peers.",
+    "peerActionCell.approving": "Approving peer...",
     "peerAddress.netBirdIp": "Cloink IP",
     "peerAddress.publicIp": "Public IP",
     "peerAddress.domain": "Domain",
     "peerAddress.region": "Region",
     "peerAddress.netBirdIpCopied":
       "Cloink IP has been copied to your clipboard",
+    "peerAddress.netBirdIpv6Copied":
+      "Cloink IPv6 has been copied to your clipboard",
     "peerAddress.publicIpCopied": "Public IP has been copied to your clipboard",
     "peerAddress.dnsLabelCopied": "DNS label has been copied to your clipboard",
     "peerAddress.regionCopied": "Region has been copied to your clipboard",
@@ -3543,10 +3655,16 @@ export const messages = {
     "common.active": "已启用",
     "common.status": "状态",
     "common.save": "保存",
+    "common.saveChanges": "保存更改",
     "common.enable": "启用",
+    "common.disable": "停用",
+    "common.continue": "继续",
+    "common.back": "返回",
     "common.exitNode": "出口节点",
     "common.none": "无",
     "common.all": "全部",
+    "common.online": "在线",
+    "common.offline": "离线",
     "common.moreCount": "+ 另外 {count} 项",
     "common.resourceCount": "{count} 个资源",
     "common.routingPeerCount": "{count} 个路由设备",
@@ -4100,6 +4218,7 @@ export const messages = {
     "reverseProxy.type": "类型",
     "reverseProxy.cluster": "集群",
     "reverseProxy.targets": "目标",
+    "reverseProxy.authAndAccess": "认证与访问",
     "reverseProxy.authMethods": "认证方式",
     "reverseProxy.accessControl": "访问控制",
     "reverseProxy.inactive": "未启用",
@@ -4326,8 +4445,12 @@ export const messages = {
     "reverseProxy.targetSelectResourceHelp": "选择你想要暴露的网络资源。",
     "reverseProxy.targetSelectPeerOrResourceHelp":
       "选择你的服务正在运行的对等端或资源。",
+    "reverseProxy.proxyClusterHelp":
+      "代理集群会把入站流量转发到代理无需 WireGuard 即可访问的上游服务。",
     "reverseProxy.targetSelectResourcePlaceholder": "选择资源...",
     "reverseProxy.targetSelectPeerOrResourcePlaceholder": "选择对等端或资源...",
+    "reverseProxy.targetSelectPeerResourceOrClusterPlaceholder":
+      "选择对等端、资源或代理集群...",
     "reverseProxy.customHeaders": "自定义请求头",
     "reverseProxy.customHeadersHelp":
       "添加转发请求时附带的额外请求头。不允许使用 Host、Connection 之类的逐跳请求头。",
@@ -4371,6 +4494,11 @@ export const messages = {
     "reverseProxy.setupProxyDescription": "设置一个自托管反向代理",
     "reverseProxy.proxyCluster": "代理集群",
     "reverseProxy.connectedProxies": "已连接代理",
+    "reverseProxy.features": "功能",
+    "reverseProxy.sharedCluster": "共享",
+    "reverseProxy.selfHostedCluster": "自托管",
+    "reverseProxy.noClustersAvailable": "暂无可用集群",
+    "reverseProxy.setupSelfHostedCluster": "设置自托管集群",
     "reverseProxy.noProxiesConnected": "暂无已连接代理",
     "reverseProxy.deleteClusterTitle": "删除“{name}”？",
     "reverseProxy.deleteClusterDescription":
@@ -4397,6 +4525,15 @@ export const messages = {
     "reverseProxy.runProxyWithDocker": "使用 Docker 运行代理",
     "reverseProxy.runProxyWithDockerHelp":
       "在你的机器上运行以下命令来启动代理。",
+    "reverseProxy.runProxyWithCompose": "使用 Docker Compose 运行代理",
+    "reverseProxy.runProxyWithKubernetes": "在 Kubernetes 上部署代理",
+    "reverseProxy.runProxyWithKubernetesHelp":
+      "将以下 manifest 应用到你的集群以启动代理。",
+    "reverseProxy.selfHostedRoutingWarning":
+      "自托管部署中，请先确认 Cloink 管理服务器已配置代理服务路由，然后再启动代理。",
+    "reverseProxy.requiredRoutingEndpoints": "所需路由端点",
+    "reverseProxy.envReferenceHelp": "需要微调代理？查看全部可用",
+    "reverseProxy.environmentVariables": "环境变量",
     "reverseProxy.finishSetup": "完成设置",
     "networks.title": "网络",
     "networks.description":
@@ -4433,6 +4570,8 @@ export const messages = {
     "networks.addResource": "添加资源",
     "networks.addPolicy": "添加策略",
     "table.name": "名称",
+    "table.selectAll": "全选",
+    "table.selectRow": "选择此行",
     "table.address": "地址",
     "table.os": "系统",
     "table.role": "角色",
@@ -4471,11 +4610,14 @@ export const messages = {
     "users.status.pendingApproval": "待审批",
     "users.status.blocked": "已阻止",
     "users.status.pending": "待处理",
+    "users.status.invited": "已邀请",
     "users.status.active": "已激活",
     "users.localAuthDisabledDescription":
       "本地认证已被禁用。该用户将无法再登录，请使用你的身份提供商进行认证。",
     "users.pendingApprovalDescription":
       "该用户需要管理员批准后才能加入你的组织。",
+    "users.invitedDescription":
+      "该用户已被邀请，但尚未接受邀请。可使用重新发送操作再次发送邀请邮件。",
     "users.pendingApprovalSettingsPrefix": "如果你想关闭新用户审批，请前往",
     "users.pendingApprovalSettingsSuffix": "并关闭",
     "users.pendingApprovalRequired": "“需要用户审批”",
@@ -4498,6 +4640,8 @@ export const messages = {
     "setupKeys.groupEmptyDescription":
       "创建新的注册密钥时分配这个分组，就可以在这里看到它们。",
     "setupKeys.lastUsedOn": "最近使用于",
+    "setupKeys.oneOff": "一次性",
+    "setupKeys.reusable": "可重复使用",
     "setupKeys.defaultName": "注册密钥",
     "setupKeys.revokeTitle": "撤销“{name}”？",
     "setupKeys.revokeDescription": "确定要撤销此注册密钥吗？此操作无法撤销。",
@@ -4518,6 +4662,7 @@ export const messages = {
       "允许设备名称包含多个 DNS 标签（例如 host.europe.netbird.io.）。",
     "setupKeys.ephemeral": "临时设备",
     "setupKeys.ephemeralDescription": "离线超过 10 分钟的设备将被自动移除。",
+    "setupKeys.usageLimitText": "/ {limit} 台设备",
     "invite.passwordCopied": "密码已复制到剪贴板！",
     "invite.linkCopied": "邀请链接已复制到剪贴板！",
     "invite.userCreatedSuccess": "用户创建成功！",
@@ -4862,6 +5007,22 @@ export const messages = {
     "userInvites.sending": "正在发送邀请...",
     "userInvites.sendingShort": "发送中...",
     "userInvites.resend": "重新发送邀请",
+    "userInvites.actions": "邀请操作",
+    "userInvites.fallbackName": "邀请",
+    "userInvites.regeneratingDescription": "正在为 {name} 重新生成邀请链接...",
+    "userInvites.regenerating": "正在重新生成...",
+    "userInvites.regeneratedTitle": "邀请链接已重新生成",
+    "userInvites.regeneratedDescription":
+      "将此链接分享给用户，用户可通过它设置自己的密码。",
+    "userInvites.linkCopied": "邀请链接已复制到剪贴板。",
+    "userInvites.expiresOn": "过期时间",
+    "userInvites.copyAndClose": "复制并关闭",
+    "userInvites.deletedTitle": "“{name}”已删除",
+    "userInvites.deletedDescription": "邀请已成功删除。",
+    "userInvites.deleting": "正在删除邀请...",
+    "userInvites.deleteTitle": "删除“{name}”的邀请？",
+    "userInvites.deleteDescription":
+      "删除此邀请会撤销邀请链接，用户将无法再通过此邀请加入。",
     "actions.cancel": "取消",
     "setupKey.copyMessage": "注册密钥已复制到剪贴板！",
     "setupKey.createdSuccess": "注册密钥创建成功！",
@@ -5393,6 +5554,9 @@ export const messages = {
     "routeTable.createTitle": "创建新路由",
     "routeTable.emptyTitleDescription":
       "看起来你还没有任何路由。添加网络路由即可访问局域网和 VPC。",
+    "routeTable.autoApply": "自动应用",
+    "routeTable.highAvailability": "高可用",
+    "routeTable.addRoute": "添加路由",
     "networkRouting.peer": "设备",
     "networkRouting.advertisedRoutes": "宣告路由",
     "networkRouting.excludedRoutes": "排除路由",
@@ -5404,6 +5568,9 @@ export const messages = {
     "networkRouting.emptyDescription":
       "向此网络添加路由设备后，即可访问该网络内的资源。",
     "networkRouting.add": "添加路由设备",
+    "networkRouting.actions": "路由设备操作",
+    "networkRouting.toggleDescription": "路由设备当前为{status}",
+    "networkRouting.updating": "正在更新路由设备...",
     "groupUsers.selectAll": "全选",
     "groupUsers.selectRow": "选择当前行",
     "groupUsers.searchPlaceholder": "按名称、邮箱或角色搜索...",
@@ -5563,6 +5730,25 @@ export const messages = {
       "允许发布仅 Cloink 网络内设备可访问的服务。以下目标类型需要该能力：",
     "reverseProxy.privateClusterDescriptionMiddle": "和",
     "reverseProxy.privateClusterDescriptionSuffix": "。",
+    "reverseProxy.featureCustomPorts": "自定义端口",
+    "reverseProxy.featureCustomPortsDescription":
+      "该集群可为服务绑定任意 TCP/UDP 端口。",
+    "reverseProxy.featureSubdomainRequired": "需要子域名",
+    "reverseProxy.featureSubdomainRequiredDescription":
+      "此集群上的服务必须使用子域名，不能直接使用裸集群域名。",
+    "reverseProxy.featureCrowdSecDescription":
+      "该集群已在所有在线代理上配置 CrowdSec IP 信誉防护。",
+    "reverseProxy.featurePrivate": "私有",
+    "reverseProxy.accountClusterTitle": "账户集群。",
+    "reverseProxy.accountClusterDescription":
+      "部署在你自己的基础设施上，由你运维代理节点并控制流量终止位置。",
+    "reverseProxy.sharedClusterTitle": "共享集群。",
+    "reverseProxy.sharedClusterDescription":
+      "部署在服务端级别，此实例中的所有账户均可使用。",
+    "reverseProxy.cloinkOnlyNoGroupsWarning":
+      "已开启仅 Cloink 访问，但尚未设置访问分组。请在认证标签页中选择至少一个分组。",
+    "reverseProxy.cloinkOnlyAccessControlCallout":
+      "此服务仅可通过 Cloink 访问。系统会默认应用允许 Cloink 网络范围访问的规则，你在这里添加的规则会叠加生效。",
     "reverseProxy.ruleCount": "{count} 条规则",
     "reverseProxy.allowedCountries": "允许的国家/地区",
     "reverseProxy.blockedCountries": "已阻止的国家/地区",
@@ -5602,6 +5788,8 @@ export const messages = {
     "reverseProxy.configureAuthentication": "配置认证",
     "proxyEvents.time": "时间",
     "proxyEvents.locationIp": "位置 / IP",
+    "proxyEvents.locationIpPlaceholder": "例如 10.0.0.5 或 Berlin",
+    "proxyEvents.request": "请求",
     "proxyEvents.method": "方法",
     "proxyEvents.hostUrl": "主机 / URL",
     "proxyEvents.duration": "耗时",
@@ -5614,6 +5802,8 @@ export const messages = {
       "我们还没有检测到任何代理事件。这可能是因为你尚未配置反向代理服务，或者目前还没有流量。",
     "proxyEvents.success": "成功",
     "proxyEvents.failed": "失败",
+    "proxyEvents.otherMetadata": "其他元数据",
+    "proxyEvents.noMetadata": "此请求没有记录元数据。",
     "onboarding.endTitle": "恭喜！",
     "onboarding.endTitleWithName": "恭喜，{name}！",
     "onboarding.endSubtitle": "你已完成引导流程。",
@@ -5782,6 +5972,7 @@ export const messages = {
     "session.login": "登录",
     "groups.searchGroup": "搜索分组...",
     "groups.searchGroups": "搜索分组...",
+    "groups.groupCount": "{count} 个分组",
     "groups.allGroups": "所有分组",
     "groups.notFound": "似乎您还没有任何分组。",
     "groups.noMatching": "没有匹配搜索条件的分组。请尝试其他搜索词。",
@@ -5810,12 +6001,17 @@ export const messages = {
     "groups.renamePlaceholder": "例如：开发人员",
     "groups.renameExists": "该分组已存在。请选择其他名称。",
     "accessPolicies.searchPlaceholder": "按名称和描述搜索...",
+    "accessPolicies.accessControlGroups": "访问控制分组",
     "accessPolicies.emptyGroupTitle": "这个分组还没有被任何策略使用",
     "accessPolicies.emptyGroupDescription":
       "将这个分组作为来源或目标添加到策略中后，就会在这里显示。",
     "accessPolicies.emptyTitle": "创建新策略",
     "accessPolicies.emptyDescription":
       "看起来你还没有任何策略。策略可以按指定协议和端口放行连接。",
+    "accessPolicies.withPostureChecks": "有",
+    "accessPolicies.withoutPostureChecks": "无",
+    "accessPolicies.bidirectional": "双向",
+    "accessPolicies.oneWay": "单向",
     "accessPolicies.addPolicy": "添加策略",
     "accessPolicies.active": "启用中",
     "accessPolicies.inactive": "未启用",
@@ -5844,6 +6040,11 @@ export const messages = {
     "actions.viewDetails": "查看详情",
     "actions.delete": "删除",
     "actions.edit": "编辑",
+    "actions.openMenu": "打开操作菜单",
+    "actions.policyActions": "策略操作",
+    "actions.routeActions": "路由操作",
+    "actions.resourceActions": "资源操作",
+    "actions.userActions": "用户操作",
     "actions.configure": "配置",
     "actions.continue": "继续",
     "actions.back": "返回",
@@ -5906,6 +6107,7 @@ export const messages = {
     "identityProviderModal.providerType": "提供商类型",
     "identityProviderModal.providerTypeHelp": "选择身份提供商的类型",
     "identityProviderModal.selectProviderType": "选择提供商类型...",
+    "identityProviderModal.name": "名称",
     "identityProviderModal.nameHelp": "输入一个便于识别该提供商的名称",
     "identityProviderModal.namePlaceholder": "例如：企业 SSO",
     "identityProviderModal.issuerUrl": "颁发者 URL",
@@ -5940,6 +6142,10 @@ export const messages = {
     "identityProviderModal.redirectUrlHelp":
       "将此 URL 复制到你的身份提供商配置中",
     "identityProviderModal.redirectCopied": "回调 URL 已复制到剪贴板。",
+    "identityProviderModal.endpointUrls": "端点 URL",
+    "identityProviderModal.redirectCallback": "重定向 / 回调",
+    "identityProviderModal.logout": "登出",
+    "identityProviderModal.logoutCopied": "登出 URL 已复制到剪贴板。",
     "identityProviderModal.addProvider": "添加提供商",
     "networkResources.addModalTitle": "添加资源",
     "networkResources.editModalTitle": "编辑资源",
@@ -6054,6 +6260,8 @@ export const messages = {
     "networkResourceAccessControl.addPolicy": "添加策略",
     "resourcesTable.address": "地址",
     "resourcesTable.active": "启用状态",
+    "resourcesTable.exposed": "已暴露",
+    "resourcesTable.notExposed": "未暴露",
     "resourcesTable.searchPlaceholder": "按名称、地址或分组搜索...",
     "resourcesTable.emptyGroupTitle": "这个分组还没有分配任何资源",
     "resourcesTable.emptyNetworkTitle": "这个网络还没有任何资源",
@@ -6384,6 +6592,8 @@ export const messages = {
     "setupModal.runNetBirdContainer": "运行 Cloink 容器",
     "setupModal.readDocumentation": "阅读我们的文档",
     "setupModal.runningNetBirdDocker": "在 Docker 中运行 Cloink",
+    "setupModal.setupKeyGeneratedDescription":
+      "已为本次安装生成一次性安装密钥。",
     "accessControl.modalUpdateTitle": "更新访问控制策略",
     "accessControl.modalCreateTitle": "创建新的访问控制策略",
     "accessControl.modalDescription": "使用此策略限制对资源分组的访问。",
@@ -6552,6 +6762,7 @@ export const messages = {
     "dataTable.noMatchingFilters": "没有匹配搜索条件的筛选条件。",
     "dataTable.filter": "筛选",
     "dataTable.filters": "筛选条件",
+    "dataTable.removeFilter": "移除 {label} 筛选条件",
     "input.togglePasswordVisibility": "切换密码可见性",
     "datePicker.selectDateRange": "选择日期范围",
     "datePicker.allTime": "全部时间",
@@ -6701,11 +6912,18 @@ export const messages = {
     "peerActionCell.enableSshAccess": "启用 SSH 访问",
     "peerActionCell.expirationDisabledTooltip":
       "通过安装密钥添加的所有设备均禁用过期设置。",
+    "peerActionCell.approveTitle": "审批设备“{name}”？",
+    "peerActionCell.approveDescription": "确定要审批此设备吗？",
+    "peerActionCell.approve": "审批",
+    "peerActionCell.approvedTitle": "设备 {name} 已审批",
+    "peerActionCell.approvedDescription": "此设备已审批，现在可以连接其他设备。",
+    "peerActionCell.approving": "正在审批设备...",
     "peerAddress.netBirdIp": "Cloink IP",
     "peerAddress.publicIp": "公网 IP",
     "peerAddress.domain": "域名",
     "peerAddress.region": "地区",
     "peerAddress.netBirdIpCopied": "Cloink IP 已复制到剪贴板",
+    "peerAddress.netBirdIpv6Copied": "Cloink IPv6 已复制到剪贴板",
     "peerAddress.publicIpCopied": "公网 IP 已复制到剪贴板",
     "peerAddress.dnsLabelCopied": "DNS 标签已复制到剪贴板",
     "peerAddress.regionCopied": "地区已复制到剪贴板",

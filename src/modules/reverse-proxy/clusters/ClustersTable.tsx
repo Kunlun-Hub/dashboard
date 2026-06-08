@@ -24,6 +24,7 @@ import React, { useMemo, useState } from "react";
 import { useSWRConfig } from "swr";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { useI18n } from "@/i18n/I18nProvider";
 import {
   ReverseProxyCluster,
   ReverseProxyClusterType,
@@ -35,11 +36,13 @@ import ClustersFeaturesCell from "@/modules/reverse-proxy/clusters/ClustersFeatu
 import { ClustersModal } from "@/modules/reverse-proxy/clusters/ClustersModal";
 import ClustersNameCell from "@/modules/reverse-proxy/clusters/ClustersNameCell";
 
-const ClustersColumns: ColumnDef<ReverseProxyCluster>[] = [
+const createClustersColumns = (
+  t: ReturnType<typeof useI18n>["t"],
+): ColumnDef<ReverseProxyCluster>[] => [
   {
     accessorKey: "address",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Cluster</DataTableHeader>;
+      return <DataTableHeader column={column}>{t("reverseProxy.cluster")}</DataTableHeader>;
     },
     sortingFn: "text",
     cell: ({ row }) => <ClustersNameCell cluster={row.original} />,
@@ -48,7 +51,7 @@ const ClustersColumns: ColumnDef<ReverseProxyCluster>[] = [
     accessorKey: "connected_proxies",
     header: ({ column }) => {
       return (
-        <DataTableHeader column={column}>Connected Proxies</DataTableHeader>
+        <DataTableHeader column={column}>{t("reverseProxy.connectedProxies")}</DataTableHeader>
       );
     },
     sortingFn: "basic",
@@ -56,7 +59,7 @@ const ClustersColumns: ColumnDef<ReverseProxyCluster>[] = [
   },
   {
     id: "features",
-    header: () => <span className={"font-medium text-xs"}>Features</span>,
+    header: () => <span className={"font-medium text-xs"}>{t("reverseProxy.features")}</span>,
     enableSorting: false,
     cell: ({ row }) => <ClustersFeaturesCell cluster={row.original} />,
   },
@@ -90,9 +93,11 @@ export default function ClustersTable({ headingTarget }: Readonly<Props>) {
   const { mutate } = useSWRConfig();
   const path = usePathname();
   const { permission } = usePermissions();
+  const { t } = useI18n();
   const { data: clusters, isLoading } = useFetchApi<ReverseProxyCluster[]>(
     "/reverse-proxies/clusters",
   );
+  const columns = useMemo(() => createClustersColumns(t), [t]);
 
   const rows = clusters ?? [];
 
@@ -110,27 +115,27 @@ export default function ClustersTable({ headingTarget }: Readonly<Props>) {
 
   const statusOptions = useMemo<RadioOption<boolean | undefined>[]>(
     () => [
-      { value: undefined, label: "All", dotClass: "bg-nb-gray-500" },
-      { value: true, label: "Online", dotClass: "bg-green-500" },
-      { value: false, label: "Offline", dotClass: "bg-red-500" },
+      { value: undefined, label: t("common.all"), dotClass: "bg-nb-gray-500" },
+      { value: true, label: t("common.online"), dotClass: "bg-green-500" },
+      { value: false, label: t("common.offline"), dotClass: "bg-red-500" },
     ],
-    [],
+    [t],
   );
 
   const typeOptions = useMemo<RadioOption<string | undefined>[]>(
     () => [
-      { value: undefined, label: "All" },
-      { value: ReverseProxyClusterType.SHARED, label: "Shared" },
-      { value: ReverseProxyClusterType.ACCOUNT, label: "Self-Hosted" },
+      { value: undefined, label: t("common.all") },
+      { value: ReverseProxyClusterType.SHARED, label: t("reverseProxy.sharedCluster") },
+      { value: ReverseProxyClusterType.ACCOUNT, label: t("reverseProxy.selfHostedCluster") },
     ],
-    [],
+    [t],
   );
 
   const filterDefs = useMemo<TableFilterDef[]>(
     () => [
       {
         id: "online",
-        label: "Status",
+        label: t("common.status"),
         renderPicker: (p) => (
           <RadioPicker
             value={p.value as boolean | undefined}
@@ -144,7 +149,7 @@ export default function ClustersTable({ headingTarget }: Readonly<Props>) {
       },
       {
         id: "type",
-        label: "Type",
+        label: t("reverseProxy.type"),
         renderPicker: (p) => (
           <RadioPicker
             value={p.value as string | undefined}
@@ -157,7 +162,7 @@ export default function ClustersTable({ headingTarget }: Readonly<Props>) {
           formatRadioChip(v as string | undefined, typeOptions),
       },
     ],
-    [statusOptions, typeOptions],
+    [statusOptions, typeOptions, t],
   );
 
   return (
@@ -175,13 +180,13 @@ export default function ClustersTable({ headingTarget }: Readonly<Props>) {
         keepStateInLocalStorage={false}
         initialPageSize={25}
         showResetFilterButton={false}
-        text={"Clusters"}
+        text={t("reverseProxy.proxyClusters")}
         sorting={sorting}
         setSorting={setSorting}
-        columns={ClustersColumns}
+        columns={columns}
         data={rows}
         useRowId={true}
-        searchPlaceholder={"Search by cluster domain..."}
+        searchPlaceholder={t("reverseProxy.selfHostedSearchPlaceholder")}
         aboveTable={(table) => (
           <TableFilterChips table={table} filters={filterDefs} />
         )}
@@ -199,10 +204,7 @@ export default function ClustersTable({ headingTarget }: Readonly<Props>) {
                 size={"large"}
               />
             }
-            title={"No clusters available"}
-            description={
-              "There are no shared clusters connected to your account and no self-hosted clusters configured. Set up a self-hosted cluster to route traffic through your own infrastructure — see the documentation linked above for setup steps."
-            }
+            title={t("reverseProxy.noClustersAvailable")}
             button={
               <Button
                 variant={"primary"}
@@ -210,7 +212,7 @@ export default function ClustersTable({ headingTarget }: Readonly<Props>) {
                 disabled={!permission?.services?.create}
               >
                 <PlusCircle size={16} />
-                Setup Self-Hosted Cluster
+                {t("reverseProxy.setupSelfHostedCluster")}
               </Button>
             }
           />
@@ -225,7 +227,7 @@ export default function ClustersTable({ headingTarget }: Readonly<Props>) {
                 disabled={!permission?.services?.create}
               >
                 <PlusCircle size={16} />
-                Setup Self-Hosted Cluster
+                {t("reverseProxy.setupSelfHostedCluster")}
               </Button>
             )}
           </>

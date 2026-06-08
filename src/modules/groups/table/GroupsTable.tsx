@@ -351,7 +351,7 @@ export default function GroupsTable({ headingTarget }: Readonly<Props>) {
       data={groups}
       initialPageSize={25}
       showResetFilterButton={false}
-      searchPlaceholder={"Search group by name..."}
+      searchPlaceholder={t("groups.searchPlaceholder")}
       rightSide={() => <AddGroupButton />}
       aboveTable={(table) => (
         <TableFilterChips table={table} filters={filterDefs} />

@@ -1,5 +1,4 @@
 import Button from "@components/Button";
-import InlineLink from "@components/InlineLink";
 import SquareIcon from "@components/SquareIcon";
 import { DataTable } from "@components/table/DataTable";
 import DataTableHeader from "@components/table/DataTableHeader";
@@ -22,7 +21,7 @@ import {
 } from "@components/table/TableFilters";
 import GetStartedTest from "@components/ui/GetStartedTest";
 import { ColumnDef, SortingState } from "@tanstack/react-table";
-import { ExternalLinkIcon, PlusCircle } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 import { usePathname } from "next/navigation";
 import React, { useMemo } from "react";
 import { useSWRConfig } from "swr";
@@ -32,7 +31,6 @@ import { useReverseProxies } from "@/contexts/ReverseProxiesProvider";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import {
   isL4Mode,
-  REVERSE_PROXY_DOCS_LINK,
   ReverseProxy,
 } from "@/interfaces/ReverseProxy";
 import ReverseProxyActionCell from "@/modules/reverse-proxy/table/ReverseProxyActionCell";
@@ -48,11 +46,13 @@ import {
 } from "@/modules/account/ResourceUsage";
 import { useI18n } from "@/i18n/I18nProvider";
 
-const ReverseProxyColumns: ColumnDef<ReverseProxy>[] = [
+const createReverseProxyColumns = (
+  t: ReturnType<typeof useI18n>["t"],
+): ColumnDef<ReverseProxy>[] => [
   {
     accessorKey: "domain",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Domain</DataTableHeader>;
+      return <DataTableHeader column={column}>{t("reverseProxy.domain")}</DataTableHeader>;
     },
     sortingFn: "text",
     cell: ({ row }) => <ReverseProxyNameCell reverseProxy={row.original} />,
@@ -60,7 +60,7 @@ const ReverseProxyColumns: ColumnDef<ReverseProxy>[] = [
   {
     accessorKey: "mode",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Type</DataTableHeader>;
+      return <DataTableHeader column={column}>{t("reverseProxy.type")}</DataTableHeader>;
     },
     sortingFn: "text",
     cell: ({ row }) => <ReverseProxyTypeCell reverseProxy={row.original} />,
@@ -73,14 +73,14 @@ const ReverseProxyColumns: ColumnDef<ReverseProxy>[] = [
   {
     accessorKey: "targets",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Target(s)</DataTableHeader>;
+      return <DataTableHeader column={column}>{t("reverseProxy.targets")}</DataTableHeader>;
     },
     cell: ({ row }) => <ReverseProxyTargetsCell reverseProxy={row.original} />,
   },
   {
     id: "auth_and_access",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Auth &amp; Access</DataTableHeader>;
+      return <DataTableHeader column={column}>{t("reverseProxy.authAndAccess")}</DataTableHeader>;
     },
     cell: ({ row }) => (
       <div className={"flex items-center gap-2"}>
@@ -119,6 +119,7 @@ export default function ReverseProxyTable({ headingTarget }: Readonly<Props>) {
   const { permission } = usePermissions();
   const { reverseProxies, isLoading, openModal } = useReverseProxies();
   const serviceLimit = useResourceLimit("custom_rules");
+  const columns = useMemo(() => createReverseProxyColumns(t), [t]);
 
   const [sorting, setSorting] = useLocalStorage<SortingState>(
     "netbird-table-sort" + path,
@@ -210,7 +211,7 @@ export default function ReverseProxyTable({ headingTarget }: Readonly<Props>) {
       text={t("reverseProxy.tableTitle")}
       sorting={sorting}
       setSorting={setSorting}
-      columns={ReverseProxyColumns}
+      columns={columns}
       data={reverseProxies}
       useRowId={true}
       initialPageSize={25}
@@ -245,17 +246,7 @@ export default function ReverseProxyTable({ headingTarget }: Readonly<Props>) {
             />
           }
           title={t("reverseProxy.emptyTitle")}
-          description={t("reverseProxy.emptyDescription")}
           button={addServiceButton()}
-          learnMore={
-            <>
-              {t("common.learnMore")}{" "}
-              <InlineLink href={REVERSE_PROXY_DOCS_LINK} target={"_blank"}>
-                {t("reverseProxy.servicesTitle")}
-                <ExternalLinkIcon size={12} />
-              </InlineLink>
-            </>
-          }
         />
       }
       rightSide={() => (

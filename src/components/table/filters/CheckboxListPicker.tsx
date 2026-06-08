@@ -45,8 +45,8 @@ export function CheckboxListPicker<V extends string | number>({
             tabIndex={0}
             className={cn(
               "flex items-center gap-2.5 px-2 py-1.5 rounded text-sm transition-colors cursor-pointer",
-              "text-nb-gray-300 hover:bg-nb-gray-900 hover:text-white",
-              isSelected && "text-white",
+              "text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900 dark:text-nb-gray-300 dark:hover:bg-nb-gray-900 dark:hover:text-white",
+              isSelected && "text-neutral-900 dark:text-white",
             )}
             onClick={() => toggle(option.value)}
             onKeyDown={(e) => {

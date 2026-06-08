@@ -453,12 +453,13 @@ export default function ReverseProxyModal({
   const handleSubmit = async () => {
     if (isUnprotected) {
       const confirmed = await confirm({
-        title: "No Protection Configured",
-        description:
-          "This service has no authentication or access control rules configured. It will be publicly accessible to everyone on the internet. Are you sure you want to continue?",
+        title: t("reverseProxy.modalNoProtectionTitle"),
+        description: t("reverseProxy.modalNoProtectionDescription"),
         type: "warning",
-        confirmText: reverseProxy ? "Save Changes" : "Add Service",
-        cancelText: "Cancel",
+        confirmText: reverseProxy
+          ? t("common.saveChanges")
+          : t("reverseProxy.addService"),
+        cancelText: t("common.cancel"),
         maxWidthClass: "max-w-lg",
       });
       if (!confirmed) return;
@@ -595,12 +596,12 @@ export default function ReverseProxyModal({
           <TabsList justify={"start"} className={"px-8"}>
             <TabsTrigger value={"targets"}>
               <ReverseProxyIcon size={14} />
-              Service
+              {t("reverseProxy.tabService")}
             </TabsTrigger>
             {!isL4Mode && (
               <TabsTrigger value={"auth"} disabled={!canContinueToSettings}>
                 <LockKeyhole size={14} />
-                Authentication
+                {t("reverseProxy.tabAuthentication")}
               </TabsTrigger>
             )}
             <TabsTrigger
@@ -608,11 +609,11 @@ export default function ReverseProxyModal({
               disabled={!canContinueToSettings}
             >
               <ShieldCheckIcon size={14} />
-              Access Control
+              {t("reverseProxy.tabAccessControl")}
             </TabsTrigger>
             <TabsTrigger value={"settings"} disabled={!canContinueToSettings}>
               <Settings size={14} />
-              Advanced Settings
+              {t("reverseProxy.tabAdvancedSettings")}
             </TabsTrigger>
           </TabsList>
 
@@ -642,8 +643,7 @@ export default function ReverseProxyModal({
 
               {isPrivate && accessGroups.length === 0 && (
                 <Paragraph className={"!text-yellow-400 !text-xs !mt-0"}>
-                  NetBird-only is on but no access groups are set. Open it
-                  on the Authentication tab and pick at least one group.
+                  {t("reverseProxy.cloinkOnlyNoGroupsWarning")}
                 </Paragraph>
               )}
 
@@ -795,9 +795,7 @@ export default function ReverseProxyModal({
                     />
                   }
                 >
-                  This service is accessible via NetBird only. An allow rule
-                  for the NetBird network range is applied by default. Any
-                  rules you add here are layered on top.
+                  {t("reverseProxy.cloinkOnlyAccessControlCallout")}
                 </Callout>
               )}
               <ReverseProxyAccessControlRules
@@ -932,24 +930,24 @@ export default function ReverseProxyModal({
               const docsLink = {
                 targets: {
                   href: REVERSE_PROXY_SERVICES_DOCS_LINK,
-                  label: "Services",
+                  label: t("reverseProxy.servicesTitle"),
                 },
                 auth: {
                   href: REVERSE_PROXY_AUTHENTICATION_DOCS_LINK,
-                  label: "Authentication",
+                  label: t("reverseProxy.tabAuthentication"),
                 },
                 "access-control": {
                   href: REVERSE_PROXY_ACCESS_CONTROL_DOCS_LINK,
-                  label: "Access Control",
+                  label: t("reverseProxy.tabAccessControl"),
                 },
                 settings: {
                   href: REVERSE_PROXY_SETTINGS_DOCS_LINK,
-                  label: "Settings",
+                  label: t("settings.title"),
                 },
               }[tab];
               return docsLink ? (
                 <Paragraph className={"text-sm mt-auto"}>
-                  Learn more about
+                  {t("common.learnMore")}{" "}
                   <InlineLink href={docsLink.href} target={"_blank"}>
                     {docsLink.label}
                     <ExternalLinkIcon size={12} />
@@ -964,7 +962,7 @@ export default function ReverseProxyModal({
                 {tab === "targets" && (
                   <>
                     <ModalClose asChild>
-                      <Button variant={"secondary"}>Cancel</Button>
+                      <Button variant={"secondary"}>{t("common.cancel")}</Button>
                     </ModalClose>
                     <Button
                       variant={"primary"}
@@ -973,7 +971,7 @@ export default function ReverseProxyModal({
                       }
                       disabled={!canContinueToSettings}
                     >
-                      Continue
+                      {t("common.continue")}
                     </Button>
                   </>
                 )}
@@ -984,13 +982,13 @@ export default function ReverseProxyModal({
                       variant={"secondary"}
                       onClick={() => setTab("targets")}
                     >
-                      Back
+                      {t("common.back")}
                     </Button>
                     <Button
                       variant={"primary"}
                       onClick={() => setTab("access-control")}
                     >
-                      Continue
+                      {t("common.continue")}
                     </Button>
                   </>
                 )}
@@ -1001,14 +999,14 @@ export default function ReverseProxyModal({
                       variant={"secondary"}
                       onClick={() => setTab(isL4Mode ? "targets" : "auth")}
                     >
-                      Back
+                      {t("common.back")}
                     </Button>
                     <Button
                       variant={"primary"}
                       onClick={() => setTab("settings")}
                       disabled={accessControlHasErrors}
                     >
-                      Continue
+                      {t("common.continue")}
                     </Button>
                   </>
                 )}
@@ -1019,7 +1017,7 @@ export default function ReverseProxyModal({
                       variant={"secondary"}
                       onClick={() => setTab("access-control")}
                     >
-                      Back
+                      {t("common.back")}
                     </Button>
                     <Button
                       variant={"primary"}
@@ -1032,7 +1030,7 @@ export default function ReverseProxyModal({
                       onClick={handleSubmit}
                     >
                       <PlusCircle size={16} />
-                      Add Service
+                      {t("reverseProxy.addService")}
                     </Button>
                   </>
                 )}
@@ -1040,7 +1038,7 @@ export default function ReverseProxyModal({
             ) : (
               <>
                 <ModalClose asChild>
-                  <Button variant={"secondary"}>Cancel</Button>
+                  <Button variant={"secondary"}>{t("common.cancel")}</Button>
                 </ModalClose>
                 <Button
                   variant={"primary"}
@@ -1052,7 +1050,7 @@ export default function ReverseProxyModal({
                   }
                   onClick={handleSubmit}
                 >
-                  Save Changes
+                  {t("common.saveChanges")}
                 </Button>
               </>
             )}

@@ -40,11 +40,13 @@ import { NetworkResourceCell } from "@/modules/networks/table/NetworkResourceCel
 import NetworkRoutingPeerCell from "@/modules/networks/table/NetworkRoutingPeerCell";
 import { GlobalSearchModal } from "@/modules/search/GlobalSearchModal";
 
-export const NetworkTableColumns: ColumnDef<Network>[] = [
+export const createNetworkTableColumns = (
+  t: ReturnType<typeof useI18n>["t"],
+): ColumnDef<Network>[] => [
   {
     accessorKey: "name",
     header: ({ column }) => (
-      <DataTableHeader column={column}>Network</DataTableHeader>
+      <DataTableHeader column={column}>{t("networks.title")}</DataTableHeader>
     ),
     sortingFn: "text",
     cell: ({ row }) => <NetworkNameCell network={row.original} />,
@@ -56,7 +58,7 @@ export const NetworkTableColumns: ColumnDef<Network>[] = [
     accessorKey: "resources",
     accessorFn: (network) => network?.resources?.length,
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Resources</DataTableHeader>;
+      return <DataTableHeader column={column}>{t("groups.tooltip.networkResources")}</DataTableHeader>;
     },
     cell: ({ row }) => <NetworkResourceCell network={row.original} />,
   },
@@ -64,7 +66,7 @@ export const NetworkTableColumns: ColumnDef<Network>[] = [
     accessorKey: "policies",
     accessorFn: (network) => network?.policies?.length,
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Policies</DataTableHeader>;
+      return <DataTableHeader column={column}>{t("nav.policies")}</DataTableHeader>;
     },
     cell: ({ row }) => <NetworkPolicyCell network={row.original} />,
   },
@@ -72,7 +74,7 @@ export const NetworkTableColumns: ColumnDef<Network>[] = [
     accessorKey: "routers",
     accessorFn: (network) => network?.routers?.length,
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Routing Peers</DataTableHeader>;
+      return <DataTableHeader column={column}>{t("networks.routingPeers")}</DataTableHeader>;
     },
     cell: ({ row }) => <NetworkRoutingPeerCell network={row.original} />,
   },
@@ -102,7 +104,7 @@ export default function NetworksTable({
   const path = usePathname();
   const [searchModal, setSearchModal] = useState(false);
   const { t } = useI18n();
-  const columns = NetworkTableColumns;
+  const columns = useMemo(() => createNetworkTableColumns(t), [t]);
 
   const [sorting, setSorting] = useLocalStorage<SortingState>(
     "netbird-table-sort" + path,
@@ -116,18 +118,18 @@ export default function NetworksTable({
 
   const statusOptions = useMemo<RadioOption<boolean | undefined>[]>(
     () => [
-      { value: undefined, label: "All", dotClass: "bg-nb-gray-500" },
-      { value: true, label: "Active", dotClass: "bg-green-500" },
-      { value: false, label: "Inactive", dotClass: "bg-nb-gray-700" },
+      { value: undefined, label: t("common.all"), dotClass: "bg-nb-gray-500" },
+      { value: true, label: t("common.active"), dotClass: "bg-green-500" },
+      { value: false, label: t("reverseProxy.inactive"), dotClass: "bg-nb-gray-700" },
     ],
-    [],
+    [t],
   );
 
   const filterDefs = useMemo<TableFilterDef[]>(
     () => [
       {
         id: "active",
-        label: "Status",
+        label: t("common.status"),
         renderPicker: (p) => (
           <RadioPicker
             value={p.value as boolean | undefined}
@@ -140,7 +142,7 @@ export default function NetworksTable({
           formatRadioChip(v as boolean | undefined, statusOptions),
       },
     ],
-    [statusOptions],
+    [statusOptions, t],
   );
 
   return (
@@ -158,7 +160,7 @@ export default function NetworksTable({
             data={data}
             initialPageSize={25}
             showResetFilterButton={false}
-            searchPlaceholder={"Search by network name or description..."}
+            searchPlaceholder={t("networks.searchPlaceholder")}
             columnVisibility={{
               description: false,
               active: false,

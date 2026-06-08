@@ -5,6 +5,7 @@ import {
   ReverseProxyCluster,
   ReverseProxyClusterType,
 } from "@/interfaces/ReverseProxy";
+import { useI18n } from "@/i18n/I18nProvider";
 
 type Props = {
   cluster: ReverseProxyCluster;
@@ -14,14 +15,19 @@ type Props = {
 // same pattern as EphemeralPeerIndicator — so the source of the
 // cluster is visible at a glance without a dedicated column.
 export const ClusterTypeIndicator = ({ cluster }: Props) => {
+  const { t } = useI18n();
+
   if (cluster.type === ReverseProxyClusterType.ACCOUNT) {
     return (
       <FullTooltip
         content={
           <div className={"text-xs max-w-xs"}>
-            <span className={"font-medium text-white"}>Account cluster.</span>{" "}
-            Self-hosted on your own infrastructure — you operate the proxy
-            nodes and control where traffic terminates.
+            <span className={"font-medium text-neutral-900 dark:text-white"}>
+              {t("reverseProxy.accountClusterTitle")}
+            </span>{" "}
+            <span className={"text-neutral-600 dark:text-nb-gray-300"}>
+              {t("reverseProxy.accountClusterDescription")}
+            </span>
           </div>
         }
       >
@@ -33,13 +39,16 @@ export const ClusterTypeIndicator = ({ cluster }: Props) => {
     <FullTooltip
       content={
         <div className={"text-xs max-w-xs"}>
-          <span className={"font-medium text-white"}>Shared cluster.</span>{" "}
-          Deployed at the server level and available to every account on this
-          instance.
+          <span className={"font-medium text-neutral-900 dark:text-white"}>
+            {t("reverseProxy.sharedClusterTitle")}
+          </span>{" "}
+          <span className={"text-neutral-600 dark:text-nb-gray-300"}>
+            {t("reverseProxy.sharedClusterDescription")}
+          </span>
         </div>
       }
     >
-      <ServerIcon size={12} className={"shrink-0 text-nb-gray-300"} />
+      <ServerIcon size={12} className={"shrink-0 text-neutral-500 dark:text-nb-gray-300"} />
     </FullTooltip>
   );
 };

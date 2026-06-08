@@ -3,6 +3,7 @@
 import { cn } from "@utils/helpers";
 import { CheckIcon } from "lucide-react";
 import * as React from "react";
+import { useI18n } from "@/i18n/I18nProvider";
 
 // StatusPicker — three-way radio that maps to the `connected` column.
 //   undefined → All
@@ -14,12 +15,6 @@ type Option = {
   dotClass: string;
 };
 
-const OPTIONS: Option[] = [
-  { value: undefined, label: "All", dotClass: "bg-nb-gray-500" },
-  { value: true, label: "Online", dotClass: "bg-green-500" },
-  { value: false, label: "Offline", dotClass: "bg-nb-gray-700" },
-];
-
 type Props = {
   value: boolean | undefined;
   onChange: (next: boolean | undefined) => void;
@@ -27,17 +22,24 @@ type Props = {
 };
 
 export function StatusPicker({ value, onChange, close }: Props) {
+  const { t } = useI18n();
+  const options: Option[] = [
+    { value: undefined, label: t("common.all"), dotClass: "bg-nb-gray-500" },
+    { value: true, label: t("common.online"), dotClass: "bg-green-500" },
+    { value: false, label: t("common.offline"), dotClass: "bg-nb-gray-700" },
+  ];
+
   return (
     <div className={"flex flex-col gap-0.5"}>
-      {OPTIONS.map((option) => {
+      {options.map((option) => {
         const selected = value === option.value;
         return (
           <button
             key={option.label}
             className={cn(
               "flex items-center gap-2.5 px-2 py-1.5 rounded text-sm transition-colors",
-              "text-nb-gray-300 hover:bg-nb-gray-900 hover:text-white",
-              selected && "text-white",
+              "text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900 dark:text-nb-gray-300 dark:hover:bg-nb-gray-900 dark:hover:text-white",
+              selected && "text-neutral-900 dark:text-white",
             )}
             onClick={() => {
               onChange(option.value);
@@ -47,7 +49,7 @@ export function StatusPicker({ value, onChange, close }: Props) {
             <CheckIcon
               size={14}
               className={cn(
-                "shrink-0 text-white",
+                "shrink-0 text-netbird dark:text-white",
                 selected ? "opacity-100" : "opacity-0",
               )}
             />
@@ -66,8 +68,13 @@ export function StatusPicker({ value, onChange, close }: Props) {
 }
 
 // formatChip helper exported for use in the filter def's formatChip().
-export function formatStatusChip(value: boolean | undefined): string | null {
-  if (value === true) return "Online";
-  if (value === false) return "Offline";
+type Translate = ReturnType<typeof useI18n>["t"];
+
+export function formatStatusChip(
+  value: boolean | undefined,
+  t: Translate,
+): string | null {
+  if (value === true) return t("common.online");
+  if (value === false) return t("common.offline");
   return null;
 }

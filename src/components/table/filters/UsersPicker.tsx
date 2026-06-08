@@ -9,6 +9,7 @@ import { sortBy, uniqBy } from "lodash";
 import { UserCircle2 } from "lucide-react";
 import * as React from "react";
 import { useMemo } from "react";
+import { useI18n } from "@/i18n/I18nProvider";
 import { SmallUserAvatar } from "@/modules/users/SmallUserAvatar";
 
 // UsersPicker — single-select search list mirroring the Activity ›
@@ -40,11 +41,12 @@ const searchPredicate = (item: UserOption, query: string) => {
 };
 
 export function UsersPicker({ value, onChange, close, options }: Props) {
+  const { t } = useI18n();
   const [filteredItems, search, setSearch] = useSearch(
     options.concat({
       id: ALL_USERS_ID,
-      name: "All Users",
-      email: "Include all users",
+      name: t("users.allUsers"),
+      email: t("users.includeAllUsers"),
     }),
     searchPredicate,
     { filter: true, debounce: 150 },
@@ -68,14 +70,14 @@ export function UsersPicker({ value, onChange, close, options }: Props) {
       <DropdownInput
         value={search}
         onChange={setSearch}
-        placeholder={"Search user..."}
+        placeholder={t("users.searchByEmailOrName")}
         hideEnterIcon={true}
       />
 
       {options.length === 0 && !search && (
         <div className={"max-w-xs mx-auto"}>
           <DropdownInfoText>
-            {"No users available to select."}
+            {t("users.noUsersAvailable")}
           </DropdownInfoText>
         </div>
       )}
@@ -83,7 +85,7 @@ export function UsersPicker({ value, onChange, close, options }: Props) {
       {filteredItems.length === 0 && search !== "" && (
         <div className={"px-10"}>
           <DropdownInfoText>
-            There are no users matching your search.
+            {t("users.noUsersMatchingSearch")}
           </DropdownInfoText>
         </div>
       )}
@@ -129,19 +131,19 @@ export function UsersPicker({ value, onChange, close, options }: Props) {
                 )}
 
                 <div className={"flex flex-col text-xs w-full min-w-0"}>
-                  <span className={"text-nb-gray-200 flex items-center gap-1.5"}>
+                  <span className={"text-neutral-800 dark:text-nb-gray-200 flex items-center gap-1.5"}>
                     <TextWithTooltip
-                      text={isSystemUser ? "System" : user?.name || user?.id}
+                      text={isSystemUser ? t("users.system") : user?.name || user?.id}
                       maxChars={22}
                     />
                   </span>
                   <span
                     className={
-                      "text-nb-gray-400 font-light flex items-center gap-1"
+                      "text-neutral-500 dark:text-nb-gray-400 font-light flex items-center gap-1"
                     }
                   >
                     <TextWithTooltip
-                      text={user?.email || "NetBird"}
+                      text={user?.email || t("users.systemEmail")}
                       maxChars={22}
                     />
                   </span>

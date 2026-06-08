@@ -1,7 +1,5 @@
 "use client";
 
-import { ExternalLinkIcon } from "lucide-react";
-import InlineLink from "@components/InlineLink";
 import SquareIcon from "@components/SquareIcon";
 import { DataTable } from "@components/table/DataTable";
 import DataTableHeader from "@components/table/DataTableHeader";
@@ -36,7 +34,6 @@ import { useServerPagination } from "@/contexts/ServerPaginationProvider";
 import { useUsers } from "@/contexts/UsersProvider";
 import { useI18n } from "@/i18n/I18nProvider";
 import {
-  REVERSE_PROXY_EVENTS_DOCS_LINK,
   ReverseProxy,
   ReverseProxyEvent,
 } from "@/interfaces/ReverseProxy";
@@ -93,7 +90,7 @@ export const makeEventsColumns = (
     accessorKey: "method",
     header: ({ column }) => (
       <DataTableHeader column={column} name="method">
-        Request
+        {t("proxyEvents.request")}
       </DataTableHeader>
     ),
     cell: ({ row }) => (
@@ -249,16 +246,16 @@ export default function ReverseProxyEventsTable({
 
   const statusOptions = useMemo<RadioOption<string | undefined>[]>(
     () => [
-      { value: undefined, label: "All", dotClass: "bg-nb-gray-500" },
-      { value: "success", label: "Success", dotClass: "bg-green-500" },
-      { value: "failed", label: "Failed", dotClass: "bg-red-500" },
+      { value: undefined, label: t("common.all"), dotClass: "bg-nb-gray-500" },
+      { value: "success", label: t("proxyEvents.success"), dotClass: "bg-green-500" },
+      { value: "failed", label: t("proxyEvents.failed"), dotClass: "bg-red-500" },
     ],
-    [],
+    [t],
   );
 
   const methodOptions = useMemo<RadioOption<string | undefined>[]>(
     () => [
-      { value: undefined, label: "All" },
+      { value: undefined, label: t("common.all") },
       { value: "GET", label: "GET" },
       { value: "POST", label: "POST" },
       { value: "PUT", label: "PUT" },
@@ -267,7 +264,7 @@ export default function ReverseProxyEventsTable({
       { value: "HEAD", label: "HEAD" },
       { value: "OPTIONS", label: "OPTIONS" },
     ],
-    [],
+    [t],
   );
 
   const userOptions = useMemo<UserOption[]>(() => {
@@ -287,7 +284,7 @@ export default function ReverseProxyEventsTable({
     () => [
       {
         id: "status_filter",
-        label: "Status",
+        label: t("common.status"),
         renderPicker: (p) => (
           <RadioPicker
             value={p.value as string | undefined}
@@ -304,7 +301,7 @@ export default function ReverseProxyEventsTable({
       },
       {
         id: "method",
-        label: "Method",
+        label: t("proxyEvents.method"),
         renderPicker: (p) => (
           <RadioPicker
             value={p.value as string | undefined}
@@ -321,7 +318,7 @@ export default function ReverseProxyEventsTable({
       },
       {
         id: "user",
-        label: "User",
+        label: t("table.user"),
         renderPicker: (p) => (
           <UsersPicker
             value={p.value as string | undefined}
@@ -341,7 +338,7 @@ export default function ReverseProxyEventsTable({
       },
       {
         id: "location_ip",
-        label: "Location / IP",
+        label: t("proxyEvents.locationIp"),
         renderPicker: (p) => (
           <TextInputPicker
             value={p.value as string | undefined}
@@ -351,13 +348,13 @@ export default function ReverseProxyEventsTable({
               setFilter("source_ip", trimmed ? trimmed : undefined);
             }}
             close={p.close}
-            placeholder={"e.g. 10.0.0.5 or Berlin"}
+            placeholder={t("proxyEvents.locationIpPlaceholder")}
           />
         ),
         formatChip: (v) => formatTextChip(v as string | undefined),
       },
     ],
-    [statusOptions, methodOptions, userOptions, setFilter],
+    [statusOptions, methodOptions, userOptions, setFilter, t],
   );
 
   const initialColumnFilters = useMemo<{ id: string; value: unknown }[]>(() => {
@@ -407,7 +404,7 @@ export default function ReverseProxyEventsTable({
       renderExpandedRow={(event) => (
         <ReverseProxyEventExpandedRow event={event} />
       )}
-      searchPlaceholder={"Search by IP, host, path, user..."}
+      searchPlaceholder={t("proxyEvents.searchPlaceholder")}
       getStartedCard={
         <GetStartedTest
           icon={
@@ -422,22 +419,7 @@ export default function ReverseProxyEventsTable({
               size={"large"}
             />
           }
-          title={"No Proxy Events Yet"}
-          description={
-            "No proxy traffic yet. Events appear here once your reverse proxy services start serving requests."
-          }
-          learnMore={
-            <>
-              Learn more about
-              <InlineLink
-                href={REVERSE_PROXY_EVENTS_DOCS_LINK}
-                target={"_blank"}
-              >
-                Proxy Events
-                <ExternalLinkIcon size={12} />
-              </InlineLink>
-            </>
-          }
+          title={t("proxyEvents.emptyTitle")}
         />
       }
     >

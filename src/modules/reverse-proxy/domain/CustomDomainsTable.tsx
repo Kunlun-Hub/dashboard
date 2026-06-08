@@ -129,18 +129,18 @@ export default function CustomDomainsTable({ headingTarget }: Readonly<Props>) {
 
   const statusOptions = useMemo<RadioOption<boolean | undefined>[]>(
     () => [
-      { value: undefined, label: "All", dotClass: "bg-nb-gray-500" },
-      { value: true, label: "Active", dotClass: "bg-green-500" },
-      { value: false, label: "Pending", dotClass: "bg-yellow-400" },
+      { value: undefined, label: t("common.all"), dotClass: "bg-nb-gray-500" },
+      { value: true, label: t("common.active"), dotClass: "bg-green-500" },
+      { value: false, label: t("reverseProxy.pending"), dotClass: "bg-yellow-400" },
     ],
-    [],
+    [t],
   );
 
   const filterDefs = useMemo<TableFilterDef[]>(
     () => [
       {
         id: "validated",
-        label: "Status",
+        label: t("common.status"),
         renderPicker: (p) => (
           <RadioPicker
             value={p.value as boolean | undefined}
@@ -153,7 +153,7 @@ export default function CustomDomainsTable({ headingTarget }: Readonly<Props>) {
           formatRadioChip(v as boolean | undefined, statusOptions),
       },
     ],
-    [statusOptions],
+    [statusOptions, t],
   );
 
   const addDomainButton = (className?: string) => {
@@ -220,7 +220,7 @@ export default function CustomDomainsTable({ headingTarget }: Readonly<Props>) {
         columns={columns}
         data={data}
         useRowId={true}
-        searchPlaceholder={"Search by domain..."}
+        searchPlaceholder={t("reverseProxy.customDomainsSearch")}
         aboveTable={(table) => (
           <TableFilterChips table={table} filters={filterDefs} />
         )}
@@ -240,7 +240,6 @@ export default function CustomDomainsTable({ headingTarget }: Readonly<Props>) {
               />
             }
             title={t("reverseProxy.customDomainsEmptyTitle")}
-            description={t("reverseProxy.customDomainsEmptyDescription")}
             button={addDomainButton()}
           />
         }

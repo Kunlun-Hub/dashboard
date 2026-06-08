@@ -96,7 +96,7 @@ export default function RouteActionCell({ route }: Props) {
             variant={"secondary"}
             className={"!px-3"}
             disabled={!permission.routes.update && !permission.routes.delete}
-            aria-label={"Route actions"}
+            aria-label={t("actions.routeActions")}
           >
             <MoreVertical size={16} className={"shrink-0"} />
           </Button>
@@ -108,7 +108,7 @@ export default function RouteActionCell({ route }: Props) {
           >
             <div className={"flex gap-3 items-center"}>
               <SquarePenIcon size={14} className={"shrink-0"} />
-              Edit
+              {t("actions.edit")}
             </div>
           </DropdownMenuItem>
           <DropdownMenuItem
@@ -120,7 +120,7 @@ export default function RouteActionCell({ route }: Props) {
           >
             <div className={"flex gap-3 items-center"}>
               <PowerIcon size={14} className={"shrink-0"} />
-              {route.enabled ? "Disable" : "Enable"}
+              {route.enabled ? t("common.disable") : t("common.enable")}
             </div>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
@@ -131,7 +131,7 @@ export default function RouteActionCell({ route }: Props) {
           >
             <div className={"flex gap-3 items-center"}>
               <Trash2 size={14} className={"shrink-0"} />
-              Delete
+              {t("actions.delete")}
             </div>
           </DropdownMenuItem>
         </DropdownMenuContent>

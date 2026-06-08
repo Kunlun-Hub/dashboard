@@ -2,6 +2,7 @@
 
 import Code from "@components/Code";
 import * as React from "react";
+import { useI18n } from "@/i18n/I18nProvider";
 import { ReverseProxyEvent } from "@/interfaces/ReverseProxy";
 
 type Props = {
@@ -43,13 +44,14 @@ function groupMetadata(entries: [string, string][]): Group[] {
 }
 
 function GroupBlock({ group }: { group: Group }) {
+  const { t } = useI18n();
   const json = JSON.stringify(
     Object.fromEntries(group.entries),
     null,
     2,
   );
   const heading =
-    group.label === "other" ? "Other metadata" : group.label;
+    group.label === "other" ? t("proxyEvents.otherMetadata") : group.label;
 
   return (
     <div className={"space-y-1.5"}>
@@ -72,6 +74,7 @@ function GroupBlock({ group }: { group: Group }) {
  * grouped JSON code blocks, surfaced via the management REST API.
  */
 export default function ReverseProxyEventExpandedRow({ event }: Props) {
+  const { t } = useI18n();
   const entries = Object.entries(event.metadata ?? {});
   if (entries.length === 0) {
     return (
@@ -80,7 +83,7 @@ export default function ReverseProxyEventExpandedRow({ event }: Props) {
           "px-4 py-4 text-sm text-neutral-500 italic border-t border-neutral-200 dark:text-nb-gray-400 dark:border-nb-gray-900"
         }
       >
-        No metadata recorded for this request.
+        {t("proxyEvents.noMetadata")}
       </div>
     );
   }

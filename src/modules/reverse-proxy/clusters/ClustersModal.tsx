@@ -13,7 +13,6 @@ import {
   ModalContent,
   ModalFooter,
 } from "@components/modal/Modal";
-import Paragraph from "@components/Paragraph";
 import ModalHeader from "@components/modal/ModalHeader";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@components/Tabs";
 import {
@@ -31,11 +30,11 @@ import { cn, validator } from "@utils/helpers";
 import { GRPC_API_ORIGIN, isNetBirdHosted } from "@/utils/netbird";
 import { SelectDropdown } from "@components/select/SelectDropdown";
 import {
-  REVERSE_PROXY_CLUSTERS_DOCS_LINK,
   REVERSE_PROXY_ENV_REFERENCE_DOCS_LINK,
   REVERSE_PROXY_SELFHOSTED_ROUTING_DOCS_LINK,
   ReverseProxyClusterToken,
 } from "@/interfaces/ReverseProxy";
+import { useI18n } from "@/i18n/I18nProvider";
 
 type Props = {
   open: boolean;
@@ -73,6 +72,7 @@ const renderHighlightedCommand = (command: string, highlights: string[]) => {
 };
 
 export const ClustersModal = ({ open, onOpenChange }: Props) => {
+  const { t } = useI18n();
   const { mutate } = useSWRConfig();
   const [tab, setTab] = useState("domain");
   const [domain, setDomain] = useState("");
@@ -92,7 +92,7 @@ export const ClustersModal = ({ open, onOpenChange }: Props) => {
       preventLeadingAndTrailingDots: true,
     });
     if (!isValid) {
-      return "Please enter a valid TLD domain, e.g., company.com";
+      return t("reverseProxy.customDomainError");
     }
     return "";
   }, [domain]);
@@ -204,15 +204,19 @@ spec:
       targetPort: 443`;
 
   const deployment = {
-    docker: { label: "Docker", title: "Run the Proxy with Docker", command: dockerCommand },
+    docker: {
+      label: "Docker",
+      title: t("reverseProxy.runProxyWithDocker"),
+      command: dockerCommand,
+    },
     compose: {
       label: "Docker Compose",
-      title: "Run the Proxy with Docker Compose",
+      title: t("reverseProxy.runProxyWithCompose"),
       command: composeCommand,
     },
     kubernetes: {
       label: "Kubernetes",
-      title: "Deploy the Proxy on Kubernetes",
+      title: t("reverseProxy.runProxyWithKubernetes"),
       command: kubernetesCommand,
     },
   }[deployMethod];
@@ -232,10 +236,10 @@ spec:
       });
 
     notify({
-      title: "Proxy Token",
-      description: "Failed to generate proxy token",
+      title: t("reverseProxy.proxyToken"),
+      description: t("reverseProxy.proxyTokenFailed"),
       promise,
-      loadingMessage: "Generating proxy token...",
+      loadingMessage: t("reverseProxy.proxyTokenGenerating"),
       showOnlyError: true,
       preventSuccessToast: true,
     });
@@ -257,8 +261,8 @@ spec:
       <ModalContent maxWidthClass={"relative max-w-[600px]"} showClose={true}>
         <ModalHeader
           icon={<ServerIcon size={16} />}
-          title={"Setup Cluster"}
-          description={"Setup a proxy cluster"}
+          title={t("reverseProxy.setupProxy")}
+          description={""}
           color={"netbird"}
         />
 
@@ -269,34 +273,32 @@ spec:
           <TabsList justify={"start"} className={"px-8"}>
             <TabsTrigger value={"domain"}>
               <GlobeIcon size={14} />
-              Domain
+              {t("reverseProxy.domain")}
             </TabsTrigger>
             <TabsTrigger
               value={"dns"}
               disabled={!domain.trim() || !!domainError}
             >
               <ListIcon size={14} />
-              DNS Records
+              {t("dns.records")}
             </TabsTrigger>
             <TabsTrigger
               value={"install"}
               disabled={!domain.trim() || !!domainError}
             >
               <SquareTerminalIcon size={14} />
-              Run the Proxy
+              {t("reverseProxy.runProxy")}
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value={"domain"} className={"pb-8"}>
             <div className={"px-8 flex flex-col gap-6"}>
               <div>
-                <Label>Domain</Label>
-                <HelpText>
-                  Enter a domain name that will be used for your cluster.
-                </HelpText>
+                <Label>{t("reverseProxy.domain")}</Label>
+                <HelpText>{t("reverseProxy.selfHostedDomainHelp")}</HelpText>
                 <Input
                   autoFocus={true}
-                  placeholder={"e.g., proxy.company.com"}
+                  placeholder={t("reverseProxy.selfHostedDomainPlaceholder")}
                   value={domain}
                   error={domainError}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -305,23 +307,22 @@ spec:
                 />
               </div>
               <Callout variant={"info"}>
-                In order to run the proxy, please make sure your machine meets
-                the following requirements:
+                {t("reverseProxy.selfHostedRequirements")}
                 <ul className={"list-disc pl-4 mt-2 flex flex-col gap-1"}>
                   <li>
                     <span className={"text-white font-medium"}>
-                      Publicly accessible IP address
+                      {t("reverseProxy.publiclyAccessibleIp")}
                     </span>
                   </li>
                   <li>
                     <span className={"text-white font-medium"}>Docker</span>{" "}
-                    installed and running
+                    {t("reverseProxy.dockerInstalled")}
                   </li>
                   <li>
                     <span className={"text-white font-medium"}>
-                      Port 80 and 443
+                      {t("reverseProxy.ports80And443")}
                     </span>{" "}
-                    open and not in use
+                    {t("reverseProxy.portsOpen")}
                   </li>
                 </ul>
               </Callout>
@@ -331,17 +332,14 @@ spec:
           <TabsContent value={"dns"} className={"pb-8"}>
             <div className={"px-8 flex flex-col"}>
               <div>
-                <Label>Configure DNS</Label>
-                <HelpText>
-                  Add the following DNS records pointing to your machine&apos;s
-                  public IP address.
-                </HelpText>
+                <Label>{t("reverseProxy.configureDns")}</Label>
+                <HelpText>{t("reverseProxy.configureDnsHelp")}</HelpText>
               </div>
               <CardTable>
                 <CardTable.Header>
-                  <CardTable.HeaderCell width={100}>Type</CardTable.HeaderCell>
-                  <CardTable.HeaderCell>Name</CardTable.HeaderCell>
-                  <CardTable.HeaderCell>Content</CardTable.HeaderCell>
+                  <CardTable.HeaderCell width={100}>{t("table.type")}</CardTable.HeaderCell>
+                  <CardTable.HeaderCell>{t("table.name")}</CardTable.HeaderCell>
+                  <CardTable.HeaderCell>{t("table.content")}</CardTable.HeaderCell>
                 </CardTable.Header>
                 <CardTable.Body>
                   <CardTable.Row>
@@ -350,7 +348,7 @@ spec:
                       {domain}
                     </CardTable.Cell>
                     <CardTable.Cell className={"italic"}>
-                      Your machine&apos;s IP
+                      {t("reverseProxy.yourMachineIp")}
                     </CardTable.Cell>
                   </CardTable.Row>
                   <CardTable.Row>
@@ -374,8 +372,8 @@ spec:
                   <Label>{deployment.title}</Label>
                   <HelpText className={"mb-0"}>
                     {deployMethod === "kubernetes"
-                      ? "Apply the following manifest to your cluster to start the proxy."
-                      : "Run the following on your machine to start the proxy."}
+                      ? t("reverseProxy.runProxyWithKubernetesHelp")
+                      : t("reverseProxy.runProxyWithDockerHelp")}
                   </HelpText>
                 </div>
                 <div className={"w-[180px] shrink-0"}>
@@ -393,15 +391,13 @@ spec:
 
               {!isNetBirdHosted() && (
                 <Callout variant={"warning"}>
-                  For self-hosted deployments, make sure the proxy service
-                  routes are configured on your NetBird management server before
-                  starting the proxy.&nbsp;
+                  {t("reverseProxy.selfHostedRoutingWarning")}
                   <InlineLink
                     href={REVERSE_PROXY_SELFHOSTED_ROUTING_DOCS_LINK}
                     target={"_blank"}
                     className={"block mt-1"}
                   >
-                     Required routing endpoints
+                    {t("reverseProxy.requiredRoutingEndpoints")}
                     <ExternalLinkIcon size={12} />
                   </InlineLink>
                 </Callout>
@@ -419,7 +415,7 @@ spec:
                 {isGeneratingToken && (
                   <div className="absolute inset-0 z-10 flex items-center justify-center gap-2 text-nb-gray-100 bg-nb-gray-950/90">
                     <Loader2 size={16} className="animate-spin" />
-                    Generating proxy token...
+                    {t("reverseProxy.proxyTokenGenerating")}
                   </div>
                 )}
 
@@ -431,12 +427,12 @@ spec:
               </Code>
 
               <HelpText className={"mb-0"}>
-                Need to fine-tune the proxy? See all available&nbsp;
+                {t("reverseProxy.envReferenceHelp")}{" "}
                 <InlineLink
                   href={REVERSE_PROXY_ENV_REFERENCE_DOCS_LINK}
                   target={"_blank"}
                 >
-                  environment variables
+                  {t("reverseProxy.environmentVariables")}
                   <ExternalLinkIcon size={12} />
                 </InlineLink>
               </HelpText>
@@ -445,50 +441,39 @@ spec:
         </Tabs>
 
         <ModalFooter className={"items-center"}>
-          <div className={"w-full"}>
-            <Paragraph className={"text-sm mt-auto"}>
-              Learn more about
-              <InlineLink
-                href={REVERSE_PROXY_CLUSTERS_DOCS_LINK}
-                target={"_blank"}
-              >
-                Proxy Cluster
-                <ExternalLinkIcon size={12} />
-              </InlineLink>
-            </Paragraph>
-          </div>
+          <div className={"w-full"} />
           <div className={"flex gap-3 w-full justify-end"}>
             {tab === "domain" && (
               <>
                 <ModalClose asChild={true}>
-                  <Button variant={"secondary"}>Cancel</Button>
+                  <Button variant={"secondary"}>{t("common.cancel")}</Button>
                 </ModalClose>
                 <Button
                   variant={"primary"}
                   onClick={() => setTab("dns")}
                   disabled={!domain.trim() || !!domainError}
                 >
-                  Continue
+                  {t("common.continue")}
                 </Button>
               </>
             )}
             {tab === "dns" && (
               <>
                 <Button variant={"secondary"} onClick={() => setTab("domain")}>
-                  Back
+                  {t("common.back")}
                 </Button>
                 <Button variant={"primary"} onClick={goToInstall}>
-                  Continue
+                  {t("common.continue")}
                 </Button>
               </>
             )}
             {tab === "install" && (
               <>
                 <Button variant={"secondary"} onClick={() => setTab("dns")}>
-                  Back
+                  {t("common.back")}
                 </Button>
                 <Button variant={"primary"} onClick={finishSetup}>
-                  Finish Setup
+                  {t("reverseProxy.finishSetup")}
                 </Button>
               </>
             )}

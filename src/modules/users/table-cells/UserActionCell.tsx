@@ -200,7 +200,7 @@ export default function UserActionCell({
           <Button
             variant={"secondary"}
             className={"!px-3"}
-            aria-label={"User actions"}
+            aria-label={t("actions.userActions")}
           >
             <MoreVertical size={16} className={"shrink-0"} />
           </Button>

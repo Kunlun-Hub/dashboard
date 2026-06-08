@@ -146,10 +146,10 @@ export default function NetworkRoutingPeerCell({ network }: Props) {
         className={"!px-3"}
         onClick={() => openAddRoutingPeerModal(network)}
         disabled={!permission.networks.update}
-        aria-label={"Add routing peer"}
+        aria-label={t("networkRouting.add")}
       >
         <PlusCircle size={12} />
-        Add
+        {t("actions.add")}
       </Button>
     </div>
   );

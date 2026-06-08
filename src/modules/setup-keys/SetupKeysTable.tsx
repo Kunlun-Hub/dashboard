@@ -45,11 +45,13 @@ import SetupKeyModal from "@/modules/setup-keys/SetupKeyModal";
 import SetupKeyNameCell from "@/modules/setup-keys/SetupKeyNameCell";
 import SetupKeyUsageCell from "@/modules/setup-keys/SetupKeyUsageCell";
 
-export const SetupKeysTableColumns: ColumnDef<SetupKey>[] = [
+export const createSetupKeysTableColumns = (
+  t: ReturnType<typeof useI18n>["t"],
+): ColumnDef<SetupKey>[] => [
   {
     accessorKey: "name",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Name & Key</DataTableHeader>;
+      return <DataTableHeader column={column}>{t("table.nameAndKey")}</DataTableHeader>;
     },
     sortingFn: "text",
     cell: ({ row }) => (
@@ -70,7 +72,7 @@ export const SetupKeysTableColumns: ColumnDef<SetupKey>[] = [
   {
     accessorKey: "usage_limit",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Usage</DataTableHeader>;
+      return <DataTableHeader column={column}>{t("table.usage")}</DataTableHeader>;
     },
     cell: ({ row }) => (
       <SetupKeyUsageCell
@@ -88,11 +90,11 @@ export const SetupKeysTableColumns: ColumnDef<SetupKey>[] = [
   {
     accessorKey: "last_used",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Last used</DataTableHeader>;
+      return <DataTableHeader column={column}>{t("table.lastUsed")}</DataTableHeader>;
     },
     sortingFn: "datetime",
     cell: ({ row }) => (
-      <LastTimeRow date={row.original.last_used} text={"Last used on"} />
+      <LastTimeRow date={row.original.last_used} text={t("setupKeys.lastUsedOn")} />
     ),
   },
   {
@@ -109,7 +111,7 @@ export const SetupKeysTableColumns: ColumnDef<SetupKey>[] = [
     accessorFn: (item) => item.auto_groups?.length,
     id: "groups",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Groups</DataTableHeader>;
+      return <DataTableHeader column={column}>{t("table.groups")}</DataTableHeader>;
     },
     cell: ({ row }) => <SetupKeyGroupsCell setupKey={row.original} />,
   },
@@ -117,7 +119,7 @@ export const SetupKeysTableColumns: ColumnDef<SetupKey>[] = [
   {
     accessorKey: "expires",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Expires</DataTableHeader>;
+      return <DataTableHeader column={column}>{t("table.expires")}</DataTableHeader>;
     },
     cell: ({ row }) => {
       let expires = dayjs(row.original.expires);
@@ -157,6 +159,7 @@ export default function SetupKeysTable({
   const path = usePathname();
   const { permission } = usePermissions();
   const { t } = useI18n();
+  const columns = useMemo(() => createSetupKeysTableColumns(t), [t]);
 
   const [sorting, setSorting] = useLocalStorage<SortingState>(
     "netbird-table-sort" + path,
@@ -195,27 +198,27 @@ export default function SetupKeysTable({
   // re-route it through the consolidated filter UI.
   const statusOptions = useMemo<RadioOption<boolean | undefined>[]>(
     () => [
-      { value: undefined, label: "All", dotClass: "bg-nb-gray-500" },
-      { value: true, label: "Valid", dotClass: "bg-green-500" },
-      { value: false, label: "Expired", dotClass: "bg-nb-gray-700" },
+      { value: undefined, label: t("filters.all"), dotClass: "bg-nb-gray-500" },
+      { value: true, label: t("filters.valid"), dotClass: "bg-green-500" },
+      { value: false, label: t("filters.expired"), dotClass: "bg-nb-gray-700" },
     ],
-    [],
+    [t],
   );
 
   const usageOptions = useMemo<RadioOption<string | undefined>[]>(
     () => [
-      { value: undefined, label: "All" },
-      { value: "one-off", label: "One-off" },
-      { value: "reusable", label: "Reusable" },
+      { value: undefined, label: t("filters.all") },
+      { value: "one-off", label: t("setupKeys.oneOff") },
+      { value: "reusable", label: t("setupKeys.reusable") },
     ],
-    [],
+    [t],
   );
 
   const filterDefs = useMemo<TableFilterDef[]>(
     () => [
       {
         id: "valid",
-        label: "Status",
+        label: t("common.status"),
         renderPicker: (p) => (
           <RadioPicker
             value={p.value as boolean | undefined}
@@ -229,7 +232,7 @@ export default function SetupKeysTable({
       },
       {
         id: "type",
-        label: "Usage",
+        label: t("table.usage"),
         renderPicker: (p) => (
           <RadioPicker
             value={p.value as string | undefined}
@@ -243,7 +246,7 @@ export default function SetupKeysTable({
       },
       {
         id: "group_names",
-        label: "Groups",
+        label: t("table.groups"),
         renderPicker: (p) => (
           <GroupsPicker
             value={p.value as string[] | undefined}
@@ -252,10 +255,10 @@ export default function SetupKeysTable({
             groups={tableGroups}
           />
         ),
-        formatChip: (v) => formatGroupsChip(v as string[] | undefined),
+        formatChip: (v) => formatGroupsChip(v as string[] | undefined, t),
       },
     ],
-    [statusOptions, usageOptions, tableGroups],
+    [statusOptions, usageOptions, tableGroups, t],
   );
 
   return (
@@ -276,7 +279,7 @@ export default function SetupKeysTable({
         setSorting={setSorting}
         initialPageSize={25}
         showResetFilterButton={false}
-        columns={SetupKeysTableColumns}
+        columns={columns}
         data={setupKeys}
         searchPlaceholder={t("setupKeys.searchPlaceholder")}
         columnVisibility={{
@@ -308,7 +311,7 @@ export default function SetupKeysTable({
                 disabled={!permission.setup_keys.create}
               >
                 <PlusCircle size={16} />
-                Create Key
+                {t("setupKeys.createTitle")}
               </Button>
             </NoResults>
           ) : (
@@ -335,7 +338,7 @@ export default function SetupKeysTable({
                   disabled={!permission.setup_keys.create}
                 >
                   <PlusCircle size={16} />
-                  Create Key
+                  {t("setupKeys.createTitle")}
                 </Button>
               }
             />
@@ -351,7 +354,7 @@ export default function SetupKeysTable({
                 disabled={!permission.setup_keys.create}
               >
                 <PlusCircle size={16} />
-                Create Key
+                {t("setupKeys.createTitle")}
               </Button>
             )}
           </>

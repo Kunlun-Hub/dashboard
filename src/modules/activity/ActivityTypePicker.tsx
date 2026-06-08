@@ -9,6 +9,7 @@ import { trim, uniqBy } from "lodash";
 import { SearchIcon } from "lucide-react";
 import * as React from "react";
 import { useMemo, useRef } from "react";
+import { useI18n } from "@/i18n/I18nProvider";
 import { ActivityEvent } from "@/interfaces/ActivityEvent";
 import ActivityTypeIcon from "@/modules/activity/ActivityTypeIcon";
 
@@ -34,6 +35,7 @@ export function ActivityTypePicker({
   onChange,
   events,
 }: Readonly<Props>) {
+  const { t } = useI18n();
   const searchRef = useRef<HTMLInputElement>(null);
   const selected = value ?? [];
 
@@ -76,15 +78,15 @@ export function ActivityTypePicker({
           <CommandInput
             className={cn(
               "min-h-[38px] w-full relative bg-transparent text-sm",
-              "border-b border-nb-gray-900 outline-none",
+              "border-b border-neutral-200 dark:border-nb-gray-900 outline-none",
               "dark:placeholder:text-nb-gray-400 font-light placeholder:text-neutral-500 pl-9",
             )}
             ref={searchRef}
-            placeholder={"Search event..."}
+            placeholder={t("activity.searchPlaceholder")}
           />
           <div
             className={
-              "absolute left-0 top-0 h-full flex items-center pl-3 text-nb-gray-400"
+              "absolute left-0 top-0 h-full flex items-center pl-3 text-neutral-500 dark:text-nb-gray-400"
             }
           >
             <SearchIcon size={13} />
@@ -101,7 +103,7 @@ export function ActivityTypePicker({
               <div className={"mb-2"}>
                 <p
                   className={
-                    "!text-nb-gray-400 text-xs uppercase font-medium tracking-wider pb-1 pl-2"
+                    "!text-neutral-500 dark:!text-nb-gray-400 text-xs uppercase font-medium tracking-wider pb-1 pl-2"
                   }
                 >
                   {group}
@@ -122,7 +124,7 @@ export function ActivityTypePicker({
                       >
                         <div
                           className={
-                            "text-nb-gray-300 font-medium flex items-center gap-2 py-0.5 px-1 w-full"
+                            "text-neutral-700 dark:text-nb-gray-300 font-medium flex items-center gap-2 py-0.5 px-1 w-full"
                           }
                         >
                           <Checkbox checked={isSelected} />

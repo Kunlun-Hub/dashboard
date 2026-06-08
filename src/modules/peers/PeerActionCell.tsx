@@ -52,16 +52,16 @@ export default function PeerActionCell() {
 
   const approvePeer = async () => {
     const choice = await confirm({
-      title: `Approve peer '${peer.name}'?`,
-      description: "Are you sure you want to approve this peer?",
-      confirmText: "Approve",
-      cancelText: "Cancel",
+      title: t("peerActionCell.approveTitle", { name: peer.name }),
+      description: t("peerActionCell.approveDescription"),
+      confirmText: t("peerActionCell.approve"),
+      cancelText: t("common.cancel"),
       type: "default",
     });
     if (!choice) return;
     notify({
-      title: `Peer ${peer.name} approved`,
-      description: `This peer was approved and can now connect to other peers.`,
+      title: t("peerActionCell.approvedTitle", { name: peer.name }),
+      description: t("peerActionCell.approvedDescription"),
       promise: update({
         name: peer.name,
         ssh: peer.ssh_enabled,
@@ -71,7 +71,7 @@ export default function PeerActionCell() {
         mutate("/peers");
         mutate("/groups");
       }),
-      loadingMessage: "Approving peer...",
+      loadingMessage: t("peerActionCell.approving"),
     });
   };
 
@@ -128,7 +128,7 @@ export default function PeerActionCell() {
         </div>
       ),
       confirmText: "Disable",
-      cancelText: "Cancel",
+      cancelText: t("common.cancel"),
       type: "warning",
       maxWidthClass: "max-w-xl",
     });

@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import * as React from "react";
 import { useState } from "react";
+import { useI18n } from "@/i18n/I18nProvider";
 
 // A TableFilterDef wires one TanStack column to the consolidated filter UI.
 // Each filter renders its own picker — the framework just provides the
@@ -44,6 +45,7 @@ export function TableFiltersButton<TData>({
   filters,
   disabled,
 }: ButtonProps<TData>) {
+  const { t } = useI18n();
   const [open, setOpen] = useState(false);
   const [activeFilterId, setActiveFilterId] = useState<string | null>(null);
 
@@ -66,7 +68,7 @@ export function TableFiltersButton<TData>({
         <Button variant={"secondary"} disabled={disabled}>
           <FilterIcon size={16} className={"shrink-0"} />
           <span className={"flex items-center gap-1.5"}>
-            Filters
+            {t("dataTable.filters")}
             {activeCount > 0 && (
               <span
                 className={
@@ -81,7 +83,9 @@ export function TableFiltersButton<TData>({
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className={"w-[280px] p-0 shadow-sm shadow-nb-gray-950"}
+        className={
+          "w-[280px] p-0 shadow-sm shadow-neutral-200 dark:shadow-nb-gray-950"
+        }
         align={"start"}
         sideOffset={7}
       >
@@ -89,19 +93,19 @@ export function TableFiltersButton<TData>({
           <div className={"flex flex-col"}>
             <div
               className={
-                "flex items-center gap-2 px-3 py-2 border-b border-nb-gray-900"
+                "flex items-center gap-2 px-3 py-2 border-b border-neutral-200 dark:border-nb-gray-900"
               }
             >
               <button
-                aria-label={"Back"}
+                aria-label={t("common.back")}
                 className={
-                  "flex items-center justify-center w-7 h-7 -ml-1 shrink-0 text-nb-gray-400 hover:text-white hover:bg-nb-gray-900 rounded transition-colors"
+                  "flex items-center justify-center w-7 h-7 -ml-1 shrink-0 text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100 dark:text-nb-gray-400 dark:hover:text-white dark:hover:bg-nb-gray-900 rounded transition-colors"
                 }
                 onClick={() => setActiveFilterId(null)}
               >
                 <ChevronLeftIcon size={16} />
               </button>
-              <span className={"text-sm font-medium text-nb-gray-100"}>
+              <span className={"text-sm font-medium text-neutral-900 dark:text-nb-gray-100"}>
                 {activeFilter.label}
               </span>
             </div>
@@ -128,7 +132,7 @@ export function TableFiltersButton<TData>({
                 <button
                   key={f.id}
                   className={
-                    "w-full text-left px-2 py-1.5 rounded hover:bg-nb-gray-900 transition-colors text-sm flex items-center gap-2.5 text-nb-gray-200"
+                    "w-full text-left px-2 py-1.5 rounded hover:bg-neutral-100 dark:hover:bg-nb-gray-900 transition-colors text-sm flex items-center gap-2.5 text-neutral-700 dark:text-nb-gray-200"
                   }
                   onClick={() => setActiveFilterId(f.id)}
                 >
@@ -136,7 +140,7 @@ export function TableFiltersButton<TData>({
                   {chip && (
                     <span
                       className={
-                        "text-xs text-nb-gray-400 truncate max-w-[110px]"
+                        "text-xs text-neutral-500 dark:text-nb-gray-400 truncate max-w-[110px]"
                       }
                     >
                       {chip}
@@ -144,7 +148,7 @@ export function TableFiltersButton<TData>({
                   )}
                   <ChevronRightIcon
                     size={14}
-                    className={"shrink-0 text-nb-gray-400"}
+                    className={"shrink-0 text-neutral-400 dark:text-nb-gray-400"}
                   />
                 </button>
               );
@@ -199,34 +203,35 @@ type FilterChipProps<TData> = {
 };
 
 function FilterChip<TData>({ def, text, table }: FilterChipProps<TData>) {
+  const { t } = useI18n();
   const [open, setOpen] = useState(false);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <div
         className={cn(
-          "flex items-stretch h-8 rounded-md border border-nb-gray-900",
-          "bg-nb-gray-930/40 text-sm text-nb-gray-200 overflow-hidden",
-          "hover:border-nb-gray-700 transition-colors",
+          "flex items-stretch h-8 rounded-md border border-neutral-200 dark:border-nb-gray-900",
+          "bg-white dark:bg-nb-gray-930/40 text-sm text-neutral-700 dark:text-nb-gray-200 overflow-hidden",
+          "hover:border-neutral-300 dark:hover:border-nb-gray-700 transition-colors",
         )}
       >
         <PopoverTrigger asChild>
           <button
             className={cn(
               "flex items-center gap-2 px-3",
-              "hover:bg-nb-gray-900 transition-colors",
+              "hover:bg-neutral-50 dark:hover:bg-nb-gray-900 transition-colors",
             )}
           >
-            <span className={"text-nb-gray-400"}>{def.label}:</span>
+            <span className={"text-neutral-500 dark:text-nb-gray-400"}>{def.label}:</span>
             <span className={"font-medium"}>{text}</span>
           </button>
         </PopoverTrigger>
         <button
-          aria-label={`Remove ${def.label} filter`}
+          aria-label={t("dataTable.removeFilter", { label: def.label })}
           className={cn(
             "flex items-center justify-center px-2",
-            "border-l border-nb-gray-900",
-            "text-nb-gray-400 hover:bg-nb-gray-900 hover:text-white transition-colors",
+            "border-l border-neutral-200 dark:border-nb-gray-900",
+            "text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900 dark:text-nb-gray-400 dark:hover:bg-nb-gray-900 dark:hover:text-white transition-colors",
           )}
           onClick={(e) => {
             e.stopPropagation();
@@ -238,17 +243,19 @@ function FilterChip<TData>({ def, text, table }: FilterChipProps<TData>) {
         </button>
       </div>
       <PopoverContent
-        className={"w-[280px] p-0 shadow-sm shadow-nb-gray-950"}
+        className={
+          "w-[280px] p-0 shadow-sm shadow-neutral-200 dark:shadow-nb-gray-950"
+        }
         align={"start"}
         sideOffset={6}
       >
         <div className={"flex flex-col"}>
           <div
             className={
-              "flex items-center gap-2 px-3 py-2 border-b border-nb-gray-900"
+              "flex items-center gap-2 px-3 py-2 border-b border-neutral-200 dark:border-nb-gray-900"
             }
           >
-            <span className={"text-sm font-medium text-nb-gray-100"}>
+            <span className={"text-sm font-medium text-neutral-900 dark:text-nb-gray-100"}>
               {def.label}
             </span>
           </div>

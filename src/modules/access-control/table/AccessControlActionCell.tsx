@@ -69,7 +69,7 @@ export default function AccessControlActionCell({ policy }: Readonly<Props>) {
           <Button
             variant={"secondary"}
             className={"!px-3"}
-            aria-label={"Policy actions"}
+            aria-label={t("actions.policyActions")}
           >
             <MoreVertical size={16} className={"shrink-0"} />
           </Button>
@@ -84,7 +84,7 @@ export default function AccessControlActionCell({ policy }: Readonly<Props>) {
           >
             <div className={"flex gap-3 items-center"}>
               <PowerIcon size={14} className={"shrink-0"} />
-              {policy.enabled ? "Disable" : "Enable"}
+              {policy.enabled ? t("common.disable") : t("common.enable")}
             </div>
           </DropdownMenuItem>
           <DropdownMenuSeparator />

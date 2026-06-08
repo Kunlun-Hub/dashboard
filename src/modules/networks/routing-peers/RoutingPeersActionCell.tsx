@@ -40,9 +40,11 @@ export const RoutingPeersActionCell = ({ router }: Props) => {
   const toggleEnabled = async () => {
     const nextEnabled = !router.enabled;
     notify({
-      title: "Network Routing Peer",
-      description: `Routing peer is now ${nextEnabled ? "enabled" : "disabled"}`,
-      loadingMessage: "Updating routing peer...",
+      title: t("networkRouting.peer"),
+      description: t("networkRouting.toggleDescription", {
+        status: nextEnabled ? t("filters.enabled") : t("common.disabled"),
+      }),
+      loadingMessage: t("networkRouting.updating"),
       duration: 1200,
       promise: update({
         ...router,
@@ -70,7 +72,7 @@ export const RoutingPeersActionCell = ({ router }: Props) => {
             disabled={
               !permission.networks.update && !permission.networks.delete
             }
-            aria-label={"Routing peer actions"}
+            aria-label={t("networkRouting.actions")}
           >
             <MoreVertical size={16} className={"shrink-0"} />
           </Button>
@@ -97,7 +99,7 @@ export const RoutingPeersActionCell = ({ router }: Props) => {
           >
             <div className={"flex gap-3 items-center"}>
               <PowerIcon size={14} className={"shrink-0"} />
-              {router.enabled ? "Disable" : "Enable"}
+              {router.enabled ? t("common.disabled") : t("common.enable")}
             </div>
           </DropdownMenuItem>
           <DropdownMenuSeparator />

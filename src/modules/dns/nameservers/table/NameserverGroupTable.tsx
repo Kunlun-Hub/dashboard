@@ -44,11 +44,13 @@ import NameserverMatchDomainsCell from "@/modules/dns/nameservers/table/Nameserv
 import NameserverNameCell from "@/modules/dns/nameservers/table/NameserverNameCell";
 import NameserverNameserversCell from "@/modules/dns/nameservers/table/NameserverNameserversCell";
 
-export const NameserverGroupTableColumns: ColumnDef<NameserverGroup>[] = [
+export const createNameserverGroupTableColumns = (
+  t: ReturnType<typeof useI18n>["t"],
+): ColumnDef<NameserverGroup>[] => [
   {
     accessorKey: "name",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Name</DataTableHeader>;
+      return <DataTableHeader column={column}>{t("table.name")}</DataTableHeader>;
     },
     sortingFn: "text",
     cell: ({ row }) => <NameserverNameCell ns={row.original} />,
@@ -69,7 +71,7 @@ export const NameserverGroupTableColumns: ColumnDef<NameserverGroup>[] = [
     accessorKey: "enabled",
     sortingFn: "basic",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Active</DataTableHeader>;
+      return <DataTableHeader column={column}>{t("common.active")}</DataTableHeader>;
     },
     cell: ({ row }) => <NameserverActiveCell ns={row.original} />,
   },
@@ -77,7 +79,7 @@ export const NameserverGroupTableColumns: ColumnDef<NameserverGroup>[] = [
     accessorFn: (row) => row.domains?.length || 0,
     id: "domains",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Match Domains</DataTableHeader>;
+      return <DataTableHeader column={column}>{t("nameservers.matchDomains")}</DataTableHeader>;
     },
     cell: ({ row }) => <NameserverMatchDomainsCell ns={row.original} />,
   },
@@ -85,7 +87,7 @@ export const NameserverGroupTableColumns: ColumnDef<NameserverGroup>[] = [
     accessorFn: (row) => row.nameservers?.length || 0,
     id: "nameservers",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Nameservers</DataTableHeader>;
+      return <DataTableHeader column={column}>{t("nameservers.nameservers")}</DataTableHeader>;
     },
     cell: ({ row }) => <NameserverNameserversCell ns={row.original} />,
   },
@@ -93,7 +95,7 @@ export const NameserverGroupTableColumns: ColumnDef<NameserverGroup>[] = [
     accessorFn: (row) => row.groups?.length || 0,
     id: "groups",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Groups</DataTableHeader>;
+      return <DataTableHeader column={column}>{t("table.groups")}</DataTableHeader>;
     },
     cell: ({ row }) => <NameserverDistributionGroupsCell ns={row.original} />,
   },
@@ -131,6 +133,7 @@ export default function NameserverGroupTable({
   const { permission } = usePermissions();
   const { t } = useI18n();
   const { groups } = useGroups();
+  const columns = useMemo(() => createNameserverGroupTableColumns(t), [t]);
 
   const nameserverGroupsWithNames = useMemo(() => {
     if (!nameserverGroups) return [];
@@ -169,18 +172,18 @@ export default function NameserverGroupTable({
 
   const statusOptions = useMemo<RadioOption<boolean | undefined>[]>(
     () => [
-      { value: undefined, label: "All", dotClass: "bg-nb-gray-500" },
-      { value: true, label: "Active", dotClass: "bg-green-500" },
-      { value: false, label: "Inactive", dotClass: "bg-nb-gray-700" },
+      { value: undefined, label: t("filters.all"), dotClass: "bg-nb-gray-500" },
+      { value: true, label: t("common.active"), dotClass: "bg-green-500" },
+      { value: false, label: t("reverseProxy.inactive"), dotClass: "bg-nb-gray-700" },
     ],
-    [],
+    [t],
   );
 
   const filterDefs = useMemo<TableFilterDef[]>(
     () => [
       {
         id: "enabled",
-        label: "Status",
+        label: t("common.status"),
         renderPicker: (p) => (
           <RadioPicker
             value={p.value as boolean | undefined}
@@ -194,7 +197,7 @@ export default function NameserverGroupTable({
       },
       {
         id: "group_names_filter",
-        label: "Groups",
+        label: t("table.groups"),
         renderPicker: (p) => (
           <GroupsPicker
             value={p.value as string[] | undefined}
@@ -203,10 +206,10 @@ export default function NameserverGroupTable({
             groups={tableGroups}
           />
         ),
-        formatChip: (v) => formatGroupsChip(v as string[] | undefined),
+        formatChip: (v) => formatGroupsChip(v as string[] | undefined, t),
       },
     ],
-    [statusOptions, tableGroups],
+    [statusOptions, tableGroups, t],
   );
 
   return (
@@ -249,9 +252,9 @@ export default function NameserverGroupTable({
           setEditModal(true);
           setCurrentCellClicked(cell);
         }}
-        columns={NameserverGroupTableColumns}
+        columns={columns}
         data={nameserverGroupsWithNames}
-        searchPlaceholder={"Search by name, domains or nameservers..."}
+        searchPlaceholder={t("nameservers.searchPlaceholder")}
         getStartedCard={
           isGroupPage ? (
             <NoResults

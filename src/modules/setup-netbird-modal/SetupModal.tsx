@@ -451,6 +451,7 @@ function SetupKeyGenerator({
   generatedKey,
   onGenerated,
 }: SetupKeyGeneratorProps) {
+  const { t } = useI18n();
   const setupKeyRequest = useApiCall<SetupKey>("/setup-keys", true);
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -477,9 +478,9 @@ function SetupKeyGenerator({
       .finally(() => setIsGenerating(false));
 
     notify({
-      title: "Setup Key Created",
-      description: "A one-off setup key was generated for this install.",
-      loadingMessage: "Generating setup key...",
+      title: t("onboarding.setupKeyCreated"),
+      description: t("setupModal.setupKeyGeneratedDescription"),
+      loadingMessage: t("onboarding.generatingSetupKey"),
       promise: request,
     });
   };
@@ -489,8 +490,8 @@ function SetupKeyGenerator({
     try {
       await navigator.clipboard.writeText(generatedKey.key);
       notify({
-        title: "Setup Key Copied",
-        description: "Successfully copied to clipboard.",
+        title: t("onboarding.setupKeyCopied"),
+        description: t("onboarding.copiedToClipboard"),
       });
     } catch {}
   };
@@ -508,7 +509,7 @@ function SetupKeyGenerator({
           ) : (
             <KeyRoundIcon size={14} />
           )}
-          Generate Key
+          {t("onboarding.generateSetupKey")}
         </Button>
       </div>
     );
@@ -527,7 +528,7 @@ function SetupKeyGenerator({
           }
         >
           <KeyRoundIcon size={12} />
-          Setup Key
+          {t("onboarding.setupKey")}
         </div>
         <div
           className={"text-nb-gray-300 text-[0.8rem] text-left mt-0.5 truncate"}

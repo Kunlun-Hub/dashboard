@@ -1,17 +1,16 @@
 import Breadcrumbs from "@components/Breadcrumbs";
-import InlineLink from "@components/InlineLink";
-import Paragraph from "@components/Paragraph";
 import SkeletonTable from "@components/skeletons/SkeletonTable";
 import { RestrictedAccess } from "@components/ui/RestrictedAccess";
 import * as Tabs from "@radix-ui/react-tabs";
 import useFetchApi from "@utils/api";
-import { ExternalLinkIcon, KeyRound } from "lucide-react";
+import { KeyRound } from "lucide-react";
 import React, { lazy, Suspense, useMemo } from "react";
 import SettingsIcon from "@/assets/icons/SettingsIcon";
 import { useGroups } from "@/contexts/GroupsProvider";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import { Group } from "@/interfaces/Group";
 import { SetupKey } from "@/interfaces/SetupKey";
+import { useI18n } from "@/i18n/I18nProvider";
 
 const SetupKeysTable = lazy(
   () => import("@/modules/setup-keys/SetupKeysTable"),
@@ -21,6 +20,7 @@ export default function SetupKeysTab() {
   const { data: setupKeys, isLoading } = useFetchApi<SetupKey[]>("/setup-keys");
   const { permission } = usePermissions();
   const { groups } = useGroups();
+  const { t } = useI18n();
 
   const setupKeysWithGroups = useMemo(() => {
     if (!setupKeys) return [];
@@ -42,33 +42,20 @@ export default function SetupKeysTab() {
         <Breadcrumbs>
           <Breadcrumbs.Item
             href={"/settings"}
-            label={"Settings"}
+            label={t("settings.title")}
             icon={<SettingsIcon size={13} />}
           />
           <Breadcrumbs.Item
             href={"/settings?tab=setup-keys"}
-            label={"Setup Keys"}
+            label={t("setupKeys.title")}
             icon={<KeyRound size={14} />}
             active
           />
         </Breadcrumbs>
-        <h1>Setup Keys</h1>
-        <Paragraph>
-          Setup keys are pre-authentication keys that allow to register new
-          machines in your network.{" "}
-          <InlineLink
-            href={
-              "https://docs.netbird.io/how-to/register-machines-using-setup-keys"
-            }
-            target={"_blank"}
-          >
-            Learn more
-            <ExternalLinkIcon size={12} />
-          </InlineLink>
-        </Paragraph>
+        <h1>{t("setupKeys.title")}</h1>
       </div>
       <RestrictedAccess
-        page={"Setup Keys"}
+        page={t("setupKeys.title")}
         hasAccess={permission.setup_keys.read}
       >
         <Suspense fallback={<SkeletonTable />}>

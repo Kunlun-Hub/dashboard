@@ -44,11 +44,13 @@ import { DNSZonesNameCell } from "@/modules/dns/zones/table/DNSZonesNameCell";
 import { DNSZonesRecordsCell } from "@/modules/dns/zones/table/DNSZonesRecordsCell";
 import { DNSZonesSearchDomainCell } from "@/modules/dns/zones/table/DNSZonesSearchDomainCell";
 
-export const DNSZonesColumns: ColumnDef<DNSZone>[] = [
+export const createDNSZonesColumns = (
+  t: ReturnType<typeof useI18n>["t"],
+): ColumnDef<DNSZone>[] => [
   {
     accessorKey: "domain",
     header: ({ column }) => (
-      <DataTableHeader column={column}>Zone</DataTableHeader>
+      <DataTableHeader column={column}>{t("zones.zone")}</DataTableHeader>
     ),
     sortingFn: "text",
     cell: ({ row }) => <DNSZonesNameCell zone={row.original} />,
@@ -56,14 +58,14 @@ export const DNSZonesColumns: ColumnDef<DNSZone>[] = [
   {
     accessorKey: "enabled",
     header: ({ column }) => (
-      <DataTableHeader column={column}>Active</DataTableHeader>
+      <DataTableHeader column={column}>{t("common.active")}</DataTableHeader>
     ),
     cell: ({ row }) => <DNSZonesActiveCell zone={row.original} />,
   },
   {
     accessorKey: "records",
     header: ({ column }) => (
-      <DataTableHeader column={column}>Records</DataTableHeader>
+      <DataTableHeader column={column}>{t("zones.records")}</DataTableHeader>
     ),
     sortingFn: "text",
     cell: ({ row }) => <DNSZonesRecordsCell zone={row.original} />,
@@ -71,7 +73,7 @@ export const DNSZonesColumns: ColumnDef<DNSZone>[] = [
   {
     accessorKey: "distribution_groups",
     header: ({ column }) => (
-      <DataTableHeader column={column}>Groups</DataTableHeader>
+      <DataTableHeader column={column}>{t("table.groups")}</DataTableHeader>
     ),
     cell: ({ row }) => <DNSZonesGroupCell zone={row.original} />,
   },
@@ -84,7 +86,7 @@ export const DNSZonesColumns: ColumnDef<DNSZone>[] = [
   {
     accessorKey: "enable_search_domain",
     header: ({ column }) => (
-      <DataTableHeader column={column}>Search Domain</DataTableHeader>
+      <DataTableHeader column={column}>{t("zones.searchDomain")}</DataTableHeader>
     ),
     cell: ({ row }) => <DNSZonesSearchDomainCell zone={row.original} />,
   },
@@ -127,7 +129,7 @@ export default function DNSZonesTable({
   const path = usePathname();
   const { groups } = useGroups();
   const { t } = useI18n();
-  const columns = DNSZonesColumns;
+  const columns = useMemo(() => createDNSZonesColumns(t), [t]);
 
   const [sorting, setSorting] = useLocalStorage<SortingState>(
     "netbird-table-sort" + path,
@@ -171,18 +173,18 @@ export default function DNSZonesTable({
 
   const statusOptions = useMemo<RadioOption<boolean | undefined>[]>(
     () => [
-      { value: undefined, label: "All", dotClass: "bg-nb-gray-500" },
-      { value: true, label: "Active", dotClass: "bg-green-500" },
-      { value: false, label: "Inactive", dotClass: "bg-nb-gray-700" },
+      { value: undefined, label: t("filters.all"), dotClass: "bg-nb-gray-500" },
+      { value: true, label: t("common.active"), dotClass: "bg-green-500" },
+      { value: false, label: t("reverseProxy.inactive"), dotClass: "bg-nb-gray-700" },
     ],
-    [],
+    [t],
   );
 
   const filterDefs = useMemo<TableFilterDef[]>(
     () => [
       {
         id: "enabled",
-        label: "Status",
+        label: t("common.status"),
         renderPicker: (p) => (
           <RadioPicker
             value={p.value as boolean | undefined}
@@ -196,7 +198,7 @@ export default function DNSZonesTable({
       },
       {
         id: "group_names_filter",
-        label: "Groups",
+        label: t("table.groups"),
         renderPicker: (p) => (
           <GroupsPicker
             value={p.value as string[] | undefined}
@@ -205,10 +207,10 @@ export default function DNSZonesTable({
             groups={tableGroups}
           />
         ),
-        formatChip: (v) => formatGroupsChip(v as string[] | undefined),
+        formatChip: (v) => formatGroupsChip(v as string[] | undefined, t),
       },
     ],
-    [statusOptions, tableGroups],
+    [statusOptions, tableGroups, t],
   );
 
   return (
@@ -230,7 +232,7 @@ export default function DNSZonesTable({
       keepStateInLocalStorage={!isGroupPage}
       initialPageSize={25}
       showResetFilterButton={false}
-      searchPlaceholder={"Search by domain, ip, content or group..."}
+      searchPlaceholder={t("zones.searchPlaceholder")}
       aboveTable={(table) => (
         <TableFilterChips table={table} filters={filterDefs} />
       )}

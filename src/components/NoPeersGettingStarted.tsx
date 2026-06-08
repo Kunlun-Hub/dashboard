@@ -1,5 +1,3 @@
-import { ExternalLinkIcon } from "lucide-react";
-import InlineLink from "@components/InlineLink";
 import SquareIcon from "@components/SquareIcon";
 import AddPeerButton from "@components/ui/AddPeerButton";
 import GetStartedTest from "@components/ui/GetStartedTest";
@@ -21,6 +19,20 @@ export const NoPeersGettingStarted = ({
   showBackground = true,
   isUserDevice,
 }: Readonly<Props>) => {
+  const { t } = useI18n();
+  const title =
+    isUserDevice === false
+      ? t("peers.serversBlockedTitle")
+      : isUserDevice
+        ? t("peers.userDevicesBlockedTitle")
+        : t("peers.blockedTitle");
+  const description =
+    isUserDevice === false
+      ? t("peers.serversBlockedDescription")
+      : isUserDevice
+        ? t("peers.userDevicesBlockedDescription")
+        : t("peers.blockedDescription");
+
   return (
     <GetStartedTest
       showBackground={showBackground}
@@ -36,24 +48,9 @@ export const NoPeersGettingStarted = ({
           size={"large"}
         />
       }
-      title={"Get Started with NetBird"}
-      description={
-        "It looks like you don't have any connected machines.\n" +
-        "Get started by adding one to your network."
-      }
+      title={title}
+      description={description}
       button={<AddPeerButton isUserDevice={isUserDevice} />}
-      learnMore={
-        <>
-          Learn more in our{" "}
-          <InlineLink
-            href={"https://docs.netbird.io/how-to/getting-started"}
-            target={"_blank"}
-          >
-            Getting Started Guide
-            <ExternalLinkIcon size={12} />
-          </InlineLink>
-        </>
-      }
     />
   );
 };

@@ -94,7 +94,7 @@ const getNetworkResourceColumns = (
       return groups.map((group) => group.name).join(", ");
     },
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Groups</DataTableHeader>;
+      return <DataTableHeader column={column}>{t("table.groups")}</DataTableHeader>;
     },
     cell: ({ row }) => {
       return <ResourceGroupCell resource={row.original} />;
@@ -193,27 +193,27 @@ export default function ResourcesTable({
 
   const statusOptions = useMemo<RadioOption<boolean | undefined>[]>(
     () => [
-      { value: undefined, label: "All", dotClass: "bg-nb-gray-500" },
-      { value: true, label: "Active", dotClass: "bg-green-500" },
-      { value: false, label: "Inactive", dotClass: "bg-nb-gray-700" },
+      { value: undefined, label: t("common.all"), dotClass: "bg-nb-gray-500" },
+      { value: true, label: t("common.active"), dotClass: "bg-green-500" },
+      { value: false, label: t("reverseProxy.inactive"), dotClass: "bg-nb-gray-700" },
     ],
-    [],
+    [t],
   );
 
   const exposedOptions = useMemo<RadioOption<boolean | undefined>[]>(
     () => [
-      { value: undefined, label: "All" },
-      { value: true, label: "Exposed" },
-      { value: false, label: "Not Exposed" },
+      { value: undefined, label: t("common.all") },
+      { value: true, label: t("resourcesTable.exposed") },
+      { value: false, label: t("resourcesTable.notExposed") },
     ],
-    [],
+    [t],
   );
 
   const filterDefs = useMemo<TableFilterDef[]>(
     () => [
       {
         id: "enabled",
-        label: "Status",
+        label: t("common.status"),
         renderPicker: (p) => (
           <RadioPicker
             value={p.value as boolean | undefined}
@@ -227,7 +227,7 @@ export default function ResourcesTable({
       },
       {
         id: "group_names",
-        label: "Groups",
+        label: t("table.groups"),
         renderPicker: (p) => (
           <GroupsPicker
             value={p.value as string[] | undefined}
@@ -236,11 +236,11 @@ export default function ResourcesTable({
             groups={tableGroups}
           />
         ),
-        formatChip: (v) => formatGroupsChip(v as string[] | undefined),
+        formatChip: (v) => formatGroupsChip(v as string[] | undefined, t),
       },
       {
         id: "exposed",
-        label: "Service",
+        label: t("nav.services"),
         renderPicker: (p) => (
           <RadioPicker
             value={p.value as boolean | undefined}
@@ -253,7 +253,7 @@ export default function ResourcesTable({
           formatRadioChip(v as boolean | undefined, exposedOptions),
       },
     ],
-    [statusOptions, exposedOptions, tableGroups],
+    [statusOptions, exposedOptions, tableGroups, t],
   );
 
   const removeResourceParam = React.useCallback(() => {

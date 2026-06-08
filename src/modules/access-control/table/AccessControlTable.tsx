@@ -65,12 +65,14 @@ type Props = {
   isGroupPage?: boolean;
 };
 
-export const AccessControlTableColumns: ColumnDef<Policy>[] = [
+export const createAccessControlTableColumns = (
+  t: ReturnType<typeof useI18n>["t"],
+): ColumnDef<Policy>[] => [
   {
     id: "name",
     accessorFn: (row) => removeAllSpaces(row?.name),
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Name</DataTableHeader>;
+      return <DataTableHeader column={column}>{t("table.name")}</DataTableHeader>;
     },
     sortingFn: "text",
     filterFn: "fuzzy",
@@ -100,7 +102,7 @@ export const AccessControlTableColumns: ColumnDef<Policy>[] = [
     },
     sortingFn: "basic",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Sources</DataTableHeader>;
+      return <DataTableHeader column={column}>{t("table.sources")}</DataTableHeader>;
     },
     cell: ({ cell }) => <AccessControlSourcesCell policy={cell.row.original} />,
   },
@@ -116,7 +118,7 @@ export const AccessControlTableColumns: ColumnDef<Policy>[] = [
     },
     sortingFn: "basic",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Direction</DataTableHeader>;
+      return <DataTableHeader column={column}>{t("table.direction")}</DataTableHeader>;
     },
     cell: ({ cell }) => (
       <AccessControlDirectionCell policy={cell.row.original} />
@@ -134,7 +136,7 @@ export const AccessControlTableColumns: ColumnDef<Policy>[] = [
     },
     sortingFn: "basic",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Destinations</DataTableHeader>;
+      return <DataTableHeader column={column}>{t("table.destinations")}</DataTableHeader>;
     },
     cell: ({ cell }) => (
       <AccessControlDestinationsCell policy={cell.row.original} />
@@ -146,7 +148,7 @@ export const AccessControlTableColumns: ColumnDef<Policy>[] = [
     accessorFn: (row) => row.rules?.[0]?.protocol || "",
     sortingFn: "text",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>Proto & Ports</DataTableHeader>;
+      return <DataTableHeader column={column}>{t("networkResourceAccessControl.protocolPorts")}</DataTableHeader>;
     },
     cell: ({ cell }) => (
       <AccessControlProtoPortsCell policy={cell.row.original} />
@@ -227,6 +229,7 @@ export default function AccessControlTable({
   const params = useSearchParams();
   const idParam = !isGroupPage ? params.get("id") : undefined;
   const { t } = useI18n();
+  const columns = useMemo(() => createAccessControlTableColumns(t), [t]);
 
   const [sorting, setSorting] = useLocalStorage<SortingState>(
     "netbird-table-sort" + path,
@@ -281,11 +284,11 @@ export default function AccessControlTable({
   // Inactive ButtonGroup. Routed through the consolidated Filters UI.
   const statusOptions = useMemo<RadioOption<boolean | undefined>[]>(
     () => [
-      { value: undefined, label: "All", dotClass: "bg-nb-gray-500" },
-      { value: true, label: "Enabled", dotClass: "bg-green-500" },
-      { value: false, label: "Disabled", dotClass: "bg-nb-gray-700" },
+      { value: undefined, label: t("common.all"), dotClass: "bg-nb-gray-500" },
+      { value: true, label: t("filters.enabled"), dotClass: "bg-green-500" },
+      { value: false, label: t("common.disabled"), dotClass: "bg-nb-gray-700" },
     ],
-    [],
+    [t],
   );
 
   const protocolOptions = useMemo<CheckboxOption<string>[]>(
@@ -300,20 +303,20 @@ export default function AccessControlTable({
 
   const postureOptions = useMemo<RadioOption<string | undefined>[]>(
     () => [
-      { value: undefined, label: "All" },
-      { value: "with", label: "With" },
-      { value: "without", label: "Without" },
+      { value: undefined, label: t("common.all") },
+      { value: "with", label: t("accessPolicies.withPostureChecks") },
+      { value: "without", label: t("accessPolicies.withoutPostureChecks") },
     ],
-    [],
+    [t],
   );
 
   const directionOptions = useMemo<RadioOption<boolean | undefined>[]>(
     () => [
-      { value: undefined, label: "All" },
-      { value: true, label: "Bidirectional" },
-      { value: false, label: "One-way" },
+      { value: undefined, label: t("common.all") },
+      { value: true, label: t("accessPolicies.bidirectional") },
+      { value: false, label: t("accessPolicies.oneWay") },
     ],
-    [],
+    [t],
   );
 
   // Groups derived from the current policies' sources + destinations,
@@ -343,7 +346,7 @@ export default function AccessControlTable({
     () => [
       {
         id: "enabled",
-        label: "Status",
+        label: t("common.status"),
         renderPicker: (p) => (
           <RadioPicker
             value={p.value as boolean | undefined}
@@ -357,7 +360,7 @@ export default function AccessControlTable({
       },
       {
         id: "source_group_names",
-        label: "Sources",
+        label: t("table.sources"),
         renderPicker: (p) => (
           <GroupsPicker
             value={p.value as string[] | undefined}
@@ -366,11 +369,11 @@ export default function AccessControlTable({
             groups={tableGroups}
           />
         ),
-        formatChip: (v) => formatGroupsChip(v as string[] | undefined),
+        formatChip: (v) => formatGroupsChip(v as string[] | undefined, t),
       },
       {
         id: "destination_group_names",
-        label: "Destinations",
+        label: t("table.destinations"),
         renderPicker: (p) => (
           <GroupsPicker
             value={p.value as string[] | undefined}
@@ -379,11 +382,11 @@ export default function AccessControlTable({
             groups={tableGroups}
           />
         ),
-        formatChip: (v) => formatGroupsChip(v as string[] | undefined),
+        formatChip: (v) => formatGroupsChip(v as string[] | undefined, t),
       },
       {
         id: "direction_filter",
-        label: "Direction",
+        label: t("table.direction"),
         renderPicker: (p) => (
           <RadioPicker
             value={p.value as boolean | undefined}
@@ -397,7 +400,7 @@ export default function AccessControlTable({
       },
       {
         id: "protocol_filter",
-        label: "Protocol",
+        label: t("table.protocol"),
         renderPicker: (p) => (
           <CheckboxListPicker
             value={p.value as string[] | undefined}
@@ -415,7 +418,7 @@ export default function AccessControlTable({
       },
       {
         id: "ports_filter",
-        label: "Port",
+        label: t("accessControl.ports"),
         renderPicker: (p) => (
           <TextInputPicker
             value={p.value as string | undefined}
@@ -428,7 +431,7 @@ export default function AccessControlTable({
       },
       {
         id: "has_posture_checks",
-        label: "Posture Checks",
+        label: t("nav.postureChecks"),
         renderPicker: (p) => (
           <RadioPicker
             value={p.value as string | undefined}
@@ -447,6 +450,7 @@ export default function AccessControlTable({
       postureOptions,
       directionOptions,
       tableGroups,
+      t,
     ],
   );
 
@@ -486,7 +490,7 @@ export default function AccessControlTable({
         setSorting={setSorting}
         initialPageSize={25}
         showResetFilterButton={false}
-        columns={AccessControlTableColumns}
+        columns={columns}
         aboveTable={(table) => (
           <TableFilterChips table={table} filters={filterDefs} />
         )}
