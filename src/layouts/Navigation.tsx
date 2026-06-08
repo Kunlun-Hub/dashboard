@@ -79,7 +79,7 @@ export default function Navigation({
 
                 <SidebarItem
                   icon={<ControlCenterIcon size={16} />}
-                  label="Control Center"
+                  label={t("nav.controlCenter")}
                   href={"/control-center"}
                   visible={permission.policies.read}
                 />

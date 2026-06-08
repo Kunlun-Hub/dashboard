@@ -137,6 +137,7 @@ export default function NetBirdSettings() {
         >
           <div className={"border-l border-neutral-200 w-full dark:border-nb-gray-930"}>
             {account && <AuthenticationTab account={account} />}
+            {account && <LicenseSettingsTab account={account} />}
             {permission.setup_keys.read && <SetupKeysTab />}
             {account?.settings?.embedded_idp_enabled &&
               identityProvidersEnabled &&
