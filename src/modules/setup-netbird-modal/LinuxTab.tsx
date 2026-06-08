@@ -16,10 +16,13 @@ import TabsContentPadding, { TabsContent } from "@components/Tabs";
 import { IconBrandUbuntu } from "@tabler/icons-react";
 import useFetchApi from "@utils/api";
 import { DownloadIcon, TerminalSquareIcon } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { OperatingSystem } from "@/interfaces/OperatingSystem";
-import { VersionRelease } from "@/modules/settings/VersionReleasesTab";
+import {
+  architectureTypeLabels,
+  VersionRelease,
+} from "@/modules/settings/VersionReleasesTab";
 import {
   NetBirdUpCommand,
   RoutingPeerSetupKeyInfo,
@@ -57,7 +60,7 @@ function LinuxTabContent({
   versions = [],
 }: Readonly<Props>) {
   const { t } = useI18n();
-  const [selectedVersion, setSelectedVersion] = useState<string>("");
+  const [selectedVersionId, setSelectedVersionId] = useState<string>("");
   const [currentOrigin, setCurrentOrigin] = useState<string>("");
   const runStep = setupKeyContent ? 3 : 2;
   const usingSetupKey = !!setupKey || !!setupKeyPlaceholder;
@@ -68,23 +71,41 @@ function LinuxTabContent({
     }
   }, []);
 
-  const linuxVersions = versions.filter((v) => v.platform === "linux");
-  const versionOptions: SelectOption[] = linuxVersions.map((v) => ({
-    label: v.version + (v.isLatest ? " (最新)" : ""),
-    value: v.downloadUrl,
-  }));
+  const linuxVersions = useMemo(
+    () => versions.filter((v) => v.platform === "linux"),
+    [versions],
+  );
+  const versionOptions: SelectOption[] = useMemo(
+    () =>
+      linuxVersions.map((v) => ({
+        label:
+          v.version +
+          ` / ${architectureTypeLabels[v.architecture] || v.architecture}` +
+          (v.isLatest ? " (最新)" : ""),
+        value: v.id,
+      })),
+    [linuxVersions],
+  );
 
   useEffect(() => {
-    if (linuxVersions.length > 0) {
+    setSelectedVersionId((current) => {
+      if (current && linuxVersions.some((v) => v.id === current)) {
+        return current;
+      }
       const latestVersion =
         linuxVersions.find((v) => v.isLatest) || linuxVersions[0];
-      setSelectedVersion(latestVersion.downloadUrl);
-    }
+      return latestVersion?.id || "";
+    });
   }, [linuxVersions]);
 
-  const currentUrl = selectedVersion || "";
+  const selectedLinuxRelease = useMemo(
+    () => linuxVersions.find((v) => v.id === selectedVersionId),
+    [linuxVersions, selectedVersionId],
+  );
+  const currentUrl = selectedLinuxRelease?.downloadUrl || "";
+  const selectedVersion = selectedLinuxRelease?.version || "";
   const oneLineInstallCommand = currentOrigin
-    ? `curl -fsSL ${currentOrigin}/install.sh | bash -s -- ${currentOrigin}`
+    ? `curl -fsSL ${currentOrigin}/install.sh | bash -s -- ${currentOrigin}${selectedVersion ? ` --version ${selectedVersion}` : ""}`
     : "";
 
   return (
@@ -100,8 +121,20 @@ function LinuxTabContent({
               运行下面的命令一键安装 Cloink（支持主流 Linux
               发行版：Ubuntu、Debian、CentOS、Fedora、Arch 等）
             </p>
+            <div className={"mb-3 w-[220px]"}>
+              <SelectDropdown
+                value={selectedVersionId}
+                onChange={setSelectedVersionId}
+                placeholder={
+                  versionOptions.length === 0
+                    ? "请先发布版本"
+                    : t("setupModal.selectArchitecture")
+                }
+                options={versionOptions}
+              />
+            </div>
             {oneLineInstallCommand && (
-              <Code>
+              <Code codeToCopy={oneLineInstallCommand}>
                 <Code.Line>{oneLineInstallCommand}</Code.Line>
               </Code>
             )}
@@ -141,9 +174,9 @@ function LinuxTabContent({
                   <p className="mb-2">选择并下载 Cloink</p>
                   <div className={"flex gap-4 mt-1 flex-wrap items-center"}>
                     <SelectDropdown
-                      value={currentUrl}
-                      className={"w-[170px]"}
-                      onChange={setSelectedVersion}
+                      value={selectedVersionId}
+                      className={"w-[220px]"}
+                      onChange={setSelectedVersionId}
                       placeholder={
                         versionOptions.length === 0
                           ? "请先发布版本"
@@ -154,6 +187,7 @@ function LinuxTabContent({
                     {versionOptions.length > 0 ? (
                       <Button
                         variant={"primary"}
+                        disabled={!currentUrl}
                         onClick={() =>
                           window.open(
                             currentUrl,

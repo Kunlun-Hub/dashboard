@@ -1,12 +1,11 @@
 import Button from "@components/Button";
 import { Callout } from "@components/Callout";
-import { notify } from "@components/Notification";
 import CardTable from "@components/CardTable";
 import Code from "@components/Code";
 import HelpText from "@components/HelpText";
+import InlineLink from "@components/InlineLink";
 import { Input } from "@components/Input";
 import { Label } from "@components/Label";
-import InlineLink from "@components/InlineLink";
 import {
   Modal,
   ModalClose,
@@ -14,7 +13,10 @@ import {
   ModalFooter,
 } from "@components/modal/Modal";
 import ModalHeader from "@components/modal/ModalHeader";
+import { notify } from "@components/Notification";
+import { SelectDropdown } from "@components/select/SelectDropdown";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@components/Tabs";
+import { cn, validator } from "@utils/helpers";
 import {
   ExternalLinkIcon,
   GlobeIcon,
@@ -25,16 +27,14 @@ import {
 } from "lucide-react";
 import React, { useCallback, useMemo, useState } from "react";
 import { useSWRConfig } from "swr";
-import { useApiCall } from "@/utils/api";
-import { cn, validator } from "@utils/helpers";
-import { GRPC_API_ORIGIN, isNetBirdHosted } from "@/utils/netbird";
-import { SelectDropdown } from "@components/select/SelectDropdown";
+import { useI18n } from "@/i18n/I18nProvider";
 import {
   REVERSE_PROXY_ENV_REFERENCE_DOCS_LINK,
   REVERSE_PROXY_SELFHOSTED_ROUTING_DOCS_LINK,
   ReverseProxyClusterToken,
 } from "@/interfaces/ReverseProxy";
-import { useI18n } from "@/i18n/I18nProvider";
+import { useApiCall } from "@/utils/api";
+import { GRPC_API_ORIGIN, isNetBirdHosted } from "@/utils/netbird";
 
 type Props = {
   open: boolean;
@@ -95,7 +95,7 @@ export const ClustersModal = ({ open, onOpenChange }: Props) => {
       return t("reverseProxy.customDomainError");
     }
     return "";
-  }, [domain]);
+  }, [domain, t]);
 
   const managementUrl = isNetBirdHosted()
     ? "https://api.netbird.io"
@@ -244,7 +244,7 @@ spec:
       preventSuccessToast: true,
     });
     return promise;
-  }, [domain, tokenRequest]);
+  }, [domain, t, tokenRequest]);
 
   const goToInstall = useCallback(() => {
     setTab("install");
@@ -310,16 +310,16 @@ spec:
                 {t("reverseProxy.selfHostedRequirements")}
                 <ul className={"list-disc pl-4 mt-2 flex flex-col gap-1"}>
                   <li>
-                    <span className={"text-white font-medium"}>
+                    <span className={"text-neutral-900 dark:text-white font-medium"}>
                       {t("reverseProxy.publiclyAccessibleIp")}
                     </span>
                   </li>
                   <li>
-                    <span className={"text-white font-medium"}>Docker</span>{" "}
+                    <span className={"text-neutral-900 dark:text-white font-medium"}>Docker</span>{" "}
                     {t("reverseProxy.dockerInstalled")}
                   </li>
                   <li>
-                    <span className={"text-white font-medium"}>
+                    <span className={"text-neutral-900 dark:text-white font-medium"}>
                       {t("reverseProxy.ports80And443")}
                     </span>{" "}
                     {t("reverseProxy.portsOpen")}

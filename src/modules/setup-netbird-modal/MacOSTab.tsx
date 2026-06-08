@@ -23,7 +23,7 @@ import {
   TerminalSquareIcon,
 } from "lucide-react";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { OperatingSystem } from "@/interfaces/OperatingSystem";
 import { VersionRelease } from "@/modules/settings/VersionReleasesTab";
@@ -64,7 +64,7 @@ function MacOSTabContent({
   versions = [],
 }: Readonly<Props>) {
   const { t } = useI18n();
-  const [selectedVersion, setSelectedVersion] = useState<string>("");
+  const [selectedVersionId, setSelectedVersionId] = useState<string>("");
   // Mirrors WindowsTab: server flow (setupKeyContent present) forces
   // the CLI run branch so the netbird up command stays visible while
   // the operator generates a key.
@@ -73,21 +73,32 @@ function MacOSTabContent({
   const keyStep = GRPC_API_ORIGIN ? 3 : 2;
   const runStep = keyStep + (setupKeyContent ? 1 : 0);
   const usingSetupKeyParam = !!setupKey || !!setupKeyPlaceholder;
-  const macosVersions = versions.filter((v) => v.platform === "macos");
-  const versionOptions: SelectOption[] = macosVersions.map((v) => ({
-    label: v.version + (v.isLatest ? " (最新)" : ""),
-    value: v.downloadUrl,
-  }));
+  const macosVersions = useMemo(
+    () => versions.filter((v) => v.platform === "macos"),
+    [versions],
+  );
+  const versionOptions: SelectOption[] = useMemo(
+    () =>
+      macosVersions.map((v) => ({
+        label: v.version + (v.isLatest ? " (最新)" : ""),
+        value: v.id,
+      })),
+    [macosVersions],
+  );
 
   useEffect(() => {
-    if (macosVersions.length > 0) {
+    setSelectedVersionId((current) => {
+      if (current && macosVersions.some((v) => v.id === current)) {
+        return current;
+      }
       const latestVersion =
         macosVersions.find((v) => v.isLatest) || macosVersions[0];
-      setSelectedVersion(latestVersion.downloadUrl);
-    }
+      return latestVersion?.id || "";
+    });
   }, [macosVersions]);
 
-  const currentUrl = selectedVersion || "";
+  const currentUrl =
+    macosVersions.find((v) => v.id === selectedVersionId)?.downloadUrl || "";
 
   return (
     <TabsContent value={String(OperatingSystem.APPLE)}>
@@ -103,9 +114,9 @@ function MacOSTabContent({
             </div>
             <div className={"flex gap-4 mt-1 flex-wrap items-center"}>
               <SelectDropdown
-                value={currentUrl}
+                value={selectedVersionId}
                 className={"w-[170px]"}
-                onChange={setSelectedVersion}
+                onChange={setSelectedVersionId}
                 placeholder={
                   versionOptions.length === 0
                     ? "请先发布版本"
@@ -116,6 +127,7 @@ function MacOSTabContent({
               {versionOptions.length > 0 ? (
                 <Button
                   variant={"primary"}
+                  disabled={!currentUrl}
                   onClick={() =>
                     window.open(currentUrl, "_blank", "noopener noreferrer")
                   }

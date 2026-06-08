@@ -92,14 +92,14 @@ export default function Navigation({
                   visible={!isRestricted}
                 >
                   <SidebarItem
-                    label="User Devices"
+                    label={t("nav.userDevices")}
                     isChild
                     href={"/peers/users"}
                     exactPathMatch={true}
                     visible={!isRestricted}
                   />
                   <SidebarItem
-                    label="Servers"
+                    label={t("nav.servers")}
                     isChild
                     href={"/peers/servers"}
                     exactPathMatch={true}
@@ -179,14 +179,14 @@ export default function Navigation({
                     visible={permission?.services?.read}
                   />
                   <SidebarItem
-                    label="Clusters"
+                    label={t("nav.clusters")}
                     isChild
                     href={"/reverse-proxy/clusters"}
                     exactPathMatch={true}
                     visible={permission?.services?.read}
                   />
                   <SidebarItem
-                    label="Access Logs"
+                    label={t("nav.accessLogs")}
                     isChild
                     href={"/reverse-proxy/logs"}
                     exactPathMatch={true}

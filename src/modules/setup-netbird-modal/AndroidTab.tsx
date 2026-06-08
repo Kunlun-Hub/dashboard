@@ -11,7 +11,7 @@ import { GRPC_API_ORIGIN } from "@utils/netbird";
 import { DownloadIcon, ShoppingBagIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import GooglePlayButton from "@/assets/google-play-badge.png";
 import { useI18n } from "@/i18n/I18nProvider";
 import { OperatingSystem } from "@/interfaces/OperatingSystem";
@@ -37,27 +37,36 @@ function AndroidTabContent({
   versions,
 }: Readonly<{ versions: VersionRelease[] }>) {
   const { t } = useI18n();
-  const [selectedVersion, setSelectedVersion] = useState<string>("");
+  const [selectedVersionId, setSelectedVersionId] = useState<string>("");
 
-  const androidVersions = (versions || []).filter(
-    (v) => v.platform === "android",
+  const androidVersions = useMemo(
+    () => (versions || []).filter((v) => v.platform === "android"),
+    [versions],
   );
 
   // Only show published versions
-  const versionOptions: SelectOption[] = androidVersions.map((v) => ({
-    label: v.version + (v.isLatest ? " (最新)" : ""),
-    value: v.downloadUrl,
-  }));
+  const versionOptions: SelectOption[] = useMemo(
+    () =>
+      androidVersions.map((v) => ({
+        label: v.version + (v.isLatest ? " (最新)" : ""),
+        value: v.id,
+      })),
+    [androidVersions],
+  );
 
   useEffect(() => {
-    if (androidVersions.length > 0) {
+    setSelectedVersionId((current) => {
+      if (current && androidVersions.some((v) => v.id === current)) {
+        return current;
+      }
       const latestVersion =
         androidVersions.find((v) => v.isLatest) || androidVersions[0];
-      setSelectedVersion(latestVersion.downloadUrl);
-    }
+      return latestVersion?.id || "";
+    });
   }, [androidVersions]);
 
-  const currentUrl = selectedVersion || "";
+  const currentUrl =
+    androidVersions.find((v) => v.id === selectedVersionId)?.downloadUrl || "";
 
   return (
     <TabsContent value={String(OperatingSystem.ANDROID)}>
@@ -71,9 +80,9 @@ function AndroidTabContent({
             <p>{t("setupModal.androidStep1")}</p>
             <div className={"flex gap-4 mt-1 flex-wrap items-center"}>
               <SelectDropdown
-                value={currentUrl}
+                value={selectedVersionId}
                 className={"w-[170px]"}
-                onChange={setSelectedVersion}
+                onChange={setSelectedVersionId}
                 placeholder={
                   versionOptions.length === 0
                     ? "请先发布版本"
@@ -84,6 +93,7 @@ function AndroidTabContent({
               {versionOptions.length > 0 ? (
                 <Button
                   variant={"primary"}
+                  disabled={!currentUrl}
                   onClick={() =>
                     window.open(currentUrl, "_blank", "noopener noreferrer")
                   }

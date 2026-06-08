@@ -73,7 +73,7 @@ function AddPeerButton({ isUserDevice }: Readonly<Props>) {
         <ModalTrigger asChild>
           <Button variant={"primary"} size={"sm"} className={"ml-auto"}>
             <PlusCircle size={16} />
-            Add Peer
+            {t("peers.addPeer")}
           </Button>
         </ModalTrigger>
         <SetupModal user={user} isUserDevice={isUserDevice} />
