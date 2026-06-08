@@ -44,14 +44,26 @@ export default function ReverseProxyServicesPage() {
             active={true}
           />
         </Breadcrumbs>
-        <h1 ref={headingRef}>Services</h1>
-        <Paragraph>
-          Expose services securely through NetBird&apos;s reverse proxy.{" "}
-          <InlineLink href={REVERSE_PROXY_DOCS_LINK} target={"_blank"}>
-            Learn more
-            <ExternalLinkIcon size={12} />
-          </InlineLink>
-        </Paragraph>
+        <div
+          className={
+            "flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"
+          }
+        >
+          <div>
+            <h1 ref={headingRef}>{t("reverseProxy.servicesTitle")}</h1>
+            <Paragraph>
+              {t("reverseProxy.servicesDescription")}{" "}
+              <InlineLink href={REVERSE_PROXY_DOCS_LINK} target={"_blank"}>
+                {t("common.learnMore")}
+                <ExternalLinkIcon size={12} />
+              </InlineLink>
+            </Paragraph>
+          </div>
+          <ResourceUsageInline
+            limit={"custom_rules"}
+            className={"sm:min-w-[18rem]"}
+          />
+        </div>
 
         {isNetBirdHosted() ? (
           <Callout className={"max-w-xl mt-5"} variant={"info"}>

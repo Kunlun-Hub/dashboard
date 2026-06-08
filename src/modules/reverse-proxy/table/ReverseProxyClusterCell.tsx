@@ -38,8 +38,12 @@ export default function ReverseProxyClusterCell({
         interactive={false}
         content={
           <span className={"text-xs"}>
-            <span className={"text-nb-gray-400"}>Cluster: </span>
-            <span className={"text-nb-gray-100"}>All</span>
+            <span className={"text-neutral-500 dark:text-nb-gray-400"}>
+              Cluster:{" "}
+            </span>
+            <span className={"text-neutral-900 dark:text-nb-gray-100"}>
+              All
+            </span>
           </span>
         }
       >
@@ -68,8 +72,10 @@ export default function ReverseProxyClusterCell({
         interactive={false}
         content={
           <span className={"text-xs"}>
-            <span className={"text-nb-gray-400"}>Cluster: </span>
-            <span className={"text-nb-gray-100"}>
+            <span className={"text-neutral-500 dark:text-nb-gray-400"}>
+              Cluster:{" "}
+            </span>
+            <span className={"text-neutral-900 dark:text-nb-gray-100"}>
               {reverseProxy.proxy_cluster}
             </span>
           </span>

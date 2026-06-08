@@ -30,10 +30,12 @@ import { RDPButton } from "@/modules/remote-access/rdp/RDPButton";
 import { SSHButton } from "@/modules/remote-access/ssh/SSHButton";
 import InlineLink from "@components/InlineLink";
 import { useDialog } from "@/contexts/DialogProvider";
+import { useI18n } from "@/i18n/I18nProvider";
 
 export default function PeerActionCell() {
   const { peer, deletePeer, update, toggleSSH, setSSHInstructionsModal } =
     usePeer();
+  const { t } = useI18n();
   const router = useRouter();
   const { mutate } = useSWRConfig();
   const { permission } = usePermissions();
@@ -83,11 +85,16 @@ export default function PeerActionCell() {
   const showRemoteAccessItems = !isMobile && !!peer.connected;
 
   const toggleLoginExpiration = async () => {
-    const text = peer.login_expiration_enabled ? "disabled" : "enabled";
+    const titleKey = peer.login_expiration_enabled
+      ? "peerActionCell.sessionExpirationDisabled"
+      : "peerActionCell.sessionExpirationEnabled";
+    const descriptionKey = peer.login_expiration_enabled
+      ? "peerActionCell.sessionExpirationDescriptionDisabled"
+      : "peerActionCell.sessionExpirationDescriptionEnabled";
     const disableLoginExpiration = peer.login_expiration_enabled;
     notify({
-      title: `Session expiration is ${text}`,
-      description: `Session expiration for peer ${peer.name} was successfully ${text}.`,
+      title: t(titleKey),
+      description: t(descriptionKey, { name: peer.name }),
       promise: update({
         loginExpiration: !peer.login_expiration_enabled,
         inactivityExpiration: disableLoginExpiration
@@ -97,7 +104,7 @@ export default function PeerActionCell() {
         mutate("/peers");
         mutate("/groups");
       }),
-      loadingMessage: "Updating session expiration...",
+      loadingMessage: t("peerActionCell.updatingSessionExpiration"),
     });
   };
 
@@ -106,16 +113,16 @@ export default function PeerActionCell() {
       title: `Disable SSH Access?`,
       description: (
         <div>
-          Starting from NetBird v0.61.0, once SSH access is disabled, you cannot
+          Starting from Cloink v0.61.0, once SSH access is disabled, you cannot
           re-enable it again from the dashboard. You&apos;ll need to create an
-          explicit access control policy and update your NetBird client to
+          explicit access control policy and update your Cloink client to
           restore SSH functionality.{" "}
           <InlineLink
             href={"https://docs.netbird.io/manage/peers/ssh"}
             target={"_blank"}
             onClick={(e) => e.stopPropagation()}
           >
-            Learn more
+            {t("common.learnMore")}
             <ExternalLinkIcon size={12} />
           </InlineLink>
         </div>
@@ -182,7 +189,7 @@ export default function PeerActionCell() {
               >
                 <IconInfoCircle size={14} />
                 <span>
-                  Expiration is disabled for all peers added with an setup-key.
+                  {t("peerActionCell.expirationDisabledTooltip")}
                 </span>
               </div>
             }
@@ -195,8 +202,9 @@ export default function PeerActionCell() {
             >
               <div className={"flex gap-3 items-center w-full"}>
                 <TimerResetIcon size={14} className={"shrink-0"} />
-                {peer.login_expiration_enabled ? "Disable" : "Enable"} Session
-                Expiration
+                {peer.login_expiration_enabled
+                  ? t("peerActionCell.disableSessionExpiration")
+                  : t("peerActionCell.enableSessionExpiration")}
               </div>
             </DropdownMenuItem>
           </FullTooltip>
@@ -213,7 +221,9 @@ export default function PeerActionCell() {
               <div className={"flex gap-3 items-center w-full"}>
                 <TerminalSquare size={14} className={"shrink-0"} />
                 <div className={"flex justify-between items-center w-full"}>
-                  {peer.ssh_enabled ? "Disable" : "Enable"} SSH Access
+                  {peer.ssh_enabled
+                    ? t("peerActionCell.disableSshAccess")
+                    : t("peerActionCell.enableSshAccess")}
                 </div>
               </div>
             </DropdownMenuItem>

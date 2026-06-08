@@ -28,7 +28,11 @@ export const ReverseProxyEventsAuthMethodCell = ({
 
   if (!authMethod) {
     if (compact) return null;
-    return <span className="text-nb-gray-400 text-sm px-3 py-2">-</span>;
+    return (
+      <span className="text-neutral-500 dark:text-nb-gray-400 text-sm px-3 py-2">
+        -
+      </span>
+    );
   }
 
   const getAuthMethodDisplay = () => {
@@ -129,14 +133,18 @@ export const ReverseProxyEventsAuthMethodCell = ({
         interactive={false}
         content={
           <span className={"text-xs"}>
-            <span className={"text-nb-gray-400"}>Auth: </span>
-            <span className={"text-nb-gray-100"}>{label}</span>
+            <span className={"text-neutral-500 dark:text-nb-gray-400"}>
+              Auth:{" "}
+            </span>
+            <span className={"text-neutral-900 dark:text-nb-gray-100"}>
+              {label}
+            </span>
           </span>
         }
       >
         <span
           className={
-            "inline-flex items-center justify-center text-nb-gray-300 cursor-help"
+            "inline-flex items-center justify-center text-neutral-600 cursor-help dark:text-nb-gray-300"
           }
         >
           {icon}

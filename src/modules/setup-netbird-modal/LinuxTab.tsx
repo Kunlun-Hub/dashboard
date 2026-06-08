@@ -111,7 +111,8 @@ function LinuxTabContent({
           )}
           <Steps.Step step={runStep} line={false}>
             <p>
-              Run NetBird {!usingSetupKey && "and log in the browser"}
+              {t("setupModal.runNetBird")}
+              {!usingSetupKey && ` ${t("setupModal.andLogInBrowser")}`}
               {showSetupKeyInfo && <RoutingPeerSetupKeyInfo />}
             </p>
             <Code>
@@ -220,7 +221,8 @@ fi`}
                 </Steps.Step>
                 <Steps.Step step={3} line={false}>
                   <p>
-                    Run NetBird {!usingSetupKey && "and log in the browser"}
+                    {t("setupModal.runNetBird")}
+                    {!usingSetupKey && ` ${t("setupModal.andLogInBrowser")}`}
                     {showSetupKeyInfo && <RoutingPeerSetupKeyInfo />}
                   </p>
                   <Code>

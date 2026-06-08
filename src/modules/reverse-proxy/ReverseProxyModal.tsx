@@ -211,9 +211,9 @@ export default function ReverseProxyModal({
     reverseProxy?.private ?? false,
   );
 
-  // Tracks whether NetBird-only was switched on automatically because the
+  // Tracks whether Cloink-only was switched on automatically because the
   // operator picked a cluster target (see onClusterPick), as opposed to an
-  // explicit choice in the NetBird-Only modal. Only auto-enabled private is
+  // explicit choice in the Cloink-only modal. Only auto-enabled private is
   // reverted when the cluster target is later removed or changed.
   const [privateFromCluster, setPrivateFromCluster] = useState(false);
 
@@ -562,19 +562,21 @@ export default function ReverseProxyModal({
   };
 
   const modalTitle = useMemo(() => {
-    const prefix = reverseProxy ? "Edit" : "Add";
+    const prefix = reverseProxy
+      ? t("reverseProxy.modalEditPrefix")
+      : t("reverseProxy.modalAddPrefix");
     const label = serviceMode
       ? t(SERVICE_MODES[serviceMode].labelKey)
-      : "Service";
+      : t("reverseProxy.modalDefaultLabel");
     return `${prefix} ${label}`;
   }, [reverseProxy, serviceMode, t]);
 
   const modalDescription = useMemo(
     () =>
       isL4Mode
-        ? "Forward traffic directly to your backend service."
-        : "Expose services securely through NetBird's reverse proxy.",
-    [isL4Mode],
+        ? t("reverseProxy.modalL4Description")
+        : t("reverseProxy.modalHttpDescription"),
+    [isL4Mode, t],
   );
 
   return (
@@ -686,10 +688,10 @@ export default function ReverseProxyModal({
                       label={
                         <>
                           <NetworkIcon size={15} />
-                          NetBird-Only Access
+                          {t("reverseProxy.cloinkOnlyAccess")}
                         </>
                       }
-                      description="Reachable only from connected peers in the selected NetBird groups."
+                      description={t("reverseProxy.cloinkOnlyDescription")}
                       enabled={isPrivate}
                       onClick={() => {
                         setNetBirdOnlyModalOpen(true);
@@ -705,11 +707,11 @@ export default function ReverseProxyModal({
                       className={"w-full"}
                       content={
                         <div className={"text-xs max-w-xs"}>
-                          NetBird-Only Access requires a proxy cluster with
-                          at least one connected embedded proxy (
-                          <code>netbird proxy</code>). The selected cluster
-                          doesn&apos;t have one. Connect an embedded proxy to
-                          this cluster to enable this option.
+                          {t(
+                            "reverseProxy.cloinkOnlyRequiresClusterPrefix",
+                          )}{" "}
+                          (<code>cloink proxy</code>)
+                          {t("reverseProxy.cloinkOnlyRequiresClusterSuffix")}
                         </div>
                       }
                     >
@@ -717,10 +719,10 @@ export default function ReverseProxyModal({
                         label={
                           <>
                             <NetworkIcon size={15} />
-                            NetBird-Only Access
+                            {t("reverseProxy.cloinkOnlyAccess")}
                           </>
                         }
-                        description="Reachable only from connected peers in the selected NetBird groups."
+                        description={t("reverseProxy.cloinkOnlyDescription")}
                         enabled={isPrivate}
                         disabled={true}
                         onClick={() => {
@@ -1089,8 +1091,8 @@ export default function ReverseProxyModal({
             setBaseDomain(cluster);
           }
           // Cluster targets are reached over the WireGuard overlay, so
-          // the only callers that ever hit the proxy are NetBird peers.
-          // Auto-flip the service to NetBird-only so the auth model
+          // the only callers that ever hit the proxy are Cloink peers.
+          // Auto-flip the service to Cloink-only so the auth model
           // matches the wire reality instead of advertising SSO/PW/PIN
           // that no public client could ever exercise. No-op when
           // already private.

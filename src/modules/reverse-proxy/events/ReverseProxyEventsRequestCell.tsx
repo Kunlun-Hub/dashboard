@@ -15,11 +15,13 @@ type Props = {
 
 export const ReverseProxyEventsMethodCell = ({ event }: Props) => {
   const className =
-    "font-mono text-[0.82rem] font-medium text-nb-gray-300 min-w-[56px] inline-flex justify-center";
+    "font-mono text-[0.82rem] font-medium text-neutral-600 dark:text-nb-gray-300 min-w-[56px] inline-flex justify-center";
 
   if (isL4Event(event)) {
     return (
-      <span className={`${className} text-nb-gray-200 uppercase`}>
+      <span
+        className={`${className} text-neutral-700 dark:text-nb-gray-200 uppercase`}
+      >
         {event.protocol}
       </span>
     );

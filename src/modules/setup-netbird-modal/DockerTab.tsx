@@ -77,13 +77,13 @@ export default function DockerTab({
             </Code>
           </Steps.Step>
           <Steps.Step step={3 + offset} line={false}>
-            <p>Read our documentation</p>
+            <p>{t("setupModal.readDocumentation")}</p>
             <InlineLink
               href={"https://docs.netbird.io/how-to/installation/docker"}
               passHref={true}
               target={"_blank"}
             >
-              Running NetBird in Docker
+              {t("setupModal.runningNetBirdDocker")}
             </InlineLink>
           </Steps.Step>
         </Steps>

@@ -11,7 +11,9 @@ import PeerIcon from "@/assets/icons/PeerIcon";
 import PeersProvider, { usePeers } from "@/contexts/PeersProvider";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useUsers } from "@/contexts/UsersProvider";
+import { useI18n } from "@/i18n/I18nProvider";
 import PageContainer from "@/layouts/PageContainer";
+import { ResourceUsageInline } from "@/modules/account/ResourceUsage";
 import { SetupModalContent } from "@/modules/setup-netbird-modal/SetupModal";
 
 const PeersTable = lazy(() => import("@/modules/peers/PeersTable"));
@@ -33,6 +35,7 @@ export default function ServersPage() {
 }
 
 function ServersView() {
+  const { t } = useI18n();
   const { peers, isLoading: isPeersLoading } = usePeers();
   const { users, isLoading: isUsersLoading } = useUsers();
   const { ref: headingRef, portalTarget } =
@@ -56,29 +59,40 @@ function ServersView() {
       <div className={"p-default py-6"}>
         <Breadcrumbs>
           <Breadcrumbs.Item
-            label={"Peers"}
+            label={t("peers.title")}
             icon={<PeerIcon size={13} />}
           />
           <Breadcrumbs.Item
             href={"/peers/servers"}
-            label={"Servers"}
+            label={t("peers.servers")}
             active
           />
         </Breadcrumbs>
-        <h1 ref={headingRef}>Servers</h1>
-        <Paragraph>
-          Servers, VMs, autonomous agents and other unattended machines with no
-          user behind them, typically enrolled with a setup key.{" "}
-          <InlineLink
-            href={
-              "https://docs.netbird.io/how-to/register-machines-using-setup-keys"
-            }
-            target={"_blank"}
-          >
-            Learn more
-            <ExternalLinkIcon size={12} />
-          </InlineLink>
-        </Paragraph>
+        <div
+          className={
+            "flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"
+          }
+        >
+          <div>
+            <h1 ref={headingRef}>{t("peers.servers")}</h1>
+            <Paragraph>
+              {t("peers.serversDescription")}{" "}
+              <InlineLink
+                href={
+                  "https://docs.netbird.io/how-to/register-machines-using-setup-keys"
+                }
+                target={"_blank"}
+              >
+                {t("common.learnMore")}
+                <ExternalLinkIcon size={12} />
+              </InlineLink>
+            </Paragraph>
+          </div>
+          <ResourceUsageInline
+            limit={"peers"}
+            className={"sm:min-w-[18rem]"}
+          />
+        </div>
       </div>
       <Suspense fallback={<SkeletonTable />}>
         <PeersTable
@@ -93,18 +107,19 @@ function ServersView() {
 }
 
 function ServersBlockedView() {
+  const { t } = useI18n();
+
   return (
     <div className={"flex items-center justify-center flex-col"}>
       <div className={"p-default py-6 max-w-3xl text-center"}>
-        <h1>Add new server to your network</h1>
+        <h1>{t("peers.serversBlockedTitle")}</h1>
         <Paragraph className={"inline"}>
-          To get started, install NetBird on the server and enroll it using a
-          setup key. If you have further questions check out our{" "}
+          {t("peers.serversBlockedDescription")}{" "}
           <InlineLink
             href={"https://docs.netbird.io/how-to/getting-started#installation"}
             target={"_blank"}
           >
-            Installation Guide
+            {t("peers.installationGuide")}
             <ExternalLinkIcon size={12} />
           </InlineLink>
         </Paragraph>
@@ -112,7 +127,7 @@ function ServersBlockedView() {
       <div className={"px-3 pt-1 pb-8 max-w-3xl w-full"}>
         <div
           className={
-            "rounded-md border border-nb-gray-900/70 grid w-full bg-nb-gray-930/40 stepper-bg-variant"
+            "rounded-md border border-neutral-200 bg-white grid w-full stepper-bg-variant dark:border-nb-gray-900/70 dark:bg-nb-gray-930/40"
           }
         >
           <SetupModalContent header={false} footer={false} isUserDevice={false} />

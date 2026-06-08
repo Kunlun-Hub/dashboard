@@ -93,7 +93,11 @@ export default function ReverseProxyTargetsCell({
         <FullTooltip
           interactive={false}
           content={
-            <span className={"text-xs text-nb-gray-100 max-w-[200px]"}>
+            <span
+              className={
+                "text-xs text-neutral-700 dark:text-nb-gray-100 max-w-[200px]"
+              }
+            >
               L4 services (TCP / UDP / TLS) only support a single target.
             </span>
           }

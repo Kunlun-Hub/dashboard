@@ -134,9 +134,7 @@ function MacOSTabContent({
 
           {GRPC_API_ORIGIN && (
             <Steps.Step step={baseMgmtStep}>
-              <p>
-                {`Click on "Settings" then "Advanced Settings" from the NetBird icon in your system tray and enter the following "Management URL"`}
-              </p>
+              <p>{t("setupModal.managementUrlInstructions")}</p>
               <Code>
                 <Code.Line>{GRPC_API_ORIGIN}</Code.Line>
               </Code>
@@ -165,13 +163,10 @@ function MacOSTabContent({
           ) : (
             <>
               <Steps.Step step={runStep}>
-                <p>
-                  {/* eslint-disable-next-line react/no-unescaped-entities */}
-                  Click on "Connect" from the NetBird icon in your system tray
-                </p>
+                <p>{t("setupModal.clickConnectTray")}</p>
               </Steps.Step>
               <Steps.Step step={runStep + 1} line={false}>
-                <p>Sign up using your email address</p>
+                <p>{t("setupModal.signUpWithEmail")}</p>
               </Steps.Step>
             </>
           )}
@@ -189,12 +184,14 @@ function MacOSTabContent({
               <Steps>
                 <Steps.Step step={1}>
                   <Code>
-                    curl -fsSL https://pkgs.netbird.io/install.sh | sh
+                    curl -fsSL /install.sh | sh
                   </Code>
                 </Steps.Step>
                 <Steps.Step step={2} line={false}>
                   <p>
-                    Run NetBird {!usingSetupKeyParam && "and log in the browser"}
+                    {t("setupModal.runNetBird")}
+                    {!usingSetupKeyParam &&
+                      ` ${t("setupModal.andLogInBrowser")}`}
                     {showSetupKeyInfo && <RoutingPeerSetupKeyInfo />}
                   </p>
                   <Code>
@@ -234,32 +231,26 @@ function MacOSTabContent({
                   <p>{t("setupModal.installNetBird")}</p>
                   <Code
                     codeToCopy={[
-                      `brew install netbirdio/tap/netbird`,
-                      `brew install --cask netbirdio/tap/netbird-ui`,
+                      `# ${t("setupModal.homebrewUnavailable")}`,
                     ].join("\n")}
                   >
                     <Code.Comment>
-                      {t("setupModal.cliOnlyComment")}
+                      # {t("setupModal.homebrewUnavailable")}
                     </Code.Comment>
-                    <Code.Line>brew install netbirdio/tap/netbird</Code.Line>
-                    <Code.Comment>
-                      {t("setupModal.guiPackageComment")}
-                    </Code.Comment>
-                    <Code.Line>
-                      brew install --cask netbirdio/tap/netbird-ui
-                    </Code.Line>
                   </Code>
                 </Steps.Step>
                 <Steps.Step step={3}>
                   <p>{t("setupModal.startNetBirdDaemon")}</p>
                   <Code>
-                    <Code.Line>sudo netbird service install</Code.Line>
-                    <Code.Line>sudo netbird service start</Code.Line>
+                    <Code.Line>sudo cloink service install</Code.Line>
+                    <Code.Line>sudo cloink service start</Code.Line>
                   </Code>
                 </Steps.Step>
                 <Steps.Step step={4} line={false}>
                   <p>
-                    Run NetBird {!usingSetupKeyParam && "and log in the browser"}
+                    {t("setupModal.runNetBird")}
+                    {!usingSetupKeyParam &&
+                      ` ${t("setupModal.andLogInBrowser")}`}
                     {showSetupKeyInfo && <RoutingPeerSetupKeyInfo />}
                   </p>
                   <Code>

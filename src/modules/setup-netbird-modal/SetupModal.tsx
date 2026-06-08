@@ -152,16 +152,9 @@ export function SetupModalContent({
   const setupKeyContent = showKeyGenerator ? (
     <>
       <div className={"flex items-center gap-1.5 flex-wrap"}>
-        Generate a setup key
+        {t("setupModal.generateSetupKey")}
         <HelpTooltip
-          content={
-            <>
-              A setup key is a one-time, pre-authentication token used to
-              enroll an unattended machine with NetBird. Pass it to{" "}
-              <code>netbird up</code> via <code>--setup-key</code> and the
-              peer registers without an interactive login.
-            </>
-          }
+          content={t("setupModal.generateSetupKeyHelp")}
         />
         <InlineLink
           href={
@@ -169,7 +162,7 @@ export function SetupModalContent({
           }
           target={"_blank"}
         >
-          Learn more
+          {t("common.learnMore")}
           <ExternalLinkIcon size={12} />
         </InlineLink>
       </div>
@@ -194,12 +187,13 @@ export function SetupModalContent({
     }
 
     return effectiveSetupKey
-      ? "Install NetBird with Setup Key"
-      : "Install NetBird";
+      ? t("setupModal.installWithSetupKey")
+      : t("setupModal.installNetBird");
   }, [
     isFirstRun,
     isInstallPage,
     effectiveSetupKey,
+    t,
     title,
     user?.given_name,
   ]);
@@ -228,8 +222,8 @@ export function SetupModalContent({
             )}
           >
             {isUserDevice === false || effectiveSetupKey
-              ? "To get started, install and run NetBird with the setup key as a parameter."
-              : "To get started, install NetBird and log in with your email account."}
+              ? t("setupModal.setupKeyDescription")
+              : t("setupModal.defaultDescription")}
           </Paragraph>
         </div>
       )}

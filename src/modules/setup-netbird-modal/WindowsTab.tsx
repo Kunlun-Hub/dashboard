@@ -121,9 +121,7 @@ function WindowsTabContent({
 
           {GRPC_API_ORIGIN && (
             <Steps.Step step={baseMgmtStep}>
-              <p>
-                {`Click on "Settings" then "Advanced Settings" from the NetBird icon in your system tray and enter the following "Management URL"`}
-              </p>
+              <p>{t("setupModal.managementUrlInstructions")}</p>
               <Code>
                 <Code.Line>{GRPC_API_ORIGIN}</Code.Line>
               </Code>
@@ -152,13 +150,10 @@ function WindowsTabContent({
           ) : (
             <>
               <Steps.Step step={runStep}>
-                <p>
-                  {/* eslint-disable-next-line react/no-unescaped-entities */}
-                  Click on "Connect" from the NetBird icon in your system tray
-                </p>
+                <p>{t("setupModal.clickConnectTray")}</p>
               </Steps.Step>
               <Steps.Step step={runStep + 1} line={false}>
-                <p>Sign up using your email address</p>
+                <p>{t("setupModal.signUpWithEmail")}</p>
               </Steps.Step>
             </>
           )}

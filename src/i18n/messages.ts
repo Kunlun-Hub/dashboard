@@ -17,6 +17,7 @@ export const messages = {
     "common.no": "No",
     "common.cancel": "Cancel",
     "common.later": "Later",
+    "common.learnMore": "Learn more",
     "common.group": "Group",
     "common.unknown": "Unknown",
     "common.username": "Username",
@@ -29,6 +30,10 @@ export const messages = {
     "common.close": "Close",
     "common.delete": "Delete",
     "common.disabled": "Disabled",
+    "common.active": "Active",
+    "common.status": "Status",
+    "common.save": "Save",
+    "common.enable": "Enable",
     "common.exitNode": "Exit Node",
     "common.none": "None",
     "common.all": "All",
@@ -302,6 +307,18 @@ export const messages = {
       "To get started, install Cloink and log in using your email account. After that you should be connected.",
     "peers.addPeer": "Add Peer",
     "peers.installationGuide": "Installation Guide",
+    "peers.userDevices": "User Devices",
+    "peers.userDevicesDescription":
+      "Laptops, phones and other personal devices with a user behind them, typically added when the user signs in with SSO.",
+    "peers.userDevicesBlockedTitle": "Add new device to your network",
+    "peers.userDevicesBlockedDescription":
+      "To get started, install Cloink and log in using your email account. After that you should be connected.",
+    "peers.servers": "Servers",
+    "peers.serversDescription":
+      "Servers, VMs, autonomous agents and other unattended machines with no user behind them, typically enrolled with a setup key.",
+    "peers.serversBlockedTitle": "Add new server to your network",
+    "peers.serversBlockedDescription":
+      "To get started, install Cloink on the server and enroll it using a setup key.",
     "setupKeys.title": "Setup Keys",
     "setupKeys.description":
       "Setup keys are pre-authentication keys that allow to register new machines in your network.",
@@ -2172,6 +2189,24 @@ export const messages = {
     "reverseProxy.authMethodIpRestricted": "IP Restricted",
     "reverseProxy.authMethodCountryRestricted": "Country Restricted",
     "reverseProxy.authMethodGeoUnavailable": "Geo Unavailable",
+    "reverseProxy.cloinkOnly": "Cloink Only",
+    "reverseProxy.cloinkOnlyAccess": "Cloink-Only Access",
+    "reverseProxy.cloinkOnlyDescription":
+      "Reachable only from connected peers in the selected Cloink groups.",
+    "reverseProxy.cloinkOnlyModalDescription":
+      "Reachable from peers in selected groups only.",
+    "reverseProxy.cloinkOnlyRequiresClusterPrefix":
+      "Cloink-Only Access requires a proxy cluster with at least one connected embedded proxy",
+    "reverseProxy.cloinkOnlyRequiresClusterSuffix":
+      ". The selected cluster doesn't have one. Connect an embedded proxy to this cluster to enable this option.",
+    "reverseProxy.pickGroups": "Pick groups",
+    "reverseProxy.selectAccessGroups": "Select access groups...",
+    "reverseProxy.noGroups": "No groups",
+    "reverseProxy.groupCount": "{count} Group(s)",
+    "reverseProxy.privateClusterDescriptionPrefix":
+      "Lets you publish services that are only reachable from peers in your Cloink network. Required for",
+    "reverseProxy.privateClusterDescriptionMiddle": "and",
+    "reverseProxy.privateClusterDescriptionSuffix": "target types.",
     "reverseProxy.ruleCount": "{count} Rule(s)",
     "reverseProxy.allowedCountries": "Allowed Countries",
     "reverseProxy.blockedCountries": "Blocked Countries",
@@ -3042,6 +3077,9 @@ export const messages = {
       "This setup key can be used only once within the next 24 hours.",
     "setupModal.setupKeyInfoLine2":
       "When expired, the same key can not be used again.",
+    "setupModal.generateSetupKey": "Generate a setup key",
+    "setupModal.generateSetupKeyHelp":
+      "A setup key is a one-time, pre-authentication token used to enroll an unattended machine with Cloink. Pass it to cloink up with --setup-key and the peer registers without an interactive login.",
     "setupModal.windowsInstallTitle": "Install on Windows",
     "setupModal.windowsStep1": "Download and run Windows Installer",
     "setupModal.selectArchitecture": "Select architecture",
@@ -3064,6 +3102,8 @@ export const messages = {
     "setupModal.installManuallyHomebrew": "Install manually with HomeBrew",
     "setupModal.downloadInstallHomebrew": "Download and install HomeBrew",
     "setupModal.homebrewGuide": "HomeBrew Installation Guide",
+    "setupModal.homebrewUnavailable":
+      "HomeBrew packages are not published for Cloink yet. Use the installer download above.",
     "setupModal.cliOnlyComment": "# for CLI only",
     "setupModal.guiPackageComment": "# for GUI package",
     "setupModal.startNetBirdDaemon": "Start Cloink daemon",
@@ -3085,6 +3125,7 @@ export const messages = {
     "setupModal.dockerInstallTitle": "Install with Docker",
     "setupModal.installDocker": "Install Docker",
     "setupModal.runNetBirdContainer": "Run Cloink container",
+    "setupModal.readDocumentation": "Read our documentation",
     "setupModal.runningNetBirdDocker": "Running Cloink in Docker",
     "accessControl.modalUpdateTitle": "Update Access Control Policy",
     "accessControl.modalCreateTitle": "Create New Access Control Policy",
@@ -3462,6 +3503,7 @@ export const messages = {
     "common.no": "否",
     "common.cancel": "取消",
     "common.later": "稍后",
+    "common.learnMore": "了解更多",
     "common.group": "分组",
     "common.unknown": "未知",
     "common.username": "用户名",
@@ -3496,6 +3538,10 @@ export const messages = {
     "common.close": "关闭",
     "common.delete": "删除",
     "common.disabled": "已禁用",
+    "common.active": "已启用",
+    "common.status": "状态",
+    "common.save": "保存",
+    "common.enable": "启用",
     "common.exitNode": "出口节点",
     "common.none": "无",
     "common.all": "全部",
@@ -3762,6 +3808,18 @@ export const messages = {
       "开始使用前，请先安装 云链-Cloink，并使用你的邮箱账号登录。完成后设备应该就会连接成功。",
     "peers.addPeer": "添加设备",
     "peers.installationGuide": "安装指南",
+    "peers.userDevices": "用户设备",
+    "peers.userDevicesDescription":
+      "笔记本、手机以及其他有用户归属的个人设备，通常由用户通过 SSO 登录后添加。",
+    "peers.userDevicesBlockedTitle": "将新设备加入你的网络",
+    "peers.userDevicesBlockedDescription":
+      "开始使用前，请先安装 Cloink 并使用你的邮箱账号登录。完成后设备应该就会连接成功。",
+    "peers.servers": "服务器",
+    "peers.serversDescription":
+      "服务器、虚拟机、自动化代理以及其他无人值守机器，通常使用 setup key 注册。",
+    "peers.serversBlockedTitle": "将新服务器加入你的网络",
+    "peers.serversBlockedDescription":
+      "开始使用前，请在服务器上安装 Cloink，并使用 setup key 完成注册。",
     "setupKeys.title": "注册密钥",
     "setupKeys.description":
       "注册密钥是预认证密钥，可用于在你的网络中注册新的机器设备。",
@@ -5484,6 +5542,24 @@ export const messages = {
     "reverseProxy.authMethodIpRestricted": "IP 限制",
     "reverseProxy.authMethodCountryRestricted": "国家限制",
     "reverseProxy.authMethodGeoUnavailable": "地理位置不可用",
+    "reverseProxy.cloinkOnly": "仅 Cloink",
+    "reverseProxy.cloinkOnlyAccess": "仅 Cloink 访问",
+    "reverseProxy.cloinkOnlyDescription":
+      "仅允许所选 Cloink 分组中的已连接设备访问。",
+    "reverseProxy.cloinkOnlyModalDescription":
+      "仅允许所选分组中的设备访问。",
+    "reverseProxy.cloinkOnlyRequiresClusterPrefix":
+      "仅 Cloink 访问需要代理集群中至少有一个已连接的嵌入式代理",
+    "reverseProxy.cloinkOnlyRequiresClusterSuffix":
+      "。当前所选集群没有可用代理，请先连接一个嵌入式代理后再启用此选项。",
+    "reverseProxy.pickGroups": "选择分组",
+    "reverseProxy.selectAccessGroups": "选择访问分组...",
+    "reverseProxy.noGroups": "无分组",
+    "reverseProxy.groupCount": "{count} 个分组",
+    "reverseProxy.privateClusterDescriptionPrefix":
+      "允许发布仅 Cloink 网络内设备可访问的服务。以下目标类型需要该能力：",
+    "reverseProxy.privateClusterDescriptionMiddle": "和",
+    "reverseProxy.privateClusterDescriptionSuffix": "。",
     "reverseProxy.ruleCount": "{count} 条规则",
     "reverseProxy.allowedCountries": "允许的国家/地区",
     "reverseProxy.blockedCountries": "已阻止的国家/地区",
@@ -6258,6 +6334,9 @@ export const messages = {
     "setupModal.setupKeyInfoLine1":
       "这个 setup key 只能在接下来的 24 小时内使用一次。",
     "setupModal.setupKeyInfoLine2": "过期后，同一个 key 不能再次使用。",
+    "setupModal.generateSetupKey": "生成 setup key",
+    "setupModal.generateSetupKeyHelp":
+      "setup key 是用于注册无人值守机器的一次性预认证令牌。将它通过 --setup-key 传给 cloink up 后，设备即可无需交互登录完成注册。",
     "setupModal.windowsInstallTitle": "在 Windows 上安装",
     "setupModal.windowsStep1": "下载并运行 Windows 安装程序",
     "setupModal.selectArchitecture": "选择架构",
@@ -6279,6 +6358,8 @@ export const messages = {
     "setupModal.installManuallyHomebrew": "通过 HomeBrew 手动安装",
     "setupModal.downloadInstallHomebrew": "下载并安装 HomeBrew",
     "setupModal.homebrewGuide": "HomeBrew 安装指南",
+    "setupModal.homebrewUnavailable":
+      "Cloink 暂未发布 HomeBrew 包，请使用上方安装程序下载方式。",
     "setupModal.cliOnlyComment": "# 仅 CLI 使用",
     "setupModal.guiPackageComment": "# GUI 图形界面包",
     "setupModal.startNetBirdDaemon": "启动 Cloink 后台服务",
@@ -6297,6 +6378,7 @@ export const messages = {
     "setupModal.dockerInstallTitle": "通过 Docker 安装",
     "setupModal.installDocker": "安装 Docker",
     "setupModal.runNetBirdContainer": "运行 Cloink 容器",
+    "setupModal.readDocumentation": "阅读我们的文档",
     "setupModal.runningNetBirdDocker": "在 Docker 中运行 Cloink",
     "accessControl.modalUpdateTitle": "更新访问控制策略",
     "accessControl.modalCreateTitle": "创建新的访问控制策略",

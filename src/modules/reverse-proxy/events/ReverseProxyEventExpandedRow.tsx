@@ -55,7 +55,7 @@ function GroupBlock({ group }: { group: Group }) {
     <div className={"space-y-1.5"}>
       <div
         className={
-          "text-[11px] font-medium uppercase tracking-wide text-nb-gray-400"
+          "text-[11px] font-medium uppercase tracking-wide text-neutral-500 dark:text-nb-gray-400"
         }
       >
         {heading}
@@ -77,7 +77,7 @@ export default function ReverseProxyEventExpandedRow({ event }: Props) {
     return (
       <div
         className={
-          "px-4 py-4 text-sm text-nb-gray-400 italic border-t border-nb-gray-900"
+          "px-4 py-4 text-sm text-neutral-500 italic border-t border-neutral-200 dark:text-nb-gray-400 dark:border-nb-gray-900"
         }
       >
         No metadata recorded for this request.
@@ -90,7 +90,7 @@ export default function ReverseProxyEventExpandedRow({ event }: Props) {
   return (
     <div
       className={
-        "px-4 py-4 space-y-3 border-t border-nb-gray-900 bg-nb-gray-940/30"
+        "px-4 py-4 space-y-3 border-t border-neutral-200 bg-neutral-50 dark:border-nb-gray-900 dark:bg-nb-gray-940/30"
       }
     >
       {groups.map((g) => (

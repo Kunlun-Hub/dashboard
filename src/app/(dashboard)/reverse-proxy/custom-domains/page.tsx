@@ -42,17 +42,29 @@ export default function ReverseProxyCustomDomainsPage() {
             active={true}
           />
         </Breadcrumbs>
-        <h1 ref={headingRef}>Domains</h1>
-        <Paragraph>
-          Add and manage custom domains for your reverse proxy services.{" "}
-          <InlineLink
-            href={REVERSE_PROXY_CUSTOM_DOMAINS_DOCS_LINK}
-            target={"_blank"}
-          >
-            Learn more
-            <ExternalLinkIcon size={12} />
-          </InlineLink>
-        </Paragraph>
+        <div
+          className={
+            "flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"
+          }
+        >
+          <div>
+            <h1 ref={headingRef}>{t("customDomains.title")}</h1>
+            <Paragraph>
+              {t("customDomains.description")}{" "}
+              <InlineLink
+                href={REVERSE_PROXY_CUSTOM_DOMAINS_DOCS_LINK}
+                target={"_blank"}
+              >
+                {t("common.learnMore")}
+                <ExternalLinkIcon size={12} />
+              </InlineLink>
+            </Paragraph>
+          </div>
+          <ResourceUsageInline
+            limit={"custom_domains"}
+            className={"sm:min-w-[18rem]"}
+          />
+        </div>
       </div>
       <RestrictedAccess
         page={t("nav.customDomains")}

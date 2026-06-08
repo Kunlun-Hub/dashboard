@@ -26,8 +26,12 @@ export const ReverseProxyEventsStatusCell = ({ event }: Props) => {
       interactive={false}
       content={
         <div className={"max-w-xs text-xs break-words whitespace-normal"}>
-          <span className={"text-nb-gray-400"}>Reason: </span>
-          <span className={"text-nb-gray-100"}>{reason}</span>
+          <span className={"text-neutral-500 dark:text-nb-gray-400"}>
+            Reason:{" "}
+          </span>
+          <span className={"text-neutral-900 dark:text-nb-gray-100"}>
+            {reason}
+          </span>
         </div>
       }
     >

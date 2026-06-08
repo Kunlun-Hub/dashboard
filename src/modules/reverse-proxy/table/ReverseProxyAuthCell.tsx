@@ -36,8 +36,8 @@ const HEADER_AUTH_METHOD = {
 };
 
 const NETBIRD_ONLY_METHOD = {
-  label: "NetBird Only",
-  hoverLabel: "NetBird-Only Access",
+  labelKey: "reverseProxy.cloinkOnly" as const,
+  hoverLabelKey: "reverseProxy.cloinkOnlyAccess" as const,
   Icon: CircleUser,
 };
 
@@ -204,14 +204,16 @@ export default function ReverseProxyAuthCell({
                     <ListItem
                       className={"py-0.5"}
                       icon={<CircleUser size={14} />}
-                      label={NETBIRD_ONLY_METHOD.hoverLabel}
+                      label={t(NETBIRD_ONLY_METHOD.hoverLabelKey)}
                       value={
                         <div className={"text-green-500"}>
                           {accessGroups.length === 0
-                            ? "No groups"
+                            ? t("reverseProxy.noGroups")
                             : accessGroups.length === 1
-                              ? "1 Group"
-                              : `${accessGroups.length} Groups`}
+                              ? t("reverseProxy.groupCount", { count: 1 })
+                              : t("reverseProxy.groupCount", {
+                                  count: accessGroups.length,
+                                })}
                         </div>
                       }
                     >
