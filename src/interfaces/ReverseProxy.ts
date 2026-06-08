@@ -21,6 +21,8 @@ export interface ReverseProxy {
   auth?: ReverseProxyAuth;
   access_restrictions?: AccessRestrictions;
   meta?: ReverseProxyMeta;
+  private?: boolean;
+  access_groups?: string[];
 }
 
 export const CrowdSecMode = {
@@ -63,6 +65,13 @@ export interface ServiceTargetOptions {
   path_rewrite?: ServiceTargetOptionsPathRewrite;
   custom_headers?: Record<string, string>;
   proxy_protocol?: boolean;
+  /**
+   * When true, the proxy dials this target via the host's network stack
+   * instead of through its embedded NetBird client. Use for upstreams
+   * reachable without WireGuard (public APIs, LAN services, localhost
+   * sidecars).
+   */
+  direct_upstream?: boolean;
 }
 
 export interface ReverseProxyTarget {
@@ -113,6 +122,7 @@ export interface ReverseProxyDomain {
   supports_custom_ports?: boolean;
   require_subdomain?: boolean;
   supports_crowdsec?: boolean;
+  supports_private?: boolean;
 }
 
 export enum ReverseProxyDomainType {
@@ -125,6 +135,7 @@ export enum ReverseProxyTargetType {
   HOST = "host",
   DOMAIN = "domain",
   SUBNET = "subnet",
+  CLUSTER = "cluster",
 }
 
 export enum ReverseProxyTargetProtocol {
@@ -163,11 +174,25 @@ export interface ReverseProxyEvent {
   metadata?: Record<string, string>;
 }
 
+export enum ReverseProxyClusterType {
+  ACCOUNT = "account",
+  SHARED = "shared",
+}
+
 export interface ReverseProxyCluster {
   id?: string;
   address: string;
+  type: ReverseProxyClusterType;
+  online: boolean;
   connected_proxies: number;
-  self_hosted: boolean;
+  supports_custom_ports?: boolean;
+  require_subdomain?: boolean;
+  supports_crowdsec?: boolean;
+  // True when at least one connected proxy in this cluster is running embedded
+  // in a netbird client (`netbird proxy`) and serving over a WireGuard tunnel.
+  // Lets the dashboard distinguish per-peer / private clusters from centralised
+  // ones.
+  private?: boolean;
 }
 
 export interface ReverseProxyClusterToken {
@@ -200,3 +225,42 @@ export function isL4Mode(mode?: ServiceMode): boolean {
     mode === ServiceMode.TLS
   );
 }
+
+export const REVERSE_PROXY_DOCS_LINK =
+  "https://docs.netbird.io/manage/reverse-proxy";
+
+export const REVERSE_PROXY_SERVICES_DOCS_LINK =
+  "https://docs.netbird.io/manage/reverse-proxy#services";
+
+export const REVERSE_PROXY_TARGETS_DOCS_LINK =
+  "https://docs.netbird.io/manage/reverse-proxy#targets";
+
+export const REVERSE_PROXY_AUTHENTICATION_DOCS_LINK =
+  "https://docs.netbird.io/manage/reverse-proxy/authentication";
+
+export const REVERSE_PROXY_SETTINGS_DOCS_LINK =
+  "https://docs.netbird.io/manage/reverse-proxy#step-4-configure-advanced-settings";
+
+export const REVERSE_PROXY_CLUSTERS_DOCS_LINK =
+  "https://docs.netbird.io/manage/reverse-proxy/bring-your-own-proxy#shared-and-account-clusters";
+
+export const REVERSE_PROXY_SELFHOSTED_ROUTING_DOCS_LINK =
+  "https://docs.netbird.io/selfhosted/migration/enable-reverse-proxy#connecting-through-traefik-instead-of-docker-network";
+
+export const REVERSE_PROXY_ENV_REFERENCE_DOCS_LINK =
+  "https://docs.netbird.io/selfhosted/migration/enable-reverse-proxy#environment-variable-reference";
+
+export const REVERSE_PROXY_CUSTOM_DOMAINS_DOCS_LINK =
+  "https://docs.netbird.io/manage/reverse-proxy/custom-domains";
+
+export const REVERSE_PROXY_DOMAIN_VERIFICATION_LINK =
+  "https://docs.netbird.io/manage/reverse-proxy/custom-domains#verifying-a-custom-domain";
+
+export const REVERSE_PROXY_EVENTS_DOCS_LINK =
+  "https://docs.netbird.io/manage/reverse-proxy/access-logs";
+
+export const REVERSE_PROXY_ACCESS_CONTROL_DOCS_LINK =
+  "https://docs.netbird.io/manage/reverse-proxy#step-3b-configure-access-control";
+
+export const REVERSE_PROXY_TROUBLESHOOTING_DOCS_LINK =
+  "https://docs.netbird.io/manage/reverse-proxy/troubleshooting";

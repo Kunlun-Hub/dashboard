@@ -1,3 +1,4 @@
+import InlineLink from "@components/InlineLink";
 import Code from "@components/Code";
 import Steps from "@components/Steps";
 import TabsContentPadding, { TabsContent } from "@components/Tabs";
@@ -10,17 +11,21 @@ import { RoutingPeerSetupKeyInfo } from "@/modules/setup-netbird-modal/SetupModa
 
 type Props = {
   setupKey?: string;
+  setupKeyContent?: React.ReactNode;
+  setupKeyPlaceholder?: string;
   showSetupKeyInfo?: boolean;
   hostname?: string;
 };
 
 export default function DockerTab({
   setupKey,
+  setupKeyContent,
+  setupKeyPlaceholder,
   showSetupKeyInfo = false,
   hostname,
 }: Readonly<Props>) {
   const { t } = useI18n();
-
+  const offset = setupKeyContent ? 1 : 0;
   return (
     <TabsContent value={String(OperatingSystem.DOCKER)}>
       <TabsContentPadding>
@@ -32,7 +37,10 @@ export default function DockerTab({
           <Steps.Step step={1}>
             <p>{t("setupModal.installDocker")}</p>
           </Steps.Step>
-          <Steps.Step step={2}>
+          {setupKeyContent && (
+            <Steps.Step step={2}>{setupKeyContent}</Steps.Step>
+          )}
+          <Steps.Step step={2 + offset}>
             <p>
               {t("setupModal.runNetBirdContainer")}
               {showSetupKeyInfo && <RoutingPeerSetupKeyInfo />}
@@ -44,7 +52,7 @@ export default function DockerTab({
                 {" "}
                 -e CL_SETUP_KEY=
                 <span className={"text-netbird"}>
-                  {setupKey ?? "SETUP_KEY"}
+                  {setupKey ?? setupKeyPlaceholder ?? "SETUP_KEY"}
                 </span>{" "}
                 \
               </Code.Line>
@@ -67,6 +75,16 @@ export default function DockerTab({
               )}
               <Code.Line> ohoimager/cloink:latest</Code.Line>
             </Code>
+          </Steps.Step>
+          <Steps.Step step={3 + offset} line={false}>
+            <p>Read our documentation</p>
+            <InlineLink
+              href={"https://docs.netbird.io/how-to/installation/docker"}
+              passHref={true}
+              target={"_blank"}
+            >
+              Running NetBird in Docker
+            </InlineLink>
           </Steps.Step>
         </Steps>
       </TabsContentPadding>

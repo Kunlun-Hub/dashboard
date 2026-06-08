@@ -1,11 +1,30 @@
 "use client";
 
-import ButtonGroup from "@components/ButtonGroup";
+import { ExternalLinkIcon } from "lucide-react";
+import InlineLink from "@components/InlineLink";
 import SquareIcon from "@components/SquareIcon";
 import { DataTable } from "@components/table/DataTable";
 import DataTableHeader from "@components/table/DataTableHeader";
 import DataTableRefreshButton from "@components/table/DataTableRefreshButton";
-import { DataTableRowsPerPage } from "@components/table/DataTableRowsPerPage";
+import {
+  formatRadioChip,
+  RadioOption,
+  RadioPicker,
+} from "@components/table/filters/RadioPicker";
+import {
+  formatTextChip,
+  TextInputPicker,
+} from "@components/table/filters/TextInputPicker";
+import {
+  formatUsersChip,
+  UserOption,
+  UsersPicker,
+} from "@components/table/filters/UsersPicker";
+import {
+  TableFilterChips,
+  TableFilterDef,
+  TableFiltersButton,
+} from "@components/table/TableFilters";
 import GetStartedTest from "@components/ui/GetStartedTest";
 import type { ColumnDef, SortingState } from "@tanstack/react-table";
 import ReverseProxyIcon from "@/assets/icons/ReverseProxyIcon";
@@ -14,7 +33,14 @@ import React, { useCallback, useMemo, useState } from "react";
 import { DateRange } from "react-day-picker";
 import { DatePickerWithRange } from "@components/DatePickerWithRange";
 import { useServerPagination } from "@/contexts/ServerPaginationProvider";
-import { ReverseProxy, ReverseProxyEvent } from "@/interfaces/ReverseProxy";
+import { useUsers } from "@/contexts/UsersProvider";
+import { useI18n } from "@/i18n/I18nProvider";
+import {
+  REVERSE_PROXY_EVENTS_DOCS_LINK,
+  ReverseProxy,
+  ReverseProxyEvent,
+} from "@/interfaces/ReverseProxy";
+import type { User } from "@/interfaces/User";
 import useFetchApi from "@/utils/api";
 import { ReverseProxyEventsStatusCell } from "@/modules/reverse-proxy/events/ReverseProxyEventsStatusCell";
 import { ReverseProxyEventsUserCell } from "@/modules/reverse-proxy/events/ReverseProxyEventsUserCell";
@@ -25,17 +51,14 @@ import {
 } from "@/modules/reverse-proxy/events/ReverseProxyEventsRequestCell";
 import { ReverseProxyEventsTimeCell } from "@/modules/reverse-proxy/events/ReverseProxyEventsTimeCell";
 import { ReverseProxyEventsAuthMethodCell } from "@/modules/reverse-proxy/events/ReverseProxyEventsAuthMethodCell";
-import { ReverseProxyEventsReasonCell } from "@/modules/reverse-proxy/events/ReverseProxyEventsReasonCell";
 import { ReverseProxyEventsDurationCell } from "@/modules/reverse-proxy/events/ReverseProxyEventsDurationCell";
 import { ReverseProxyEventsBytesCell } from "@/modules/reverse-proxy/events/ReverseProxyEventsBytesCell";
-import { useI18n } from "@/i18n/I18nProvider";
-import type { MessageKey } from "@/i18n/messages";
-
-type TranslationValues = Record<string, string | number>;
+import ReverseProxyEventExpandedRow from "@/modules/reverse-proxy/events/ReverseProxyEventExpandedRow";
 
 export const makeEventsColumns = (
   servicesMap: Map<string, ReverseProxy>,
-  t: (key: MessageKey, values?: TranslationValues) => string,
+  userById: Map<string, User>,
+  t: ReturnType<typeof useI18n>["t"],
 ): ColumnDef<ReverseProxyEvent>[] => [
   {
     id: "timestamp",
@@ -63,32 +86,28 @@ export const makeEventsColumns = (
     cell: ({ row }) => (
       <ReverseProxyEventsLocationIpCell event={row.original} />
     ),
+    filterFn: "includesString",
   },
   {
     id: "method",
     accessorKey: "method",
     header: ({ column }) => (
       <DataTableHeader column={column} name="method">
-        {t("proxyEvents.method")}
-      </DataTableHeader>
-    ),
-    cell: ({ row }) => <ReverseProxyEventsMethodCell event={row.original} />,
-    filterFn: "arrIncludesSomeExact",
-  },
-  {
-    id: "url",
-    accessorFn: (row) => `${row.host} ${row.path || ""}`,
-    header: ({ column }) => (
-      <DataTableHeader column={column} name="url" sorting={false}>
-        {t("proxyEvents.hostUrl")}
+        Request
       </DataTableHeader>
     ),
     cell: ({ row }) => (
-      <ReverseProxyEventsUrlCell
-        event={row.original}
-        service={servicesMap.get(row.original.service_id)}
-      />
+      <div className={"flex items-baseline gap-3"}>
+        <ReverseProxyEventsMethodCell event={row.original} />
+        <ReverseProxyEventsUrlCell
+          event={row.original}
+          service={servicesMap.get(row.original.service_id)}
+        />
+      </div>
     ),
+    filterFn: "exactMatch",
+    size: 380,
+    maxSize: 420,
   },
   {
     id: "status",
@@ -98,9 +117,12 @@ export const makeEventsColumns = (
         {t("table.status")}
       </DataTableHeader>
     ),
-    cell: ({ row }) => <ReverseProxyEventsStatusCell event={row.original} />,
-    size: 80,
-    maxSize: 80,
+    cell: ({ row }) => (
+      <div className={"flex items-center gap-3"}>
+        <ReverseProxyEventsStatusCell event={row.original} />
+        <ReverseProxyEventsDurationCell event={row.original} />
+      </div>
+    ),
   },
   {
     id: "is_success",
@@ -108,14 +130,10 @@ export const makeEventsColumns = (
     filterFn: "exactMatch",
   },
   {
-    id: "duration",
-    accessorKey: "duration_ms",
-    header: ({ column }) => (
-      <DataTableHeader column={column} name="duration">
-        {t("proxyEvents.duration")}
-      </DataTableHeader>
-    ),
-    cell: ({ row }) => <ReverseProxyEventsDurationCell event={row.original} />,
+    id: "status_filter",
+    accessorFn: (row) =>
+      row.status_code >= 200 && row.status_code < 400 ? "success" : "failed",
+    filterFn: "exactMatch",
   },
   {
     id: "bytes",
@@ -128,36 +146,23 @@ export const makeEventsColumns = (
     cell: ({ row }) => <ReverseProxyEventsBytesCell event={row.original} />,
   },
   {
-    id: "auth_method",
-    accessorKey: "auth_method_used",
-    header: ({ column }) => (
-      <DataTableHeader column={column} name="auth_method">
-        {t("proxyEvents.authMethod")}
-      </DataTableHeader>
-    ),
-    cell: ({ row }) => (
-      <ReverseProxyEventsAuthMethodCell event={row.original} />
-    ),
-  },
-  {
-    id: "reason",
-    accessorKey: "reason",
-    header: ({ column }) => (
-      <DataTableHeader column={column} name="reason">
-        {t("proxyEvents.reason")}
-      </DataTableHeader>
-    ),
-    cell: ({ row }) => <ReverseProxyEventsReasonCell event={row.original} />,
-  },
-  {
     id: "user",
-    accessorFn: (row) => row.user_id || "",
+    accessorFn: (row) => {
+      if (!row.user_id) return "";
+      return userById.get(row.user_id)?.email ?? "";
+    },
     header: ({ column }) => (
       <DataTableHeader column={column} name="user_id">
         {t("table.user")}
       </DataTableHeader>
     ),
-    cell: ({ row }) => <ReverseProxyEventsUserCell event={row.original} />,
+    cell: ({ row }) => (
+      <div className={"flex items-center gap-2"}>
+        <ReverseProxyEventsUserCell event={row.original} />
+        <ReverseProxyEventsAuthMethodCell event={row.original} compact={true} />
+      </div>
+    ),
+    filterFn: "exactMatch",
   },
   {
     accessorKey: "id",
@@ -185,6 +190,7 @@ export default function ReverseProxyEventsTable({
   const { data: services } = useFetchApi<ReverseProxy[]>(
     "/reverse-proxies/services",
   );
+  const { users } = useUsers();
 
   const servicesMap = useMemo(() => {
     const map = new Map<string, ReverseProxy>();
@@ -194,7 +200,19 @@ export default function ReverseProxyEventsTable({
     return map;
   }, [services]);
 
-  const columns = useMemo(() => makeEventsColumns(servicesMap, t), [servicesMap, t]);
+  const userById = useMemo(() => {
+    const map = new Map<string, User>();
+    for (const user of users ?? []) {
+      if (!user.id || user.is_service_user) continue;
+      map.set(user.id, user);
+    }
+    return map;
+  }, [users]);
+
+  const columns = useMemo(
+    () => makeEventsColumns(servicesMap, userById, t),
+    [servicesMap, userById, t],
+  );
 
   const activeStatus = getFilter("status");
 
@@ -229,6 +247,142 @@ export default function ReverseProxyEventsTable({
     },
   ]);
 
+  const statusOptions = useMemo<RadioOption<string | undefined>[]>(
+    () => [
+      { value: undefined, label: "All", dotClass: "bg-nb-gray-500" },
+      { value: "success", label: "Success", dotClass: "bg-green-500" },
+      { value: "failed", label: "Failed", dotClass: "bg-red-500" },
+    ],
+    [],
+  );
+
+  const methodOptions = useMemo<RadioOption<string | undefined>[]>(
+    () => [
+      { value: undefined, label: "All" },
+      { value: "GET", label: "GET" },
+      { value: "POST", label: "POST" },
+      { value: "PUT", label: "PUT" },
+      { value: "PATCH", label: "PATCH" },
+      { value: "DELETE", label: "DELETE" },
+      { value: "HEAD", label: "HEAD" },
+      { value: "OPTIONS", label: "OPTIONS" },
+    ],
+    [],
+  );
+
+  const userOptions = useMemo<UserOption[]>(() => {
+    const map = new Map<string, UserOption>();
+    for (const user of users ?? []) {
+      if (!user.id || !user.email || user.is_service_user) continue;
+      map.set(user.id, {
+        id: user.id,
+        name: user.name || user.email,
+        email: user.email,
+      });
+    }
+    return Array.from(map.values());
+  }, [users]);
+
+  const filterDefs = useMemo<TableFilterDef[]>(
+    () => [
+      {
+        id: "status_filter",
+        label: "Status",
+        renderPicker: (p) => (
+          <RadioPicker
+            value={p.value as string | undefined}
+            onChange={(next) => {
+              p.onChange(next);
+              setFilter("status", next ?? undefined);
+            }}
+            close={p.close}
+            options={statusOptions}
+          />
+        ),
+        formatChip: (v) =>
+          formatRadioChip(v as string | undefined, statusOptions),
+      },
+      {
+        id: "method",
+        label: "Method",
+        renderPicker: (p) => (
+          <RadioPicker
+            value={p.value as string | undefined}
+            onChange={(next) => {
+              p.onChange(next);
+              setFilter("method", next ?? undefined);
+            }}
+            close={p.close}
+            options={methodOptions}
+          />
+        ),
+        formatChip: (v) =>
+          formatRadioChip(v as string | undefined, methodOptions),
+      },
+      {
+        id: "user",
+        label: "User",
+        renderPicker: (p) => (
+          <UsersPicker
+            value={p.value as string | undefined}
+            onChange={(next) => {
+              p.onChange(next);
+              const id = next
+                ? userOptions.find((u) => u.email === next)?.id
+                : undefined;
+              setFilter("user_id", id);
+            }}
+            close={p.close}
+            options={userOptions}
+          />
+        ),
+        formatChip: (v) =>
+          formatUsersChip(v as string | undefined, userOptions),
+      },
+      {
+        id: "location_ip",
+        label: "Location / IP",
+        renderPicker: (p) => (
+          <TextInputPicker
+            value={p.value as string | undefined}
+            onChange={(next) => {
+              const trimmed = next?.trim() ?? "";
+              p.onChange(trimmed ? trimmed : undefined);
+              setFilter("source_ip", trimmed ? trimmed : undefined);
+            }}
+            close={p.close}
+            placeholder={"e.g. 10.0.0.5 or Berlin"}
+          />
+        ),
+        formatChip: (v) => formatTextChip(v as string | undefined),
+      },
+    ],
+    [statusOptions, methodOptions, userOptions, setFilter],
+  );
+
+  const initialColumnFilters = useMemo<{ id: string; value: unknown }[]>(() => {
+    const filters: { id: string; value: unknown }[] = [];
+    if (activeStatus) {
+      filters.push({ id: "status_filter", value: activeStatus });
+    }
+    const activeMethod = getFilter("method");
+    if (activeMethod) {
+      filters.push({ id: "method", value: activeMethod });
+    }
+    const activeIp = getFilter("source_ip");
+    if (activeIp) {
+      filters.push({ id: "location_ip", value: activeIp });
+    }
+    const activeUserId = getFilter("user_id");
+    if (activeUserId) {
+      const email = userOptions.find((u) => u.id === activeUserId)?.email;
+      if (email) {
+        filters.push({ id: "user", value: email });
+      }
+    }
+    return filters;
+  }, [activeStatus, getFilter, userOptions]);
+
   return (
     <DataTable
       {...paginationProps}
@@ -241,8 +395,19 @@ export default function ReverseProxyEventsTable({
       sorting={sorting}
       setSorting={setSorting}
       columns={columns}
-      columnVisibility={{ is_success: false, id: false }}
-      searchPlaceholder={t("proxyEvents.searchPlaceholder")}
+      initialFilters={initialColumnFilters}
+      aboveTable={(table) => (
+        <TableFilterChips table={table} filters={filterDefs} />
+      )}
+      columnVisibility={{
+        is_success: false,
+        id: false,
+        status_filter: false,
+      }}
+      renderExpandedRow={(event) => (
+        <ReverseProxyEventExpandedRow event={event} />
+      )}
+      searchPlaceholder={"Search by IP, host, path, user..."}
       getStartedCard={
         <GetStartedTest
           icon={
@@ -257,45 +422,37 @@ export default function ReverseProxyEventsTable({
               size={"large"}
             />
           }
-          title={t("proxyEvents.emptyTitle")}
-          description={t("proxyEvents.emptyDescription")}
+          title={"No Proxy Events Yet"}
+          description={
+            "No proxy traffic yet. Events appear here once your reverse proxy services start serving requests."
+          }
+          learnMore={
+            <>
+              Learn more about
+              <InlineLink
+                href={REVERSE_PROXY_EVENTS_DOCS_LINK}
+                target={"_blank"}
+              >
+                Proxy Events
+                <ExternalLinkIcon size={12} />
+              </InlineLink>
+            </>
+          }
         />
       }
     >
       {(table) => (
         <>
-          <ButtonGroup disabled={!events?.length && !hasActiveFilters}>
-            <ButtonGroup.Button
-              onClick={() => setFilter("status", undefined)}
-              variant={activeStatus === undefined ? "tertiary" : "secondary"}
-            >
-              {t("filters.all")}
-            </ButtonGroup.Button>
-            <ButtonGroup.Button
-              onClick={() => setFilter("status", "success")}
-              variant={activeStatus === "success" ? "tertiary" : "secondary"}
-            >
-              {t("proxyEvents.success")}
-            </ButtonGroup.Button>
-            <ButtonGroup.Button
-              onClick={() => setFilter("status", "failed")}
-              variant={activeStatus === "failed" ? "tertiary" : "secondary"}
-            >
-              {t("proxyEvents.failed")}
-            </ButtonGroup.Button>
-          </ButtonGroup>
-
           <DatePickerWithRange
             value={dateRange}
             onChange={handleDateFilterChange}
             disabled={!events?.length && !hasActiveFilters}
           />
-
-          <DataTableRowsPerPage
+          <TableFiltersButton
             table={table}
+            filters={filterDefs}
             disabled={!events?.length && !hasActiveFilters}
           />
-
           <DataTableRefreshButton
             isDisabled={!events?.length && !hasActiveFilters}
             onClick={() => mutate()}

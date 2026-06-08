@@ -1,3 +1,6 @@
+import { ExternalLinkIcon } from "lucide-react";
+import InlineLink from "@components/InlineLink";
+import Paragraph from "@components/Paragraph";
 import React, { lazy, Suspense } from "react";
 import SkeletonTable, {
   SkeletonTableHeader,
@@ -18,6 +21,19 @@ export const PeerRemoteJobsSection = ({ peerID }: Props) => {
   return (
     <div className="pb-10 px-8">
       <div className="">
+        <div className="flex justify-between items-center mb-5">
+          <div>
+            <Paragraph>
+              Remotely trigger actions such as debug bundles or other tasks on
+              this peer, without requiring CLI access.{" "}
+              <InlineLink href={"https://docs.netbird.io"} target={"_blank"}>
+                Learn more
+                <ExternalLinkIcon size={12} />
+              </InlineLink>
+            </Paragraph>
+          </div>
+        </div>
+
         <Suspense
           fallback={
             <div>

@@ -13,9 +13,20 @@ type Props = {
   peer: Peer;
 };
 
+// shortDnsLabel returns the leading segment of a DNS label
+// ("misha.netbird.selfhosted" → "misha"). The base domain is operator-
+// configurable so we keep everything before the first dot rather than
+// trying to strip a known suffix. The full label still lands on the
+// clipboard via CopyToClipboardText's textToCopy prop.
+function shortDnsLabel(label: string | undefined | null): string {
+  if (!label) return "";
+  const dot = label.indexOf(".");
+  return dot === -1 ? label : label.slice(0, dot);
+}
+
 export default function PeerAddressCell({ peer }: Props) {
   const { t } = useI18n();
-
+  const shortLabel = shortDnsLabel(peer.dns_label);
   return (
     <FullTooltip
       side={"top"}
@@ -27,7 +38,7 @@ export default function PeerAddressCell({ peer }: Props) {
     >
       <div
         className={
-          "flex gap-2.5 items-center min-w-[300px] max-w-[300px] group/cell transition-all hover:bg-neutral-100 py-2 px-3 rounded-md cursor-default dark:hover:bg-nb-gray-800/10"
+          "flex gap-2.5 items-center max-w-[300px] group/cell transition-all hover:bg-nb-gray-800/10 py-2 px-3 rounded-md cursor-default"
         }
         onClick={(e) => {
           e.stopPropagation();
@@ -47,9 +58,10 @@ export default function PeerAddressCell({ peer }: Props) {
         </div>
         <div className="flex flex-col gap-0 dark:text-neutral-300 text-neutral-500 font-light truncate">
           <CopyToClipboardText
-            message={t("peerAddress.dnsLabelCopied")}
+            message={"DNS label has been copied to your clipboard"}
+            textToCopy={peer.dns_label}
           >
-            <span className={"font-normal truncate"}>{peer.dns_label}</span>
+            <span className={"font-normal truncate"}>{shortLabel}</span>
           </CopyToClipboardText>
           <CopyToClipboardText
             message={t("peerAddress.netBirdIpCopied")}

@@ -6,8 +6,9 @@ import {
   ActivityIcon,
   AlertOctagonIcon,
   FingerprintIcon,
-  FolderGit2Icon,
   GlobeIcon,
+  FolderGit2Icon,
+  KeyRound,
   KeyRoundIcon,
   LockIcon,
   MonitorSmartphoneIcon,
@@ -34,6 +35,7 @@ import IdentityProvidersTab from "@/modules/settings/IdentityProvidersTab";
 import LicenseSettingsTab from "@/modules/settings/LicenseSettingsTab";
 import NetworkSettingsTab from "@/modules/settings/NetworkSettingsTab";
 import PermissionsTab from "@/modules/settings/PermissionsTab";
+import SetupKeysTab from "@/modules/settings/SetupKeysTab";
 import VersionReleasesTab from "@/modules/settings/VersionReleasesTab";
 
 export default function NetBirdSettings() {
@@ -76,6 +78,12 @@ export default function NetBirdSettings() {
                 <KeyRoundIcon size={14} />
                 {t("settings.license")}
               </VerticalTabs.Trigger>
+              {permission.setup_keys.read && (
+                <VerticalTabs.Trigger value="setup-keys">
+                  <KeyRound size={14} />
+                  Setup Keys
+                </VerticalTabs.Trigger>
+              )}
               {account?.settings?.embedded_idp_enabled &&
                 identityProvidersEnabled &&
                 permission?.identity_providers?.read && (
@@ -129,7 +137,7 @@ export default function NetBirdSettings() {
         >
           <div className={"border-l border-neutral-200 w-full dark:border-nb-gray-930"}>
             {account && <AuthenticationTab account={account} />}
-            {account && <LicenseSettingsTab account={account} />}
+            {permission.setup_keys.read && <SetupKeysTab />}
             {account?.settings?.embedded_idp_enabled &&
               identityProvidersEnabled &&
               permission.identity_providers.read && <IdentityProvidersTab />}

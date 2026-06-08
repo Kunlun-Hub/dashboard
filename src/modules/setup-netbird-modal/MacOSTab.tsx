@@ -14,7 +14,7 @@ import Separator from "@components/Separator";
 import Steps from "@components/Steps";
 import TabsContentPadding, { TabsContent } from "@components/Tabs";
 import useFetchApi from "@utils/api";
-import { getNetBirdUpCommand, GRPC_API_ORIGIN } from "@utils/netbird";
+import { GRPC_API_ORIGIN } from "@utils/netbird";
 import {
   BeerIcon,
   DownloadIcon,
@@ -28,13 +28,14 @@ import { useI18n } from "@/i18n/I18nProvider";
 import { OperatingSystem } from "@/interfaces/OperatingSystem";
 import { VersionRelease } from "@/modules/settings/VersionReleasesTab";
 import {
-  HostnameParameter,
+  NetBirdUpCommand,
   RoutingPeerSetupKeyInfo,
-  SetupKeyParameter,
 } from "@/modules/setup-netbird-modal/SetupModal";
 
 type Props = {
   setupKey?: string;
+  setupKeyContent?: React.ReactNode;
+  setupKeyPlaceholder?: string;
   showSetupKeyInfo?: boolean;
   hostname?: string;
   versions?: VersionRelease[];
@@ -56,28 +57,35 @@ function AuthenticatedMacOSTab(props: Readonly<Props>) {
 
 function MacOSTabContent({
   setupKey,
+  setupKeyContent,
+  setupKeyPlaceholder,
   showSetupKeyInfo,
   hostname,
-  versions,
-}: Readonly<Props & { versions: VersionRelease[] }>) {
+  versions = [],
+}: Readonly<Props>) {
   const { t } = useI18n();
   const [selectedVersion, setSelectedVersion] = useState<string>("");
-
-  const macVersions = (versions || []).filter((v) => v.platform === "macos");
-
-  // Only show published versions
-  const versionOptions: SelectOption[] = macVersions.map((v) => ({
+  // Mirrors WindowsTab: server flow (setupKeyContent present) forces
+  // the CLI run branch so the netbird up command stays visible while
+  // the operator generates a key.
+  const useCliRun = !!setupKey || !!setupKeyContent;
+  const baseMgmtStep = 2;
+  const keyStep = GRPC_API_ORIGIN ? 3 : 2;
+  const runStep = keyStep + (setupKeyContent ? 1 : 0);
+  const usingSetupKeyParam = !!setupKey || !!setupKeyPlaceholder;
+  const macosVersions = versions.filter((v) => v.platform === "macos");
+  const versionOptions: SelectOption[] = macosVersions.map((v) => ({
     label: v.version + (v.isLatest ? " (最新)" : ""),
     value: v.downloadUrl,
   }));
 
   useEffect(() => {
-    if (macVersions.length > 0) {
+    if (macosVersions.length > 0) {
       const latestVersion =
-        macVersions.find((v) => v.isLatest) || macVersions[0];
+        macosVersions.find((v) => v.isLatest) || macosVersions[0];
       setSelectedVersion(latestVersion.downloadUrl);
     }
-  }, [macVersions]);
+  }, [macosVersions]);
 
   const currentUrl = selectedVersion || "";
 
@@ -125,36 +133,45 @@ function MacOSTabContent({
           </Steps.Step>
 
           {GRPC_API_ORIGIN && (
-            <Steps.Step step={2}>
-              <p>{t("setupModal.managementUrlInstructions")}</p>
+            <Steps.Step step={baseMgmtStep}>
+              <p>
+                {`Click on "Settings" then "Advanced Settings" from the NetBird icon in your system tray and enter the following "Management URL"`}
+              </p>
               <Code>
                 <Code.Line>{GRPC_API_ORIGIN}</Code.Line>
               </Code>
             </Steps.Step>
           )}
 
-          {setupKey ? (
-            <Steps.Step step={GRPC_API_ORIGIN ? 3 : 2} line={false}>
+          {setupKeyContent && (
+            <Steps.Step step={keyStep}>{setupKeyContent}</Steps.Step>
+          )}
+
+          {useCliRun ? (
+            <Steps.Step step={runStep} line={false}>
               <p>
                 {t("setupModal.openTerminalRunNetBird")}{" "}
                 {showSetupKeyInfo && <RoutingPeerSetupKeyInfo />}
               </p>
 
               <Code>
-                <Code.Line>
-                  {getNetBirdUpCommand()}
-                  <SetupKeyParameter setupKey={setupKey} />
-                  <HostnameParameter hostname={hostname} />
-                </Code.Line>
+                <NetBirdUpCommand
+                  setupKey={setupKey}
+                  setupKeyPlaceholder={setupKeyPlaceholder}
+                  hostname={hostname}
+                />
               </Code>
             </Steps.Step>
           ) : (
             <>
-              <Steps.Step step={GRPC_API_ORIGIN ? 3 : 2}>
-                <p>{t("setupModal.clickConnectTray")}</p>
+              <Steps.Step step={runStep}>
+                <p>
+                  {/* eslint-disable-next-line react/no-unescaped-entities */}
+                  Click on "Connect" from the NetBird icon in your system tray
+                </p>
               </Steps.Step>
-              <Steps.Step step={GRPC_API_ORIGIN ? 4 : 3} line={false}>
-                <p>{t("setupModal.signUpWithEmail")}</p>
+              <Steps.Step step={runStep + 1} line={false}>
+                <p>Sign up using your email address</p>
               </Steps.Step>
             </>
           )}
@@ -177,16 +194,15 @@ function MacOSTabContent({
                 </Steps.Step>
                 <Steps.Step step={2} line={false}>
                   <p>
-                    {t("setupModal.runNetBird")}
-                    {!setupKey && ` ${t("setupModal.andLogInBrowser")}`}
+                    Run NetBird {!usingSetupKeyParam && "and log in the browser"}
                     {showSetupKeyInfo && <RoutingPeerSetupKeyInfo />}
                   </p>
                   <Code>
-                    <Code.Line>
-                      {getNetBirdUpCommand()}
-                      <SetupKeyParameter setupKey={setupKey} />
-                      <HostnameParameter hostname={hostname} />
-                    </Code.Line>
+                    <NetBirdUpCommand
+                      setupKey={setupKey}
+                      setupKeyPlaceholder={setupKeyPlaceholder}
+                      hostname={hostname}
+                    />
                   </Code>
                 </Steps.Step>
               </Steps>
@@ -243,16 +259,15 @@ function MacOSTabContent({
                 </Steps.Step>
                 <Steps.Step step={4} line={false}>
                   <p>
-                    {t("setupModal.runNetBird")}
-                    {!setupKey && ` ${t("setupModal.andLogInBrowser")}`}
+                    Run NetBird {!usingSetupKeyParam && "and log in the browser"}
                     {showSetupKeyInfo && <RoutingPeerSetupKeyInfo />}
                   </p>
                   <Code>
-                    <Code.Line>
-                      {getNetBirdUpCommand()}
-                      <SetupKeyParameter setupKey={setupKey} />
-                      <HostnameParameter hostname={hostname} />
-                    </Code.Line>
+                    <NetBirdUpCommand
+                      setupKey={setupKey}
+                      setupKeyPlaceholder={setupKeyPlaceholder}
+                      hostname={hostname}
+                    />
                   </Code>
                 </Steps.Step>
               </Steps>

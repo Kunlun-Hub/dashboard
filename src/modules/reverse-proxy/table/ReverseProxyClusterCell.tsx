@@ -16,10 +16,12 @@ import { isNetBirdHosted } from "@/utils/netbird";
 
 type Props = {
   reverseProxy: ReverseProxy;
+  compact?: boolean;
 };
 
 export default function ReverseProxyClusterCell({
   reverseProxy,
+  compact,
 }: Readonly<Props>) {
   const { domains } = useReverseProxies();
   const { t } = useI18n();
@@ -31,8 +33,27 @@ export default function ReverseProxyClusterCell({
   );
 
   if (!hasCluster) {
-    return (
-      <div className="flex items-center gap-2">
+    return compact ? (
+      <FullTooltip
+        interactive={false}
+        content={
+          <span className={"text-xs"}>
+            <span className={"text-nb-gray-400"}>Cluster: </span>
+            <span className={"text-nb-gray-100"}>All</span>
+          </span>
+        }
+      >
+        <span
+          className={
+            "inline-flex items-center gap-1.5 truncate cursor-help"
+          }
+        >
+          <Globe size={11} className={"shrink-0"} />
+          All
+        </span>
+      </FullTooltip>
+    ) : (
+      <div className="flex items-center gap-2" data-cluster-cell>
         <Badge variant="gray" className="font-normal">
           <Globe size={12} />
           {t("common.all")}
@@ -42,8 +63,29 @@ export default function ReverseProxyClusterCell({
   }
 
   if (isConnected) {
-    return (
-      <div className="flex items-center gap-2">
+    return compact ? (
+      <FullTooltip
+        interactive={false}
+        content={
+          <span className={"text-xs"}>
+            <span className={"text-nb-gray-400"}>Cluster: </span>
+            <span className={"text-nb-gray-100"}>
+              {reverseProxy.proxy_cluster}
+            </span>
+          </span>
+        }
+      >
+        <span
+          className={
+            "inline-flex items-center gap-1.5 truncate cursor-help"
+          }
+        >
+          <Server size={11} className={"shrink-0"} />
+          {reverseProxy.proxy_cluster}
+        </span>
+      </FullTooltip>
+    ) : (
+      <div className="flex items-center gap-2" data-cluster-cell>
         <Badge variant={"gray"} className={cn("font-normal")}>
           <Server size={11} className={cn("text-green-500")} />
           {clusterName}
@@ -79,12 +121,23 @@ export default function ReverseProxyClusterCell({
       align={"center"}
       alignOffset={0}
     >
-      <div className="flex items-center gap-2">
-        <Badge variant={"red"} className={cn("font-normal")}>
-          <AlertTriangle size={11} />
-          {clusterName}
-        </Badge>
-      </div>
+      {compact ? (
+        <span
+          className={
+            "inline-flex items-center gap-1.5 text-red-500 cursor-help truncate"
+          }
+        >
+          <AlertTriangle size={11} className={"shrink-0"} />
+          {reverseProxy.proxy_cluster}
+        </span>
+      ) : (
+        <div className="flex items-center gap-2" data-cluster-cell>
+          <Badge variant={"red"} className={cn("font-normal")}>
+            <AlertTriangle size={11} />
+            {reverseProxy.proxy_cluster}
+          </Badge>
+        </div>
+      )}
     </FullTooltip>
   );
 }

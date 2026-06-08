@@ -15,20 +15,20 @@ import Steps from "@components/Steps";
 import TabsContentPadding, { TabsContent } from "@components/Tabs";
 import { IconBrandUbuntu } from "@tabler/icons-react";
 import useFetchApi from "@utils/api";
-import { getNetBirdUpCommand } from "@utils/netbird";
 import { DownloadIcon, TerminalSquareIcon } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { OperatingSystem } from "@/interfaces/OperatingSystem";
 import { VersionRelease } from "@/modules/settings/VersionReleasesTab";
 import {
-  HostnameParameter,
+  NetBirdUpCommand,
   RoutingPeerSetupKeyInfo,
-  SetupKeyParameter,
 } from "@/modules/setup-netbird-modal/SetupModal";
 
 type Props = {
   setupKey?: string;
+  setupKeyContent?: React.ReactNode;
+  setupKeyPlaceholder?: string;
   showSetupKeyInfo?: boolean;
   hostname?: string;
   versions?: VersionRelease[];
@@ -50,13 +50,17 @@ function AuthenticatedLinuxTab(props: Readonly<Props>) {
 
 function LinuxTabContent({
   setupKey,
+  setupKeyContent,
+  setupKeyPlaceholder,
   showSetupKeyInfo = false,
   hostname,
-  versions,
-}: Readonly<Props & { versions: VersionRelease[] }>) {
+  versions = [],
+}: Readonly<Props>) {
   const { t } = useI18n();
   const [selectedVersion, setSelectedVersion] = useState<string>("");
   const [currentOrigin, setCurrentOrigin] = useState<string>("");
+  const runStep = setupKeyContent ? 3 : 2;
+  const usingSetupKey = !!setupKey || !!setupKeyPlaceholder;
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -64,9 +68,7 @@ function LinuxTabContent({
     }
   }, []);
 
-  const linuxVersions = (versions || []).filter((v) => v.platform === "linux");
-
-  // Only show published versions
+  const linuxVersions = versions.filter((v) => v.platform === "linux");
   const versionOptions: SelectOption[] = linuxVersions.map((v) => ({
     label: v.version + (v.isLatest ? " (最新)" : ""),
     value: v.downloadUrl,
@@ -104,18 +106,20 @@ function LinuxTabContent({
               </Code>
             )}
           </Steps.Step>
-          <Steps.Step step={2} line={false}>
+          {setupKeyContent && (
+            <Steps.Step step={2}>{setupKeyContent}</Steps.Step>
+          )}
+          <Steps.Step step={runStep} line={false}>
             <p>
-              {t("setupModal.runNetBird")}
-              {!setupKey && ` ${t("setupModal.andLogInBrowser")}`}
+              Run NetBird {!usingSetupKey && "and log in the browser"}
               {showSetupKeyInfo && <RoutingPeerSetupKeyInfo />}
             </p>
             <Code>
-              <Code.Line>
-                {getNetBirdUpCommand()}
-                <SetupKeyParameter setupKey={setupKey} />
-                <HostnameParameter hostname={hostname} />
-              </Code.Line>
+              <NetBirdUpCommand
+                setupKey={setupKey}
+                setupKeyPlaceholder={setupKeyPlaceholder}
+                hostname={hostname}
+              />
             </Code>
           </Steps.Step>
         </Steps>
@@ -216,16 +220,15 @@ fi`}
                 </Steps.Step>
                 <Steps.Step step={3} line={false}>
                   <p>
-                    {t("setupModal.runNetBird")}
-                    {!setupKey && ` ${t("setupModal.andLogInBrowser")}`}
+                    Run NetBird {!usingSetupKey && "and log in the browser"}
                     {showSetupKeyInfo && <RoutingPeerSetupKeyInfo />}
                   </p>
                   <Code>
-                    <Code.Line>
-                      {getNetBirdUpCommand()}
-                      <SetupKeyParameter setupKey={setupKey} />
-                      <HostnameParameter hostname={hostname} />
-                    </Code.Line>
+                    <NetBirdUpCommand
+                      setupKey={setupKey}
+                      setupKeyPlaceholder={setupKeyPlaceholder}
+                      hostname={hostname}
+                    />
                   </Code>
                 </Steps.Step>
               </Steps>

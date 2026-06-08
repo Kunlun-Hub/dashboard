@@ -7,20 +7,21 @@ import {
 import Steps from "@components/Steps";
 import TabsContentPadding, { TabsContent } from "@components/Tabs";
 import useFetchApi from "@utils/api";
-import { getNetBirdUpCommand, GRPC_API_ORIGIN } from "@utils/netbird";
+import { GRPC_API_ORIGIN } from "@utils/netbird";
 import { DownloadIcon, PackageOpenIcon } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { OperatingSystem } from "@/interfaces/OperatingSystem";
 import { VersionRelease } from "@/modules/settings/VersionReleasesTab";
 import {
-  HostnameParameter,
+  NetBirdUpCommand,
   RoutingPeerSetupKeyInfo,
-  SetupKeyParameter,
 } from "@/modules/setup-netbird-modal/SetupModal";
 
 type Props = {
   setupKey?: string;
+  setupKeyContent?: React.ReactNode;
+  setupKeyPlaceholder?: string;
   showSetupKeyInfo?: boolean;
   hostname?: string;
   versions?: VersionRelease[];
@@ -42,6 +43,8 @@ function AuthenticatedWindowsTab(props: Readonly<Props>) {
 
 function WindowsTabContent({
   setupKey,
+  setupKeyContent,
+  setupKeyPlaceholder,
   showSetupKeyInfo,
   hostname,
   versions,
@@ -52,8 +55,6 @@ function WindowsTabContent({
   const windowsVersions = (versions || []).filter(
     (v) => v.platform === "windows",
   );
-
-  // Only show published versions
   const versionOptions: SelectOption[] = windowsVersions.map((v) => ({
     label: v.version + (v.isLatest ? " (最新)" : ""),
     value: v.downloadUrl,
@@ -69,6 +70,14 @@ function WindowsTabContent({
 
   const currentUrl = selectedVersion || "";
 
+  // The CLI-run branch is required for the server flow (setupKeyContent
+  // present) even before a key is generated — the placeholder keeps the
+  // command shape consistent. Otherwise we fall back to the existing
+  // setupKey-driven branching.
+  const useCliRun = !!setupKey || !!setupKeyContent;
+  const baseMgmtStep = 2;
+  const keyStep = GRPC_API_ORIGIN ? 3 : 2;
+  const runStep = keyStep + (setupKeyContent ? 1 : 0);
   return (
     <TabsContent value={String(OperatingSystem.WINDOWS)}>
       <TabsContentPadding>
@@ -111,36 +120,45 @@ function WindowsTabContent({
           </Steps.Step>
 
           {GRPC_API_ORIGIN && (
-            <Steps.Step step={2}>
-              <p>{t("setupModal.managementUrlInstructions")}</p>
+            <Steps.Step step={baseMgmtStep}>
+              <p>
+                {`Click on "Settings" then "Advanced Settings" from the NetBird icon in your system tray and enter the following "Management URL"`}
+              </p>
               <Code>
                 <Code.Line>{GRPC_API_ORIGIN}</Code.Line>
               </Code>
             </Steps.Step>
           )}
 
-          {setupKey ? (
-            <Steps.Step step={GRPC_API_ORIGIN ? 3 : 2} line={false}>
+          {setupKeyContent && (
+            <Steps.Step step={keyStep}>{setupKeyContent}</Steps.Step>
+          )}
+
+          {useCliRun ? (
+            <Steps.Step step={runStep} line={false}>
               <p>
                 {t("setupModal.openCommandLineRunNetBird")}{" "}
                 {showSetupKeyInfo && <RoutingPeerSetupKeyInfo />}
               </p>
 
               <Code>
-                <Code.Line>
-                  {getNetBirdUpCommand()}
-                  <SetupKeyParameter setupKey={setupKey} />
-                  <HostnameParameter hostname={hostname} />
-                </Code.Line>
+                <NetBirdUpCommand
+                  setupKey={setupKey}
+                  setupKeyPlaceholder={setupKeyPlaceholder}
+                  hostname={hostname}
+                />
               </Code>
             </Steps.Step>
           ) : (
             <>
-              <Steps.Step step={GRPC_API_ORIGIN ? 3 : 2}>
-                <p>{t("setupModal.clickConnectTray")}</p>
+              <Steps.Step step={runStep}>
+                <p>
+                  {/* eslint-disable-next-line react/no-unescaped-entities */}
+                  Click on "Connect" from the NetBird icon in your system tray
+                </p>
               </Steps.Step>
-              <Steps.Step step={GRPC_API_ORIGIN ? 4 : 3} line={false}>
-                <p>{t("setupModal.signUpWithEmail")}</p>
+              <Steps.Step step={runStep + 1} line={false}>
+                <p>Sign up using your email address</p>
               </Steps.Step>
             </>
           )}

@@ -5,7 +5,17 @@ import SquareIcon from "@components/SquareIcon";
 import { DataTable } from "@components/table/DataTable";
 import DataTableHeader from "@components/table/DataTableHeader";
 import DataTableRefreshButton from "@components/table/DataTableRefreshButton";
-import { DataTableRowsPerPage } from "@components/table/DataTableRowsPerPage";
+import DataTableResetFilterButton from "@components/table/DataTableResetFilterButton";
+import {
+  formatRadioChip,
+  RadioOption,
+  RadioPicker,
+} from "@components/table/filters/RadioPicker";
+import {
+  TableFilterChips,
+  TableFilterDef,
+  TableFiltersButton,
+} from "@components/table/TableFilters";
 import GetStartedTest from "@components/ui/GetStartedTest";
 import { ColumnDef, SortingState } from "@tanstack/react-table";
 import { cn } from "@utils/helpers";
@@ -30,55 +40,52 @@ import { NetworkResourceCell } from "@/modules/networks/table/NetworkResourceCel
 import NetworkRoutingPeerCell from "@/modules/networks/table/NetworkRoutingPeerCell";
 import { GlobalSearchModal } from "@/modules/search/GlobalSearchModal";
 
-function useNetworkTableColumns(): ColumnDef<Network>[] {
-  const { t } = useI18n();
-
-  return useMemo(
-    () => [
-      {
-        accessorKey: "name",
-        header: ({ column }) => (
-          <DataTableHeader column={column}>{t("networks.title")}</DataTableHeader>
-        ),
-        sortingFn: "text",
-        cell: ({ row }) => <NetworkNameCell network={row.original} />,
-      },
-      {
-        accessorKey: "description",
-      },
-      {
-        accessorKey: "resources",
-        accessorFn: (network) => network?.resources?.length,
-        header: ({ column }) => {
-          return <DataTableHeader column={column}>{t("groups.tooltip.networkResources")}</DataTableHeader>;
-        },
-        cell: ({ row }) => <NetworkResourceCell network={row.original} />,
-      },
-      {
-        accessorKey: "policies",
-        accessorFn: (network) => network?.policies?.length,
-        header: ({ column }) => {
-          return <DataTableHeader column={column}>{t("groups.tooltip.policies")}</DataTableHeader>;
-        },
-        cell: ({ row }) => <NetworkPolicyCell network={row.original} />,
-      },
-      {
-        accessorKey: "routers",
-        accessorFn: (network) => network?.routers?.length,
-        header: ({ column }) => {
-          return <DataTableHeader column={column}>{t("networks.routingPeers")}</DataTableHeader>;
-        },
-        cell: ({ row }) => <NetworkRoutingPeerCell network={row.original} />,
-      },
-      {
-        accessorKey: "id",
-        header: "",
-        cell: ({ row }) => <NetworkActionCell network={row.original} />,
-      },
-    ],
-    [t],
-  );
-}
+export const NetworkTableColumns: ColumnDef<Network>[] = [
+  {
+    accessorKey: "name",
+    header: ({ column }) => (
+      <DataTableHeader column={column}>Network</DataTableHeader>
+    ),
+    sortingFn: "text",
+    cell: ({ row }) => <NetworkNameCell network={row.original} />,
+  },
+  {
+    accessorKey: "description",
+  },
+  {
+    accessorKey: "resources",
+    accessorFn: (network) => network?.resources?.length,
+    header: ({ column }) => {
+      return <DataTableHeader column={column}>Resources</DataTableHeader>;
+    },
+    cell: ({ row }) => <NetworkResourceCell network={row.original} />,
+  },
+  {
+    accessorKey: "policies",
+    accessorFn: (network) => network?.policies?.length,
+    header: ({ column }) => {
+      return <DataTableHeader column={column}>Policies</DataTableHeader>;
+    },
+    cell: ({ row }) => <NetworkPolicyCell network={row.original} />,
+  },
+  {
+    accessorKey: "routers",
+    accessorFn: (network) => network?.routers?.length,
+    header: ({ column }) => {
+      return <DataTableHeader column={column}>Routing Peers</DataTableHeader>;
+    },
+    cell: ({ row }) => <NetworkRoutingPeerCell network={row.original} />,
+  },
+  {
+    id: "active",
+    accessorFn: (network) => (network?.routing_peers_count ?? 0) > 0,
+  },
+  {
+    accessorKey: "id",
+    header: "",
+    cell: ({ row }) => <NetworkActionCell network={row.original} />,
+  },
+];
 
 type Props = {
   data?: Network[];
@@ -95,7 +102,7 @@ export default function NetworksTable({
   const path = usePathname();
   const [searchModal, setSearchModal] = useState(false);
   const { t } = useI18n();
-  const columns = useNetworkTableColumns();
+  const columns = NetworkTableColumns;
 
   const [sorting, setSorting] = useLocalStorage<SortingState>(
     "netbird-table-sort" + path,
@@ -105,6 +112,35 @@ export default function NetworksTable({
         desc: false,
       },
     ],
+  );
+
+  const statusOptions = useMemo<RadioOption<boolean | undefined>[]>(
+    () => [
+      { value: undefined, label: "All", dotClass: "bg-nb-gray-500" },
+      { value: true, label: "Active", dotClass: "bg-green-500" },
+      { value: false, label: "Inactive", dotClass: "bg-nb-gray-700" },
+    ],
+    [],
+  );
+
+  const filterDefs = useMemo<TableFilterDef[]>(
+    () => [
+      {
+        id: "active",
+        label: "Status",
+        renderPicker: (p) => (
+          <RadioPicker
+            value={p.value as boolean | undefined}
+            onChange={p.onChange}
+            close={p.close}
+            options={statusOptions}
+          />
+        ),
+        formatChip: (v) =>
+          formatRadioChip(v as boolean | undefined, statusOptions),
+      },
+    ],
+    [statusOptions],
   );
 
   return (
@@ -120,10 +156,16 @@ export default function NetworksTable({
             setSorting={setSorting}
             columns={columns}
             data={data}
-            searchPlaceholder={t("networks.searchPlaceholder")}
+            initialPageSize={25}
+            showResetFilterButton={false}
+            searchPlaceholder={"Search by network name or description..."}
             columnVisibility={{
               description: false,
+              active: false,
             }}
+            aboveTable={(table) => (
+              <TableFilterChips table={table} filters={filterDefs} />
+            )}
             onSearchClick={() => setSearchModal(true)}
             getStartedCard={
               <GetStartedTest
@@ -159,9 +201,18 @@ export default function NetworksTable({
           >
             {(table) => (
               <>
-                <DataTableRowsPerPage
+                <TableFiltersButton
                   table={table}
+                  filters={filterDefs}
                   disabled={data?.length == 0}
+                />
+                <DataTableResetFilterButton
+                  table={table}
+                  onClick={() => {
+                    table.setPageIndex(0);
+                    table.resetColumnFilters();
+                    table.resetGlobalFilter();
+                  }}
                 />
                 <DataTableRefreshButton
                   isDisabled={data?.length == 0}

@@ -56,6 +56,7 @@ export default function SetupKeyGroupsCell({ setupKey }: Readonly<Props>) {
         showAddGroupButton={permission.setup_keys.update}
         modal={modal}
         setModal={setModal}
+        countOnly={true}
       />
     )
   );

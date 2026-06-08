@@ -1,9 +1,16 @@
-"use client";
-
-import ButtonGroup from "@components/ButtonGroup";
 import { DataTable } from "@components/table/DataTable";
 import DataTableHeader from "@components/table/DataTableHeader";
-import { DataTableRowsPerPage } from "@components/table/DataTableRowsPerPage";
+import DataTableResetFilterButton from "@components/table/DataTableResetFilterButton";
+import {
+  formatRadioChip,
+  RadioOption,
+  RadioPicker,
+} from "@components/table/filters/RadioPicker";
+import {
+  TableFilterChips,
+  TableFilterDef,
+  TableFiltersButton,
+} from "@components/table/TableFilters";
 import { ColumnDef, SortingState } from "@tanstack/react-table";
 import { removeAllSpaces } from "@utils/helpers";
 import { Layers3Icon } from "lucide-react";
@@ -304,6 +311,35 @@ export default function GroupsTable({ headingTarget }: Readonly<Props>) {
     ],
   );
 
+  const usageOptions = useMemo<RadioOption<boolean | undefined>[]>(
+    () => [
+      { value: undefined, label: "All" },
+      { value: true, label: "Used" },
+      { value: false, label: "Unused" },
+    ],
+    [],
+  );
+
+  const filterDefs = useMemo<TableFilterDef[]>(
+    () => [
+      {
+        id: "in_use",
+        label: "Usage",
+        renderPicker: (p) => (
+          <RadioPicker
+            value={p.value as boolean | undefined}
+            onChange={p.onChange}
+            close={p.close}
+            options={usageOptions}
+          />
+        ),
+        formatChip: (v) =>
+          formatRadioChip(v as boolean | undefined, usageOptions),
+      },
+    ],
+    [usageOptions],
+  );
+
   return (
     <DataTable
       headingTarget={headingTarget}
@@ -313,8 +349,13 @@ export default function GroupsTable({ headingTarget }: Readonly<Props>) {
       setSorting={setSorting}
       columns={columns}
       data={groups}
-      searchPlaceholder={t("groups.searchPlaceholder")}
+      initialPageSize={25}
+      showResetFilterButton={false}
+      searchPlaceholder={"Search group by name..."}
       rightSide={() => <AddGroupButton />}
+      aboveTable={(table) => (
+        <TableFilterChips table={table} filters={filterDefs} />
+      )}
       columnVisibility={{
         in_use: false,
         search: false,
@@ -322,42 +363,19 @@ export default function GroupsTable({ headingTarget }: Readonly<Props>) {
     >
       {(table) => (
         <>
-          <ButtonGroup disabled={groups?.length == 0}>
-            <ButtonGroup.Button
-              onClick={() => table.getColumn("in_use")?.setFilterValue(undefined)}
-              disabled={groups?.length == 0}
-              variant={
-                table.getColumn("in_use")?.getFilterValue() === undefined
-                  ? "tertiary"
-                  : "secondary"
-              }
-            >
-              {t("filters.all")}
-            </ButtonGroup.Button>
-            <ButtonGroup.Button
-              onClick={() => table.getColumn("in_use")?.setFilterValue(true)}
-              disabled={groups?.length == 0}
-              variant={
-                table.getColumn("in_use")?.getFilterValue() === true
-                  ? "tertiary"
-                  : "secondary"
-              }
-            >
-              {t("groups.used")}
-            </ButtonGroup.Button>
-            <ButtonGroup.Button
-              disabled={groups?.length == 0}
-              onClick={() => table.getColumn("in_use")?.setFilterValue(false)}
-              variant={
-                table.getColumn("in_use")?.getFilterValue() === false
-                  ? "tertiary"
-                  : "secondary"
-              }
-            >
-              {t("groups.unused")}
-            </ButtonGroup.Button>
-          </ButtonGroup>
-          <DataTableRowsPerPage table={table} disabled={groups?.length == 0} />
+          <TableFiltersButton
+            table={table}
+            filters={filterDefs}
+            disabled={groups?.length == 0}
+          />
+          <DataTableResetFilterButton
+            table={table}
+            onClick={() => {
+              table.setPageIndex(0);
+              table.resetColumnFilters();
+              table.resetGlobalFilter();
+            }}
+          />
         </>
       )}
     </DataTable>

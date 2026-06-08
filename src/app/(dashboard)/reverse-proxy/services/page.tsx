@@ -1,5 +1,8 @@
 "use client";
 
+import { ExternalLinkIcon } from "lucide-react";
+import InlineLink from "@components/InlineLink";
+import Paragraph from "@components/Paragraph";
 import Breadcrumbs from "@components/Breadcrumbs";
 import { Callout } from "@components/Callout";
 import SkeletonTable from "@components/skeletons/SkeletonTable";
@@ -11,6 +14,7 @@ import ReverseProxyIcon from "@/assets/icons/ReverseProxyIcon";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import ReverseProxiesProvider from "@/contexts/ReverseProxiesProvider";
 import { useI18n } from "@/i18n/I18nProvider";
+import { REVERSE_PROXY_DOCS_LINK } from "@/interfaces/ReverseProxy";
 import PageContainer from "@/layouts/PageContainer";
 import { ResourceUsageInline } from "@/modules/account/ResourceUsage";
 
@@ -40,17 +44,14 @@ export default function ReverseProxyServicesPage() {
             active={true}
           />
         </Breadcrumbs>
-        <div
-          className={
-            "flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"
-          }
-        >
-          <h1 ref={headingRef}>{t("reverseProxy.servicesTitle")}</h1>
-          <ResourceUsageInline
-            limit={"custom_rules"}
-            className={"sm:min-w-[18rem]"}
-          />
-        </div>
+        <h1 ref={headingRef}>Services</h1>
+        <Paragraph>
+          Expose services securely through NetBird&apos;s reverse proxy.{" "}
+          <InlineLink href={REVERSE_PROXY_DOCS_LINK} target={"_blank"}>
+            Learn more
+            <ExternalLinkIcon size={12} />
+          </InlineLink>
+        </Paragraph>
 
         {isNetBirdHosted() ? (
           <Callout className={"max-w-xl mt-5"} variant={"info"}>

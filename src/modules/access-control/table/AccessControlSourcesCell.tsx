@@ -1,5 +1,12 @@
+import EmptyRow from "@/modules/common-table-rows/EmptyRow";
+import { Group } from "@/interfaces/Group";
 import { Policy } from "@/interfaces/Policy";
+import { usePermissions } from "@/contexts/PermissionsProvider";
+import { AccessControlResourceCell } from "@/modules/access-control/table/AccessControlResourceCell";
 import AccessControlRuleEndpointCell from "@/modules/access-control/table/AccessControlRuleEndpointCell";
+import MultipleGroups, { TransparentEditIconButton } from "@components/ui/MultipleGroups";
+import { cn } from "@utils/helpers";
+import { useMemo } from "react";
 
 type Props = {
   policy: Policy;
@@ -12,12 +19,34 @@ export default function AccessControlSourcesCell({
   hideEdit = false,
   disableRedirect = false,
 }: Props) {
-  return (
-    <AccessControlRuleEndpointCell
-      policy={policy}
-      endpoint="sources"
-      hideEdit={hideEdit}
-      disableRedirect={disableRedirect}
-    />
+  const { permission } = usePermissions();
+  const canUpdate = permission?.policies?.update;
+
+  const firstRule = useMemo(() => {
+    if (policy.rules.length > 0) return policy.rules[0];
+    return undefined;
+  }, [policy]);
+
+  if (firstRule?.sourceResource) {
+    return <AccessControlResourceCell resource={firstRule.sourceResource} />;
+  }
+
+  return firstRule ? (
+    <div
+      className={cn(
+        "flex items-center gap-1",
+        canUpdate && !hideEdit && "group",
+      )}
+    >
+      <MultipleGroups
+        groups={firstRule.sources as Group[]}
+        showUsers={firstRule.protocol === "netbird-ssh"}
+        disableRedirect={disableRedirect}
+        countOnly
+      />
+      {canUpdate && !hideEdit && <TransparentEditIconButton />}
+    </div>
+  ) : (
+    <EmptyRow />
   );
 }

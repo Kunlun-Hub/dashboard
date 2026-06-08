@@ -39,12 +39,12 @@ export const NetworkResourceCell = ({ network }: Props) => {
       <Button
         size={"xs"}
         variant={"secondary"}
-        className={"min-w-[130px]"}
+        className={"!px-3"}
         onClick={() => openResourceModal(network)}
         disabled={!permission.networks.update}
       >
         <PlusCircle size={12} />
-        {t("networks.addResource")}
+        Add
       </Button>
     </div>
   ) : (
@@ -52,11 +52,11 @@ export const NetworkResourceCell = ({ network }: Props) => {
       <Button
         size={"xs"}
         variant={"secondary"}
-        className={"min-w-[130px]"}
+        className={"!px-3"}
         onClick={() => openResourceModal(network)}
       >
         <PlusCircle size={12} />
-        {t("networks.addResource")}
+        Add
       </Button>
     </>
   );

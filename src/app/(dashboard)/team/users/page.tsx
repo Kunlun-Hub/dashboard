@@ -1,11 +1,13 @@
 "use client";
 
+import InlineLink from "@components/InlineLink";
+import Paragraph from "@components/Paragraph";
 import Breadcrumbs from "@components/Breadcrumbs";
 import SkeletonTable from "@components/skeletons/SkeletonTable";
 import { RestrictedAccess } from "@components/ui/RestrictedAccess";
 import { usePortalElement } from "@hooks/usePortalElement";
 import useFetchApi from "@utils/api";
-import { User2 } from "lucide-react";
+import { ExternalLinkIcon, User2 } from "lucide-react";
 import React, { lazy, Suspense } from "react";
 import TeamIcon from "@/assets/icons/TeamIcon";
 import { useGroups } from "@/contexts/GroupsProvider";
@@ -44,14 +46,18 @@ export default function TeamUsers() {
             icon={<User2 size={16} />}
           />
         </Breadcrumbs>
-        <div
-          className={
-            "flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"
-          }
-        >
-          <h1 ref={headingRef}>{t("users.title")}</h1>
-          <ResourceUsageInline limit={"users"} className={"sm:min-w-[18rem]"} />
-        </div>
+        <h1 ref={headingRef}>Users</h1>
+        <Paragraph>
+          Manage users and their permissions. Same-domain email users are added
+          automatically on first sign-in.{" "}
+          <InlineLink
+            href={"https://docs.netbird.io/how-to/add-users-to-your-network"}
+            target={"_blank"}
+          >
+            Learn more
+            <ExternalLinkIcon size={12} />
+          </InlineLink>
+        </Paragraph>
       </div>
       <RestrictedAccess
         page={t("users.title")}

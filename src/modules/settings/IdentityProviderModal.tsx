@@ -1,6 +1,7 @@
 import Button from "@components/Button";
 import Code from "@components/Code";
 import HelpText from "@components/HelpText";
+import InlineLink from "@components/InlineLink";
 import { Input } from "@components/Input";
 import { Label } from "@components/Label";
 import {
@@ -73,8 +74,11 @@ type Props = {
   provider?: SSOIdentityProvider | null;
 };
 
+const copyMessage = "Redirect URL was copied to your clipboard!";
+const logoutCopyMessage = "Logout URL was copied to your clipboard!";
 const config = loadConfig();
 const redirectUrl = `${config.apiOrigin}/oauth2/callback`;
+const logoutUrl = `${config.apiOrigin}/oauth2/logout/callback`;
 
 export default function IdentityProviderModal({
   open,
@@ -344,17 +348,130 @@ export default function IdentityProviderModal({
 
           <Separator />
 
-          <div>
-            <Label>{t("identityProviderModal.redirectUrl")}</Label>
-            <HelpText>{t("identityProviderModal.redirectUrlHelp")}</HelpText>
-            <Code
-              codeToCopy={redirectUrl}
-              message={t("identityProviderModal.redirectCopied")}
-            >
-              <Code.Line>
-                {isWeChatWork ? `${redirectUrl}/{connector_id}` : redirectUrl}
-              </Code.Line>
-            </Code>
+          <div className={"px-8 py-6 flex flex-col gap-6"}>
+            <div>
+              <Label>Provider Type</Label>
+              <HelpText>Select the type of identity provider</HelpText>
+              <Select
+                value={type}
+                onValueChange={(v) => {
+                  const newType = v as SSOIdentityProviderType;
+                  setType(newType);
+                  if (!isEditing) {
+                    setName(defaultNames[newType]);
+                  }
+                }}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select provider type..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {SSOIdentityProviderOptions.map((idp) => (
+                    <SelectItem key={idp.value} value={idp.value}>
+                      <div className="flex items-center gap-2">
+                        {idpIcon(idp.value)}
+                        <span>{idp.label}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label>Name</Label>
+              <HelpText>A friendly name to identify this provider</HelpText>
+              <Input
+                placeholder={"e.g., Corporate SSO"}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                customPrefix={
+                  <TagIcon size={16} className="text-nb-gray-300" />
+                }
+              />
+            </div>
+
+            {requiresIssuer && (
+              <div>
+                <Label>Issuer URL</Label>
+                <HelpText>The OIDC issuer URL for this provider</HelpText>
+                <Input
+                  placeholder={issuerHints[type] ?? "https://login.example.com"}
+                  value={issuer}
+                  onChange={(e) => setIssuer(e.target.value)}
+                  customPrefix={
+                    <GlobeIcon size={16} className="text-nb-gray-300" />
+                  }
+                />
+              </div>
+            )}
+
+            <div>
+              <Label>Client ID</Label>
+              <HelpText>The OAuth2 confidential client ID</HelpText>
+              <Input
+                placeholder={"Enter client ID"}
+                value={clientId}
+                onChange={(e) => setClientId(e.target.value)}
+                customPrefix={<IdCard size={16} className="text-nb-gray-300" />}
+              />
+            </div>
+
+            <div>
+              <Label>Client Secret</Label>
+              <HelpText>
+                {isEditing
+                  ? clientIdChanged
+                    ? "Required when client ID is changed"
+                    : "Leave empty to keep the existing secret, or enter a new one"
+                  : "The OAuth2 client secret"}
+              </HelpText>
+              <Input
+                type="password"
+                placeholder={isEditing ? "••••••••" : "Enter client secret"}
+                value={clientSecret}
+                onChange={(e) => setClientSecret(e.target.value)}
+                customPrefix={
+                  <KeyIcon size={16} className="text-nb-gray-300" />
+                }
+              />
+            </div>
+
+            <Separator />
+
+            <div className={"flex flex-col gap-3"}>
+              <div>
+                <Label>Endpoint URLs</Label>
+                <HelpText margin={false}>
+                  Add these to your identity provider configuration
+                </HelpText>
+              </div>
+
+              <div>
+                <Label className={"text-xs mb-1"}>Redirect / Callback</Label>
+                <Code codeToCopy={redirectUrl} message={copyMessage}>
+                  <Code.Line>{redirectUrl}</Code.Line>
+                </Code>
+              </div>
+
+              <div>
+                <Label className={"text-xs mb-1"}>Logout</Label>
+                <Code codeToCopy={logoutUrl} message={logoutCopyMessage}>
+                  <Code.Line>{logoutUrl}</Code.Line>
+                </Code>
+                <HelpText margin={false} className={"mt-1.5"}>
+                  Not all identity providers support logout.{" "}
+                  <InlineLink
+                    href={
+                      "https://docs.netbird.io/selfhosted/identity-providers"
+                    }
+                    target={"_blank"}
+                  >
+                    Learn more
+                  </InlineLink>
+                </HelpText>
+              </div>
+            </div>
           </div>
         </div>
 

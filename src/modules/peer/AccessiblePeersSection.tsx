@@ -1,7 +1,10 @@
+import InlineLink from "@components/InlineLink";
+import Paragraph from "@components/Paragraph";
 import SkeletonTable, {
   SkeletonTableHeader,
 } from "@components/skeletons/SkeletonTable";
 import useFetchApi from "@utils/api";
+import { ExternalLinkIcon } from "lucide-react";
 import * as React from "react";
 import { lazy, Suspense } from "react";
 import { useUsers } from "@/contexts/UsersProvider";
@@ -31,6 +34,22 @@ export const AccessiblePeersSection = ({ peerID }: Props) => {
   return (
     <div className={"pb-10 px-8"}>
       <div className={""}>
+        <div className={"flex justify-between items-center mb-5"}>
+          <div>
+            <Paragraph>
+              This peer can connect to the following peers within the NetBird
+              network.{" "}
+              <InlineLink
+                href={"https://docs.netbird.io/how-to/manage-network-access"}
+                target={"_blank"}
+              >
+                Learn more
+                <ExternalLinkIcon size={12} />
+              </InlineLink>
+            </Paragraph>
+          </div>
+        </div>
+
         <Suspense
           fallback={
             <div>

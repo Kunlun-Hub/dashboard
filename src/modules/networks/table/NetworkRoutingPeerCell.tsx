@@ -143,17 +143,13 @@ export default function NetworkRoutingPeerCell({ network }: Props) {
       <Button
         size={"xs"}
         variant={"secondary"}
-        className={"min-w-[130px]"}
+        className={"!px-3"}
         onClick={() => openAddRoutingPeerModal(network)}
-        disabled={!permission.networks.update || highAvailabilityLocked}
-        title={
-          highAvailabilityLocked
-            ? t("networkDetails.highAvailabilityLockedHelp")
-            : undefined
-        }
+        disabled={!permission.networks.update}
+        aria-label={"Add routing peer"}
       >
         <PlusCircle size={12} />
-        {t("networkRouting.add")}
+        Add
       </Button>
     </div>
   );

@@ -9,19 +9,26 @@ export const NetworkNavigation = () => {
   const { t } = useI18n();
   const { permission } = usePermissions();
   return (
-    <>
+    <SidebarItem
+      icon={<NetworkRoutesIcon />}
+      label={"Network Routing"}
+      collapsible
+      visible={permission.networks.read || permission.routes.read}
+    >
       <SidebarItem
-        icon={<NetworkRoutesIcon />}
-        label={t("networks.title")}
+        label={"Networks"}
+        isChild
         href={"/networks"}
+        exactPathMatch={true}
         visible={permission.networks.read}
       />
       <SidebarItem
-        icon={<NetworkRoutesIcon />}
+        label={"Routes"}
+        isChild
         href={"/network-routes"}
-        label={t("networkRoutesPage.title")}
+        exactPathMatch={true}
         visible={permission.routes.read}
       />
-    </>
+    </SidebarItem>
   );
 };

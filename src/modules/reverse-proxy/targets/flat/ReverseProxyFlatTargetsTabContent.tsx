@@ -1,10 +1,16 @@
+import { ExternalLinkIcon } from "lucide-react";
+import InlineLink from "@components/InlineLink";
+import Paragraph from "@components/Paragraph";
 import SkeletonTable, {
   SkeletonTableHeader,
 } from "@components/skeletons/SkeletonTable";
 import * as React from "react";
 import { Suspense } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
-import { ReverseProxyFlatTarget } from "@/interfaces/ReverseProxy";
+import {
+  REVERSE_PROXY_DOCS_LINK,
+  ReverseProxyFlatTarget,
+} from "@/interfaces/ReverseProxy";
 import { ReverseProxyFlatTargetsTable } from "@/modules/reverse-proxy/targets/flat/ReverseProxyFlatTargetsTable";
 
 type Props = {
@@ -27,6 +33,17 @@ export const ReverseProxyFlatTargetsTabContent = ({
   const { t } = useI18n();
   return (
     <div className={"pb-10 px-8"}>
+      <div className={"flex justify-between items-center mb-5"}>
+        <div>
+          <Paragraph>
+            Expose services securely through NetBird&apos;s reverse proxy.{" "}
+            <InlineLink href={REVERSE_PROXY_DOCS_LINK} target={"_blank"}>
+              Learn more
+              <ExternalLinkIcon size={12} />
+            </InlineLink>
+          </Paragraph>
+        </div>
+      </div>
       <Suspense
         fallback={
           <div>

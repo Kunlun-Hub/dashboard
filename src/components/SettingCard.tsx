@@ -14,6 +14,7 @@ type SettingCardItemProps = {
   description: React.ReactNode;
   enabled: boolean;
   onClick: () => void;
+  disabled?: boolean;
 };
 
 function SettingCardItem({
@@ -21,22 +22,33 @@ function SettingCardItem({
   description,
   enabled,
   onClick,
+  disabled = false,
 }: Readonly<SettingCardItemProps>) {
   const { t } = useI18n();
+
+  const handleClick = () => {
+    if (disabled) return;
+    onClick();
+  };
   return (
     <div
       role="button"
-      tabIndex={0}
-      onClick={onClick}
+      tabIndex={disabled ? -1 : 0}
+      aria-disabled={disabled || undefined}
+      onClick={handleClick}
       onKeyDown={(e) => {
+        if (disabled) return;
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
           onClick();
         }
       }}
-      className={
-        "flex justify-between gap-10 px-6 border-t border-neutral-200 first:border-t-0 py-5 hover:bg-neutral-50 cursor-pointer transition-colors dark:border-nb-gray-920 dark:hover:bg-nb-gray-935"
-      }
+      className={cn(
+        "flex justify-between gap-10 px-6 border-t border-nb-gray-920 first:border-t-0 py-5 transition-colors",
+        disabled
+          ? "opacity-50 cursor-not-allowed"
+          : "hover:bg-nb-gray-935 cursor-pointer",
+      )}
     >
       <div className={"max-w-sm"}>
         <div className="flex items-center gap-2">
@@ -58,7 +70,8 @@ function SettingCardItem({
             variant={"secondaryLighter"}
             size={"xs"}
             className={"pl-3 pr-3"}
-            onClick={onClick}
+            onClick={handleClick}
+            disabled={disabled}
           >
             <SquarePen size={12} />
             {t("actions.edit")}
@@ -68,7 +81,8 @@ function SettingCardItem({
             variant={"secondaryLighter"}
             size={"xs"}
             className={"pl-3 pr-3"}
-            onClick={onClick}
+            onClick={handleClick}
+            disabled={disabled}
           >
             <PlusCircle size={12} />
             {t("actions.add")}

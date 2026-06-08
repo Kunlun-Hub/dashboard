@@ -1,15 +1,28 @@
-"use client";
-
 import Button from "@components/Button";
-import ButtonGroup from "@components/ButtonGroup";
+import InlineLink from "@components/InlineLink";
 import SquareIcon from "@components/SquareIcon";
 import { DataTable } from "@components/table/DataTable";
 import DataTableHeader from "@components/table/DataTableHeader";
 import DataTableRefreshButton from "@components/table/DataTableRefreshButton";
-import { DataTableRowsPerPage } from "@components/table/DataTableRowsPerPage";
+import DataTableResetFilterButton from "@components/table/DataTableResetFilterButton";
+import {
+  CheckboxListPicker,
+  CheckboxOption,
+  formatCheckboxChip,
+} from "@components/table/filters/CheckboxListPicker";
+import {
+  formatRadioChip,
+  RadioOption,
+  RadioPicker,
+} from "@components/table/filters/RadioPicker";
+import {
+  TableFilterChips,
+  TableFilterDef,
+  TableFiltersButton,
+} from "@components/table/TableFilters";
 import GetStartedTest from "@components/ui/GetStartedTest";
 import { ColumnDef, SortingState } from "@tanstack/react-table";
-import { PlusCircle } from "lucide-react";
+import { ExternalLinkIcon, PlusCircle } from "lucide-react";
 import { usePathname } from "next/navigation";
 import React, { useMemo } from "react";
 import { useSWRConfig } from "swr";
@@ -17,150 +30,78 @@ import ReverseProxyIcon from "@/assets/icons/ReverseProxyIcon";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useReverseProxies } from "@/contexts/ReverseProxiesProvider";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
-import { useI18n } from "@/i18n/I18nProvider";
-import { isL4Mode, ReverseProxy } from "@/interfaces/ReverseProxy";
 import {
-  ResourceLimitTooltip,
-  useResourceLimit,
-} from "@/modules/account/ResourceUsage";
-import ReverseProxyAccessControlCell from "@/modules/reverse-proxy/table/ReverseProxyAccessControlCell";
+  isL4Mode,
+  REVERSE_PROXY_DOCS_LINK,
+  ReverseProxy,
+} from "@/interfaces/ReverseProxy";
 import ReverseProxyActionCell from "@/modules/reverse-proxy/table/ReverseProxyActionCell";
-import ReverseProxyActiveCell from "@/modules/reverse-proxy/table/ReverseProxyActiveCell";
+import ReverseProxyAccessControlCell from "@/modules/reverse-proxy/table/ReverseProxyAccessControlCell";
 import ReverseProxyAuthCell from "@/modules/reverse-proxy/table/ReverseProxyAuthCell";
-import ReverseProxyClusterCell from "@/modules/reverse-proxy/table/ReverseProxyClusterCell";
 import ReverseProxyNameCell from "@/modules/reverse-proxy/table/ReverseProxyNameCell";
-import ReverseProxyStatusCell from "@/modules/reverse-proxy/table/ReverseProxyStatusCell";
 import ReverseProxyTargetsCell from "@/modules/reverse-proxy/table/ReverseProxyTargetsCell";
-import { ReverseProxyTypeCell } from "@/modules/reverse-proxy/table/ReverseProxyTypeCell";
 import ReverseProxyTargetsTable from "@/modules/reverse-proxy/targets/ReverseProxyTargetsTable";
+import { ReverseProxyTypeCell } from "@/modules/reverse-proxy/table/ReverseProxyTypeCell";
 
-function useReverseProxyColumns() {
-  const { t } = useI18n();
-
-  return useMemo<ColumnDef<ReverseProxy>[]>(
-    () => [
-      {
-        accessorKey: "domain",
-        header: ({ column }) => {
-          return (
-            <DataTableHeader column={column}>
-              {t("reverseProxy.domain")}
-            </DataTableHeader>
-          );
-        },
-        sortingFn: "text",
-        cell: ({ row }) => <ReverseProxyNameCell reverseProxy={row.original} />,
-      },
-      {
-        accessorKey: "mode",
-        header: ({ column }) => {
-          return (
-            <DataTableHeader column={column}>
-              {t("reverseProxy.type")}
-            </DataTableHeader>
-          );
-        },
-        sortingFn: "text",
-        cell: ({ row }) => <ReverseProxyTypeCell reverseProxy={row.original} />,
-      },
-      {
-        id: "status",
-        accessorFn: (proxy) => proxy?.meta?.certificate_issued_at,
-        header: "",
-        cell: ({ row }) =>
-          row.original.id ? (
-            <ReverseProxyStatusCell
-              serviceId={row.original.id}
-              meta={row.original.meta}
-              enabled={row.original.enabled}
-              isL4={isL4Mode(row.original.mode)}
-            />
-          ) : null,
-      },
-      {
-        accessorKey: "enabled",
-        header: ({ column }) => {
-          return (
-            <DataTableHeader column={column}>{t("table.active")}</DataTableHeader>
-          );
-        },
-        cell: ({ row }) => (
-          <ReverseProxyActiveCell reverseProxy={row.original} />
-        ),
-      },
-      {
-        accessorKey: "proxy_cluster",
-        header: ({ column }) => {
-          return (
-            <DataTableHeader column={column}>
-              {t("reverseProxy.cluster")}
-            </DataTableHeader>
-          );
-        },
-        cell: ({ row }) => (
-          <ReverseProxyClusterCell reverseProxy={row.original} />
-        ),
-      },
-      {
-        accessorKey: "targets",
-        header: ({ column }) => {
-          return (
-            <DataTableHeader column={column}>
-              {t("reverseProxy.targets")}
-            </DataTableHeader>
-          );
-        },
-        cell: ({ row }) => (
-          <ReverseProxyTargetsCell reverseProxy={row.original} />
-        ),
-      },
-      {
-        accessorKey: "auth",
-        header: ({ column }) => {
-          return (
-            <DataTableHeader column={column}>
-              {t("reverseProxy.authMethods")}
-            </DataTableHeader>
-          );
-        },
-        cell: ({ row }) => <ReverseProxyAuthCell reverseProxy={row.original} />,
-      },
-      {
-        id: "access_rules",
-        header: ({ column }) => {
-          return (
-            <DataTableHeader column={column}>
-              {t("reverseProxy.accessControl")}
-            </DataTableHeader>
-          );
-        },
-        cell: ({ row }) => (
-          <ReverseProxyAccessControlCell reverseProxy={row.original} />
-        ),
-      },
-      {
-        accessorKey: "id",
-        header: "",
-        cell: ({ row }) => (
-          <ReverseProxyActionCell reverseProxy={row.original} />
-        ),
-      },
-      {
-        id: "searchString",
-        accessorFn: (row) => {
-          return [
-            row?.domain,
-            row?.proxy_cluster,
-            row?.targets?.map((t) => t.destination).join(""),
-            row?.targets?.map((t) => t.host).join(""),
-            row?.targets?.map((t) => t.port).join(""),
-          ].join("");
-        },
-      },
-    ],
-    [t],
-  );
-}
+const ReverseProxyColumns: ColumnDef<ReverseProxy>[] = [
+  {
+    accessorKey: "domain",
+    header: ({ column }) => {
+      return <DataTableHeader column={column}>Domain</DataTableHeader>;
+    },
+    sortingFn: "text",
+    cell: ({ row }) => <ReverseProxyNameCell reverseProxy={row.original} />,
+  },
+  {
+    accessorKey: "mode",
+    header: ({ column }) => {
+      return <DataTableHeader column={column}>Type</DataTableHeader>;
+    },
+    sortingFn: "text",
+    cell: ({ row }) => <ReverseProxyTypeCell reverseProxy={row.original} />,
+    filterFn: "arrIncludesSomeExact",
+  },
+  {
+    id: "enabled",
+    accessorKey: "enabled",
+  },
+  {
+    accessorKey: "targets",
+    header: ({ column }) => {
+      return <DataTableHeader column={column}>Target(s)</DataTableHeader>;
+    },
+    cell: ({ row }) => <ReverseProxyTargetsCell reverseProxy={row.original} />,
+  },
+  {
+    id: "auth_and_access",
+    header: ({ column }) => {
+      return <DataTableHeader column={column}>Auth &amp; Access</DataTableHeader>;
+    },
+    cell: ({ row }) => (
+      <div className={"flex items-center gap-2"}>
+        <ReverseProxyAuthCell reverseProxy={row.original} />
+        <ReverseProxyAccessControlCell reverseProxy={row.original} />
+      </div>
+    ),
+  },
+  {
+    accessorKey: "id",
+    header: "",
+    cell: ({ row }) => <ReverseProxyActionCell reverseProxy={row.original} />,
+  },
+  {
+    id: "searchString",
+    accessorFn: (row) => {
+      return [
+        row?.domain,
+        row?.proxy_cluster,
+        row?.targets?.map((t) => t.destination).join(""),
+        row?.targets?.map((t) => t.host).join(""),
+        row?.targets?.map((t) => t.port).join(""),
+      ]?.join("");
+    },
+  },
+];
 
 type Props = {
   headingTarget?: HTMLHeadingElement | null;
@@ -171,11 +112,6 @@ export default function ReverseProxyTable({ headingTarget }: Readonly<Props>) {
   const path = usePathname();
   const { permission } = usePermissions();
   const { reverseProxies, isLoading, openModal } = useReverseProxies();
-  const { t } = useI18n();
-  const columns = useReverseProxyColumns();
-  const serviceLimit = useResourceLimit("custom_rules");
-  const addServiceDisabled =
-    !permission?.services?.create || serviceLimit.exhausted;
 
   const [sorting, setSorting] = useLocalStorage<SortingState>(
     "netbird-table-sort" + path,
@@ -187,45 +123,78 @@ export default function ReverseProxyTable({ headingTarget }: Readonly<Props>) {
     ],
   );
 
-  const addServiceButton = (className?: string) => {
-    const button = (
-      <Button
-        variant={"primary"}
-        className={serviceLimit.exhausted ? undefined : className}
-        onClick={() => {
-          if (!serviceLimit.exhausted) openModal();
-        }}
-        disabled={addServiceDisabled}
-      >
-        <PlusCircle size={16} />
-        {t("reverseProxy.addService")}
-      </Button>
-    );
+  const statusOptions = useMemo<RadioOption<boolean | undefined>[]>(
+    () => [
+      { value: undefined, label: "All", dotClass: "bg-nb-gray-500" },
+      { value: true, label: "Active", dotClass: "bg-green-500" },
+      { value: false, label: "Inactive", dotClass: "bg-nb-gray-700" },
+    ],
+    [],
+  );
 
-    if (serviceLimit.exhausted) {
-      return (
-        <ResourceLimitTooltip limitState={serviceLimit} className={className}>
-          {button}
-        </ResourceLimitTooltip>
-      );
-    }
+  const typeOptions = useMemo<CheckboxOption<string>[]>(
+    () => [
+      { value: "http", label: "HTTP" },
+      { value: "tcp", label: "TCP" },
+      { value: "udp", label: "UDP" },
+      { value: "tls", label: "TLS" },
+    ],
+    [],
+  );
 
-    return button;
-  };
+  const filterDefs = useMemo<TableFilterDef[]>(
+    () => [
+      {
+        id: "enabled",
+        label: "Status",
+        renderPicker: (p) => (
+          <RadioPicker
+            value={p.value as boolean | undefined}
+            onChange={p.onChange}
+            close={p.close}
+            options={statusOptions}
+          />
+        ),
+        formatChip: (v) =>
+          formatRadioChip(v as boolean | undefined, statusOptions),
+      },
+      {
+        id: "mode",
+        label: "Type",
+        renderPicker: (p) => (
+          <CheckboxListPicker
+            value={p.value as string[] | undefined}
+            onChange={p.onChange}
+            close={p.close}
+            options={typeOptions}
+          />
+        ),
+        formatChip: (v) =>
+          formatCheckboxChip(v as string[] | undefined, typeOptions, "types"),
+      },
+    ],
+    [statusOptions, typeOptions],
+  );
 
   return (
     <DataTable
       headingTarget={headingTarget}
       isLoading={isLoading}
       inset={false}
-      text={t("reverseProxy.tableTitle")}
+      text={"Reverse Proxy"}
       sorting={sorting}
       setSorting={setSorting}
-      columns={columns}
+      columns={ReverseProxyColumns}
       data={reverseProxies}
       useRowId={true}
-      searchPlaceholder={t("reverseProxy.searchPlaceholder")}
-      columnVisibility={{ searchString: false }}
+      initialPageSize={25}
+      showResetFilterButton={false}
+      searchPlaceholder={"Search by URL, domain, or target..."}
+      rowClassName={(row) => (row.original.enabled ? "" : "opacity-50")}
+      aboveTable={(table) => (
+        <TableFilterChips table={table} filters={filterDefs} />
+      )}
+      columnVisibility={{ searchString: false, enabled: false }}
       tableCellClassName={"h-[80px]"}
       renderExpandedRow={(reverseProxy) => {
         if (isL4Mode(reverseProxy.mode)) return;
@@ -234,7 +203,7 @@ export default function ReverseProxyTable({ headingTarget }: Readonly<Props>) {
         return (
           <>
             <ReverseProxyTargetsTable reverseProxy={reverseProxy} />
-            <div className={"h-2 w-full bg-neutral-50 dark:bg-nb-gray-960"}></div>
+            <div className={"h-2 w-full bg-nb-gray-960"}></div>
           </>
         );
       }}
@@ -243,77 +212,67 @@ export default function ReverseProxyTable({ headingTarget }: Readonly<Props>) {
           icon={
             <SquareIcon
               icon={
-                <ReverseProxyIcon
-                  className={"fill-neutral-400 dark:fill-nb-gray-200"}
-                  size={20}
-                />
+                <ReverseProxyIcon className={"fill-nb-gray-200"} size={20} />
               }
               color={"gray"}
               size={"large"}
             />
           }
-          title={t("reverseProxy.emptyTitle")}
-          description={t("reverseProxy.emptyDescription")}
-          button={addServiceButton()}
+          title={"Create Services"}
+          description={
+            "Expose your internal services securely through NetBird's reverse proxy with automatic TLS and optional authentication to protect your services."
+          }
+          button={
+            <Button
+              variant={"primary"}
+              onClick={() => openModal()}
+              disabled={!permission?.services?.create}
+            >
+              <PlusCircle size={16} />
+              Add Service
+            </Button>
+          }
+          learnMore={
+            <>
+              Learn more about
+              <InlineLink href={REVERSE_PROXY_DOCS_LINK} target={"_blank"}>
+                Services
+                <ExternalLinkIcon size={12} />
+              </InlineLink>
+            </>
+          }
         />
       }
       rightSide={() => (
         <>
-          {reverseProxies && reverseProxies.length > 0 && (
-            addServiceButton("ml-auto")
+          {reverseProxies && reverseProxies?.length > 0 && (
+            <Button
+              variant={"primary"}
+              className={"ml-auto"}
+              onClick={() => openModal()}
+              disabled={!permission?.services?.create}
+            >
+              <PlusCircle size={16} />
+              Add Service
+            </Button>
           )}
         </>
       )}
     >
       {(table) => (
         <>
-          <ButtonGroup disabled={reverseProxies?.length == 0}>
-            <ButtonGroup.Button
-              onClick={() => {
-                table.setPageIndex(0);
-                table.getColumn("enabled")?.setFilterValue(undefined);
-              }}
-              disabled={reverseProxies?.length == 0}
-              variant={
-                table.getColumn("enabled")?.getFilterValue() === undefined
-                  ? "tertiary"
-                  : "secondary"
-              }
-            >
-              {t("filters.all")}
-            </ButtonGroup.Button>
-            <ButtonGroup.Button
-              onClick={() => {
-                table.setPageIndex(0);
-                table.getColumn("enabled")?.setFilterValue(true);
-              }}
-              disabled={reverseProxies?.length == 0}
-              variant={
-                table.getColumn("enabled")?.getFilterValue() === true
-                  ? "tertiary"
-                  : "secondary"
-              }
-            >
-              {t("table.active")}
-            </ButtonGroup.Button>
-            <ButtonGroup.Button
-              onClick={() => {
-                table.setPageIndex(0);
-                table.getColumn("enabled")?.setFilterValue(false);
-              }}
-              disabled={reverseProxies?.length == 0}
-              variant={
-                table.getColumn("enabled")?.getFilterValue() === false
-                  ? "tertiary"
-                  : "secondary"
-              }
-            >
-              {t("reverseProxy.inactive")}
-            </ButtonGroup.Button>
-          </ButtonGroup>
-          <DataTableRowsPerPage
+          <TableFiltersButton
             table={table}
+            filters={filterDefs}
             disabled={reverseProxies?.length == 0}
+          />
+          <DataTableResetFilterButton
+            table={table}
+            onClick={() => {
+              table.setPageIndex(0);
+              table.resetColumnFilters();
+              table.resetGlobalFilter();
+            }}
           />
           <DataTableRefreshButton
             isDisabled={reverseProxies?.length == 0}

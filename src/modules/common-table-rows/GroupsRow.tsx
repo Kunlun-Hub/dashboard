@@ -36,6 +36,7 @@ type Props = {
   showAddGroupButton?: boolean;
   hideAllGroup?: boolean;
   disabled: boolean;
+  countOnly?: boolean;
 };
 
 export default function GroupsRow({
@@ -49,6 +50,7 @@ export default function GroupsRow({
   showAddGroupButton = false,
   hideAllGroup = false,
   disabled = false,
+  countOnly = false,
 }: Readonly<Props>) {
   const { t } = useI18n();
   const { groups: allGroups } = useGroups();
@@ -84,7 +86,11 @@ export default function GroupsRow({
               disabled ? "cursor-default" : "group",
             )}
           >
-            <MultipleGroups groups={foundGroups} label={label} />
+            <MultipleGroups
+              groups={foundGroups}
+              label={label}
+              countOnly={countOnly}
+            />
             {!disabled && <TransparentEditIconButton />}
           </div>
         )}

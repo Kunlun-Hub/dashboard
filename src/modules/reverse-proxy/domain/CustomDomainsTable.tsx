@@ -2,13 +2,23 @@
 
 import Badge from "@components/Badge";
 import Button from "@components/Button";
-import ButtonGroup from "@components/ButtonGroup";
 import CopyToClipboardText from "@components/CopyToClipboardText";
 import FullTooltip from "@components/FullTooltip";
 import SquareIcon from "@components/SquareIcon";
 import { DataTable } from "@components/table/DataTable";
 import DataTableHeader from "@components/table/DataTableHeader";
 import DataTableRefreshButton from "@components/table/DataTableRefreshButton";
+import DataTableResetFilterButton from "@components/table/DataTableResetFilterButton";
+import {
+  formatRadioChip,
+  RadioOption,
+  RadioPicker,
+} from "@components/table/filters/RadioPicker";
+import {
+  TableFilterChips,
+  TableFilterDef,
+  TableFiltersButton,
+} from "@components/table/TableFilters";
 import GetStartedTest from "@components/ui/GetStartedTest";
 import { ColumnDef, SortingState } from "@tanstack/react-table";
 import { cn } from "@utils/helpers";
@@ -117,18 +127,46 @@ export default function CustomDomainsTable({ headingTarget }: Readonly<Props>) {
     return domains.filter((d) => d.type !== ReverseProxyDomainType.FREE);
   }, [domains]);
 
+  const statusOptions = useMemo<RadioOption<boolean | undefined>[]>(
+    () => [
+      { value: undefined, label: "All", dotClass: "bg-nb-gray-500" },
+      { value: true, label: "Active", dotClass: "bg-green-500" },
+      { value: false, label: "Pending", dotClass: "bg-yellow-400" },
+    ],
+    [],
+  );
+
+  const filterDefs = useMemo<TableFilterDef[]>(
+    () => [
+      {
+        id: "validated",
+        label: "Status",
+        renderPicker: (p) => (
+          <RadioPicker
+            value={p.value as boolean | undefined}
+            onChange={p.onChange}
+            close={p.close}
+            options={statusOptions}
+          />
+        ),
+        formatChip: (v) =>
+          formatRadioChip(v as boolean | undefined, statusOptions),
+      },
+    ],
+    [statusOptions],
+  );
+
   const addDomainButton = (className?: string) => {
     const button = (
       <Button
         variant={"primary"}
-        className={domainLimit.exhausted ? undefined : className}
-        onClick={() => {
-          if (!domainLimit.exhausted) setAddModalOpen(true);
-        }}
+        size={"sm"}
+        className={className}
         disabled={addDomainDisabled}
+        onClick={() => setAddModalOpen(true)}
       >
         <PlusCircle size={16} />
-        {t("reverseProxy.addDomain")}
+        {t("reverseProxy.addCustomDomain")}
       </Button>
     );
 
@@ -174,6 +212,7 @@ export default function CustomDomainsTable({ headingTarget }: Readonly<Props>) {
         isLoading={isLoadingDomains}
         inset={false}
         initialPageSize={10000}
+        showResetFilterButton={false}
         keepStateInLocalStorage={false}
         text={t("reverseProxy.customDomainsTitle")}
         sorting={sorting}
@@ -181,7 +220,10 @@ export default function CustomDomainsTable({ headingTarget }: Readonly<Props>) {
         columns={columns}
         data={data}
         useRowId={true}
-        searchPlaceholder={t("reverseProxy.customDomainsSearch")}
+        searchPlaceholder={"Search by domain..."}
+        aboveTable={(table) => (
+          <TableFilterChips table={table} filters={filterDefs} />
+        )}
         columnVisibility={{ searchString: false }}
         getStartedCard={
           <GetStartedTest
@@ -212,50 +254,19 @@ export default function CustomDomainsTable({ headingTarget }: Readonly<Props>) {
       >
         {(table) => (
           <>
-            <ButtonGroup disabled={data?.length == 0}>
-              <ButtonGroup.Button
-                onClick={() => {
-                  table.setPageIndex(0);
-                  table.getColumn("validated")?.setFilterValue(undefined);
-                }}
-                disabled={data?.length == 0}
-                variant={
-                  table.getColumn("validated")?.getFilterValue() === undefined
-                    ? "tertiary"
-                    : "secondary"
-                }
-              >
-                {t("filters.all")}
-              </ButtonGroup.Button>
-              <ButtonGroup.Button
-                onClick={() => {
-                  table.setPageIndex(0);
-                  table.getColumn("validated")?.setFilterValue(false);
-                }}
-                disabled={data?.length == 0}
-                variant={
-                  table.getColumn("validated")?.getFilterValue() === false
-                    ? "tertiary"
-                    : "secondary"
-                }
-              >
-                {t("reverseProxy.pending")}
-              </ButtonGroup.Button>
-              <ButtonGroup.Button
-                onClick={() => {
-                  table.setPageIndex(0);
-                  table.getColumn("validated")?.setFilterValue(true);
-                }}
-                disabled={data?.length == 0}
-                variant={
-                  table.getColumn("validated")?.getFilterValue() === true
-                    ? "tertiary"
-                    : "secondary"
-                }
-              >
-                {t("table.active")}
-              </ButtonGroup.Button>
-            </ButtonGroup>
+            <TableFiltersButton
+              table={table}
+              filters={filterDefs}
+              disabled={data?.length == 0}
+            />
+            <DataTableResetFilterButton
+              table={table}
+              onClick={() => {
+                table.setPageIndex(0);
+                table.resetColumnFilters();
+                table.resetGlobalFilter();
+              }}
+            />
             <DataTableRefreshButton
               isDisabled={data?.length == 0}
               onClick={() => {

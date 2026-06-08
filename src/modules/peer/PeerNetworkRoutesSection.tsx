@@ -1,3 +1,6 @@
+import { ExternalLinkIcon } from "lucide-react";
+import InlineLink from "@components/InlineLink";
+import Paragraph from "@components/Paragraph";
 import SkeletonTable from "@components/skeletons/SkeletonTable";
 import * as React from "react";
 import { lazy, Suspense } from "react";
@@ -21,6 +24,21 @@ export const PeerNetworkRoutesSection = ({ peer }: Props) => {
     <div className={"pb-10 px-8"}>
       <div className={""}>
         <div className={"flex justify-between items-center mb-5"}>
+          <div>
+            <Paragraph>
+              Access other networks without installing NetBird on every
+              resource.{" "}
+              <InlineLink
+                href={
+                  "https://docs.netbird.io/how-to/routing-traffic-to-private-networks"
+                }
+                target={"_blank"}
+              >
+                Learn more
+                <ExternalLinkIcon size={12} />
+              </InlineLink>
+            </Paragraph>
+          </div>
           <div className={"inline-flex gap-4 justify-end"}>
             <div className={"gap-4 flex"}>
               <AddExitNodeButton

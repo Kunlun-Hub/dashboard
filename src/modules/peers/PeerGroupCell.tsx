@@ -50,6 +50,7 @@ export default function PeerGroupCell() {
       modal={modal}
       peer={peer}
       setModal={setModal}
+      countOnly={true}
     />
   );
 }

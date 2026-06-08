@@ -5,10 +5,18 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@components/DropdownMenu";
-import { MoreVertical, Settings, SquarePenIcon, Trash2 } from "lucide-react";
+import {
+  MoreVertical,
+  PowerIcon,
+  Settings,
+  SquarePenIcon,
+  Trash2,
+} from "lucide-react";
 import * as React from "react";
+import { useState } from "react";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useReverseProxies } from "@/contexts/ReverseProxiesProvider";
 import { useI18n } from "@/i18n/I18nProvider";
@@ -22,13 +30,18 @@ export default function ReverseProxyFlatTargetActionCell({
   target,
 }: Readonly<Props>) {
   const { permission } = usePermissions();
-  const { openModal, openTargetModal, handleDeleteTarget } =
-    useReverseProxies();
+  const {
+    openModal,
+    openTargetModal,
+    handleDeleteTarget,
+    handleToggleTarget,
+  } = useReverseProxies();
   const { t } = useI18n();
+  const [open, setOpen] = useState(false);
 
   return (
     <div className={"flex justify-end pr-4"}>
-      <DropdownMenu modal={false}>
+      <DropdownMenu modal={false} open={open} onOpenChange={setOpen}>
         <DropdownMenuTrigger
           asChild={true}
           onClick={(e) => {
@@ -61,6 +74,21 @@ export default function ReverseProxyFlatTargetActionCell({
           <DropdownMenuItem
             onClick={(e) => {
               e.stopPropagation();
+              setOpen(false);
+              handleToggleTarget(target.proxy, target);
+            }}
+            disabled={!permission?.services?.update}
+          >
+            <div className={"flex gap-3 items-center"}>
+              <PowerIcon size={14} className={"shrink-0"} />
+              {target.enabled ? "Disable" : "Enable"}
+            </div>
+          </DropdownMenuItem>
+
+          <DropdownMenuItem
+            data-proxy-settings-action={target.proxy.id}
+            onClick={(e) => {
+              e.stopPropagation();
               openModal({ proxy: target.proxy, initialTab: "settings" });
             }}
             disabled={!permission?.services?.update}
@@ -70,6 +98,8 @@ export default function ReverseProxyFlatTargetActionCell({
               {t("reverseProxy.tabAdvancedSettings")}
             </div>
           </DropdownMenuItem>
+
+          <DropdownMenuSeparator />
 
           <DropdownMenuItem
             onClick={(e) => {

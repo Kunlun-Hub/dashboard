@@ -10,9 +10,10 @@ import { useI18n } from "@/i18n/I18nProvider";
 
 type Props = {
   reverseProxy?: ReverseProxy;
+  compact?: boolean;
 };
 
-export const ReverseProxyTypeCell = ({ reverseProxy }: Props) => {
+export const ReverseProxyTypeCell = ({ reverseProxy, compact }: Props) => {
   const { t } = useI18n();
   const serviceModeLabel = useMemo(() => {
     if (!reverseProxy?.mode) return "HTTP/S";
@@ -23,14 +24,13 @@ export const ReverseProxyTypeCell = ({ reverseProxy }: Props) => {
     );
   }, [reverseProxy, t]);
 
+  if (compact) {
+    return <span className={"truncate"}>{serviceModeLabel}</span>;
+  }
+
   return (
     <div className={"flex"}>
       <Badge variant={"gray"} className={"font-normal"}>
-        <ReverseProxyServiceIcon
-          reverseProxy={reverseProxy}
-          className={"text-neutral-800 dark:text-nb-gray-200"}
-          size={11}
-        />
         {serviceModeLabel}
       </Badge>
     </div>

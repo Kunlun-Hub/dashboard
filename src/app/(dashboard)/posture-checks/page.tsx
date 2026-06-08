@@ -1,11 +1,13 @@
 "use client";
 
+import InlineLink from "@components/InlineLink";
+import Paragraph from "@components/Paragraph";
 import Breadcrumbs from "@components/Breadcrumbs";
 import SkeletonTable from "@components/skeletons/SkeletonTable";
 import { RestrictedAccess } from "@components/ui/RestrictedAccess";
 import { usePortalElement } from "@hooks/usePortalElement";
 import useFetchApi from "@utils/api";
-import { ShieldCheck } from "lucide-react";
+import { ExternalLinkIcon, ShieldCheck } from "lucide-react";
 import React, { lazy, Suspense } from "react";
 import AccessControlIcon from "@/assets/icons/AccessControlIcon";
 import GroupsProvider from "@/contexts/GroupsProvider";
@@ -44,7 +46,17 @@ export default function PostureChecksPage() {
               icon={<ShieldCheck size={15} />}
             />
           </Breadcrumbs>
-          <h1 ref={headingRef}>{t("nav.postureChecks")}</h1>
+          <h1 ref={headingRef}>Posture Checks</h1>
+          <Paragraph>
+            Use posture checks to further restrict access in your network.{" "}
+            <InlineLink
+              href={"https://docs.netbird.io/how-to/manage-posture-checks"}
+              target={"_blank"}
+            >
+              Learn more
+              <ExternalLinkIcon size={12} />
+            </InlineLink>
+          </Paragraph>
         </div>
 
         <RestrictedAccess

@@ -12,7 +12,6 @@ import DNSIcon from "@/assets/icons/DNSIcon";
 import PeerIcon from "@/assets/icons/PeerIcon";
 import ReverseProxyIcon from "@/assets/icons/ReverseProxyIcon";
 import SettingsIcon from "@/assets/icons/SettingsIcon";
-import SetupKeysIcon from "@/assets/icons/SetupKeysIcon";
 import TeamIcon from "@/assets/icons/TeamIcon";
 import SidebarItem from "@/components/SidebarItem";
 import { NavigationVersionInfo } from "@/components/VersionInfo";
@@ -80,7 +79,7 @@ export default function Navigation({
 
                 <SidebarItem
                   icon={<ControlCenterIcon size={16} />}
-                  label={t("nav.controlCenter")}
+                  label="Control Center"
                   href={"/control-center"}
                   visible={permission.policies.read}
                 />
@@ -89,15 +88,25 @@ export default function Navigation({
                   icon={<PeerIcon />}
                   label={t("nav.peers")}
                   href={"/peers"}
+                  collapsible
                   visible={!isRestricted}
-                />
+                >
+                  <SidebarItem
+                    label="User Devices"
+                    isChild
+                    href={"/peers/users"}
+                    exactPathMatch={true}
+                    visible={!isRestricted}
+                  />
+                  <SidebarItem
+                    label="Servers"
+                    isChild
+                    href={"/peers/servers"}
+                    exactPathMatch={true}
+                    visible={!isRestricted}
+                  />
+                </SidebarItem>
 
-                <SidebarItem
-                  icon={<SetupKeysIcon />}
-                  label={t("nav.setupKeys")}
-                  href={"/setup-keys"}
-                  visible={permission.setup_keys.read}
-                />
                 <SidebarItem
                   icon={<AccessControlIcon />}
                   label={t("nav.accessControl")}
@@ -166,6 +175,20 @@ export default function Navigation({
                     label={t("nav.customDomains")}
                     isChild
                     href={"/reverse-proxy/custom-domains"}
+                    exactPathMatch={true}
+                    visible={permission?.services?.read}
+                  />
+                  <SidebarItem
+                    label="Clusters"
+                    isChild
+                    href={"/reverse-proxy/clusters"}
+                    exactPathMatch={true}
+                    visible={permission?.services?.read}
+                  />
+                  <SidebarItem
+                    label="Access Logs"
+                    isChild
+                    href={"/reverse-proxy/logs"}
                     exactPathMatch={true}
                     visible={permission?.services?.read}
                   />
@@ -280,22 +303,22 @@ const ActivityNavigationItem = () => {
       />
       <SidebarItem
         label={t("nav.proxyEvents")}
-        isChild
         href={"/events/proxy"}
+        isChild
         exactPathMatch={true}
         visible={permission.events.read}
       />
       <SidebarItem
         label={t("nav.networkLogs")}
-        isChild
         href={"/events/network"}
+        isChild
         exactPathMatch={true}
         visible={permission.events.read && flowLogsEnabled}
       />
       <SidebarItem
         label={t("nav.dnsLogs")}
-        isChild
         href={"/events/dns"}
+        isChild
         exactPathMatch={true}
         visible={permission.events.read && dnsLogsEnabled}
       />

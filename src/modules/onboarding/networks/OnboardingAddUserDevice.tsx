@@ -89,7 +89,7 @@ export const OnboardingAddUserDevice = ({ device, policy, onNext }: Props) => {
 
       <Modal open={open} onOpenChange={setOpen}>
         <ModalContent>
-          <SetupModalContent title={t("onboarding.installNetBird")} hideDocker={true} />
+          <SetupModalContent title={"Install NetBird"} isUserDevice={true} />
         </ModalContent>
       </Modal>
     </div>

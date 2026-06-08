@@ -2,21 +2,28 @@ import Button from "@components/Button";
 import Card from "@components/Card";
 import { DataTable } from "@components/table/DataTable";
 import DataTableHeader from "@components/table/DataTableHeader";
-import { DataTableRowsPerPage } from "@components/table/DataTableRowsPerPage";
+import DataTableResetFilterButton from "@components/table/DataTableResetFilterButton";
+import {
+  formatRadioChip,
+  RadioOption,
+  RadioPicker,
+} from "@components/table/filters/RadioPicker";
+import {
+  TableFilterChips,
+  TableFilterDef,
+  TableFiltersButton,
+} from "@components/table/TableFilters";
 import NoResults from "@components/ui/NoResults";
 import { IconCirclePlus } from "@tabler/icons-react";
 import { ColumnDef, SortingState } from "@tanstack/react-table";
 import * as React from "react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import PeerIcon from "@/assets/icons/PeerIcon";
 import { usePermissions } from "@/contexts/PermissionsProvider";
-import { useI18n } from "@/i18n/I18nProvider";
 import { NetworkRouter } from "@/interfaces/Network";
-import { useAccountEntitlements } from "@/modules/account/useAccountEntitlements";
 import { useNetworksContext } from "@/modules/networks/NetworkProvider";
 import { NetworkRoutingPeerName } from "@/modules/networks/routing-peers/NetworkRoutingPeerName";
 import { RoutingPeersActionCell } from "@/modules/networks/routing-peers/RoutingPeersActionCell";
-import { RoutingPeersEnabledCell } from "@/modules/networks/routing-peers/RoutingPeersEnabledCell";
 import { RoutingPeersMasqueradeCell } from "@/modules/networks/routing-peers/RoutingPeersMasqueradeCell";
 import RouteMetricCell from "@/modules/routes/RouteMetricCell";
 
@@ -26,136 +33,61 @@ type Props = {
   headingTarget?: HTMLHeadingElement | null;
 };
 
-function useNetworkRouterColumns(): ColumnDef<NetworkRouter>[] {
-  const { t } = useI18n();
-
-  return [
-    {
-      id: "name",
-      accessorKey: "id",
-      header: ({ column }) => {
-        return (
-          <DataTableHeader column={column}>
-            {t("networkRouting.peer")}
-          </DataTableHeader>
-        );
-      },
-      sortingFn: "text",
-      cell: ({ row }) => <NetworkRoutingPeerName router={row.original} />,
+const NetworkRouterColumns: ColumnDef<NetworkRouter>[] = [
+  {
+    id: "name",
+    accessorKey: "id",
+    header: ({ column }) => {
+      return <DataTableHeader column={column}>Peer</DataTableHeader>;
     },
-    {
-      id: "enabled",
-      accessorKey: "enabled",
-      header: ({ column }) => {
-        return (
-          <DataTableHeader column={column}>{t("table.active")}</DataTableHeader>
-        );
-      },
-      cell: ({ row }) => <RoutingPeersEnabledCell router={row.original} />,
+    sortingFn: "text",
+    cell: ({ row }) => <NetworkRoutingPeerName router={row.original} />,
+  },
+  {
+    id: "enabled",
+    accessorKey: "enabled",
+  },
+  {
+    id: "metric",
+    accessorKey: "metric",
+    header: ({ column }) => {
+      return <DataTableHeader column={column}>Metric</DataTableHeader>;
     },
-    {
-      id: "advertised_routes",
-      accessorFn: (router) => router.advertised_routes?.join(" ") ?? "",
-      header: ({ column }) => {
-        return (
-          <DataTableHeader column={column}>
-            {t("networkRouting.advertisedRoutes")}
-          </DataTableHeader>
-        );
-      },
-      cell: ({ row }) => (
-        <RouteListCell
-          routes={row.original.advertised_routes}
-          emptyLabel={t("networkRouting.defaultRoutes")}
-        />
-      ),
+    cell: ({ row }) => (
+      <RouteMetricCell metric={row.original.metric} useHoverStyle={false} />
+    ),
+  },
+  {
+    id: "masquerade",
+    accessorKey: "masquerade",
+    header: ({ column }) => {
+      return <DataTableHeader column={column}>Masquerade</DataTableHeader>;
     },
-    {
-      id: "excluded_routes",
-      accessorFn: (router) => router.excluded_routes?.join(" ") ?? "",
-      header: ({ column }) => {
-        return (
-          <DataTableHeader column={column}>
-            {t("networkRouting.excludedRoutes")}
-          </DataTableHeader>
-        );
-      },
-      cell: ({ row }) => (
-        <RouteListCell routes={row.original.excluded_routes} emptyLabel={"-"} />
-      ),
+    cell: ({ row }) => <RoutingPeersMasqueradeCell router={row.original} />,
+  },
+  {
+    id: "actions",
+    accessorKey: "id",
+    header: "",
+    cell: ({ row }) => {
+      return <RoutingPeersActionCell router={row.original} />;
     },
-    {
-      id: "metric",
-      accessorKey: "metric",
-      header: ({ column }) => {
-        return (
-          <DataTableHeader column={column}>
-            {t("networkRouting.metric")}
-          </DataTableHeader>
-        );
-      },
-      cell: ({ row }) => (
-        <RouteMetricCell metric={row.original.metric} useHoverStyle={false} />
-      ),
-    },
-    {
-      id: "masquerade",
-      accessorKey: "masquerade",
-      header: ({ column }) => {
-        return (
-          <DataTableHeader column={column}>
-            {t("networkRouting.masquerade")}
-          </DataTableHeader>
-        );
-      },
-      cell: ({ row }) => <RoutingPeersMasqueradeCell router={row.original} />,
-    },
-    {
-      id: "actions",
-      accessorKey: "id",
-      header: "",
-      cell: ({ row }) => {
-        return <RoutingPeersActionCell router={row.original} />;
-      },
-    },
-    {
-      id: "search",
-      accessorKey: "search",
-      header: "",
-      filterFn: "fuzzy",
-    },
-  ];
-}
-
-function RouteListCell({
-  routes,
-  emptyLabel,
-}: Readonly<{ routes?: string[]; emptyLabel: string }>) {
-  if (!routes || routes.length === 0) {
-    return <span className={"text-neutral-500 dark:text-nb-gray-400 text-xs"}>{emptyLabel}</span>;
-  }
-
-  const firstRoute = routes[0];
-  return (
-    <span className={"text-xs text-neutral-600 dark:text-nb-gray-300"}>
-      {firstRoute}
-      {routes.length > 1 ? ` +${routes.length - 1}` : ""}
-    </span>
-  );
-}
+  },
+  {
+    id: "search",
+    accessorKey: "search",
+    header: "",
+    filterFn: "fuzzy",
+  },
+];
 
 export default function NetworkRoutingPeersTable({
   routers,
   isLoading,
   headingTarget,
 }: Readonly<Props>) {
-  const { t } = useI18n();
   const { permission } = usePermissions();
   const { openAddRoutingPeerModal, network } = useNetworksContext();
-  const { isFeatureEnabled } = useAccountEntitlements();
-  const highAvailabilityLocked =
-    !isFeatureEnabled("ha_routes") && (network?.routing_peers_count ?? 0) > 0;
-  const columns = useNetworkRouterColumns();
 
   const [sorting, setSorting] = useState<SortingState>([
     {
@@ -163,6 +95,35 @@ export default function NetworkRoutingPeersTable({
       desc: false,
     },
   ]);
+
+  const statusOptions = useMemo<RadioOption<boolean | undefined>[]>(
+    () => [
+      { value: undefined, label: "All", dotClass: "bg-nb-gray-500" },
+      { value: true, label: "Active", dotClass: "bg-green-500" },
+      { value: false, label: "Inactive", dotClass: "bg-nb-gray-700" },
+    ],
+    [],
+  );
+
+  const filterDefs = useMemo<TableFilterDef[]>(
+    () => [
+      {
+        id: "enabled",
+        label: "Status",
+        renderPicker: (p) => (
+          <RadioPicker
+            value={p.value as boolean | undefined}
+            onChange={p.onChange}
+            close={p.close}
+            options={statusOptions}
+          />
+        ),
+        formatChip: (v) =>
+          formatRadioChip(v as boolean | undefined, statusOptions),
+      },
+    ],
+    [statusOptions],
+  );
 
   return (
     <DataTable
@@ -175,49 +136,58 @@ export default function NetworkRoutingPeersTable({
       showSearchAndFilters={true}
       inset={false}
       tableClassName={"mt-0"}
-      text={t("networkDetails.routingPeers")}
-      columns={columns}
+      text={"Routing Peers"}
+      columns={NetworkRouterColumns}
       keepStateInLocalStorage={false}
+      initialPageSize={25}
+      showResetFilterButton={false}
+      aboveTable={(table) => (
+        <TableFilterChips table={table} filters={filterDefs} />
+      )}
       data={routers}
-      searchPlaceholder={t("networkRouting.searchPlaceholder")}
+      searchPlaceholder={"Search by peer name, group name..."}
       isLoading={isLoading}
       getStartedCard={
         <NoResults
           className={"py-4"}
-          title={t("networkRouting.emptyTitle")}
-          description={t("networkRouting.emptyDescription")}
-          icon={
-            <PeerIcon
-              size={18}
-              className={"fill-neutral-500 dark:fill-nb-gray-400"}
-            />
+          title={"This network has no routing peers"}
+          description={
+            "Add routing peers to this network to access resources inside this network."
           }
+          icon={<PeerIcon size={18} className={"fill-nb-gray-400"} />}
         />
       }
-      columnVisibility={{ search: false }}
+      columnVisibility={{ search: false, enabled: false }}
+      rowClassName={(row) => (row.original.enabled ? "" : "opacity-50")}
       paginationPaddingClassName={"px-0 pt-8"}
       rightSide={() => (
         <Button
           variant={"primary"}
-          className={"ml-auto"}
+          className={"ml-auto mr-4"}
           onClick={() => network && openAddRoutingPeerModal(network)}
-          disabled={!permission.networks.update || highAvailabilityLocked}
-          title={
-            highAvailabilityLocked
-              ? t("networkDetails.highAvailabilityLockedHelp")
-              : undefined
-          }
+          disabled={!permission.networks.update}
         >
           <IconCirclePlus size={16} />
-          {t("networkRouting.add")}
+          Add
         </Button>
       )}
     >
       {(table) => (
-        <DataTableRowsPerPage
-          table={table}
-          disabled={!routers || routers?.length == 0}
-        />
+        <>
+          <TableFiltersButton
+            table={table}
+            filters={filterDefs}
+            disabled={!routers || routers?.length == 0}
+          />
+          <DataTableResetFilterButton
+            table={table}
+            onClick={() => {
+              table.setPageIndex(0);
+              table.resetColumnFilters();
+              table.resetGlobalFilter();
+            }}
+          />
+        </>
       )}
     </DataTable>
   );

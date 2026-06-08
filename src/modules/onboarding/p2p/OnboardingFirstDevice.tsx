@@ -55,10 +55,7 @@ export const OnboardingFirstDevice = ({
 
       <Modal open={open} onOpenChange={setOpen}>
         <ModalContent className={"!z-[70]"}>
-          <SetupModalContent
-            title={t("onboarding.installNetBird")}
-            hideDocker={true}
-          />
+          <SetupModalContent title={"Install NetBird"} isUserDevice={true} />
         </ModalContent>
       </Modal>
     </div>

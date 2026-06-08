@@ -5,7 +5,22 @@ import SquareIcon from "@components/SquareIcon";
 import { DataTable } from "@components/table/DataTable";
 import DataTableHeader from "@components/table/DataTableHeader";
 import DataTableRefreshButton from "@components/table/DataTableRefreshButton";
-import { DataTableRowsPerPage } from "@components/table/DataTableRowsPerPage";
+import DataTableResetFilterButton from "@components/table/DataTableResetFilterButton";
+import {
+  CheckboxListPicker,
+  CheckboxOption,
+  formatCheckboxChip,
+} from "@components/table/filters/CheckboxListPicker";
+import {
+  formatRadioChip,
+  RadioOption,
+  RadioPicker,
+} from "@components/table/filters/RadioPicker";
+import {
+  TableFilterChips,
+  TableFilterDef,
+  TableFiltersButton,
+} from "@components/table/TableFilters";
 import GetStartedTest from "@components/ui/GetStartedTest";
 import { IconSettings2 } from "@tabler/icons-react";
 import { ColumnDef, SortingState } from "@tanstack/react-table";
@@ -28,59 +43,49 @@ import UserActionCell from "@/modules/users/table-cells/UserActionCell";
 import UserRoleCell from "@/modules/users/table-cells/UserRoleCell";
 import UserStatusCell from "@/modules/users/table-cells/UserStatusCell";
 
-function useServiceUsersTableColumns(): ColumnDef<User>[] {
-  const { t } = useI18n();
-
-  return useMemo(
-    () => [
-      {
-        accessorKey: "name",
-        header: ({ column }) => {
-          return (
-            <DataTableHeader column={column}>{t("table.name")}</DataTableHeader>
-          );
-        },
-        sortingFn: "text",
-        cell: ({ row }) => <ServiceUserNameCell user={row.original} />,
-      },
-      {
-        accessorKey: "is_current",
-        sortingFn: "basic",
-      },
-      {
-        accessorKey: "role",
-        header: ({ column }) => {
-          return (
-            <DataTableHeader column={column}>{t("table.role")}</DataTableHeader>
-          );
-        },
-        sortingFn: "text",
-        cell: ({ row }) => <UserRoleCell user={row.original} />,
-      },
-      {
-        accessorKey: "status",
-        header: ({ column }) => {
-          return (
-            <DataTableHeader column={column}>
-              {t("table.status")}
-            </DataTableHeader>
-          );
-        },
-        sortingFn: "text",
-        cell: ({ row }) => <UserStatusCell user={row.original} />,
-      },
-      {
-        accessorKey: "id",
-        header: "",
-        sortingFn: "text",
-        cell: ({ row }) => (
-          <UserActionCell user={row.original} serviceUser={true} />
-        ),
-      },
-    ],
-    [t],
-  );
-}
+export const ServiceUsersTableColumns: ColumnDef<User>[] = [
+  {
+    accessorKey: "name",
+    header: ({ column }) => {
+      return <DataTableHeader column={column}>Name</DataTableHeader>;
+    },
+    sortingFn: "text",
+    cell: ({ row }) => <ServiceUserNameCell user={row.original} />,
+  },
+  {
+    accessorKey: "is_current",
+    sortingFn: "basic",
+  },
+  {
+    accessorKey: "role",
+    header: ({ column }) => {
+      return <DataTableHeader column={column}>Role</DataTableHeader>;
+    },
+    sortingFn: "text",
+    cell: ({ row }) => <UserRoleCell user={row.original} />,
+  },
+  {
+    accessorKey: "status",
+    header: ({ column }) => {
+      return <DataTableHeader column={column}>Status</DataTableHeader>;
+    },
+    sortingFn: "text",
+    cell: ({ row }) => <UserStatusCell user={row.original} />,
+  },
+  {
+    id: "role_filter",
+    accessorFn: (u) => [u?.role],
+    filterFn: "arrIncludesSome",
+  },
+  {
+    accessorKey: "id",
+    header: "",
+    sortingFn: "text",
+    cell: ({ row }) => (
+      <UserActionCell user={row.original} serviceUser={true} />
+    ),
+  },
+];
 
 type Props = {
   users?: User[];
@@ -99,7 +104,6 @@ export default function ServiceUsersTable({
   const path = usePathname();
   const { permission } = usePermissions();
   const { t } = useI18n();
-  const columns = useServiceUsersTableColumns();
 
   const [sorting, setSorting] = useLocalStorage<SortingState>(
     "netbird-table-sort" + path,
@@ -115,6 +119,60 @@ export default function ServiceUsersTable({
     ],
   );
 
+  const statusOptions = useMemo<RadioOption<string | undefined>[]>(
+    () => [
+      { value: undefined, label: "All", dotClass: "bg-nb-gray-500" },
+      { value: "active", label: "Active", dotClass: "bg-green-500" },
+      { value: "blocked", label: "Blocked", dotClass: "bg-red-500" },
+    ],
+    [],
+  );
+
+  const roleOptions = useMemo<CheckboxOption<string>[]>(
+    () => [
+      { value: "admin", label: "Admin" },
+      { value: "user", label: "User" },
+      { value: "network_admin", label: "Network Admin" },
+      { value: "billing_admin", label: "Billing Admin" },
+      { value: "auditor", label: "Auditor" },
+    ],
+    [],
+  );
+
+  const filterDefs = useMemo<TableFilterDef[]>(
+    () => [
+      {
+        id: "status",
+        label: "Status",
+        renderPicker: (p) => (
+          <RadioPicker
+            value={p.value as string | undefined}
+            onChange={p.onChange}
+            close={p.close}
+            options={statusOptions}
+          />
+        ),
+        formatChip: (v) =>
+          formatRadioChip(v as string | undefined, statusOptions),
+      },
+      {
+        id: "role_filter",
+        label: "Role",
+        renderPicker: (p) => (
+          <CheckboxListPicker
+            value={p.value as string[] | undefined}
+            onChange={p.onChange}
+            close={p.close}
+            options={roleOptions}
+          />
+        ),
+        formatChip: (v) =>
+          formatCheckboxChip(v as string[] | undefined, roleOptions, "roles"),
+      },
+    ],
+    [statusOptions, roleOptions],
+  );
+
   return (
     <DataTable
       headingTarget={headingTarget}
@@ -122,14 +180,20 @@ export default function ServiceUsersTable({
       text={t("serviceUsers.title")}
       sorting={sorting}
       setSorting={setSorting}
-      columns={columns}
+      columns={ServiceUsersTableColumns}
       data={users}
       onRowClick={(row) => {
         router.push(`/team/user?id=${row.original.id}&service_user=true`);
       }}
       rowClassName={"cursor-pointer"}
+      initialPageSize={25}
+      showResetFilterButton={false}
+      aboveTable={(table) => (
+        <TableFilterChips table={table} filters={filterDefs} />
+      )}
       columnVisibility={{
         is_current: false,
+        role_filter: false,
       }}
       searchPlaceholder={t("serviceUsers.searchPlaceholder")}
       getStartedCard={
@@ -162,7 +226,19 @@ export default function ServiceUsersTable({
     >
       {(table) => (
         <>
-          <DataTableRowsPerPage table={table} disabled={users?.length == 0} />
+          <TableFiltersButton
+            table={table}
+            filters={filterDefs}
+            disabled={users?.length == 0}
+          />
+          <DataTableResetFilterButton
+            table={table}
+            onClick={() => {
+              table.setPageIndex(0);
+              table.resetColumnFilters();
+              table.resetGlobalFilter();
+            }}
+          />
           <DataTableRefreshButton
             isDisabled={users?.length == 0}
             onClick={() => {

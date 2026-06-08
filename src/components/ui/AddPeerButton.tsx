@@ -14,7 +14,11 @@ import {
 } from "@/modules/account/ResourceUsage";
 import SetupModal from "@/modules/setup-netbird-modal/SetupModal";
 
-function AddPeerButton() {
+type Props = {
+  isUserDevice?: boolean;
+};
+
+function AddPeerButton({ isUserDevice }: Readonly<Props>) {
   const { t } = useI18n();
   const { data: peers } = useFetchApi<Peer[]>("/peers");
   const { oidcUser: user } = useOidcUser();
@@ -64,13 +68,17 @@ function AddPeerButton() {
   }
 
   return (
-    <Modal open={installModal} onOpenChange={handleOpenChange}>
-      <ModalTrigger asChild>{button}</ModalTrigger>
-      <SetupModal
-        user={user}
-        defaultOperatingSystem={OperatingSystem.WINDOWS}
-      />
-    </Modal>
+    <>
+      <Modal open={installModal} onOpenChange={handleOpenChange}>
+        <ModalTrigger asChild>
+          <Button variant={"primary"} size={"sm"} className={"ml-auto"}>
+            <PlusCircle size={16} />
+            Add Peer
+          </Button>
+        </ModalTrigger>
+        <SetupModal user={user} isUserDevice={isUserDevice} />
+      </Modal>
+    </>
   );
 }
 

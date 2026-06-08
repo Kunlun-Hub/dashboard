@@ -1,3 +1,6 @@
+import { ExternalLinkIcon } from "lucide-react";
+import InlineLink from "@components/InlineLink";
+import Paragraph from "@components/Paragraph";
 import SkeletonTable, {
   SkeletonTableHeader,
 } from "@components/skeletons/SkeletonTable";
@@ -38,6 +41,21 @@ export const NetworkRoutingPeersTabContent = ({
 
   return (
     <div className={"px-8"} id={"routing-peers"}>
+      <div className={"flex justify-between items-center mb-5"}>
+        <div>
+          <Paragraph>
+            Add routing peers to this network to access resources inside this
+            network.{" "}
+            <InlineLink
+              href={"https://docs.netbird.io/manage/networks#routing-peers"}
+              target={"_blank"}
+            >
+              Learn more
+              <ExternalLinkIcon size={12} />
+            </InlineLink>
+          </Paragraph>
+        </div>
+      </div>
       <Suspense
         fallback={
           <div>

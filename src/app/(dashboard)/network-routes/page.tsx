@@ -1,5 +1,6 @@
 "use client";
 
+import Paragraph from "@components/Paragraph";
 import Breadcrumbs from "@components/Breadcrumbs";
 import { Callout } from "@components/Callout";
 import InlineLink from "@components/InlineLink";
@@ -7,7 +8,7 @@ import SkeletonTable from "@components/skeletons/SkeletonTable";
 import { RestrictedAccess } from "@components/ui/RestrictedAccess";
 import { usePortalElement } from "@hooks/usePortalElement";
 import useFetchApi from "@utils/api";
-import { ArrowUpRightIcon } from "lucide-react";
+import { ArrowUpRightIcon, ExternalLinkIcon } from "lucide-react";
 import React, { lazy, Suspense } from "react";
 import NetworkRoutesIcon from "@/assets/icons/NetworkRoutesIcon";
 import PeersProvider from "@/contexts/PeersProvider";
@@ -38,12 +39,28 @@ export default function NetworkRoutes() {
           <div className={"p-default py-6"}>
             <Breadcrumbs>
               <Breadcrumbs.Item
-                href={"/network-routes"}
-                label={t("networkRoutesPage.title")}
+                label={"Network Routing"}
                 icon={<NetworkRoutesIcon size={13} />}
               />
+              <Breadcrumbs.Item href={"/network-routes"} label={"Routes"} />
             </Breadcrumbs>
-            <h1 ref={headingRef}>{t("networkRoutesPage.title")}</h1>
+            <h1 ref={headingRef}>Routes</h1>
+            <Paragraph>
+              Access other networks like LANs and VPCs without installing
+              NetBird on every resource.{" "}
+              <InlineLink
+                href={
+                  "https://docs.netbird.io/how-to/routing-traffic-to-private-networks"
+                }
+                target={"_blank"}
+                aria-label={
+                  "Learn more about routing traffic to private networks"
+                }
+              >
+                Learn more
+                <ExternalLinkIcon size={12} />
+              </InlineLink>
+            </Paragraph>
 
             <Callout className={"max-w-xl mt-5"} variant={"warning"}>
               <span>

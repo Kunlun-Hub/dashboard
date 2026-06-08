@@ -1,13 +1,26 @@
 "use client";
 
 import Button from "@components/Button";
-import ButtonGroup from "@components/ButtonGroup";
 import Card from "@components/Card";
 import SquareIcon from "@components/SquareIcon";
 import { DataTable } from "@components/table/DataTable";
 import DataTableHeader from "@components/table/DataTableHeader";
 import DataTableRefreshButton from "@components/table/DataTableRefreshButton";
-import { DataTableRowsPerPage } from "@components/table/DataTableRowsPerPage";
+import DataTableResetFilterButton from "@components/table/DataTableResetFilterButton";
+import {
+  formatGroupsChip,
+  GroupsPicker,
+} from "@components/table/filters/GroupsPicker";
+import {
+  formatRadioChip,
+  RadioOption,
+  RadioPicker,
+} from "@components/table/filters/RadioPicker";
+import {
+  TableFilterChips,
+  TableFilterDef,
+  TableFiltersButton,
+} from "@components/table/TableFilters";
 import GetStartedTest from "@components/ui/GetStartedTest";
 import NoResults from "@components/ui/NoResults";
 import { ColumnDef, SortingState } from "@tanstack/react-table";
@@ -15,6 +28,7 @@ import dayjs from "dayjs";
 import { PlusCircle } from "lucide-react";
 import { usePathname } from "next/navigation";
 import React, { useMemo, useState } from "react";
+import { uniqBy } from "lodash";
 import { useSWRConfig } from "swr";
 import SetupKeysIcon from "@/assets/icons/SetupKeysIcon";
 import { usePermissions } from "@/contexts/PermissionsProvider";
@@ -29,103 +43,100 @@ import SetupKeyActionCell from "@/modules/setup-keys/SetupKeyActionCell";
 import SetupKeyGroupsCell from "@/modules/setup-keys/SetupKeyGroupsCell";
 import SetupKeyModal from "@/modules/setup-keys/SetupKeyModal";
 import SetupKeyNameCell from "@/modules/setup-keys/SetupKeyNameCell";
-import SetupKeyStatusCell from "@/modules/setup-keys/SetupKeyStatusCell";
 import SetupKeyUsageCell from "@/modules/setup-keys/SetupKeyUsageCell";
 
-function useSetupKeysTableColumns(): ColumnDef<SetupKey>[] {
-  const { t } = useI18n();
+export const SetupKeysTableColumns: ColumnDef<SetupKey>[] = [
+  {
+    accessorKey: "name",
+    header: ({ column }) => {
+      return <DataTableHeader column={column}>Name & Key</DataTableHeader>;
+    },
+    sortingFn: "text",
+    cell: ({ row }) => (
+      <SetupKeyNameCell
+        name={row.original.name}
+        valid={row.original.valid}
+        secret={row.original.key}
+        ephemeral={row.original.ephemeral}
+        allowExtraDnsLabels={row.original.allow_extra_dns_labels}
+      />
+    ),
+  },
+  {
+    id: "valid",
+    accessorKey: "valid",
+    sortingFn: "basic",
+  },
+  {
+    accessorKey: "usage_limit",
+    header: ({ column }) => {
+      return <DataTableHeader column={column}>Usage</DataTableHeader>;
+    },
+    cell: ({ row }) => (
+      <SetupKeyUsageCell
+        current={row.original.used_times}
+        limit={row.original.usage_limit || 0}
+        reusable={row.original.type == "reusable"}
+      />
+    ),
+  },
+  {
+    id: "type",
+    accessorKey: "type",
+    filterFn: "equalsString",
+  },
+  {
+    accessorKey: "last_used",
+    header: ({ column }) => {
+      return <DataTableHeader column={column}>Last used</DataTableHeader>;
+    },
+    sortingFn: "datetime",
+    cell: ({ row }) => (
+      <LastTimeRow date={row.original.last_used} text={"Last used on"} />
+    ),
+  },
+  {
+    id: "group_strings",
+    accessorKey: "group_strings",
+    accessorFn: (s) => s.groups?.map((g) => g?.name || "").join(", "),
+  },
+  {
+    id: "group_names",
+    accessorFn: (s) => s.groups?.map((g) => g?.name || ""),
+    filterFn: "arrIncludesSome",
+  },
+  {
+    accessorFn: (item) => item.auto_groups?.length,
+    id: "groups",
+    header: ({ column }) => {
+      return <DataTableHeader column={column}>Groups</DataTableHeader>;
+    },
+    cell: ({ row }) => <SetupKeyGroupsCell setupKey={row.original} />,
+  },
 
-  return useMemo(
-    () => [
-      {
-        accessorKey: "name",
-        header: ({ column }) => {
-          return (
-            <DataTableHeader column={column}>{t("table.nameAndKey")}</DataTableHeader>
-          );
-        },
-        sortingFn: "text",
-        cell: ({ row }) => (
-          <SetupKeyNameCell
-            name={row.original.name}
-            valid={row.original.valid}
-            secret={row.original.key}
-          />
-        ),
-      },
-      {
-        id: "valid",
-        accessorKey: "valid",
-        sortingFn: "basic",
-      },
-      {
-        accessorKey: "usage_limit",
-        header: ({ column }) => {
-          return <DataTableHeader column={column}>{t("table.usage")}</DataTableHeader>;
-        },
-        cell: ({ row }) => (
-          <SetupKeyUsageCell
-            current={row.original.used_times}
-            limit={row.original.usage_limit || 0}
-            reusable={row.original.type == "reusable"}
-          />
-        ),
-      },
-      {
-        accessorKey: "last_used",
-        header: ({ column }) => {
-          return <DataTableHeader column={column}>{t("table.lastUsed")}</DataTableHeader>;
-        },
-        sortingFn: "datetime",
-        cell: ({ row }) => (
-          <LastTimeRow date={row.original.last_used} text={t("setupKeys.lastUsedOn")} />
-        ),
-      },
-      {
-        id: "group_strings",
-        accessorKey: "group_strings",
-        accessorFn: (s) => s.groups?.map((g) => g?.name || "").join(", "),
-      },
-      {
-        accessorFn: (item) => item.auto_groups?.length,
-        id: "groups",
-        header: ({ column }) => {
-          return <DataTableHeader column={column}>{t("table.groups")}</DataTableHeader>;
-        },
-        cell: ({ row }) => <SetupKeyGroupsCell setupKey={row.original} />,
-      },
-      {
-        accessorKey: "expires",
-        header: ({ column }) => {
-          return <DataTableHeader column={column}>{t("table.expires")}</DataTableHeader>;
-        },
-        cell: ({ row }) => {
-          const expires = dayjs(row.original.expires);
-          const isNeverExpiring = expires?.year() == 1 || false;
-          return !isNeverExpiring ? (
-            <ExpirationDateRow date={row.original.expires} />
-          ) : (
-            <EmptyRow className={"px-3"} />
-          );
-        },
-      },
-      {
-        id: "status",
-        accessorKey: "id",
-        header: ({ column }) => "",
-        cell: ({ row }) => <SetupKeyStatusCell setupKey={row.original} />,
-      },
-      {
-        accessorKey: "id",
-        header: "",
-        cell: ({ row }) => {
-          return <SetupKeyActionCell setupKey={row.original} />;
-        },
-      },
-    ],
-    [t],
-  );
-}
+  {
+    accessorKey: "expires",
+    header: ({ column }) => {
+      return <DataTableHeader column={column}>Expires</DataTableHeader>;
+    },
+    cell: ({ row }) => {
+      let expires = dayjs(row.original.expires);
+      let isNeverExpiring = expires?.year() == 1 || false;
+      return !isNeverExpiring ? (
+        <ExpirationDateRow date={row.original.expires} />
+      ) : (
+        <EmptyRow className={"px-3"} />
+      );
+    },
+  },
+  {
+    accessorKey: "id",
+    header: "",
+    cell: ({ row }) => {
+      return <SetupKeyActionCell setupKey={row.original} />;
+    },
+  },
+];
 
 type Props = {
   setupKeys?: SetupKey[];
@@ -146,7 +157,6 @@ export default function SetupKeysTable({
   const path = usePathname();
   const { permission } = usePermissions();
   const { t } = useI18n();
-  const columns = useSetupKeysTableColumns();
 
   const [sorting, setSorting] = useLocalStorage<SortingState>(
     "netbird-table-sort" + path,
@@ -169,6 +179,85 @@ export default function SetupKeysTable({
 
   const [open, setOpen] = useState(false);
 
+  // Groups derived from the current setup keys, so the Groups filter
+  // only offers groups that actually appear in the table.
+  const tableGroups = useMemo<Group[]>(
+    () =>
+      (uniqBy(
+        setupKeys?.flatMap((k) => k.groups || []),
+        "name",
+      ) as Group[]) || [],
+    [setupKeys],
+  );
+
+  // Single-radio status filter mirroring the previous All / Valid /
+  // Expired ButtonGroup. The `valid` column already exists; we just
+  // re-route it through the consolidated filter UI.
+  const statusOptions = useMemo<RadioOption<boolean | undefined>[]>(
+    () => [
+      { value: undefined, label: "All", dotClass: "bg-nb-gray-500" },
+      { value: true, label: "Valid", dotClass: "bg-green-500" },
+      { value: false, label: "Expired", dotClass: "bg-nb-gray-700" },
+    ],
+    [],
+  );
+
+  const usageOptions = useMemo<RadioOption<string | undefined>[]>(
+    () => [
+      { value: undefined, label: "All" },
+      { value: "one-off", label: "One-off" },
+      { value: "reusable", label: "Reusable" },
+    ],
+    [],
+  );
+
+  const filterDefs = useMemo<TableFilterDef[]>(
+    () => [
+      {
+        id: "valid",
+        label: "Status",
+        renderPicker: (p) => (
+          <RadioPicker
+            value={p.value as boolean | undefined}
+            onChange={p.onChange}
+            close={p.close}
+            options={statusOptions}
+          />
+        ),
+        formatChip: (v) =>
+          formatRadioChip(v as boolean | undefined, statusOptions),
+      },
+      {
+        id: "type",
+        label: "Usage",
+        renderPicker: (p) => (
+          <RadioPicker
+            value={p.value as string | undefined}
+            onChange={p.onChange}
+            close={p.close}
+            options={usageOptions}
+          />
+        ),
+        formatChip: (v) =>
+          formatRadioChip(v as string | undefined, usageOptions),
+      },
+      {
+        id: "group_names",
+        label: "Groups",
+        renderPicker: (p) => (
+          <GroupsPicker
+            value={p.value as string[] | undefined}
+            onChange={p.onChange}
+            close={p.close}
+            groups={tableGroups}
+          />
+        ),
+        formatChip: (v) => formatGroupsChip(v as string[] | undefined),
+      },
+    ],
+    [statusOptions, usageOptions, tableGroups],
+  );
+
   return (
     <>
       {open && <SetupKeyModal open={open} setOpen={setOpen} groups={groups} />}
@@ -185,13 +274,20 @@ export default function SetupKeysTable({
         text={t("setupKeys.title")}
         sorting={sorting}
         setSorting={setSorting}
-        columns={columns}
+        initialPageSize={25}
+        showResetFilterButton={false}
+        columns={SetupKeysTableColumns}
         data={setupKeys}
         searchPlaceholder={t("setupKeys.searchPlaceholder")}
         columnVisibility={{
           valid: false,
           group_strings: false,
+          group_names: false,
+          type: false,
         }}
+        aboveTable={(table) => (
+          <TableFilterChips table={table} filters={filterDefs} />
+        )}
         getStartedCard={
           isGroupPage ? (
             <NoResults
@@ -212,7 +308,7 @@ export default function SetupKeysTable({
                 disabled={!permission.setup_keys.create}
               >
                 <PlusCircle size={16} />
-                {t("setupKeys.createTitle")}
+                Create Key
               </Button>
             </NoResults>
           ) : (
@@ -239,7 +335,7 @@ export default function SetupKeysTable({
                   disabled={!permission.setup_keys.create}
                 >
                   <PlusCircle size={16} />
-                  {t("setupKeys.createTitle")}
+                  Create Key
                 </Button>
               }
             />
@@ -255,7 +351,7 @@ export default function SetupKeysTable({
                 disabled={!permission.setup_keys.create}
               >
                 <PlusCircle size={16} />
-                {t("setupKeys.createTitle")}
+                Create Key
               </Button>
             )}
           </>
@@ -263,54 +359,21 @@ export default function SetupKeysTable({
       >
         {(table) => (
           <>
-            <ButtonGroup disabled={setupKeys?.length == 0}>
-              <ButtonGroup.Button
-                onClick={() => {
-                  table.setPageIndex(0);
-                  table.getColumn("valid")?.setFilterValue(undefined);
-                }}
-                disabled={setupKeys?.length == 0}
-                variant={
-                  table.getColumn("valid")?.getFilterValue() == undefined
-                    ? "tertiary"
-                    : "secondary"
-                }
-              >
-                {t("filters.all")}
-              </ButtonGroup.Button>
-              <ButtonGroup.Button
-                onClick={() => {
-                  table.setPageIndex(0);
-                  table.getColumn("valid")?.setFilterValue(true);
-                }}
-                disabled={setupKeys?.length == 0}
-                variant={
-                  table.getColumn("valid")?.getFilterValue() == true
-                    ? "tertiary"
-                    : "secondary"
-                }
-              >
-                {t("filters.valid")}
-              </ButtonGroup.Button>
-              <ButtonGroup.Button
-                onClick={() => {
-                  table.setPageIndex(0);
-                  table.getColumn("valid")?.setFilterValue(false);
-                }}
-                disabled={setupKeys?.length == 0}
-                variant={
-                  table.getColumn("valid")?.getFilterValue() == false
-                    ? "tertiary"
-                    : "secondary"
-                }
-              >
-                {t("filters.expired")}
-              </ButtonGroup.Button>
-            </ButtonGroup>
-            <DataTableRowsPerPage
+            <TableFiltersButton
               table={table}
+              filters={filterDefs}
               disabled={setupKeys?.length == 0}
             />
+
+            <DataTableResetFilterButton
+              table={table}
+              onClick={() => {
+                table.setPageIndex(0);
+                table.resetColumnFilters();
+                table.resetGlobalFilter();
+              }}
+            />
+
             <DataTableRefreshButton
               isDisabled={setupKeys?.length == 0}
               onClick={() => {
