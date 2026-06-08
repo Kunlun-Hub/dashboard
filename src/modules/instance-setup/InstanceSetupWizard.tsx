@@ -28,6 +28,9 @@ interface FormErrors {
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63}$/i;
 
+const setupPageClassName =
+  "light-theme-surface fixed inset-0 overflow-y-auto bg-neutral-50 px-4 py-10 text-neutral-950 dark:bg-nb-gray-950 dark:text-nb-gray-100 sm:py-20";
+
 export default function InstanceSetupWizard() {
   const { t } = useI18n();
   const [formData, setFormData] = useState<FormData>({
@@ -61,7 +64,7 @@ export default function InstanceSetupWizard() {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  }, [formData]);
+  }, [formData, t]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -136,7 +139,7 @@ export default function InstanceSetupWizard() {
 
   if (isSuccess) {
     return (
-      <div className="light-theme-surface min-h-screen bg-neutral-50 px-4 py-20 text-neutral-950 dark:bg-nb-gray-950 dark:text-nb-gray-100">
+      <div className={setupPageClassName}>
         <div className={"flex items-center justify-center"}>
           <PublicBrandingLogo size={"large"} mobile={false} />
         </div>
@@ -174,7 +177,7 @@ export default function InstanceSetupWizard() {
   }
 
   return (
-    <div className="light-theme-surface min-h-screen bg-neutral-50 px-4 py-20 text-neutral-950 dark:bg-nb-gray-950 dark:text-nb-gray-100">
+    <div className={setupPageClassName}>
       <div className={"flex items-center justify-center"}>
         <PublicBrandingLogo size={"large"} mobile={false} />
       </div>
