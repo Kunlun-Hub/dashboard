@@ -1,11 +1,8 @@
 "use client";
 
 import Breadcrumbs from "@components/Breadcrumbs";
-import InlineLink from "@components/InlineLink";
-import Paragraph from "@components/Paragraph";
 import { RestrictedAccess } from "@components/ui/RestrictedAccess";
 import dayjs from "dayjs";
-import { ExternalLinkIcon } from "lucide-react";
 import ReverseProxyIcon from "@/assets/icons/ReverseProxyIcon";
 import React, { useMemo } from "react";
 import PeersProvider from "@/contexts/PeersProvider";
@@ -14,10 +11,11 @@ import ServerPaginationProvider from "@/contexts/ServerPaginationProvider";
 import PageContainer from "@/layouts/PageContainer";
 import ReverseProxyEventsTable from "@/modules/reverse-proxy/events/ReverseProxyEventsTable";
 import { usePortalElement } from "@hooks/usePortalElement";
-import { REVERSE_PROXY_EVENTS_DOCS_LINK } from "@/interfaces/ReverseProxy";
+import { useI18n } from "@/i18n/I18nProvider";
 
 export default function ProxyLogsPage() {
   const { permission } = usePermissions();
+  const { t } = useI18n();
   const { ref: headingRef, portalTarget } =
     usePortalElement<HTMLHeadingElement>();
 
@@ -36,30 +34,22 @@ export default function ProxyLogsPage() {
       <div className="p-default py-6">
         <Breadcrumbs>
           <Breadcrumbs.Item
-            label="Reverse Proxy"
+            label={t("nav.reverseProxy")}
             disabled
             icon={<ReverseProxyIcon size={15} />}
           />
           <Breadcrumbs.Item
             href="/reverse-proxy/logs"
-            label="Access Logs"
+            label={t("reverseProxy.accessLogs")}
             icon={<ReverseProxyIcon size={15} />}
           />
         </Breadcrumbs>
 
-        <h1 ref={headingRef}>Access Logs</h1>
-
-        <Paragraph>
-          View access logs for your reverse proxy services, including allowed
-          and denied requests.{" "}
-          <InlineLink href={REVERSE_PROXY_EVENTS_DOCS_LINK} target="_blank">
-            Learn more <ExternalLinkIcon size={12} />
-          </InlineLink>
-        </Paragraph>
+        <h1 ref={headingRef}>{t("reverseProxy.accessLogs")}</h1>
       </div>
 
       <RestrictedAccess
-        page="Access Logs"
+        page={t("reverseProxy.accessLogs")}
         hasAccess={permission?.services?.read}
       >
         <ServerPaginationProvider

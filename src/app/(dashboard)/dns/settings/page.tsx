@@ -1,8 +1,5 @@
 "use client";
 
-import { ExternalLinkIcon } from "lucide-react";
-import InlineLink from "@components/InlineLink";
-import Paragraph from "@components/Paragraph";
 import Breadcrumbs from "@components/Breadcrumbs";
 import Button from "@components/Button";
 import Card from "@components/Card";
@@ -53,18 +50,11 @@ export default function NameServerSettings() {
             icon={<IconSettings2 size={15} />}
           />
         </Breadcrumbs>
-        <h1>DNS Settings</h1>
-        <Paragraph>
-          {"Manage your account's DNS settings."}{" "}
-          <InlineLink
-            href={"https://docs.netbird.io/how-to/manage-dns-in-your-network"}
-            target={"_blank"}
-          >
-            Learn more
-            <ExternalLinkIcon size={12} />
-          </InlineLink>
-        </Paragraph>
-        <RestrictedAccess page={"DNS Settings"} hasAccess={permission.dns.read}>
+        <h1>{t("dnsSettingsPage.title")}</h1>
+        <RestrictedAccess
+          page={t("dnsSettingsPage.title")}
+          hasAccess={permission.dns.read}
+        >
           {!isLoading && initialDNSGroups !== undefined ? (
             <SettingDisabledManagementGroups initialGroups={initialDNSGroups} />
           ) : (

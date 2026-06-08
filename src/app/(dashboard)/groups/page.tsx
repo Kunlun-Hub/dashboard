@@ -1,11 +1,9 @@
 "use client";
 
-import InlineLink from "@components/InlineLink";
-import Paragraph from "@components/Paragraph";
 import SkeletonTable from "@components/skeletons/SkeletonTable";
 import { RestrictedAccess } from "@components/ui/RestrictedAccess";
 import { usePortalElement } from "@hooks/usePortalElement";
-import { ExternalLinkIcon, FolderGit2Icon } from "lucide-react";
+import { FolderGit2Icon } from "lucide-react";
 import React, { lazy, Suspense } from "react";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { usePermissions } from "@/contexts/PermissionsProvider";
@@ -31,17 +29,7 @@ export default function GroupsPage() {
             active
           />
         </Breadcrumbs>
-        <h1 ref={headingRef}>Groups</h1>
-        <Paragraph>
-          Organize peers, users and resources into groups to manage access.{" "}
-          <InlineLink
-            href={"https://docs.netbird.io/how-to/manage-network-access"}
-            target={"_blank"}
-          >
-            Learn more
-            <ExternalLinkIcon size={12} />
-          </InlineLink>
-        </Paragraph>
+        <h1 ref={headingRef}>{t("groups.title")}</h1>
       </div>
       <RestrictedAccess
         hasAccess={permission.groups.read}

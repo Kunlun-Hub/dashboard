@@ -1,8 +1,5 @@
 "use client";
 
-import { ExternalLinkIcon } from "lucide-react";
-import InlineLink from "@components/InlineLink";
-import Paragraph from "@components/Paragraph";
 import Breadcrumbs from "@components/Breadcrumbs";
 import SkeletonTable from "@components/skeletons/SkeletonTable";
 import { RestrictedAccess } from "@components/ui/RestrictedAccess";
@@ -13,7 +10,7 @@ import DNSIcon from "@/assets/icons/DNSIcon";
 import DNSZoneIcon from "@/assets/icons/DNSZoneIcon";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useI18n } from "@/i18n/I18nProvider";
-import { DNS_ZONE_DOCS_LINK, DNSZone } from "@/interfaces/DNS";
+import { DNSZone } from "@/interfaces/DNS";
 import PageContainer from "@/layouts/PageContainer";
 import { DNSZonesProvider } from "@/modules/dns/zones/DNSZonesProvider";
 
@@ -42,14 +39,7 @@ export default function DNSZonePage() {
             icon={<DNSZoneIcon size={16} />}
           />
         </Breadcrumbs>
-        <h1 ref={headingRef}>Zones</h1>
-        <Paragraph>
-          Manage DNS zones to control domain name resolution for your network.{" "}
-          <InlineLink href={DNS_ZONE_DOCS_LINK} target={"_blank"}>
-            Learn more
-            <ExternalLinkIcon size={12} />
-          </InlineLink>
-        </Paragraph>
+        <h1 ref={headingRef}>{t("zones.pageTitle")}</h1>
       </div>
 
       <RestrictedAccess

@@ -1,8 +1,5 @@
 "use client";
 
-import { ExternalLinkIcon } from "lucide-react";
-import InlineLink from "@components/InlineLink";
-import Paragraph from "@components/Paragraph";
 import Breadcrumbs from "@components/Breadcrumbs";
 import SkeletonTable from "@components/skeletons/SkeletonTable";
 import { RestrictedAccess } from "@components/ui/RestrictedAccess";
@@ -47,18 +44,7 @@ export default function ServiceUsers() {
             icon={<IconSettings2 size={17} />}
           />
         </Breadcrumbs>
-        <h1 ref={headingRef}>Service Users</h1>
-        <Paragraph>
-          Use service users to create API tokens and avoid losing automated
-          access.{" "}
-          <InlineLink
-            href={"https://docs.netbird.io/how-to/access-netbird-public-api"}
-            target={"_blank"}
-          >
-            Learn more
-            <ExternalLinkIcon size={12} />
-          </InlineLink>
-        </Paragraph>
+        <h1 ref={headingRef}>{t("serviceUsers.title")}</h1>
       </div>
       <RestrictedAccess
         page={t("serviceUsers.title")}

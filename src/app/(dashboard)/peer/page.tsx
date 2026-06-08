@@ -597,14 +597,14 @@ function PeerInformationCard({ peer }: Readonly<{ peer: Peer }>) {
           />
 
           {peer.ipv6 && (
-            <Card.ListItem
-              copy
-              tooltip={false}
-              copyText={"NetBird IPv6 Address"}
+              <Card.ListItem
+                copy
+                tooltip={false}
+              copyText={t("peerDetails.netbirdIpv6Address")}
               label={
                 <>
                   <MapPin size={16} className={"shrink-0"} />
-                  {t("peerDetails.netbirdIpAddress")} IPv6
+                  {t("peerDetails.netbirdIpv6Address")}
                 </>
               }
               valueToCopy={peer.ipv6}

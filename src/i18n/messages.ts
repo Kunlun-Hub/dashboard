@@ -603,6 +603,7 @@ export const messages = {
     "zones.time.day.one": "1 Day",
     "zones.time.day.other": "{count} Days",
     "reverseProxy.title": "Reverse Proxy",
+    "reverseProxy.accessLogs": "Access Logs",
     "reverseProxy.servicesTitle": "Services",
     "reverseProxy.servicesDescription":
       "Expose services securely through Cloink's reverse proxy.",
@@ -2362,6 +2363,7 @@ export const messages = {
     "peerDetails.ipv6Updated": "Cloink peer IPv6 was successfully updated",
     "peerDetails.updatingIpv6": "Updating peer IPv6...",
     "peerDetails.netbirdIpAddress": "Cloink IP Address",
+    "peerDetails.netbirdIpv6Address": "Cloink IPv6 Address",
     "peerDetails.publicIpAddress": "Public IP Address",
     "peerDetails.dnsLabel": "DNS label",
     "peerDetails.domainName": "Domain Name",
@@ -4084,6 +4086,7 @@ export const messages = {
     "zones.time.day.one": "1 天",
     "zones.time.day.other": "{count} 天",
     "reverseProxy.title": "反向代理",
+    "reverseProxy.accessLogs": "访问日志",
     "reverseProxy.servicesTitle": "服务",
     "reverseProxy.servicesDescription":
       "通过 Cloink 的反向代理安全地暴露服务。",
@@ -5705,6 +5708,7 @@ export const messages = {
     "peerDetails.ipv6Updated": "Cloink 设备 IPv6 已成功更新",
     "peerDetails.updatingIpv6": "正在更新设备 IPv6...",
     "peerDetails.netbirdIpAddress": "Cloink IP 地址",
+    "peerDetails.netbirdIpv6Address": "Cloink IPv6 地址",
     "peerDetails.publicIpAddress": "公网 IP 地址",
     "peerDetails.dnsLabel": "DNS 标签",
     "peerDetails.domainName": "域名",

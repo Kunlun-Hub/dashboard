@@ -1,8 +1,5 @@
 "use client";
 
-import { ExternalLinkIcon } from "lucide-react";
-import InlineLink from "@components/InlineLink";
-import Paragraph from "@components/Paragraph";
 import Breadcrumbs from "@components/Breadcrumbs";
 import SkeletonTable from "@components/skeletons/SkeletonTable";
 import { RestrictedAccess } from "@components/ui/RestrictedAccess";
@@ -45,17 +42,7 @@ export default function NameServers() {
             icon={<DNSIcon size={13} />}
           />
         </Breadcrumbs>
-        <h1 ref={headingRef}>Nameservers</h1>
-        <Paragraph>
-          Add nameservers for domain name resolution in your NetBird network.{" "}
-          <InlineLink
-            href={"https://docs.netbird.io/how-to/manage-dns-in-your-network"}
-            target={"_blank"}
-          >
-            Learn more
-            <ExternalLinkIcon size={12} />
-          </InlineLink>
-        </Paragraph>
+        <h1 ref={headingRef}>{t("nameservers.title")}</h1>
       </div>
 
       <RestrictedAccess

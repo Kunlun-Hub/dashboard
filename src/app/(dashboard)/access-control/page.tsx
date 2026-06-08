@@ -1,8 +1,5 @@
 "use client";
 
-import { ExternalLinkIcon } from "lucide-react";
-import InlineLink from "@components/InlineLink";
-import Paragraph from "@components/Paragraph";
 import Breadcrumbs from "@components/Breadcrumbs";
 import SkeletonTable from "@components/skeletons/SkeletonTable";
 import { RestrictedAccess } from "@components/ui/RestrictedAccess";
@@ -40,18 +37,7 @@ export default function AccessControlPage() {
               icon={<AccessControlIcon size={14} />}
             />
           </Breadcrumbs>
-          <h1 ref={headingRef}>Access Control Policies</h1>
-          <Paragraph>
-            Create rules to manage access in your network and define what peers
-            can connect.{" "}
-            <InlineLink
-              href={"https://docs.netbird.io/how-to/manage-network-access"}
-              target={"_blank"}
-            >
-              Learn more
-              <ExternalLinkIcon size={12} />
-            </InlineLink>
-          </Paragraph>
+          <h1 ref={headingRef}>{t("accessControl.policiesTitle")}</h1>
         </div>
 
         <RestrictedAccess

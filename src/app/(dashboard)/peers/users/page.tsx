@@ -75,18 +75,6 @@ function UserDevicesView() {
         >
           <div>
             <h1 ref={headingRef}>{t("peers.userDevices")}</h1>
-            <Paragraph>
-              {t("peers.userDevicesDescription")}{" "}
-              <InlineLink
-                href={
-                  "https://docs.netbird.io/how-to/add-machines-to-your-network"
-                }
-                target={"_blank"}
-              >
-                {t("common.learnMore")}
-                <ExternalLinkIcon size={12} />
-              </InlineLink>
-            </Paragraph>
           </div>
           <ResourceUsageInline
             limit={"peers"}

@@ -75,18 +75,6 @@ function ServersView() {
         >
           <div>
             <h1 ref={headingRef}>{t("peers.servers")}</h1>
-            <Paragraph>
-              {t("peers.serversDescription")}{" "}
-              <InlineLink
-                href={
-                  "https://docs.netbird.io/how-to/register-machines-using-setup-keys"
-                }
-                target={"_blank"}
-              >
-                {t("common.learnMore")}
-                <ExternalLinkIcon size={12} />
-              </InlineLink>
-            </Paragraph>
           </div>
           <ResourceUsageInline
             limit={"peers"}
