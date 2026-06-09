@@ -13,6 +13,7 @@ import GroupBadge from "@components/ui/GroupBadge";
 import GroupBadgeWithEditPeers from "@components/ui/GroupBadgeWithEditPeers";
 import ResourceBadge from "@components/ui/ResourceBadge";
 import TextWithTooltip from "@components/ui/TextWithTooltip";
+import TruncatedText from "@components/ui/TruncatedText";
 import { VirtualScrollAreaList } from "@components/VirtualScrollAreaList";
 import { useSearch } from "@hooks/useSearch";
 import useSortedDropdownOptions from "@hooks/useSortedDropdownOptions";
@@ -38,17 +39,16 @@ import {
 import * as React from "react";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import Skeleton from "react-loading-skeleton";
-import { useI18n } from "@/i18n/I18nProvider";
 import { useGroups } from "@/contexts/GroupsProvider";
 import { useElementSize } from "@/hooks/useElementSize";
+import { useI18n } from "@/i18n/I18nProvider";
 import type { Group, GroupPeer, GroupResource } from "@/interfaces/Group";
 import { NetworkResource } from "@/interfaces/Network";
 import type { Peer } from "@/interfaces/Peer";
 import { Policy, PolicyRuleResource } from "@/interfaces/Policy";
 import { User } from "@/interfaces/User";
-import { HorizontalUsersStack } from "@/modules/users/HorizontalUsersStack";
 import { PeerOperatingSystemIcon } from "@/modules/peers/PeerOperatingSystemIcon";
-import TruncatedText from "@components/ui/TruncatedText";
+import { HorizontalUsersStack } from "@/modules/users/HorizontalUsersStack";
 
 type PeerGroupSelectorTab = "peers" | "groups" | "resources" | "clusters";
 
@@ -144,12 +144,22 @@ export function PeerGroupSelector({
   selectedCluster,
   onClusterChange,
 }: Readonly<MultiSelectProps>) {
-  const { data: fetchedResources, isLoading: isResourcesLoading } = useFetchApi<
-    NetworkResource[]
-  >("/networks/resources");
+  const shouldFetchResources =
+    showResources || !!resource || !!additionalResources?.length;
+  const {
+    data: fetchedResources,
+    isLoading: isResourcesLoading,
+    isValidating: isResourcesValidating,
+    mutate: refreshResources,
+  } = useFetchApi<NetworkResource[]>(
+    "/networks/resources",
+    false,
+    true,
+    shouldFetchResources,
+  );
 
   const resources = useMemo(() => {
-    if (!additionalResources?.length) return fetchedResources;
+    if (!additionalResources?.length) return fetchedResources ?? [];
     const additional = additionalResources.filter(
       (ar) => !fetchedResources?.some((r) => r.id === ar.id),
     );
@@ -294,6 +304,11 @@ export function PeerGroupSelector({
   const [tab, setTab] = useState<PeerGroupSelectorTab>(getDefaultTab);
 
   useEffect(() => {
+    if (!open || !showResources || tab !== "resources") return;
+    refreshResources();
+  }, [open, refreshResources, showResources, tab]);
+
+  useEffect(() => {
     if (open) {
       setTimeout(() => {
         setSlice(dropdownOptions.length);
@@ -315,7 +330,7 @@ export function PeerGroupSelector({
     setTimeout(() => {
       searchRef.current?.focus();
     }, 0);
-  }, [tab]);
+  }, [tab, setSearch]);
 
   const searchPlaceholder = useMemo(() => {
     if (tab === "groups") return placeholderForSearch;
@@ -717,7 +732,10 @@ export function PeerGroupSelector({
                         ? resources?.filter((r) => resourceIds.includes(r.id))
                         : resources
                     }
-                    isLoading={isResourcesLoading}
+                    isLoading={
+                      (isResourcesLoading || isResourcesValidating) &&
+                      resources.length === 0
+                    }
                     value={resource}
                     onChange={selectResource}
                     radioName={`${radioGroupId}-resource`}

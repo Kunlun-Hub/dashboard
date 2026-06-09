@@ -223,18 +223,13 @@ export default function IdentityProviderModal({
           </div>
 
           <div>
-            <Label>{t("table.name")}</Label>
+            <Label>{t("identityProviderModal.name")}</Label>
             <HelpText>{t("identityProviderModal.nameHelp")}</HelpText>
             <Input
               placeholder={t("identityProviderModal.namePlaceholder")}
               value={name}
               onChange={(e) => setName(e.target.value)}
-              customPrefix={
-                <TagIcon
-                  size={16}
-                  className="text-neutral-500 dark:text-nb-gray-300"
-                />
-              }
+              customPrefix={<TagIcon size={16} className="text-nb-gray-300" />}
             />
           </div>
 
@@ -247,10 +242,7 @@ export default function IdentityProviderModal({
                 value={issuer}
                 onChange={(e) => setIssuer(e.target.value)}
                 customPrefix={
-                  <GlobeIcon
-                    size={16}
-                    className="text-neutral-500 dark:text-nb-gray-300"
-                  />
+                  <GlobeIcon size={16} className="text-nb-gray-300" />
                 }
               />
             </div>
@@ -275,31 +267,19 @@ export default function IdentityProviderModal({
               }
               value={clientId}
               onChange={(e) => setClientId(e.target.value)}
-              customPrefix={
-                <IdCard
-                  size={16}
-                  className="text-neutral-500 dark:text-nb-gray-300"
-                />
-              }
+              customPrefix={<IdCard size={16} className="text-nb-gray-300" />}
             />
           </div>
 
           {isWeChatWork && (
             <div>
               <Label>{t("identityProviderModal.agentId")}</Label>
-              <HelpText>
-                {t("identityProviderModal.agentIdHelp")}
-              </HelpText>
+              <HelpText>{t("identityProviderModal.agentIdHelp")}</HelpText>
               <Input
                 placeholder={t("identityProviderModal.agentIdPlaceholder")}
                 value={agentId}
                 onChange={(e) => setAgentId(e.target.value)}
-                customPrefix={
-                  <IdCard
-                    size={16}
-                    className="text-neutral-500 dark:text-nb-gray-300"
-                  />
-                }
+                customPrefix={<IdCard size={16} className="text-nb-gray-300" />}
               />
             </div>
           )}
@@ -334,142 +314,39 @@ export default function IdentityProviderModal({
               }
               value={clientSecret}
               onChange={(e) => setClientSecret(e.target.value)}
-              customPrefix={
-                <KeyIcon
-                  size={16}
-                  className="text-neutral-500 dark:text-nb-gray-300"
-                />
-              }
+              customPrefix={<KeyIcon size={16} className="text-nb-gray-300" />}
             />
           </div>
 
           <Separator />
 
-          <div className={"px-8 py-6 flex flex-col gap-6"}>
+          <div className={"flex flex-col gap-3"}>
             <div>
-              <Label>{t("identityProviderModal.providerType")}</Label>
-              <HelpText>{t("identityProviderModal.providerTypeHelp")}</HelpText>
-              <Select
-                value={type}
-                onValueChange={(v) => {
-                  const newType = v as SSOIdentityProviderType;
-                  setType(newType);
-                  if (!isEditing) {
-                    setName(defaultNames[newType]);
-                  }
-                }}
+              <Label>{t("identityProviderModal.endpointUrls")}</Label>
+            </div>
+
+            <div>
+              <Label className={"text-xs mb-1"}>
+                {t("identityProviderModal.redirectCallback")}
+              </Label>
+              <Code
+                codeToCopy={redirectUrl}
+                message={t("identityProviderModal.redirectCopied")}
               >
-                <SelectTrigger className="w-full">
-                  <SelectValue
-                    placeholder={t("identityProviderModal.selectProviderType")}
-                  />
-                </SelectTrigger>
-                <SelectContent>
-                  {SSOIdentityProviderOptions.map((idp) => (
-                    <SelectItem key={idp.value} value={idp.value}>
-                      <div className="flex items-center gap-2">
-                        {idpIcon(idp.value)}
-                        <span>{idp.label}</span>
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                <Code.Line>{redirectUrl}</Code.Line>
+              </Code>
             </div>
 
             <div>
-              <Label>{t("identityProviderModal.name")}</Label>
-              <HelpText>{t("identityProviderModal.nameHelp")}</HelpText>
-              <Input
-                placeholder={t("identityProviderModal.namePlaceholder")}
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                customPrefix={
-                  <TagIcon size={16} className="text-nb-gray-300" />
-                }
-              />
-            </div>
-
-            {requiresIssuer && (
-              <div>
-                <Label>{t("identityProviderModal.issuerUrl")}</Label>
-                <HelpText>{t("identityProviderModal.issuerUrlHelp")}</HelpText>
-                <Input
-                  placeholder={issuerHints[type] ?? "https://login.example.com"}
-                  value={issuer}
-                  onChange={(e) => setIssuer(e.target.value)}
-                  customPrefix={
-                    <GlobeIcon size={16} className="text-nb-gray-300" />
-                  }
-                />
-              </div>
-            )}
-
-            <div>
-              <Label>{t("identityProviderModal.clientId")}</Label>
-              <HelpText>{t("identityProviderModal.clientIdHelp")}</HelpText>
-              <Input
-                placeholder={t("identityProviderModal.clientIdPlaceholder")}
-                value={clientId}
-                onChange={(e) => setClientId(e.target.value)}
-                customPrefix={<IdCard size={16} className="text-nb-gray-300" />}
-              />
-            </div>
-
-            <div>
-              <Label>{t("identityProviderModal.clientSecret")}</Label>
-              <HelpText>
-                {isEditing
-                  ? clientIdChanged
-                    ? t("identityProviderModal.clientSecretChangedHelp")
-                    : t("identityProviderModal.clientSecretOptionalHelp")
-                  : t("identityProviderModal.clientSecretHelp")}
-              </HelpText>
-              <Input
-                type="password"
-                placeholder={
-                  isEditing
-                    ? t("identityProviderModal.clientSecretMaskedPlaceholder")
-                    : t("identityProviderModal.clientSecretPlaceholder")
-                }
-                value={clientSecret}
-                onChange={(e) => setClientSecret(e.target.value)}
-                customPrefix={
-                  <KeyIcon size={16} className="text-nb-gray-300" />
-                }
-              />
-            </div>
-
-            <Separator />
-
-            <div className={"flex flex-col gap-3"}>
-              <div>
-                <Label>{t("identityProviderModal.endpointUrls")}</Label>
-              </div>
-
-              <div>
-                <Label className={"text-xs mb-1"}>
-                  {t("identityProviderModal.redirectCallback")}
-                </Label>
-                <Code
-                  codeToCopy={redirectUrl}
-                  message={t("identityProviderModal.redirectCopied")}
-                >
-                  <Code.Line>{redirectUrl}</Code.Line>
-                </Code>
-              </div>
-
-              <div>
-                <Label className={"text-xs mb-1"}>
-                  {t("identityProviderModal.logout")}
-                </Label>
-                <Code
-                  codeToCopy={logoutUrl}
-                  message={t("identityProviderModal.logoutCopied")}
-                >
-                  <Code.Line>{logoutUrl}</Code.Line>
-                </Code>
-              </div>
+              <Label className={"text-xs mb-1"}>
+                {t("identityProviderModal.logout")}
+              </Label>
+              <Code
+                codeToCopy={logoutUrl}
+                message={t("identityProviderModal.logoutCopied")}
+              >
+                <Code.Line>{logoutUrl}</Code.Line>
+              </Code>
             </div>
           </div>
         </div>

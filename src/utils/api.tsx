@@ -147,7 +147,11 @@ export default function useFetchApi<T>(
   const handleErrors = useApiErrorHandling(ignoreError);
   const { globalApiParams } = useApplicationContext();
 
-  const cacheKey = options?.key ? [url, options?.key] : url;
+  const cacheKey = !allowFetch
+    ? null
+    : options?.key
+    ? [url, options?.key]
+    : url;
   const fetchFn = options?.key
     ? async ([url]: [url: string]) => {
         if (!allowFetch) return;

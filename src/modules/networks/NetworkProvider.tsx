@@ -98,6 +98,7 @@ export const NetworkProvider = ({
     description?: string;
     destinationGroups?: Group[] | string[];
     destinationResource?: PolicyRuleResource;
+    additionalResources?: NetworkResource[];
   }>();
   const [currentPolicy, setCurrentPolicy] = useState<Policy>();
 
@@ -152,6 +153,13 @@ export const NetworkProvider = ({
 
   const openPolicyModal = (network?: Network, resource?: NetworkResource) => {
     const hasResourceGroups = (resource?.groups?.length || 0) > 0;
+    const additionalResources = resource
+      ? [resource]
+      : resources?.filter(
+          (r) =>
+            !!network?.resources?.includes(r.id) ||
+            (network?.resources ?? []).includes(r.name),
+        );
     setPolicyDefaultSettings({
       destinationGroups: hasResourceGroups ? resource?.groups : undefined,
       destinationResource: hasResourceGroups
@@ -161,6 +169,9 @@ export const NetworkProvider = ({
             id: resource.id,
             type: resource.type,
           } as PolicyRuleResource)
+        : undefined,
+      additionalResources: additionalResources?.length
+        ? additionalResources
         : undefined,
       name:
         network && !resource
@@ -387,6 +398,7 @@ export const NetworkProvider = ({
             initialDestinationResource={
               policyDefaultSettings?.destinationResource
             }
+            additionalResources={policyDefaultSettings?.additionalResources}
             initialName={policyDefaultSettings?.name}
             initialDescription={policyDefaultSettings?.description}
             policy={currentPolicy}

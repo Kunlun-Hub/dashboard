@@ -1725,7 +1725,7 @@ export const messages = {
     "activity.identityProviderCreate": "was created",
     "activity.identityProviderUpdate": "was updated",
     "activity.identityProviderDelete": "was deleted",
-    "proxyEvents.title": "Proxy Events",
+    "proxyEvents.title": "Access Logs",
     "proxyEvents.description":
       "View access logs for your reverse proxy services, including allowed and denied requests.",
     "networkLogs.title": "Network Logs",
@@ -2340,7 +2340,7 @@ export const messages = {
     "proxyEvents.authMethod": "Auth Method",
     "proxyEvents.reason": "Reason",
     "proxyEvents.searchPlaceholder": "Search by IP, host, path, user...",
-    "proxyEvents.emptyTitle": "No Proxy Events Yet",
+    "proxyEvents.emptyTitle": "No Access Logs Yet",
     "proxyEvents.emptyDescription":
       "We haven't detected any proxy events yet. This could be because you haven't configured any reverse proxy services, or there hasn't been any traffic.",
     "proxyEvents.success": "Success",
@@ -5241,7 +5241,7 @@ export const messages = {
     "activity.enabled": "已启用",
     "activity.disabled": "已禁用",
     "activity.to": "至",
-    "proxyEvents.title": "代理事件",
+    "proxyEvents.title": "访问日志",
     "proxyEvents.description":
       "查看反向代理服务的访问日志，包括被允许和被拒绝的请求。",
     "networkLogs.title": "网络日志",
@@ -5809,9 +5809,9 @@ export const messages = {
     "proxyEvents.authMethod": "认证方式",
     "proxyEvents.reason": "原因",
     "proxyEvents.searchPlaceholder": "按 IP、主机、路径、用户搜索...",
-    "proxyEvents.emptyTitle": "暂无代理事件",
+    "proxyEvents.emptyTitle": "暂无访问日志",
     "proxyEvents.emptyDescription":
-      "我们还没有检测到任何代理事件。这可能是因为你尚未配置反向代理服务，或者目前还没有流量。",
+      "我们还没有检测到任何访问日志。这可能是因为你尚未配置反向代理服务，或者目前还没有流量。",
     "proxyEvents.success": "成功",
     "proxyEvents.failed": "失败",
     "proxyEvents.otherMetadata": "其他元数据",
