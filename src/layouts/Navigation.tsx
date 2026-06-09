@@ -302,13 +302,6 @@ const ActivityNavigationItem = () => {
         visible={permission.events.read}
       />
       <SidebarItem
-        label={t("nav.proxyEvents")}
-        href={"/events/proxy"}
-        isChild
-        exactPathMatch={true}
-        visible={permission.events.read}
-      />
-      <SidebarItem
         label={t("nav.networkLogs")}
         href={"/events/network"}
         isChild
