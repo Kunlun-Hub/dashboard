@@ -51,7 +51,6 @@ type DNSLogRow = {
 };
 
 const DNS_TYPES = ["A", "AAAA", "CNAME"];
-const DNS_TYPE_SET = new Set(DNS_TYPES);
 
 const normalizeList = (value?: string[] | string | null) => {
   if (!value) return [];
@@ -66,19 +65,6 @@ const endpointLabel = (endpoint: NetworkLogEndpoint) => {
   return endpoint.name || endpoint.dns_label || endpoint.address || "-";
 };
 
-const isAllowedDNSType = (type?: string | null) => {
-  return DNS_TYPE_SET.has((type ?? "").trim().toUpperCase());
-};
-
-const hasDNSAnswers = (log: DNSLog) => normalizeList(log.answers).length > 0;
-
-const shouldShowDNSLog = (log: DNSLog) => {
-  if (!isAllowedDNSType(log.query_type)) return false;
-  const rcode = log.rcode?.trim().toUpperCase();
-  if (rcode === "NXDOMAIN") return false;
-  return rcode !== "NOERROR" || hasDNSAnswers(log);
-};
-
 const dnsResult = (log: DNSLog) => {
   const answers = normalizeList(log.answers);
   if (answers.length > 0) return Array.from(new Set(answers)).join(", ");
@@ -91,7 +77,6 @@ const dnsResult = (log: DNSLog) => {
 
 const toDNSRows = (logs?: DNSLog[]) => {
   return (logs ?? [])
-    .filter(shouldShowDNSLog)
     .map((log) => {
       return {
         id: log.id,
