@@ -1,9 +1,14 @@
 "use client";
 
+import Badge from "@components/Badge";
 import Button from "@components/Button";
 import { Callout } from "@components/Callout";
+import { Checkbox } from "@components/Checkbox";
+import { DropdownInfoText } from "@components/DropdownInfoText";
+import { DropdownInput } from "@components/DropdownInput";
 import FancyToggleSwitch from "@components/FancyToggleSwitch";
 import HelpText from "@components/HelpText";
+import { HelpTooltip } from "@components/HelpTooltip";
 import { Input } from "@components/Input";
 import { Label } from "@components/Label";
 import {
@@ -15,6 +20,7 @@ import {
 } from "@components/modal/Modal";
 import ModalHeader from "@components/modal/ModalHeader";
 import { PeerGroupSelector } from "@components/PeerGroupSelector";
+import { Popover, PopoverContent, PopoverTrigger } from "@components/Popover";
 import { PortSelector } from "@components/PortSelector";
 import {
   Select,
@@ -26,11 +32,18 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@components/Tabs";
 import { Textarea } from "@components/Textarea";
 import { ToggleSwitch } from "@components/ToggleSwitch";
+import GroupBadge from "@components/ui/GroupBadge";
 import PolicyDirection from "@components/ui/PolicyDirection";
+import { VirtualScrollAreaList } from "@components/VirtualScrollAreaList";
+import { useSearch } from "@hooks/useSearch";
+import useFetchApi from "@utils/api";
 import { cn } from "@utils/helpers";
 import {
   AlertCircleIcon,
   ArrowRightLeft,
+  ChevronDown,
+  ChevronRight,
+  ChevronsUpDown,
   FolderDown,
   FolderInput,
   PlusCircle,
@@ -38,8 +51,9 @@ import {
   Share2,
   SquareTerminalIcon,
   Trash2,
-  ChevronDown,
-  ChevronRight,
+  UserIcon,
+  UsersIcon,
+  XIcon,
 } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import AccessControlIcon from "@/assets/icons/AccessControlIcon";
@@ -49,15 +63,16 @@ import { Group } from "@/interfaces/Group";
 import { NetworkResource } from "@/interfaces/Network";
 import { Policy, PolicyRuleResource, Protocol } from "@/interfaces/Policy";
 import { PostureCheck } from "@/interfaces/PostureCheck";
+import { User } from "@/interfaces/User";
+import { SSHAccessType } from "@/modules/access-control/ssh/SSHAccessType";
+import { SSHAuthorizedGroups } from "@/modules/access-control/ssh/SSHAuthorizedGroups";
 import {
   RuleState,
   useAccessControl,
 } from "@/modules/access-control/useAccessControl";
 import { PostureCheckTab } from "@/modules/posture-checks/ui/PostureCheckTab";
 import { PostureCheckTabTrigger } from "@/modules/posture-checks/ui/PostureCheckTabTrigger";
-import { SSHAccessType } from "@/modules/access-control/ssh/SSHAccessType";
-import { SSHAuthorizedGroups } from "@/modules/access-control/ssh/SSHAuthorizedGroups";
-import { HelpTooltip } from "@components/HelpTooltip";
+import { SmallUserAvatar } from "@/modules/users/SmallUserAvatar";
 
 type Props = {
   children?: React.ReactNode;
@@ -125,6 +140,265 @@ type RuleEditorProps = {
   additionalResources?: NetworkResource[];
 };
 
+const userSearchPredicate = (item: User, query: string) => {
+  const lowerCaseQuery = query.toLowerCase();
+  return (
+    item.name?.toLowerCase().includes(lowerCaseQuery) ||
+    item.email?.toLowerCase().includes(lowerCaseQuery) ||
+    item.id?.toLowerCase().includes(lowerCaseQuery)
+  );
+};
+
+const groupSearchPredicate = (item: Group, query: string) => {
+  const lowerCaseQuery = query.toLowerCase();
+  return (
+    item.name?.toLowerCase().includes(lowerCaseQuery) ||
+    item.id?.toLowerCase().includes(lowerCaseQuery) ||
+    false
+  );
+};
+
+const resolveSelectedUsers = (
+  selected: User[] | string[] | undefined,
+  users?: User[],
+): User[] => {
+  if (!Array.isArray(selected)) return [];
+  return selected
+    .map((value) => {
+      if (typeof value !== "string") return value;
+      return users?.find((u) => u.id === value) ?? ({ id: value, name: value } as User);
+    })
+    .filter(Boolean) as User[];
+};
+
+const resolveSelectedGroups = (
+  selected: Group[] | string[] | undefined,
+  groups?: Group[],
+): Group[] => {
+  if (!Array.isArray(selected)) return [];
+  return selected
+    .map((value) => {
+      if (typeof value !== "string") return value;
+      return groups?.find((g) => g.id === value) ?? { id: value, name: value };
+    })
+    .filter(Boolean) as Group[];
+};
+
+const IdentitySourceSelector = ({
+  users,
+  groups,
+  selectedUsers,
+  selectedGroups,
+  onUsersChange,
+  onGroupsChange,
+  disabled,
+}: {
+  users?: User[];
+  groups?: Group[];
+  selectedUsers?: User[] | string[];
+  selectedGroups?: Group[] | string[];
+  onUsersChange: (users: User[]) => void;
+  onGroupsChange: (groups: Group[]) => void;
+  disabled?: boolean;
+}) => {
+  const { t } = useI18n();
+  const [open, setOpen] = useState(false);
+  const [tab, setTab] = useState<"users" | "groups">("users");
+  const [search, setSearch] = useState("");
+
+  const resolvedUsers = useMemo(
+    () => resolveSelectedUsers(selectedUsers, users),
+    [selectedUsers, users],
+  );
+  const resolvedGroups = useMemo(
+    () => resolveSelectedGroups(selectedGroups, groups),
+    [selectedGroups, groups],
+  );
+
+  const [filteredUsers, , setUserSearch] = useSearch(
+    users || [],
+    userSearchPredicate,
+    { filter: true, debounce: 150 },
+  );
+  const [filteredGroups, , setGroupSearch] = useSearch(
+    groups || [],
+    groupSearchPredicate,
+    { filter: true, debounce: 150 },
+  );
+
+  React.useEffect(() => {
+    setUserSearch(search);
+    setGroupSearch(search);
+  }, [search, setGroupSearch, setUserSearch]);
+
+  const toggleUser = (user: User) => {
+    const exists = resolvedUsers.some((u) => u.id === user.id);
+    onUsersChange(
+      exists
+        ? resolvedUsers.filter((u) => u.id !== user.id)
+        : [...resolvedUsers, user],
+    );
+  };
+
+  const toggleGroup = (group: Group) => {
+    const exists = resolvedGroups.some((g) => g.id === group.id);
+    onGroupsChange(
+      exists
+        ? resolvedGroups.filter((g) => g.id !== group.id)
+        : [...resolvedGroups, group],
+    );
+  };
+
+  return (
+    <Popover
+      open={open}
+      onOpenChange={(state) => {
+        setOpen(state);
+        if (!state) setSearch("");
+      }}
+    >
+      <PopoverTrigger asChild>
+        <button
+          className={cn(
+            "min-h-[46px] w-full relative items-center group",
+            "border border-neutral-200 dark:border-nb-gray-700 justify-between py-2 px-3",
+            "rounded-md bg-white text-sm dark:bg-nb-gray-900/40 flex text-neutral-600 dark:text-neutral-400/70 cursor-pointer hover:bg-neutral-50 hover:dark:bg-nb-gray-900/50",
+            "disabled:pointer-events-none disabled:bg-neutral-50 disabled:text-neutral-400 dark:disabled:bg-nb-gray-900/40 dark:disabled:text-neutral-500/70 transition-all",
+          )}
+          disabled={disabled}
+        >
+          <div className="flex items-center gap-2 flex-wrap min-w-0">
+            {resolvedUsers.length === 0 && resolvedGroups.length === 0 && (
+              <span>{t("accessControl.selectUsersOrGroups")}</span>
+            )}
+            {resolvedUsers.map((user) => (
+              <Badge
+                key={user.id}
+                variant="gray-ghost"
+                className="py-[3px]"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  toggleUser(user);
+                }}
+              >
+                <SmallUserAvatar
+                  id={user.id}
+                  name={user.name}
+                  email={user.email}
+                  className="w-4 h-4 text-[8px]"
+                />
+                {user.name || user.email || user.id}
+                <XIcon size={12} />
+              </Badge>
+            ))}
+            {resolvedGroups.map((group) => (
+              <GroupBadge
+                key={group.id || group.name}
+                group={group}
+                showX
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  toggleGroup(group);
+                }}
+              />
+            ))}
+          </div>
+          <ChevronsUpDown size={18} className="shrink-0" />
+        </button>
+      </PopoverTrigger>
+      <PopoverContent
+        hideWhenDetached={false}
+        className="w-[500px] p-0 shadow-sm shadow-neutral-200/70 dark:shadow-nb-gray-950"
+        align="start"
+        side="bottom"
+        sideOffset={10}
+      >
+        <DropdownInput
+          value={search}
+          onChange={(value) => {
+            if (typeof value === "string") setSearch(value);
+          }}
+          hideEnterIcon
+          placeholder={t("accessControl.searchUsersOrGroups")}
+        />
+        <Tabs value={tab} onValueChange={(v) => setTab(v as "users" | "groups")}>
+          <TabsList justify="start" className="px-3">
+            <TabsTrigger value="users">
+              <UserIcon size={14} />
+              {t("accessControl.users")}
+            </TabsTrigger>
+            <TabsTrigger value="groups">
+              <UsersIcon size={14} />
+              {t("accessControl.userGroups")}
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="users" className="p-0 my-0">
+            {filteredUsers.length === 0 ? (
+              <DropdownInfoText className="mt-5 max-w-sm mx-auto">
+                {t("userSelector.noMatchingUsers")}
+              </DropdownInfoText>
+            ) : (
+              <VirtualScrollAreaList
+                items={filteredUsers}
+                estimatedItemHeight={44}
+                onSelect={toggleUser}
+                renderItem={(user) => {
+                  const selected = resolvedUsers.some((u) => u.id === user.id);
+                  return (
+                    <div className="flex items-center justify-between gap-3 w-full">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <SmallUserAvatar
+                          id={user.id}
+                          name={user.name}
+                          email={user.email}
+                          className="w-6 h-6 text-[10px]"
+                        />
+                        <div className="flex flex-col min-w-0">
+                          <span className="truncate text-sm">
+                            {user.name || user.id}
+                          </span>
+                          <span className="truncate text-xs text-neutral-500">
+                            {user.email || user.id}
+                          </span>
+                        </div>
+                      </div>
+                      <Checkbox checked={selected} />
+                    </div>
+                  );
+                }}
+              />
+            )}
+          </TabsContent>
+          <TabsContent value="groups" className="p-0 my-0">
+            {filteredGroups.length === 0 ? (
+              <DropdownInfoText className="mt-5 max-w-sm mx-auto">
+                {t("accessControl.noMatchingUserGroups")}
+              </DropdownInfoText>
+            ) : (
+              <VirtualScrollAreaList
+                items={filteredGroups}
+                estimatedItemHeight={42}
+                onSelect={toggleGroup}
+                renderItem={(group) => {
+                  const selected = resolvedGroups.some((g) => g.id === group.id);
+                  return (
+                    <div className="flex items-center justify-between gap-3 w-full">
+                      <GroupBadge group={group} />
+                      <Checkbox checked={selected} />
+                    </div>
+                  );
+                }}
+              />
+            )}
+          </TabsContent>
+        </Tabs>
+      </PopoverContent>
+    </Popover>
+  );
+};
+
 const RuleEditor = ({
   ruleIndex,
   rule,
@@ -137,6 +411,8 @@ const RuleEditor = ({
 }: RuleEditorProps) => {
   const { t } = useI18n();
   const [expanded, setExpanded] = useState(true);
+  const { data: users } = useFetchApi<User[]>("/users?service_user=false");
+  const { data: groups } = useFetchApi<Group[]>("/groups");
 
   const portDisabled = !hasPortSupport(rule.protocol);
 
@@ -311,6 +587,21 @@ const RuleEditor = ({
                   !permission.policies.update || !permission.policies.create
                 }
               />
+              <div className="mt-3">
+                <IdentitySourceSelector
+                  users={users}
+                  groups={groups}
+                  selectedUsers={rule.sourceUsers}
+                  selectedGroups={rule.sourceUserGroups}
+                  onUsersChange={(v) => updateRule(ruleIndex, { sourceUsers: v })}
+                  onGroupsChange={(v) =>
+                    updateRule(ruleIndex, { sourceUserGroups: v })
+                  }
+                  disabled={
+                    !permission.policies.update || !permission.policies.create
+                  }
+                />
+              </div>
             </div>
             <PolicyDirection
               value={rule.direction}

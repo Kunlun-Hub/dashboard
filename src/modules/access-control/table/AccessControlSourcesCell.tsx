@@ -1,12 +1,14 @@
-import EmptyRow from "@/modules/common-table-rows/EmptyRow";
-import { Group } from "@/interfaces/Group";
-import { Policy } from "@/interfaces/Policy";
-import { usePermissions } from "@/contexts/PermissionsProvider";
-import { AccessControlResourceCell } from "@/modules/access-control/table/AccessControlResourceCell";
-import AccessControlRuleEndpointCell from "@/modules/access-control/table/AccessControlRuleEndpointCell";
+import Badge from "@components/Badge";
 import MultipleGroups, { TransparentEditIconButton } from "@components/ui/MultipleGroups";
 import { cn } from "@utils/helpers";
+import { UserIcon, UsersIcon } from "lucide-react";
 import { useMemo } from "react";
+import { usePermissions } from "@/contexts/PermissionsProvider";
+import { Group } from "@/interfaces/Group";
+import { Policy } from "@/interfaces/Policy";
+import { AccessControlResourceCell } from "@/modules/access-control/table/AccessControlResourceCell";
+import AccessControlRuleEndpointCell from "@/modules/access-control/table/AccessControlRuleEndpointCell";
+import EmptyRow from "@/modules/common-table-rows/EmptyRow";
 
 type Props = {
   policy: Policy;
@@ -31,19 +33,36 @@ export default function AccessControlSourcesCell({
     return <AccessControlResourceCell resource={firstRule.sourceResource} />;
   }
 
+  const sourceUsers = (firstRule?.source_users ?? []) as string[];
+  const sourceUserGroups = (firstRule?.source_user_groups ?? []) as string[];
+
   return firstRule ? (
     <div
       className={cn(
-        "flex items-center gap-1",
+        "flex items-center gap-1 flex-wrap",
         canUpdate && !hideEdit && "group",
       )}
     >
-      <MultipleGroups
-        groups={firstRule.sources as Group[]}
-        showUsers={firstRule.protocol === "netbird-ssh"}
-        disableRedirect={disableRedirect}
-        countOnly
-      />
+      {firstRule.sources && firstRule.sources.length > 0 && (
+        <MultipleGroups
+          groups={firstRule.sources as Group[]}
+          showUsers={firstRule.protocol === "netbird-ssh"}
+          disableRedirect={disableRedirect}
+          countOnly
+        />
+      )}
+      {sourceUsers.length > 0 && (
+        <Badge variant="gray" size="xs">
+          <UserIcon size={12} />
+          {sourceUsers.length}
+        </Badge>
+      )}
+      {sourceUserGroups.length > 0 && (
+        <Badge variant="gray" size="xs">
+          <UsersIcon size={12} />
+          {sourceUserGroups.length}
+        </Badge>
+      )}
       {canUpdate && !hideEdit && <TransparentEditIconButton />}
     </div>
   ) : (

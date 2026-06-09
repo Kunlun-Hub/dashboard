@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import type { Group } from "../../interfaces/Group";
 import type { PostureCheck } from "../../interfaces/PostureCheck";
+import type { User } from "../../interfaces/User";
 import {
   buildPolicyPayload,
   buildPolicyRulePayload,
@@ -66,6 +67,36 @@ test("buildPolicyRulePayload omits group sources when a source resource is set",
   assert.equal(payload.sources, undefined);
   assert.deepEqual(payload.destinations, ["group-destination"]);
   assert.deepEqual(payload.sourceResource, { id: "peer-1", type: "peer" });
+});
+
+test("buildPolicyRulePayload includes user and user group sources", () => {
+  const payload = buildPolicyRulePayload(
+    rule({
+      sourceUsers: [
+        { id: "user-1", name: "User 1" } as User,
+        { id: "user-2", name: "User 2" } as User,
+      ],
+      sourceUserGroups: [{ id: "group-users", name: "Users" }],
+    }),
+    groups,
+  );
+
+  assert.deepEqual(payload.source_users, ["user-1", "user-2"]);
+  assert.deepEqual(payload.source_user_groups, ["group-users"]);
+});
+
+test("buildPolicyRulePayload omits user sources when a source resource is set", () => {
+  const payload = buildPolicyRulePayload(
+    rule({
+      sourceResource: { id: "peer-1", type: "peer" },
+      sourceUsers: ["user-1"],
+      sourceUserGroups: [{ id: "group-users", name: "Users" }],
+    }),
+    groups,
+  );
+
+  assert.equal(payload.source_users, undefined);
+  assert.equal(payload.source_user_groups, undefined);
 });
 
 test("buildPolicyRulePayload maps SSH authorized groups by group name and forces SSH ports", () => {

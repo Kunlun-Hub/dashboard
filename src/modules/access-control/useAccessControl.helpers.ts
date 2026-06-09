@@ -10,6 +10,7 @@ import type {
   Protocol,
 } from "../../interfaces/Policy";
 import type { PostureCheck } from "../../interfaces/PostureCheck";
+import type { User } from "../../interfaces/User";
 
 export type RuleState = {
   id?: string;
@@ -26,6 +27,8 @@ export type RuleState = {
   destinations: Group[];
   sourceResource?: PolicyRuleResource;
   destinationResource?: PolicyRuleResource;
+  sourceUsers?: User[] | string[];
+  sourceUserGroups?: Group[] | string[];
   sshAccessType: "full" | "limited";
   sshAuthorizedGroups?: AuthorizedGroups;
 };
@@ -40,6 +43,8 @@ type LegacyPolicyFields = {
   bidirectional?: boolean;
   sourceResource?: PolicyRuleResource;
   destinationResource?: PolicyRuleResource;
+  source_users?: User[] | string[];
+  source_user_groups?: Group[] | string[];
   authorized_groups?: AuthorizedGroups;
 };
 
@@ -97,6 +102,17 @@ export const resolveGroups = (
     .filter(Boolean) as Group[];
 };
 
+const toID = (value: { id?: string } | string): string | undefined =>
+  typeof value === "string" ? value : value?.id;
+
+const resolveIDs = <T extends { id?: string }>(
+  values: T[] | string[] | null | undefined,
+): string[] | undefined => {
+  if (!Array.isArray(values) || values.length === 0) return undefined;
+  const ids = values.map((value) => toID(value)).filter(Boolean) as string[];
+  return ids.length > 0 ? ids : undefined;
+};
+
 export const convertRuleToState = (
   rule: PolicyRule,
   groups: Group[],
@@ -116,6 +132,8 @@ export const convertRuleToState = (
     destinations: resolveGroups(rule.destinations, groups),
     sourceResource: rule.sourceResource,
     destinationResource: rule.destinationResource,
+    sourceUsers: rule.source_users,
+    sourceUserGroups: rule.source_user_groups,
     sshAccessType:
       rule.authorized_groups && Object.keys(rule.authorized_groups).length > 0
         ? "limited"
@@ -164,6 +182,8 @@ export const buildInitialRules = ({
         bidirectional: policy.bidirectional ?? true,
         sourceResource: policy.sourceResource,
         destinationResource: policy.destinationResource,
+        sourceUsers: policy.source_users,
+        sourceUserGroups: policy.source_user_groups,
         sshAccessType:
           policy.authorized_groups &&
           Object.keys(policy.authorized_groups).length > 0
@@ -301,6 +321,10 @@ export const buildPolicyRulePayload = (
     protocol: rule.protocol,
     enabled: rule.enabled,
     sources: rule.sourceResource ? undefined : sources,
+    source_users: rule.sourceResource ? undefined : resolveIDs(rule.sourceUsers),
+    source_user_groups: rule.sourceResource
+      ? undefined
+      : resolveIDs(rule.sourceUserGroups),
     destinations: rule.destinationResource ? undefined : destinations,
     sourceResource: rule.sourceResource || undefined,
     destinationResource: rule.destinationResource || undefined,
@@ -333,6 +357,10 @@ export const buildEditablePolicyRule = (rule: RuleState): PolicyRule => {
     description: rule.description,
     name: rule.name,
     sources: rule.sourceResource ? undefined : sources,
+    source_users: rule.sourceResource ? undefined : resolveIDs(rule.sourceUsers),
+    source_user_groups: rule.sourceResource
+      ? undefined
+      : resolveIDs(rule.sourceUserGroups),
     destinations: rule.destinationResource ? undefined : destinations,
     sourceResource: rule.sourceResource || undefined,
     destinationResource: rule.destinationResource || undefined,

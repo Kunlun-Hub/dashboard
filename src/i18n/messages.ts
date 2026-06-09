@@ -3255,6 +3255,12 @@ export const messages = {
       "Typically a group of peers or resources (e.g., Servers, Databases, Internal Services) that will be accessed by the source. Can also be an individual peer or resource.",
     "accessControl.selectSources": "Select source(s)...",
     "accessControl.selectDestinations": "Select destination(s)...",
+    "accessControl.selectUsersOrGroups": "Select users or user groups...",
+    "accessControl.searchUsersOrGroups": "Search users or user groups...",
+    "accessControl.users": "Users",
+    "accessControl.userGroups": "User Groups",
+    "accessControl.noMatchingUserGroups":
+      "There are no user groups matching your search.",
     "accessControl.resourceWarning":
       "Some destination groups contain resources. Resources only support incoming traffic and cannot initiate connections.",
     "accessControl.sshResourceWarning":
@@ -6624,6 +6630,11 @@ export const messages = {
       "通常是来源会访问的一组设备或资源，例如服务器、数据库、内部服务，也可以是单个设备或资源。",
     "accessControl.selectSources": "选择来源...",
     "accessControl.selectDestinations": "选择目标...",
+    "accessControl.selectUsersOrGroups": "选择用户或用户组...",
+    "accessControl.searchUsersOrGroups": "搜索用户或用户组...",
+    "accessControl.users": "用户",
+    "accessControl.userGroups": "用户组",
+    "accessControl.noMatchingUserGroups": "没有匹配搜索条件的用户组。",
     "accessControl.resourceWarning":
       "部分目标分组包含资源。资源仅支持入站流量，不能主动发起连接。",
     "accessControl.sshResourceWarning":

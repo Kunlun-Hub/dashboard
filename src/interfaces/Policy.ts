@@ -1,5 +1,6 @@
 import { Group } from "@/interfaces/Group";
 import { PostureCheck } from "@/interfaces/PostureCheck";
+import { User } from "@/interfaces/User";
 
 export interface Policy {
   id?: string;
@@ -23,6 +24,8 @@ export interface PolicyRule {
   protocol: Protocol;
   ports: string[];
   port_ranges?: PortRange[];
+  source_users?: User[] | string[];
+  source_user_groups?: Group[] | string[];
   sourceResource?: PolicyRuleResource;
   destinationResource?: PolicyRuleResource;
   authorized_groups?: AuthorizedGroups;
