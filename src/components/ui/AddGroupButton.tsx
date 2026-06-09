@@ -15,13 +15,29 @@ import { useState } from "react";
 import { useSWRConfig } from "swr";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useI18n } from "@/i18n/I18nProvider";
-import { Group } from "@/interfaces/Group";
+import { Group, GroupType } from "@/interfaces/Group";
 import { useApiCall } from "@/utils/api";
 import ModalHeader from "../modal/ModalHeader";
 import { notify } from "../Notification";
 import Separator from "../Separator";
 
-export const AddGroupButton = () => {
+type Props = {
+  type?: GroupType;
+  buttonText?: string;
+  title?: string;
+  description?: string;
+  createdDescription?: (name: string) => string;
+  redirectPath?: (group: Group) => string;
+};
+
+export const AddGroupButton = ({
+  type = GroupType.PEER,
+  buttonText,
+  title,
+  description,
+  createdDescription,
+  redirectPath,
+}: Props) => {
   const { t } = useI18n();
   const create = useApiCall<Group>("/groups", true).post;
   const { mutate } = useSWRConfig();
@@ -30,16 +46,19 @@ export const AddGroupButton = () => {
   const router = useRouter();
   const { permission } = usePermissions();
 
+  const modalTitle = title ?? t("groups.createTitle");
+
   const createGroup = () => {
     notify({
-      title: t("groups.createTitle"),
-      description: t("groups.createdDescription", { name }),
+      title: modalTitle,
+      description:
+        createdDescription?.(name) ?? t("groups.createdDescription", { name }),
       loadingMessage: t("groups.creating"),
-      promise: create({ name }).then((g) => {
+      promise: create({ name, type }).then((g) => {
         setOpen(false);
         setName("");
         mutate("/groups");
-        router.push(`/group?id=${g?.id}`);
+        router.push(redirectPath?.(g) ?? `/group?id=${g?.id}`);
       }),
     });
   };
@@ -54,14 +73,14 @@ export const AddGroupButton = () => {
             className={"ml-auto h-[42px]"}
           >
             <PlusCircle size={16} />
-            {t("groups.createTitle")}
+            {buttonText ?? modalTitle}
           </Button>
         </ModalTrigger>
         <ModalContent maxWidthClass={"max-w-xl"}>
           <ModalHeader
             icon={<FolderGit2Icon size={18} />}
-            title={t("groups.createTitle")}
-            description={t("groups.createDescription")}
+            title={modalTitle}
+            description={description ?? t("groups.createDescription")}
             color="netbird"
           />
           <Separator />
@@ -92,7 +111,7 @@ export const AddGroupButton = () => {
                 onClick={createGroup}
               >
                 <PlusCircle size={16} />
-                {t("groups.createTitle")}
+                {buttonText ?? modalTitle}
               </Button>
             </div>
           </ModalFooter>

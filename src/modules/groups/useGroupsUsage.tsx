@@ -19,6 +19,9 @@ export interface GroupUsage extends Group {
   resources_count: number;
 }
 
+const getGroupId = (group: Group | string) =>
+  typeof group === "string" ? group : group.id;
+
 export default function useGroupsUsage() {
   const { data: groups, isLoading: isGroupsLoading } =
     useFetchApi<Group[]>(`/groups`); // Groups, Peers count
@@ -40,15 +43,25 @@ export default function useGroupsUsage() {
     if (!policies) return [];
     return policies
       ?.map((policy) => {
-        const sourceGroups = policy.rules[0].sources as Group[];
-        const destinationGroups = policy.rules[0].destinations as Group[];
-        const sourceGroupsIds = sourceGroups
-          ? sourceGroups.map((group) => group.id)
-          : [];
-        const destinationGroupsIds = destinationGroups
-          ? destinationGroups.map((group) => group.id)
-          : [];
-        return [...sourceGroupsIds, ...destinationGroupsIds];
+        return policy.rules.flatMap((rule) => {
+          const sourceGroups = (rule.sources as Group[]) || [];
+          const destinationGroups = (rule.destinations as Group[]) || [];
+          const sourceUserGroups = (rule.source_user_groups as Group[]) || [];
+          const sourceGroupsIds = sourceGroups
+            ? sourceGroups.map((group) => getGroupId(group))
+            : [];
+          const destinationGroupsIds = destinationGroups
+            ? destinationGroups.map((group) => getGroupId(group))
+            : [];
+          const sourceUserGroupsIds = sourceUserGroups
+            ? sourceUserGroups.map((group) => getGroupId(group))
+            : [];
+          return [
+            ...sourceGroupsIds,
+            ...destinationGroupsIds,
+            ...sourceUserGroupsIds,
+          ];
+        });
       })
       .filter((u) => u !== undefined);
   }, [policies, isPoliciesLoading]);

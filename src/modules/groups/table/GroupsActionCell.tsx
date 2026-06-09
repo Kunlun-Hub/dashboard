@@ -19,9 +19,14 @@ import { GroupUsage } from "@/modules/groups/useGroupsUsage";
 type Props = {
   group: GroupUsage;
   inUse: boolean;
+  detailsPath?: string;
 };
 
-export default function GroupsActionCell({ group, inUse }: Readonly<Props>) {
+export default function GroupsActionCell({
+  group,
+  inUse,
+  detailsPath,
+}: Readonly<Props>) {
   const { permission } = usePermissions();
   const router = useRouter();
   const { t } = useI18n();
@@ -60,7 +65,7 @@ export default function GroupsActionCell({ group, inUse }: Readonly<Props>) {
 
           <DropdownMenuContent className="w-auto" align="end">
             <DropdownMenuItem
-              onClick={() => router.push("/group?id=" + group.id)}
+              onClick={() => router.push(detailsPath ?? "/group?id=" + group.id)}
               disabled={!permission.groups.read}
             >
               <div className="flex gap-3 items-center">

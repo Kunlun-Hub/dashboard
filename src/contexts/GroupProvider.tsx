@@ -6,12 +6,12 @@ import { useSWRConfig } from "swr";
 import { useDialog } from "@/contexts/DialogProvider";
 import { useGroups } from "@/contexts/GroupsProvider";
 import { usePermissions } from "@/contexts/PermissionsProvider";
+import { useI18n } from "@/i18n/I18nProvider";
 import { Group } from "@/interfaces/Group";
 import { Peer } from "@/interfaces/Peer";
 import { User } from "@/interfaces/User";
 import { EditGroupNameModal } from "@/modules/groups/EditGroupNameModal";
 import { useGroupIdentification } from "@/modules/groups/useGroupIdentification";
-import { useI18n } from "@/i18n/I18nProvider";
 
 type Props = {
   group: Group;
@@ -204,6 +204,7 @@ export const GroupProvider = ({
         if (returnOnlyPromise) return;
         if (isDetailPage) mutate(`/groups/${group.id}`);
         mutate("/groups");
+        mutate("/users");
         mutate("/users?service_user=false");
       });
 
@@ -249,6 +250,7 @@ export const GroupProvider = ({
     const promise = Promise.all(promises).then(() => {
       if (isDetailPage) mutate(`/groups/${group.id}`);
       mutate("/groups");
+      mutate("/users");
       mutate("/users?service_user=false");
     });
     notify({
@@ -271,6 +273,7 @@ export const GroupProvider = ({
         if (returnOnlyPromise) return;
         if (isDetailPage) mutate(`/groups/${group.id}`);
         mutate("/groups");
+        mutate("/users");
         mutate("/users?service_user=false");
       });
     if (!returnOnlyPromise) {
@@ -292,6 +295,7 @@ export const GroupProvider = ({
     const promise = Promise.all(promises).then(() => {
       if (isDetailPage) mutate(`/groups/${group.id}`);
       mutate("/groups");
+      mutate("/users");
       mutate("/users?service_user=false");
     });
     notify({

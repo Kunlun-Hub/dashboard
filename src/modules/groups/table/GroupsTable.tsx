@@ -27,6 +27,7 @@ import { AddGroupButton } from "@/components/ui/AddGroupButton";
 import { GroupProvider } from "@/contexts/GroupProvider";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useI18n } from "@/i18n/I18nProvider";
+import { GroupType } from "@/interfaces/Group";
 import GroupsActionCell from "@/modules/groups/table/GroupsActionCell";
 import GroupsCountCell from "@/modules/groups/table/GroupsCountCell";
 import GroupsNameCell from "@/modules/groups/table/GroupsNameCell";
@@ -348,7 +349,7 @@ export default function GroupsTable({ headingTarget }: Readonly<Props>) {
       isLoading={isLoading}
       setSorting={setSorting}
       columns={columns}
-      data={groups}
+      data={groups?.filter((group) => (group.type ?? GroupType.PEER) === GroupType.PEER)}
       initialPageSize={25}
       showResetFilterButton={false}
       searchPlaceholder={t("groups.searchPlaceholder")}
@@ -357,6 +358,7 @@ export default function GroupsTable({ headingTarget }: Readonly<Props>) {
         <TableFilterChips table={table} filters={filterDefs} />
       )}
       columnVisibility={{
+        users_count: false,
         in_use: false,
         search: false,
       }}

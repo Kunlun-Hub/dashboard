@@ -124,6 +124,7 @@ export default function Navigation({
                     label={t("nav.deviceGroups")}
                     isChild
                     href={"/groups"}
+                    exactPathMatch={true}
                     visible={permission.policies.read}
                   />
                   <SidebarItem
@@ -234,6 +235,13 @@ export default function Navigation({
                     isChild
                     href={"/team/users"}
                     visible={permission.users.read}
+                  />
+                  <SidebarItem
+                    label={t("nav.userGroups")}
+                    isChild
+                    href={"/team/groups"}
+                    exactPathMatch={true}
+                    visible={permission.users.read && permission.groups.read}
                   />
                   <SidebarItem
                     label={t("nav.serviceUsers")}
