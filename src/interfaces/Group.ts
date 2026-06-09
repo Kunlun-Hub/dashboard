@@ -1,6 +1,7 @@
 export interface Group {
   id?: string;
   name: string;
+  type?: GroupType;
   peers?: GroupPeer[] | string[];
   peers_count?: number;
   resources?: GroupResource[] | string[];
@@ -25,6 +26,11 @@ export enum GroupIssued {
   API = "api",
   INTEGRATION = "integration",
   JWT = "jwt",
+}
+
+export enum GroupType {
+  PEER = "peer",
+  USER = "user",
 }
 
 export const GROUP_TOOLTIP_TEXT = {

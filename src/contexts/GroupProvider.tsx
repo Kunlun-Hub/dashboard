@@ -60,7 +60,8 @@ export const GroupProvider = ({
   const isAllowedToDelete = !isIntegrationGroup && permission?.groups?.delete;
 
   const handleDelete = async () => {
-    if (!isAllowedToDelete) return Promise.reject(t("group.notAllowedToDelete"));
+    if (!isAllowedToDelete)
+      return Promise.reject(t("group.notAllowedToDelete"));
 
     const promise = groupRequest.del().then(() => {
       deleteGroupDropdownOption(group.name);
@@ -91,7 +92,8 @@ export const GroupProvider = ({
   };
 
   const renameGroup = (name: string) => {
-    if (!isAllowedToRename) return Promise.reject(t("group.notAllowedToRename"));
+    if (!isAllowedToRename)
+      return Promise.reject(t("group.notAllowedToRename"));
 
     const currentPeerIds =
       group.peers?.map((p) => (typeof p === "string" ? p : p.id)) || [];
@@ -119,7 +121,10 @@ export const GroupProvider = ({
 
     const choice = await confirm({
       title: peer
-        ? t("group.removePeerConfirm", { peerName: peer.name, groupName: group.name })
+        ? t("group.removePeerConfirm", {
+            peerName: peer.name,
+            groupName: group.name,
+          })
         : t("group.removePeersConfirm", { groupName: group.name }),
       description: peer
         ? t("group.removePeerDescription")
@@ -191,10 +196,10 @@ export const GroupProvider = ({
     if (!permission?.groups?.update) return Promise.reject();
     if (!permission?.users?.update) return Promise.reject();
 
-    const currentGroupIds = user.auto_groups?.map((g) => g) || [];
+    const currentGroupIds = user.user_groups?.map((g) => g) || [];
     const newGroupIds = currentGroupIds.filter((gid) => gid !== group.id);
     const promise = userRequest
-      .put({ ...user, auto_groups: newGroupIds }, `/${user.id}`)
+      .put({ ...user, user_groups: newGroupIds }, `/${user.id}`)
       .then(() => {
         if (returnOnlyPromise) return;
         if (isDetailPage) mutate(`/groups/${group.id}`);
@@ -205,7 +210,10 @@ export const GroupProvider = ({
     if (!returnOnlyPromise) {
       notify({
         title: t("group.removeUserFromGroup") + " " + group.name,
-        description: t("group.userRemoved", { userName: user.name, groupName: group.name }),
+        description: t("group.userRemoved", {
+          userName: user.name,
+          groupName: group.name,
+        }),
         promise,
         loadingMessage: t("group.removingUserFromGroup"),
       });
@@ -223,7 +231,10 @@ export const GroupProvider = ({
 
     const choice = await confirm({
       title: user
-        ? t("group.removeUserConfirm", { userName: user?.name ?? user?.id, groupName: group.name })
+        ? t("group.removeUserConfirm", {
+            userName: user?.name ?? user?.id,
+            groupName: group.name,
+          })
         : t("group.removeUsersConfirm", { groupName: group.name }),
       description: user
         ? t("group.removeUserDescription")
@@ -252,10 +263,10 @@ export const GroupProvider = ({
   const addUserToGroup = async (user: User, returnOnlyPromise?: boolean) => {
     if (!permission?.groups?.update) return Promise.reject();
     if (!permission?.users?.update) return Promise.reject();
-    const currentGroupIds = user.auto_groups?.map((g) => g) || [];
+    const currentGroupIds = user.user_groups?.map((g) => g) || [];
     const newGroupIds = Array.from(new Set([...currentGroupIds, group.id]));
     const promise = userRequest
-      .put({ ...user, auto_groups: newGroupIds }, `/${user.id}`)
+      .put({ ...user, user_groups: newGroupIds }, `/${user.id}`)
       .then(() => {
         if (returnOnlyPromise) return;
         if (isDetailPage) mutate(`/groups/${group.id}`);
@@ -265,7 +276,10 @@ export const GroupProvider = ({
     if (!returnOnlyPromise) {
       notify({
         title: t("group.addUserToGroup") + " " + group.name,
-        description: t("group.userAdded", { userName: user.name, groupName: group.name }),
+        description: t("group.userAdded", {
+          userName: user.name,
+          groupName: group.name,
+        }),
         promise,
         loadingMessage: t("group.addingUserToGroup"),
       });

@@ -121,7 +121,7 @@ export default function Navigation({
                     visible={permission.policies.read}
                   />
                   <SidebarItem
-                    label={t("nav.groups")}
+                    label={t("nav.deviceGroups")}
                     isChild
                     href={"/groups"}
                     visible={permission.policies.read}

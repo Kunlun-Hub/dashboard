@@ -1,7 +1,7 @@
 import useFetchApi from "@utils/api";
 import { useMemo } from "react";
 import { DNSZone } from "@/interfaces/DNS";
-import { Group } from "@/interfaces/Group";
+import { Group, GroupType } from "@/interfaces/Group";
 import { NameserverGroup } from "@/interfaces/Nameserver";
 import { Policy } from "@/interfaces/Policy";
 import { Route } from "@/interfaces/Route";
@@ -80,9 +80,7 @@ export default function useGroupsUsage() {
   const usersGroups = useMemo(() => {
     if (isUsersLoading) return;
     if (!users) return [];
-    return users
-      ?.map((user) => user.auto_groups)
-      .filter((u) => u !== undefined);
+    return users;
   }, [users, isUsersLoading]);
 
   const isLoading = useMemo(() => {
@@ -142,7 +140,9 @@ export default function useGroupsUsage() {
       }).length;
 
       const userCount = usersGroups?.filter((user) => {
-        return user.includes(group.id as string);
+        return (group.type ?? GroupType.PEER) === GroupType.USER
+          ? user.user_groups?.includes(group.id as string)
+          : user.auto_groups?.includes(group.id as string);
       }).length;
 
       return {

@@ -7,6 +7,7 @@ export interface User {
   role: Role;
   status: string;
   auto_groups: string[];
+  user_groups: string[];
   is_current?: boolean;
   is_service_user?: boolean;
   is_blocked?: boolean;
@@ -22,6 +23,7 @@ export interface UserInviteCreateRequest {
   name: string;
   role: string;
   auto_groups: string[];
+  user_groups: string[];
   expires_in?: number;
 }
 
@@ -31,6 +33,7 @@ export interface UserInvite {
   name: string;
   role: string;
   auto_groups: string[];
+  user_groups: string[];
   expires_at: string;
   created_at: string;
   expired: boolean;

@@ -84,6 +84,7 @@ export const messages = {
     "nav.accessControl": "Access Control",
     "nav.policies": "Policies",
     "nav.groups": "Groups",
+    "nav.deviceGroups": "Device Groups",
     "nav.postureChecks": "Posture Checks",
     "nav.networkRouting": "Network Routing",
     "nav.networks": "Networks",
@@ -1432,9 +1433,9 @@ export const messages = {
     "userBlock.unblockedDescription": "{name} was successfully unblocked.",
     "userBlock.blocking": "Blocking the user...",
     "userBlock.unblocking": "Unblocking the user...",
-    "userGroups.label": "Auto-assigned Groups",
+    "userGroups.label": "User Groups",
     "userGroups.description":
-      "Groups will be assigned to peers added by this user.",
+      "Access granted to these groups applies to this user's devices.",
     "userGroups.savedDescription": "Groups of the user were successfully saved",
     "userGroups.updating": "Updating groups...",
     "userRoles.user": "User",
@@ -1792,8 +1793,7 @@ export const messages = {
     "flowLogsSettings.dnsDomainFilterModeAll": "Record All",
     "flowLogsSettings.dnsDomainFilterModeAllow": "Only Matching Domains",
     "flowLogsSettings.dnsDomainFilterModeExclude": "Exclude Matching Domains",
-    "flowLogsSettings.dnsDomainFilterPlaceholder":
-      "baidu.com\n*.baidu.com",
+    "flowLogsSettings.dnsDomainFilterPlaceholder": "baidu.com\n*.baidu.com",
     "flowLogsSettings.dnsDomainFilterExamples":
       "One rule per line. Exact match: baidu.com. Wildcard match: *.baidu.com.",
     "flowLogsSettings.enableExitNodeCollection": "Enable Exit Node Collection",
@@ -3717,6 +3717,7 @@ export const messages = {
     "nav.accessControl": "访问控制",
     "nav.policies": "策略",
     "nav.groups": "分组",
+    "nav.deviceGroups": "设备组",
     "nav.postureChecks": "姿态检查",
     "nav.networkRouting": "网络路由",
     "nav.networks": "网络",
@@ -4035,8 +4036,7 @@ export const messages = {
     "licenseSettings.urlMismatchTitle": "授权 URL 不符",
     "licenseSettings.urlMismatchDescription":
       "当前 dashboard URL 与已安装授权中的 URL 不一致，请联系售后解决。",
-    "licenseExpiry.warning":
-      "授权即将于 {date} 过期，请尽快续期",
+    "licenseExpiry.warning": "授权即将于 {date} 过期，请尽快续期",
     "brandingSettings.logo": "Logo",
     "brandingSettings.logoHelp": "显示在控制台左上角。",
     "brandingSettings.darkLogo": "深色模式 Logo",
@@ -4980,8 +4980,9 @@ export const messages = {
     "userBlock.unblockedDescription": "{name} 已成功解除封禁。",
     "userBlock.blocking": "正在封禁用户...",
     "userBlock.unblocking": "正在解除封禁用户...",
-    "userGroups.label": "自动分配分组",
-    "userGroups.description": "该用户添加的设备将被分配到这些分组。",
+    "userGroups.label": "用户组",
+    "userGroups.description":
+      "授权给这些用户组后，该用户的设备会继承访问权限。",
     "userGroups.savedDescription": "用户分组已成功保存。",
     "userGroups.updating": "正在更新分组...",
     "userRoles.user": "用户",
@@ -5312,8 +5313,7 @@ export const messages = {
     "flowLogsSettings.dnsDomainFilterModeAll": "记录全部",
     "flowLogsSettings.dnsDomainFilterModeAllow": "仅记录匹配域名",
     "flowLogsSettings.dnsDomainFilterModeExclude": "排除匹配域名",
-    "flowLogsSettings.dnsDomainFilterPlaceholder":
-      "baidu.com\n*.baidu.com",
+    "flowLogsSettings.dnsDomainFilterPlaceholder": "baidu.com\n*.baidu.com",
     "flowLogsSettings.dnsDomainFilterExamples":
       "每行一条规则。精确匹配示例：baidu.com。通配匹配示例：*.baidu.com。",
     "flowLogsSettings.enableExitNodeCollection": "启用出口节点采集",
@@ -5734,8 +5734,7 @@ export const messages = {
     "reverseProxy.cloinkOnlyAccess": "仅 Cloink 访问",
     "reverseProxy.cloinkOnlyDescription":
       "仅允许所选 Cloink 分组中的已连接设备访问。",
-    "reverseProxy.cloinkOnlyModalDescription":
-      "仅允许所选分组中的设备访问。",
+    "reverseProxy.cloinkOnlyModalDescription": "仅允许所选分组中的设备访问。",
     "reverseProxy.cloinkOnlyRequiresClusterPrefix":
       "仅 Cloink 访问需要代理集群中至少有一个已连接的嵌入式代理",
     "reverseProxy.cloinkOnlyRequiresClusterSuffix":
@@ -6939,7 +6938,8 @@ export const messages = {
     "peerActionCell.approveDescription": "确定要审批此设备吗？",
     "peerActionCell.approve": "审批",
     "peerActionCell.approvedTitle": "设备 {name} 已审批",
-    "peerActionCell.approvedDescription": "此设备已审批，现在可以连接其他设备。",
+    "peerActionCell.approvedDescription":
+      "此设备已审批，现在可以连接其他设备。",
     "peerActionCell.approving": "正在审批设备...",
     "peerAddress.netBirdIp": "Cloink IP",
     "peerAddress.publicIp": "公网 IP",

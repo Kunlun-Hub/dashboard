@@ -7,7 +7,7 @@ import { useSWRConfig } from "swr";
 import { useGroups } from "@/contexts/GroupsProvider";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useI18n } from "@/i18n/I18nProvider";
-import { Group } from "@/interfaces/Group";
+import { Group, GroupType } from "@/interfaces/Group";
 import { User } from "@/interfaces/User";
 import GroupsRow from "@/modules/common-table-rows/GroupsRow";
 
@@ -24,10 +24,10 @@ export default function UserGroupCell({ user }: Readonly<Props>) {
 
   const allGroups = useMemo(() => {
     if (isLoading) return [];
-    return uniq(user.auto_groups)
+    return uniq(user.user_groups)
       .map((group) => groups?.find((g) => g?.id == group))
       .filter((g): g is Group => g !== undefined);
-  }, [user.auto_groups, groups, isLoading]);
+  }, [user.user_groups, groups, isLoading]);
 
   const userGroupIds = useMemo(() => {
     return (allGroups.map((group) => group.id) as string[]) || [];
@@ -55,7 +55,12 @@ export default function UserGroupCell({ user }: Readonly<Props>) {
         .put(
           {
             ...user,
-            auto_groups: groupIds,
+            auto_groups:
+              user.auto_groups?.filter((groupId) => {
+                const group = groups?.find((g) => g.id === groupId);
+                return (group?.type ?? GroupType.PEER) === GroupType.PEER;
+              }) ?? [],
+            user_groups: groupIds,
           },
           `/${user.id}`,
         )
@@ -81,6 +86,7 @@ export default function UserGroupCell({ user }: Readonly<Props>) {
       modal={modal}
       setModal={setModal}
       countOnly={true}
+      groupType={GroupType.USER}
     />
   );
 }

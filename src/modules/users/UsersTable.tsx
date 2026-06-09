@@ -71,7 +71,9 @@ export const createUsersTableColumns = (
   {
     accessorKey: "name",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>{t("table.name")}</DataTableHeader>;
+      return (
+        <DataTableHeader column={column}>{t("table.name")}</DataTableHeader>
+      );
     },
     accessorFn: (row) => row.name + " " + row.email,
     sortingFn: "text",
@@ -84,7 +86,9 @@ export const createUsersTableColumns = (
   {
     accessorKey: "role",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>{t("table.role")}</DataTableHeader>;
+      return (
+        <DataTableHeader column={column}>{t("table.role")}</DataTableHeader>
+      );
     },
     sortingFn: "text",
     cell: ({ row }) => <UserRoleCell user={row.original} />,
@@ -101,16 +105,20 @@ export const createUsersTableColumns = (
       return row.status ?? "";
     },
     header: ({ column }) => {
-      return <DataTableHeader column={column}>{t("table.status")}</DataTableHeader>;
+      return (
+        <DataTableHeader column={column}>{t("table.status")}</DataTableHeader>
+      );
     },
     sortingFn: "text",
     cell: ({ row }) => <UserStatusCell user={row.original} />,
   },
 
   {
-    accessorKey: "auto_groups",
+    accessorKey: "user_groups",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>{t("table.groups")}</DataTableHeader>;
+      return (
+        <DataTableHeader column={column}>{t("table.groups")}</DataTableHeader>
+      );
     },
     sortingFn: "text",
     cell: ({ row }) => <UserGroupCell user={row.original} />,
@@ -119,7 +127,11 @@ export const createUsersTableColumns = (
   {
     accessorKey: "last_login",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>{t("table.lastLogin")}</DataTableHeader>;
+      return (
+        <DataTableHeader column={column}>
+          {t("table.lastLogin")}
+        </DataTableHeader>
+      );
     },
     sortingFn: "text",
     cell: ({ row }) => (
@@ -143,7 +155,7 @@ export const createUsersTableColumns = (
   {
     id: "group_names_filter",
     accessorFn: (row) =>
-      ((row as User & { _group_names?: string[] })._group_names) ?? [],
+      (row as User & { _group_names?: string[] })._group_names ?? [],
     filterFn: "arrIncludesSome",
   },
   {
@@ -225,7 +237,7 @@ export default function UsersTable({
     if (!users) return undefined;
     return users.map((u) => ({
       ...u,
-      _group_names: (u.auto_groups ?? [])
+      _group_names: (u.user_groups ?? [])
         .map((id) => groups?.find((g) => g.id === id)?.name)
         .filter((n): n is string => !!n),
     }));
@@ -244,10 +256,26 @@ export default function UsersTable({
   const statusOptions = useMemo<RadioOption<string | undefined>[]>(
     () => [
       { value: undefined, label: t("common.all"), dotClass: "bg-nb-gray-500" },
-      { value: "active", label: t("users.status.active"), dotClass: "bg-green-500" },
-      { value: "pending", label: t("users.status.pending"), dotClass: "bg-netbird" },
-      { value: "invited", label: t("users.status.invited"), dotClass: "bg-yellow-400" },
-      { value: "blocked", label: t("users.status.blocked"), dotClass: "bg-red-500" },
+      {
+        value: "active",
+        label: t("users.status.active"),
+        dotClass: "bg-green-500",
+      },
+      {
+        value: "pending",
+        label: t("users.status.pending"),
+        dotClass: "bg-netbird",
+      },
+      {
+        value: "invited",
+        label: t("users.status.invited"),
+        dotClass: "bg-yellow-400",
+      },
+      {
+        value: "blocked",
+        label: t("users.status.blocked"),
+        dotClass: "bg-red-500",
+      },
     ],
     [t],
   );
@@ -329,8 +357,7 @@ export default function UsersTable({
   const columnIds = new Set<string>();
   for (const c of effectiveColumns) {
     const id =
-      (c as { id?: string }).id ??
-      (c as { accessorKey?: string }).accessorKey;
+      (c as { id?: string }).id ?? (c as { accessorKey?: string }).accessorKey;
     if (id) columnIds.add(String(id));
   }
   const activeFilterDefs = filterDefs.filter((f) => columnIds.has(f.id));

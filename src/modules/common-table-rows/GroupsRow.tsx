@@ -21,7 +21,7 @@ import { useMemo } from "react";
 import { useGroups } from "@/contexts/GroupsProvider";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useI18n } from "@/i18n/I18nProvider";
-import { Group } from "@/interfaces/Group";
+import { Group, GroupType } from "@/interfaces/Group";
 import { Peer } from "@/interfaces/Peer";
 import useGroupHelper from "@/modules/groups/useGroupHelper";
 
@@ -37,6 +37,7 @@ type Props = {
   hideAllGroup?: boolean;
   disabled: boolean;
   countOnly?: boolean;
+  groupType?: GroupType;
 };
 
 export default function GroupsRow({
@@ -51,6 +52,7 @@ export default function GroupsRow({
   hideAllGroup = false,
   disabled = false,
   countOnly = false,
+  groupType = GroupType.PEER,
 }: Readonly<Props>) {
   const { t } = useI18n();
   const { groups: allGroups } = useGroups();
@@ -103,6 +105,7 @@ export default function GroupsRow({
         peer={peer}
         hideAllGroup={hideAllGroup}
         disabled={disabled}
+        groupType={groupType}
       />
     </Modal>
   );
@@ -116,6 +119,7 @@ type EditGroupsModalProps = {
   peer?: Peer;
   hideAllGroup?: boolean;
   disabled: boolean;
+  groupType: GroupType;
 };
 
 export function EditGroupsModal({
@@ -126,12 +130,14 @@ export function EditGroupsModal({
   peer,
   hideAllGroup = false,
   disabled,
+  groupType,
 }: Readonly<EditGroupsModalProps>) {
   const { t } = useI18n();
   const [selectedGroups, setSelectedGroups, { getAllGroupCalls }] =
     useGroupHelper({
       initial: groups,
       peer,
+      groupType,
     });
 
   const handleSave = async () => {
@@ -156,6 +162,7 @@ export function EditGroupsModal({
             values={selectedGroups}
             peer={peer}
             hideAllGroup={hideAllGroup}
+            groupType={groupType}
           />
         </div>
       </div>

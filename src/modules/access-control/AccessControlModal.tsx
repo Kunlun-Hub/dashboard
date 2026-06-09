@@ -59,7 +59,7 @@ import React, { useMemo, useState } from "react";
 import AccessControlIcon from "@/assets/icons/AccessControlIcon";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useI18n } from "@/i18n/I18nProvider";
-import { Group } from "@/interfaces/Group";
+import { Group, GroupType } from "@/interfaces/Group";
 import { NetworkResource } from "@/interfaces/Network";
 import { Policy, PolicyRuleResource, Protocol } from "@/interfaces/Policy";
 import { PostureCheck } from "@/interfaces/PostureCheck";
@@ -166,7 +166,10 @@ const resolveSelectedUsers = (
   return selected
     .map((value) => {
       if (typeof value !== "string") return value;
-      return users?.find((u) => u.id === value) ?? ({ id: value, name: value } as User);
+      return (
+        users?.find((u) => u.id === value) ??
+        ({ id: value, name: value } as User)
+      );
     })
     .filter(Boolean) as User[];
 };
@@ -214,6 +217,10 @@ const IdentitySourceSelector = ({
     () => resolveSelectedGroups(selectedGroups, groups),
     [selectedGroups, groups],
   );
+  const userGroups = useMemo(
+    () => (groups || []).filter((group) => group.type === GroupType.USER),
+    [groups],
+  );
 
   const [filteredUsers, , setUserSearch] = useSearch(
     users || [],
@@ -221,7 +228,7 @@ const IdentitySourceSelector = ({
     { filter: true, debounce: 150 },
   );
   const [filteredGroups, , setGroupSearch] = useSearch(
-    groups || [],
+    userGroups,
     groupSearchPredicate,
     { filter: true, debounce: 150 },
   );
@@ -323,7 +330,10 @@ const IdentitySourceSelector = ({
           hideEnterIcon
           placeholder={t("accessControl.searchUsersOrGroups")}
         />
-        <Tabs value={tab} onValueChange={(v) => setTab(v as "users" | "groups")}>
+        <Tabs
+          value={tab}
+          onValueChange={(v) => setTab(v as "users" | "groups")}
+        >
           <TabsList justify="start" className="px-3">
             <TabsTrigger value="users">
               <UserIcon size={14} />
@@ -382,7 +392,9 @@ const IdentitySourceSelector = ({
                 estimatedItemHeight={42}
                 onSelect={toggleGroup}
                 renderItem={(group) => {
-                  const selected = resolvedGroups.some((g) => g.id === group.id);
+                  const selected = resolvedGroups.some(
+                    (g) => g.id === group.id,
+                  );
                   return (
                     <div className="flex items-center justify-between gap-3 w-full">
                       <GroupBadge group={group} />
@@ -572,6 +584,7 @@ const RuleEditor = ({
                 showPeers={rule.protocol !== "netbird-ssh"}
                 showResourceCounter={false}
                 showPeerCount={allowEditPeers}
+                groupType={GroupType.PEER}
                 disableInlineRemoveGroup={false}
                 values={rule.sources}
                 onChange={(v) => {
@@ -593,7 +606,9 @@ const RuleEditor = ({
                   groups={groups}
                   selectedUsers={rule.sourceUsers}
                   selectedGroups={rule.sourceUserGroups}
-                  onUsersChange={(v) => updateRule(ruleIndex, { sourceUsers: v })}
+                  onUsersChange={(v) =>
+                    updateRule(ruleIndex, { sourceUsers: v })
+                  }
                   onGroupsChange={(v) =>
                     updateRule(ruleIndex, { sourceUserGroups: v })
                   }
@@ -623,6 +638,7 @@ const RuleEditor = ({
                 showPeers={true}
                 showResourceCounter={true}
                 showPeerCount={allowEditPeers}
+                groupType={GroupType.PEER}
                 disableInlineRemoveGroup={false}
                 values={rule.destinations}
                 onChange={(v) => {

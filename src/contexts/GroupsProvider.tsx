@@ -121,6 +121,7 @@ export function GroupsProviderContent({
           name: group.name,
           peers: peers,
           resources: resources,
+          type: group.type ?? "peer",
         },
         `/${group.id}`,
       );
@@ -129,6 +130,7 @@ export function GroupsProviderContent({
         name: group.name,
         peers: peers,
         resources: resources,
+        type: group.type ?? "peer",
       });
     }
   };

@@ -42,7 +42,12 @@ import Skeleton from "react-loading-skeleton";
 import { useGroups } from "@/contexts/GroupsProvider";
 import { useElementSize } from "@/hooks/useElementSize";
 import { useI18n } from "@/i18n/I18nProvider";
-import type { Group, GroupPeer, GroupResource } from "@/interfaces/Group";
+import {
+  GroupType,
+  type Group,
+  type GroupPeer,
+  type GroupResource,
+} from "@/interfaces/Group";
 import { NetworkResource } from "@/interfaces/Network";
 import type { Peer } from "@/interfaces/Peer";
 import { Policy, PolicyRuleResource } from "@/interfaces/Policy";
@@ -106,6 +111,7 @@ interface MultiSelectProps {
   resourceIds?: string[];
   additionalResources?: NetworkResource[];
   policies?: Policy[];
+  groupType?: GroupType;
 }
 export function PeerGroupSelector({
   onChange,
@@ -143,6 +149,7 @@ export function PeerGroupSelector({
   clusters,
   selectedCluster,
   onClusterChange,
+  groupType = GroupType.PEER,
 }: Readonly<MultiSelectProps>) {
   const shouldFetchResources =
     showResources || !!resource || !!additionalResources?.length;
@@ -187,8 +194,16 @@ export function PeerGroupSelector({
   const [open, setOpen] = useState(false);
   const radioGroupId = React.useId();
 
+  const typedDropdownOptions = useMemo(
+    () =>
+      dropdownOptions.filter(
+        (group) => (group.type ?? GroupType.PEER) === groupType,
+      ),
+    [dropdownOptions, groupType],
+  );
+
   const sortedDropdownOptions = useSortedDropdownOptions(
-    dropdownOptions,
+    typedDropdownOptions,
     values,
     open,
   );
@@ -216,7 +231,7 @@ export function PeerGroupSelector({
 
     setDropdownOptions(uniqueGroups);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [groups]);
+  }, [groups, groupType]);
 
   const toggleGroupByName = (name: string) => {
     const isSelected = values.find((group) => group.name == name) != undefined;
@@ -230,8 +245,11 @@ export function PeerGroupSelector({
   // Add group to the groupOptions if it does not exist
   const selectGroup = (name: string) => {
     onResourceChange?.(undefined);
-    const group = groups?.find((group) => group.name == name);
-    const option = dropdownOptions.find((option) => option.name == name);
+    const group = groups?.find(
+      (group) =>
+        group.name == name && (group.type ?? GroupType.PEER) === groupType,
+    );
+    const option = typedDropdownOptions.find((option) => option.name == name);
     const groupPeers: GroupPeer[] | undefined =
       (group?.peers as GroupPeer[]) || [];
     const groupResources: GroupResource[] | undefined =
@@ -249,7 +267,12 @@ export function PeerGroupSelector({
 
     if (!group && !option) {
       addDropdownOptions([
-        { name: name, peers: groupPeers, resources: groupResources },
+        {
+          name: name,
+          peers: groupPeers,
+          resources: groupResources,
+          type: groupType,
+        },
       ]);
     }
 
@@ -260,6 +283,7 @@ export function PeerGroupSelector({
           id: group?.id,
           peers: groupPeers,
           resources: groupResources,
+          type: group?.type ?? groupType,
         },
       ]);
     } else {
@@ -270,6 +294,7 @@ export function PeerGroupSelector({
           id: group?.id,
           peers: groupPeers,
           resources: groupResources,
+          type: group?.type ?? groupType,
         },
       ]);
     }
@@ -288,10 +313,11 @@ export function PeerGroupSelector({
   const searchedGroupNotFound = useMemo(() => {
     const isSearching = search.length > 0;
     const groupDoesNotExist =
-      dropdownOptions.filter((item) => item.name == trim(search)).length == 0;
+      typedDropdownOptions.filter((item) => item.name == trim(search)).length ==
+      0;
     const isAllGroup = search.toLowerCase() == "all";
     return isSearching && groupDoesNotExist && !isAllGroup;
-  }, [search, dropdownOptions]);
+  }, [search, typedDropdownOptions]);
 
   const [slice, setSlice] = useState(10);
 
@@ -311,12 +337,12 @@ export function PeerGroupSelector({
   useEffect(() => {
     if (open) {
       setTimeout(() => {
-        setSlice(dropdownOptions.length);
+        setSlice(typedDropdownOptions.length);
       }, 100);
     } else {
       setSlice(10);
     }
-  }, [open, dropdownOptions]);
+  }, [open, typedDropdownOptions]);
 
   const onPeerAssignmentChange = (oldGroup: Group, newGroup: Group) => {
     const filtered = values.filter((group) => group.name !== oldGroup.name);
@@ -445,9 +471,7 @@ export function PeerGroupSelector({
                   useHover={true}
                   data-cy={"cluster-badge"}
                   variant={"gray-ghost"}
-                  className={
-                    "py-[3px] transition-all group whitespace-nowrap"
-                  }
+                  className={"py-[3px] transition-all group whitespace-nowrap"}
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -897,9 +921,13 @@ const UsersCounter = ({
   selected: boolean;
 }) => {
   const { t } = useI18n();
+  const groupType = group.type ?? GroupType.PEER;
   const usersOfGroup =
-    users?.filter((user) => user.auto_groups.includes(group.id as string)) ||
-    [];
+    users?.filter((user) =>
+      groupType === GroupType.USER
+        ? user.user_groups.includes(group.id as string)
+        : user.auto_groups.includes(group.id as string),
+    ) || [];
 
   if (usersOfGroup.length === 0)
     return (
@@ -1143,9 +1171,7 @@ const ClustersList = ({
 
   return (
     <Radio defaultValue={value} name={"cluster"} value={value}>
-      <ScrollArea
-        className={"max-h-[195px] flex flex-col gap-1 py-2 px-2"}
-      >
+      <ScrollArea className={"max-h-[195px] flex flex-col gap-1 py-2 px-2"}>
         {clusters.map((c) => (
           <CommandItem
             key={c.domain}

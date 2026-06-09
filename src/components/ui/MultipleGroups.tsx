@@ -13,7 +13,7 @@ import { ArrowRightIcon, PencilLineIcon } from "lucide-react";
 import * as React from "react";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useUsers } from "@/contexts/UsersProvider";
-import { Group } from "@/interfaces/Group";
+import { Group, GroupType } from "@/interfaces/Group";
 import EmptyRow from "@/modules/common-table-rows/EmptyRow";
 import { HorizontalUsersStack } from "@/modules/users/HorizontalUsersStack";
 import { useI18n } from "@/i18n/I18nProvider";
@@ -54,9 +54,10 @@ export default function MultipleGroups({
 }: Readonly<Props>) {
   const { t } = useI18n();
   const { permission } = usePermissions();
-  
+
   const defaultLabel = label || t("groups.assignedGroups");
-  const defaultDescription = description || t("groups.useGroupsToControlAccess");
+  const defaultDescription =
+    description || t("groups.useGroupsToControlAccess");
 
   if (!groups || groups?.length === 0) return <EmptyRow />;
   const orderedGroups = [...groups].sort((a, b) => {
@@ -210,9 +211,13 @@ export const TransparentEditIconButton = () => {
 
 export const UserCountStack = ({ group }: { group: Group }) => {
   const { users } = useUsers();
+  const groupType = group.type ?? GroupType.PEER;
   const usersOfGroup =
-    users?.filter((user) => user.auto_groups.includes(group.id as string)) ||
-    [];
+    users?.filter((user) =>
+      groupType === GroupType.USER
+        ? user.user_groups.includes(group.id as string)
+        : user.auto_groups.includes(group.id as string),
+    ) || [];
   return (
     <HorizontalUsersStack
       users={usersOfGroup}

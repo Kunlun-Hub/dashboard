@@ -156,10 +156,22 @@ export function ControlCenterDetailsPanel({
           }
         />
         <Section title={t("controlCenter.connection")}>
-          <FactRow label={t("controlCenter.sourceNode")} value={sourceMeta.title} />
-          <FactRow label={t("controlCenter.targetNode")} value={targetMeta.title} />
-          <FactRow label={t("controlCenter.edgeStyle")} value={edge.type || "-"} />
-          <FactRow label={t("controlCenter.protocolOrScope")} value={edgeLabel} />
+          <FactRow
+            label={t("controlCenter.sourceNode")}
+            value={sourceMeta.title}
+          />
+          <FactRow
+            label={t("controlCenter.targetNode")}
+            value={targetMeta.title}
+          />
+          <FactRow
+            label={t("controlCenter.edgeStyle")}
+            value={edge.type || "-"}
+          />
+          <FactRow
+            label={t("controlCenter.protocolOrScope")}
+            value={edgeLabel}
+          />
         </Section>
         <Section title={t("controlCenter.endpoints")}>
           <div className="flex flex-col gap-2">
@@ -192,7 +204,9 @@ export function ControlCenterDetailsPanel({
 
   const renderPeer = (peer: Peer) => {
     const peerGroupIds = peer.groups?.map((group) => group.id) || [];
-    const peerGroups = groups.filter((group) => peerGroupIds.includes(group.id));
+    const peerGroups = groups.filter((group) =>
+      peerGroupIds.includes(group.id),
+    );
     const relatedPolicies = policies.filter((policy) =>
       getSourceGroupsFromPolicy(policy).some((group) =>
         peerGroupIds.includes(group.id),
@@ -217,11 +231,23 @@ export function ControlCenterDetailsPanel({
           <DeviceCard device={peer} className="w-full !pl-0 !pr-0" />
         </EntityCard>
         <Section title={t("peerDetails.overview")}>
-          <FactRow label={t("peerDetails.hostname")} value={peer.hostname || "-"} />
-          <FactRow label={t("peerDetails.publicIpAddress")} value={peer.connection_ip || "-"} />
-          <FactRow label={t("peerDetails.operatingSystem")} value={peer.os || "-"} />
+          <FactRow
+            label={t("peerDetails.hostname")}
+            value={peer.hostname || "-"}
+          />
+          <FactRow
+            label={t("peerDetails.publicIpAddress")}
+            value={peer.connection_ip || "-"}
+          />
+          <FactRow
+            label={t("peerDetails.operatingSystem")}
+            value={peer.os || "-"}
+          />
           <FactRow label={t("table.version")} value={peer.version || "-"} />
-          <FactRow label={t("peerDetails.lastSeen")} value={formatDate(peer.last_seen)} />
+          <FactRow
+            label={t("peerDetails.lastSeen")}
+            value={formatDate(peer.last_seen)}
+          />
           <FactRow
             label={t("controlCenter.owner")}
             value={peer.user?.name || peer.user?.email || t("common.unknown")}
@@ -269,7 +295,9 @@ export function ControlCenterDetailsPanel({
       getSourceGroupsFromPolicy(policy).some((item) => item.id === group.id),
     );
     const destinationPolicies = policies.filter((policy) =>
-      getDestinationGroupsFromPolicy(policy).some((item) => item.id === group.id),
+      getDestinationGroupsFromPolicy(policy).some(
+        (item) => item.id === group.id,
+      ),
     );
 
     return (
@@ -333,8 +361,8 @@ export function ControlCenterDetailsPanel({
 
   const renderUser = (user: User) => {
     const userPeers = peers.filter((peer) => peer.user_id === user.id);
-    const autoGroups = groups.filter((group) =>
-      user.auto_groups.includes(group.id || ""),
+    const userGroups = groups.filter((group) =>
+      user.user_groups.includes(group.id || ""),
     );
 
     return (
@@ -351,18 +379,21 @@ export function ControlCenterDetailsPanel({
         />
         <Section title={t("userDetails.title")}>
           <FactRow label={t("users.title")} value={user.name || "-"} />
-          <FactRow label={t("controlCenter.status")} value={getUserStatusText(user, t)} />
+          <FactRow
+            label={t("controlCenter.status")}
+            value={getUserStatusText(user, t)}
+          />
           <FactRow label={t("peers.title")} value={String(userPeers.length)} />
           <FactRow
             label={t("groups.title")}
-            value={String(autoGroups.length)}
+            value={String(userGroups.length)}
           />
         </Section>
         <Section title={t("peers.title")}>
           <ChipList items={userPeers.map((peer) => peer.name)} />
         </Section>
         <Section title={t("groups.title")}>
-          <ChipList items={autoGroups.map((group) => group.name)} />
+          <ChipList items={userGroups.map((group) => group.name)} />
         </Section>
         <ActionRow>
           <Button
@@ -393,7 +424,9 @@ export function ControlCenterDetailsPanel({
           description={network.description || t("networkDetails.network")}
           badge={
             <SmallBadge
-              text={t("common.resourceCount", { count: networkResources.length })}
+              text={t("common.resourceCount", {
+                count: networkResources.length,
+              })}
               variant="blue"
               size="md"
             />
@@ -456,7 +489,10 @@ export function ControlCenterDetailsPanel({
           <DeviceCard resource={resource} className="w-full !pl-0 !pr-0" />
         </EntityCard>
         <Section title={t("networkDetails.resources")}>
-          <FactRow label={t("networkDetails.type")} value={resource.type || "-"} />
+          <FactRow
+            label={t("networkDetails.type")}
+            value={resource.type || "-"}
+          />
           <FactRow
             label={t("groups.title")}
             value={String(resourceGroups.length)}
@@ -576,7 +612,9 @@ export function ControlCenterDetailsPanel({
         return network ? renderNetwork(network) : renderSummary();
       }
       case "resource": {
-        const resource = resources.find((item) => item.id === target.resourceId);
+        const resource = resources.find(
+          (item) => item.id === target.resourceId,
+        );
         return resource ? renderResource(resource) : renderSummary();
       }
       case "policy": {
@@ -647,7 +685,9 @@ function PanelHeader({
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <div className="mb-2 flex items-center gap-2 text-sm font-medium text-neutral-900 dark:text-nb-gray-200">
-            <span className="text-neutral-500 dark:text-nb-gray-400">{icon}</span>
+            <span className="text-neutral-500 dark:text-nb-gray-400">
+              {icon}
+            </span>
             <span className="truncate">{title}</span>
           </div>
           {description && (
@@ -699,14 +739,18 @@ function FactRow({
   return (
     <div className="flex items-start justify-between gap-4 border-b border-neutral-200 py-2 text-sm last:border-b-0 first:pt-0 last:pb-0 dark:border-nb-gray-800/70">
       <span className="text-neutral-500 dark:text-nb-gray-400">{label}</span>
-      <span className="max-w-[11rem] text-right text-neutral-900 dark:text-nb-gray-100">{value}</span>
+      <span className="max-w-[11rem] text-right text-neutral-900 dark:text-nb-gray-100">
+        {value}
+      </span>
     </div>
   );
 }
 
 function ChipList({ items }: Readonly<{ items: string[] }>) {
   if (items.length === 0) {
-    return <div className="text-sm text-neutral-400 dark:text-nb-gray-500">-</div>;
+    return (
+      <div className="text-sm text-neutral-400 dark:text-nb-gray-500">-</div>
+    );
   }
 
   return (
@@ -751,7 +795,11 @@ function EndpointCard({
           {badge}
         </Badge>
       </div>
-      {subtitle && <div className="text-xs text-neutral-500 dark:text-nb-gray-400">{subtitle}</div>}
+      {subtitle && (
+        <div className="text-xs text-neutral-500 dark:text-nb-gray-400">
+          {subtitle}
+        </div>
+      )}
     </div>
   );
 }
@@ -825,7 +873,8 @@ function getNodeMeta(nodeId: string, nodeMap: Map<string, Node>, t: Translate) {
     return {
       title: rule?.name || data.policy.name,
       subtitle:
-        getPolicyProtocolAndPortText(data.policy) || t("controlCenter.allTraffic"),
+        getPolicyProtocolAndPortText(data.policy) ||
+        t("controlCenter.allTraffic"),
       kind: t("groups.count.policy"),
     };
   }
@@ -839,9 +888,11 @@ function getNodeMeta(nodeId: string, nodeMap: Map<string, Node>, t: Translate) {
 
 function getEdgeRelation(edge: Edge, t: Translate) {
   if (edge.id.includes("-policy-")) return t("controlCenter.policyConnection");
-  if (edge.id.includes("-resource-")) return t("controlCenter.resourceConnection");
+  if (edge.id.includes("-resource-"))
+    return t("controlCenter.resourceConnection");
   if (edge.id.includes("-peer-")) return t("controlCenter.peerConnection");
-  if (edge.id.includes("-network-")) return t("controlCenter.networkConnection");
+  if (edge.id.includes("-network-"))
+    return t("controlCenter.networkConnection");
   return t("controlCenter.connection");
 }
 
@@ -867,9 +918,11 @@ function getPolicyFromEdge(
 ) {
   const sourceNode = nodeMap.get(edge.source);
   const targetNode = nodeMap.get(edge.target);
-  const sourcePolicy = (sourceNode?.data as { policy?: Policy } | undefined)?.policy;
+  const sourcePolicy = (sourceNode?.data as { policy?: Policy } | undefined)
+    ?.policy;
   if (sourcePolicy?.id) return sourcePolicy;
-  const targetPolicy = (targetNode?.data as { policy?: Policy } | undefined)?.policy;
+  const targetPolicy = (targetNode?.data as { policy?: Policy } | undefined)
+    ?.policy;
   if (targetPolicy?.id) return targetPolicy;
   const edgePolicyId = edge.id.match(/policy-([^-]+)/)?.[1];
   return policies.find((policy) => policy.id === edgePolicyId);

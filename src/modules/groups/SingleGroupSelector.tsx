@@ -10,7 +10,7 @@ import * as React from "react";
 import { useState } from "react";
 import { useUsers } from "@/contexts/UsersProvider";
 import { useI18n } from "@/i18n/I18nProvider";
-import { Group } from "@/interfaces/Group";
+import { Group, GroupType } from "@/interfaces/Group";
 import { HorizontalUsersStack } from "@/modules/users/HorizontalUsersStack";
 
 type Props = {
@@ -83,17 +83,13 @@ export const SingleGroupSelector = ({
 
           {values.length == 0 && !search && (
             <div className={"max-w-xs mx-auto px-4"}>
-              <DropdownInfoText>
-                {t("groups.notFound")}
-              </DropdownInfoText>
+              <DropdownInfoText>{t("groups.notFound")}</DropdownInfoText>
             </div>
           )}
 
           {filteredItems.length == 0 && search != "" && (
             <div className={"max-w-xs mx-auto px-4"}>
-              <DropdownInfoText>
-                {t("groups.noMatching")}
-              </DropdownInfoText>
+              <DropdownInfoText>{t("groups.noMatching")}</DropdownInfoText>
             </div>
           )}
 
@@ -129,9 +125,13 @@ type ItemProps = {
 
 const Item = ({ group, selected }: ItemProps) => {
   const { users } = useUsers();
+  const groupType = group.type ?? GroupType.PEER;
   const usersOfGroup =
-    users?.filter((user) => user.auto_groups.includes(group.id as string)) ||
-    [];
+    users?.filter((user) =>
+      groupType === GroupType.USER
+        ? user.user_groups.includes(group.id as string)
+        : user.auto_groups.includes(group.id as string),
+    ) || [];
 
   return (
     <div className={"flex gap-2 items-center w-full group justify-between"}>

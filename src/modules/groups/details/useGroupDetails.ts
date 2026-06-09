@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { DNSZone } from "@/interfaces/DNS";
-import { Group, GroupPeer, GroupResource } from "@/interfaces/Group";
+import { Group, GroupPeer, GroupResource, GroupType } from "@/interfaces/Group";
 import { NameserverGroup } from "@/interfaces/Nameserver";
 import {
   Network,
@@ -95,8 +95,14 @@ export default function useGroupDetails(groupId: string) {
   }, [setupKeys, groupId]);
 
   const linkedUsers = useMemo(() => {
-    return users?.filter((user) => user.auto_groups?.includes(groupId)) || [];
-  }, [users, groupId]);
+    return (
+      users?.filter((user) =>
+        (group?.type ?? GroupType.PEER) === GroupType.USER
+          ? user.user_groups?.includes(groupId)
+          : user.auto_groups?.includes(groupId),
+      ) || []
+    );
+  }, [users, groupId, group]);
 
   const linkedPeers = useMemo(() => {
     const groupPeerIds = (group?.peers as GroupPeer[])?.map((p) => p.id);

@@ -29,7 +29,7 @@ import Avatar3 from "@/assets/avatars/063.jpg";
 import Avatar4 from "@/assets/avatars/086.jpg";
 import useCopyToClipboard from "@/hooks/useCopyToClipboard";
 import { useI18n } from "@/i18n/I18nProvider";
-import { Group } from "@/interfaces/Group";
+import { Group, GroupType } from "@/interfaces/Group";
 import { Role, User, UserInvite } from "@/interfaces/User";
 import {
   ResourceLimitTooltip,
@@ -168,14 +168,14 @@ export default function UserInviteModal({ children, groups }: Readonly<Props>) {
               )}
             </Code>
             {isInviteSuccess && (
-                <Paragraph
-                  className={
-                    "mt-3 text-xs text-neutral-500 dark:text-nb-gray-400 text-center"
-                  }
-                >
-                  {t("invite.expiresOn")}{" "}
-                  {new Date(successData.invite.expires_at).toLocaleString()}
-                </Paragraph>
+              <Paragraph
+                className={
+                  "mt-3 text-xs text-neutral-500 dark:text-nb-gray-400 text-center"
+                }
+              >
+                {t("invite.expiresOn")}{" "}
+                {new Date(successData.invite.expires_at).toLocaleString()}
+              </Paragraph>
             )}
           </div>
           <ModalFooter className={"items-center"}>
@@ -218,6 +218,7 @@ export function UserInviteModalContent({
   const [selectedGroups, setSelectedGroups, { save: saveGroups }] =
     useGroupHelper({
       initial: groups,
+      groupType: GroupType.USER,
     });
 
   const isCloud = isNetBirdHosted();
@@ -234,7 +235,8 @@ export function UserInviteModalContent({
           name,
           email,
           role,
-          auto_groups: groupIds,
+          auto_groups: [],
+          user_groups: groupIds,
           is_service_user: false,
         })
         .then((user) => {
@@ -256,7 +258,8 @@ export function UserInviteModalContent({
           name,
           email,
           role,
-          auto_groups: groupIds,
+          auto_groups: [],
+          user_groups: groupIds,
           expires_in: parseInt(expiresIn || "3") * 24 * 60 * 60, // Days to seconds
         })
         .then((invite) => {
@@ -426,14 +429,15 @@ export function UserInviteModalContent({
         </div>
 
         <div className={"mb-4"}>
-          <Label>{t("invite.autoGroups")}</Label>
-          <HelpText>{t("invite.autoGroupsHelp")}</HelpText>
+          <Label>{t("userGroups.label")}</Label>
+          <HelpText>{t("userGroups.description")}</HelpText>
           <PeerGroupSelector
             onChange={setSelectedGroups}
             values={selectedGroups}
             showResources={false}
             showRoutes={false}
             hideAllGroup={true}
+            groupType={GroupType.USER}
           />
         </div>
       </div>

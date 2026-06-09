@@ -150,17 +150,17 @@ function InviteRoleCell({ invite }: { invite: UserInvite }) {
   );
 }
 
-// Groups cell for invites - read-only display of auto_groups
+// Groups cell for invites - read-only display of user_groups
 function InviteGroupCell({ invite }: { invite: UserInvite }) {
   const { t } = useI18n();
   const { groups, isLoading } = useGroups();
 
   const foundGroups = useMemo(() => {
     if (isLoading || !groups) return [];
-    return (invite.auto_groups || [])
+    return (invite.user_groups || [])
       .map((groupId) => groups.find((g) => g?.id === groupId))
       .filter((g): g is Group => g !== undefined);
-  }, [invite.auto_groups, groups, isLoading]);
+  }, [invite.user_groups, groups, isLoading]);
 
   if (isLoading) {
     return (
@@ -174,7 +174,7 @@ function InviteGroupCell({ invite }: { invite: UserInvite }) {
   return (
     <MultipleGroups
       groups={foundGroups}
-      label={t("setupKeys.autoAssignedGroups")}
+      label={t("userGroups.label")}
       countOnly={true}
     />
   );
@@ -382,7 +382,9 @@ export const createInvitesTableColumns = (
   {
     accessorKey: "name",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>{t("table.name")}</DataTableHeader>;
+      return (
+        <DataTableHeader column={column}>{t("table.name")}</DataTableHeader>
+      );
     },
     accessorFn: (row) => row.name + " " + row.email,
     sortingFn: "text",
@@ -391,7 +393,9 @@ export const createInvitesTableColumns = (
   {
     accessorKey: "role",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>{t("table.role")}</DataTableHeader>;
+      return (
+        <DataTableHeader column={column}>{t("table.role")}</DataTableHeader>
+      );
     },
     sortingFn: "text",
     cell: ({ row }) => <InviteRoleCell invite={row.original} />,
@@ -399,15 +403,19 @@ export const createInvitesTableColumns = (
   {
     accessorKey: "expired",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>{t("table.status")}</DataTableHeader>;
+      return (
+        <DataTableHeader column={column}>{t("table.status")}</DataTableHeader>
+      );
     },
     sortingFn: "basic",
     cell: ({ row }) => <InviteStatusCell invite={row.original} />,
   },
   {
-    accessorKey: "auto_groups",
+    accessorKey: "user_groups",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>{t("table.groups")}</DataTableHeader>;
+      return (
+        <DataTableHeader column={column}>{t("table.groups")}</DataTableHeader>
+      );
     },
     sortingFn: "text",
     cell: ({ row }) => <InviteGroupCell invite={row.original} />,
@@ -415,7 +423,9 @@ export const createInvitesTableColumns = (
   {
     accessorKey: "expires_at",
     header: ({ column }) => {
-      return <DataTableHeader column={column}>{t("table.expires")}</DataTableHeader>;
+      return (
+        <DataTableHeader column={column}>{t("table.expires")}</DataTableHeader>
+      );
     },
     sortingFn: "datetime",
     cell: ({ row }) => (
@@ -432,7 +442,7 @@ export const createInvitesTableColumns = (
   {
     id: "group_names_filter",
     accessorFn: (row) =>
-      ((row as UserInvite & { _group_names?: string[] })._group_names) ?? [],
+      (row as UserInvite & { _group_names?: string[] })._group_names ?? [],
     filterFn: "arrIncludesSome",
   },
   {
@@ -476,7 +486,7 @@ export default function UserInvitesTable({
     if (!invites) return undefined;
     return invites.map((invite) => ({
       ...invite,
-      _group_names: (invite.auto_groups ?? [])
+      _group_names: (invite.user_groups ?? [])
         .map((id) => groups?.find((g) => g.id === id)?.name)
         .filter((n): n is string => !!n),
     }));

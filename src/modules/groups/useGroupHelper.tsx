@@ -4,15 +4,20 @@ import { useMemo, useState } from "react";
 import { useSWRConfig } from "swr";
 import { useGroups } from "@/contexts/GroupsProvider";
 import { usePeerGroups } from "@/contexts/PeerProvider";
-import { type Group, type GroupPeer } from "@/interfaces/Group";
+import { type Group, type GroupPeer, GroupType } from "@/interfaces/Group";
 import { type Peer } from "@/interfaces/Peer";
 
 type Props = {
   initial?: Group[] | string[];
   peer?: Peer;
+  groupType?: GroupType;
 };
 
-export default function useGroupHelper({ initial = [], peer }: Props) {
+export default function useGroupHelper({
+  initial = [],
+  peer,
+  groupType = GroupType.PEER,
+}: Props) {
   const groupRequest = useApiCall<Group>("/groups");
   const { mutate } = useSWRConfig();
   const { groups } = useGroups();
@@ -116,6 +121,7 @@ export default function useGroupHelper({ initial = [], peer }: Props) {
           name: selectedGroup.name,
           peers: peers,
           resources: selectedGroup.resources,
+          type: selectedGroup.type ?? groupType,
         },
         `/${selectedGroup.id}`,
       );
@@ -127,6 +133,7 @@ export default function useGroupHelper({ initial = [], peer }: Props) {
         name: selectedGroup.name,
         peers: groupPeers || [],
         resources: selectedGroup.resources,
+        type: selectedGroup.type ?? groupType,
       })
       .then((group) => {
         setSelectedGroups((prev) => {
