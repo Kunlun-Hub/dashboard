@@ -75,7 +75,6 @@ type Props = {
 
 const config = loadConfig();
 const redirectUrl = `${config.apiOrigin}/oauth2/callback`;
-const logoutUrl = `${config.apiOrigin}/oauth2/logout/callback`;
 
 export default function IdentityProviderModal({
   open,
@@ -223,13 +222,18 @@ export default function IdentityProviderModal({
           </div>
 
           <div>
-            <Label>{t("identityProviderModal.name")}</Label>
+            <Label>{t("table.name")}</Label>
             <HelpText>{t("identityProviderModal.nameHelp")}</HelpText>
             <Input
               placeholder={t("identityProviderModal.namePlaceholder")}
               value={name}
               onChange={(e) => setName(e.target.value)}
-              customPrefix={<TagIcon size={16} className="text-nb-gray-300" />}
+              customPrefix={
+                <TagIcon
+                  size={16}
+                  className="text-neutral-500 dark:text-nb-gray-300"
+                />
+              }
             />
           </div>
 
@@ -242,7 +246,10 @@ export default function IdentityProviderModal({
                 value={issuer}
                 onChange={(e) => setIssuer(e.target.value)}
                 customPrefix={
-                  <GlobeIcon size={16} className="text-nb-gray-300" />
+                  <GlobeIcon
+                    size={16}
+                    className="text-neutral-500 dark:text-nb-gray-300"
+                  />
                 }
               />
             </div>
@@ -267,19 +274,31 @@ export default function IdentityProviderModal({
               }
               value={clientId}
               onChange={(e) => setClientId(e.target.value)}
-              customPrefix={<IdCard size={16} className="text-nb-gray-300" />}
+              customPrefix={
+                <IdCard
+                  size={16}
+                  className="text-neutral-500 dark:text-nb-gray-300"
+                />
+              }
             />
           </div>
 
           {isWeChatWork && (
             <div>
               <Label>{t("identityProviderModal.agentId")}</Label>
-              <HelpText>{t("identityProviderModal.agentIdHelp")}</HelpText>
+              <HelpText>
+                {t("identityProviderModal.agentIdHelp")}
+              </HelpText>
               <Input
                 placeholder={t("identityProviderModal.agentIdPlaceholder")}
                 value={agentId}
                 onChange={(e) => setAgentId(e.target.value)}
-                customPrefix={<IdCard size={16} className="text-nb-gray-300" />}
+                customPrefix={
+                  <IdCard
+                    size={16}
+                    className="text-neutral-500 dark:text-nb-gray-300"
+                  />
+                }
               />
             </div>
           )}
@@ -314,40 +333,28 @@ export default function IdentityProviderModal({
               }
               value={clientSecret}
               onChange={(e) => setClientSecret(e.target.value)}
-              customPrefix={<KeyIcon size={16} className="text-nb-gray-300" />}
+              customPrefix={
+                <KeyIcon
+                  size={16}
+                  className="text-neutral-500 dark:text-nb-gray-300"
+                />
+              }
             />
           </div>
 
           <Separator />
 
-          <div className={"flex flex-col gap-3"}>
-            <div>
-              <Label>{t("identityProviderModal.endpointUrls")}</Label>
-            </div>
-
-            <div>
-              <Label className={"text-xs mb-1"}>
-                {t("identityProviderModal.redirectCallback")}
-              </Label>
-              <Code
-                codeToCopy={redirectUrl}
-                message={t("identityProviderModal.redirectCopied")}
-              >
-                <Code.Line>{redirectUrl}</Code.Line>
-              </Code>
-            </div>
-
-            <div>
-              <Label className={"text-xs mb-1"}>
-                {t("identityProviderModal.logout")}
-              </Label>
-              <Code
-                codeToCopy={logoutUrl}
-                message={t("identityProviderModal.logoutCopied")}
-              >
-                <Code.Line>{logoutUrl}</Code.Line>
-              </Code>
-            </div>
+          <div>
+            <Label>{t("identityProviderModal.redirectUrl")}</Label>
+            <HelpText>{t("identityProviderModal.redirectUrlHelp")}</HelpText>
+            <Code
+              codeToCopy={redirectUrl}
+              message={t("identityProviderModal.redirectCopied")}
+            >
+              <Code.Line>
+                {isWeChatWork ? `${redirectUrl}/{connector_id}` : redirectUrl}
+              </Code.Line>
+            </Code>
           </div>
         </div>
 
