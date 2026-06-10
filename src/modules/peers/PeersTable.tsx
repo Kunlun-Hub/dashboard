@@ -36,6 +36,7 @@ import {
   RowSelectionState,
   SortingState,
 } from "@tanstack/react-table";
+import { removeAllSpaces } from "@utils/helpers";
 import { trim, uniqBy } from "lodash";
 import { MonitorDotIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
@@ -46,6 +47,7 @@ import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useLoggedInUser } from "@/contexts/UsersProvider";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { getOperatingSystem } from "@/hooks/useOperatingSystem";
+import { useI18n } from "@/i18n/I18nProvider";
 import { Group } from "@/interfaces/Group";
 import { OperatingSystem } from "@/interfaces/OperatingSystem";
 import { Peer } from "@/interfaces/Peer";
@@ -56,10 +58,19 @@ import PeerLastSeenCell from "@/modules/peers/PeerLastSeenCell";
 import { PeerMultiSelect } from "@/modules/peers/PeerMultiSelect";
 import PeerNameCell from "@/modules/peers/PeerNameCell";
 import { PeerOSCell } from "@/modules/peers/PeerOSCell";
+import {
+  canShowPeerActions,
+  filterPeersForTable,
+  getPeersTableColumnVisibility,
+  peerSearchIndex,
+  PeersTableKind,
+  shouldShowAddPeerButton,
+  shouldShowPeerMultiSelect,
+  shouldShowPendingApprovalFilter,
+} from "@/modules/peers/PeersTable.helpers";
 import PeerStatusCell from "@/modules/peers/PeerStatusCell";
 import PeerVersionCell from "@/modules/peers/PeerVersionCell";
-import { removeAllSpaces } from "@utils/helpers";
-import { useI18n } from "@/i18n/I18nProvider";
+import { SmallUserAvatar } from "@/modules/users/SmallUserAvatar";
 
 // Stable key per OS family for the filter column. Mirrors the icon
 // selection in PeerOSCell so the chip label and the displayed OS icon
@@ -117,6 +128,56 @@ const createPeersTableColumns = (
     },
     sortingFn: "text",
     cell: ({ row }) => <PeerNameCell peer={row.original} />,
+  },
+  {
+    id: "search_index",
+    accessorFn: peerSearchIndex,
+  },
+  {
+    id: "owner",
+    accessorFn: (peer) =>
+      [peer.user?.name, peer.user?.email, peer.user_id]
+        .filter(Boolean)
+        .join(" "),
+    header: ({ column }) => {
+      return (
+        <DataTableHeader column={column}>{t("table.user")}</DataTableHeader>
+      );
+    },
+    sortingFn: "text",
+    cell: ({ row }) => {
+      const user = row.original.user;
+      const fallback = row.original.user_id || t("common.unknown");
+      const name = user?.name || user?.email || fallback;
+      return (
+        <div className={"flex max-w-[260px] items-center gap-3 px-3 py-2"}>
+          <SmallUserAvatar
+            name={user?.name}
+            email={user?.email}
+            id={user?.id || row.original.user_id}
+            className={"h-8 w-8"}
+          />
+          <div className={"min-w-0"}>
+            <div
+              className={
+                "truncate text-sm font-medium text-neutral-900 dark:text-neutral-100"
+              }
+            >
+              {name}
+            </div>
+            {user?.email && user.email !== name && (
+              <div
+                className={
+                  "truncate text-xs text-neutral-500 dark:text-nb-gray-400"
+                }
+              >
+                {user.email}
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    },
   },
   {
     id: "approval_required",
@@ -232,9 +293,7 @@ const createPeersTableColumns = (
     accessorKey: "version",
     header: ({ column }) => {
       return (
-        <DataTableHeader column={column}>
-          {t("table.version")}
-        </DataTableHeader>
+        <DataTableHeader column={column}>{t("table.version")}</DataTableHeader>
       );
     },
     cell: ({ row }) => (
@@ -280,22 +339,12 @@ const createPeersTableColumns = (
   },
 ];
 
-export type PeersTableKind = "users" | "servers";
-
 type Props = {
   peers?: Peer[];
   isLoading: boolean;
   headingTarget?: HTMLHeadingElement | null;
   kind?: PeersTableKind;
-};
-
-// Peers split into two kinds:
-//   users   – owner is a real (non-service) user, typically added via SSO
-//   servers – no owner, or owner is a service user, typically enrolled via setup key
-const matchesKind = (peer: Peer, kind?: PeersTableKind) => {
-  if (!kind) return true;
-  const hasRealUser = !!peer.user && !peer.user.is_service_user;
-  return kind === "users" ? hasRealUser : !hasRealUser;
+  pendingOnly?: boolean;
 };
 
 export default function PeersTable({
@@ -303,12 +352,18 @@ export default function PeersTable({
   isLoading,
   headingTarget,
   kind,
+  pendingOnly = false,
 }: Readonly<Props>) {
   const { t } = useI18n();
   const { mutate } = useSWRConfig();
   const { permission } = usePermissions();
   const path = usePathname();
+  const canShowActions = canShowPeerActions(permission);
   const columns = useMemo(() => createPeersTableColumns(t), [t]);
+  const columnVisibility = useMemo(
+    () => getPeersTableColumnVisibility(permission, pendingOnly),
+    [permission, pendingOnly],
+  );
 
   // Default sorting state of the table
   const [sorting, setSorting] = useLocalStorage<SortingState>(
@@ -326,18 +381,23 @@ export default function PeersTable({
   );
 
   const kindFilteredPeers = useMemo(
-    () => peers?.filter((p) => matchesKind(p, kind)),
-    [peers, kind],
+    () => filterPeersForTable(peers, kind, pendingOnly),
+    [peers, kind, pendingOnly],
   );
 
   const pendingApprovalCount =
     kindFilteredPeers?.filter((p) => p.approval_required).length || 0;
 
-  const tableGroups =
-    (uniqBy(
-      kindFilteredPeers?.map((p) => p.groups?.map((g) => g)).flatMap((g) => g),
-      "name",
-    ) as Group[]) || ([] as Group[]);
+  const tableGroups = useMemo(
+    () =>
+      (uniqBy(
+        kindFilteredPeers
+          ?.map((p) => p.groups?.map((g) => g))
+          .flatMap((g) => g),
+        "name",
+      ) as Group[]) || ([] as Group[]),
+    [kindFilteredPeers],
+  );
 
   // Users derived from the current kind-filtered set, so the Users
   // filter offers only owners that actually appear in the table.
@@ -473,53 +533,63 @@ export default function PeersTable({
       });
     }
     return defs;
-  }, [isUser, kind, osOptions, tableGroups, tableUsers]);
+  }, [isUser, kind, osOptions, t, tableGroups, tableUsers]);
 
   return (
     <>
-      <PeerMultiSelect
-        selectedPeers={selectedRows}
-        onCanceled={() => setSelectedRows({})}
-      />
+      {shouldShowPeerMultiSelect(pendingOnly) && (
+        <PeerMultiSelect
+          selectedPeers={selectedRows}
+          onCanceled={() => setSelectedRows({})}
+        />
+      )}
       <DataTable
         headingTarget={headingTarget}
         rowSelection={selectedRows}
         setRowSelection={setSelectedRows}
         useRowId={true}
-        text={t("peers.title")}
+        text={pendingOnly ? t("peers.pendingApprovalTitle") : t("peers.title")}
         sorting={sorting}
         setSorting={setSorting}
         initialPageSize={25}
         showResetFilterButton={false}
         columns={columns}
         data={showBrowserPeers ? browserPeers : regularPeers}
-        searchPlaceholder={t("peers.searchPlaceholder")}
-        columnVisibility={{
-          select: permission.groups.read,
-          connected: false,
-          approval_required: false,
-          group_name_strings: false,
-          group_names: false,
-          ip: false,
-          serial: false,
-          user_name: false,
-          user_email: false,
-          actions: permission.peers.update,
-          groups: permission.groups.read,
-          os: false,
-          os_kind: false,
-          ipv6: false,
-        }}
+        searchPlaceholder={
+          pendingOnly
+            ? t("peers.pendingApprovalSearchPlaceholder")
+            : t("peers.searchPlaceholder")
+        }
+        columnVisibility={columnVisibility}
         isLoading={isLoading}
         getStartedCard={
-          <NoPeersGettingStarted
-            showBackground={true}
-            isUserDevice={kind ? kind === "users" : undefined}
-          />
+          pendingOnly ? (
+            <div
+              className={
+                "flex min-h-[18rem] flex-col items-center justify-center gap-2 text-center text-neutral-500 dark:text-nb-gray-300"
+              }
+            >
+              <div
+                className={
+                  "text-base font-medium text-neutral-900 dark:text-neutral-100"
+                }
+              >
+                {t("peers.noPendingApprovalsTitle")}
+              </div>
+              <div className={"max-w-md text-sm"}>
+                {t("peers.noPendingApprovalsDescription")}
+              </div>
+            </div>
+          ) : (
+            <NoPeersGettingStarted
+              showBackground={true}
+              isUserDevice={kind ? kind === "users" : undefined}
+            />
+          )
         }
         rightSide={() => (
           <>
-            {peers && peers.length > 0 && (
+            {shouldShowAddPeerButton(peers, pendingOnly) && (
               <AddPeerButton isUserDevice={kind === "users"} />
             )}
           </>
@@ -546,7 +616,10 @@ export default function PeersTable({
               }}
             />
 
-            {pendingApprovalCount > 0 && (
+            {shouldShowPendingApprovalFilter(
+              pendingApprovalCount,
+              pendingOnly,
+            ) && (
               <Button
                 disabled={peers?.length == 0}
                 onClick={() => {
@@ -577,7 +650,7 @@ export default function PeersTable({
                     : "secondary"
                 }
               >
-                Pending Approvals
+                {t("peers.pendingApprovals")}
                 <NotificationCountBadge count={pendingApprovalCount} />
               </Button>
             )}

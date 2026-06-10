@@ -7,6 +7,7 @@ import {
   DropdownMenuTrigger,
 } from "@components/DropdownMenu";
 import FullTooltip from "@components/FullTooltip";
+import InlineLink from "@components/InlineLink";
 import { notify } from "@components/Notification";
 import { getOperatingSystem } from "@hooks/useOperatingSystem";
 import { IconInfoCircle } from "@tabler/icons-react";
@@ -22,15 +23,18 @@ import {
 import { useRouter } from "next/navigation";
 import React, { useMemo } from "react";
 import { useSWRConfig } from "swr";
+import { useDialog } from "@/contexts/DialogProvider";
 import { usePeer } from "@/contexts/PeerProvider";
 import { usePermissions } from "@/contexts/PermissionsProvider";
+import { useI18n } from "@/i18n/I18nProvider";
 import { OperatingSystem } from "@/interfaces/OperatingSystem";
 import { ExitNodeDropdownButton } from "@/modules/exit-node/ExitNodeDropdownButton";
+import {
+  buildApprovePeerPayload,
+  shouldShowApprovePeerAction,
+} from "@/modules/peers/PeerActionCell.helpers";
 import { RDPButton } from "@/modules/remote-access/rdp/RDPButton";
 import { SSHButton } from "@/modules/remote-access/ssh/SSHButton";
-import InlineLink from "@components/InlineLink";
-import { useDialog } from "@/contexts/DialogProvider";
-import { useI18n } from "@/i18n/I18nProvider";
 
 export default function PeerActionCell() {
   const { peer, deletePeer, update, toggleSSH, setSSHInstructionsModal } =
@@ -48,7 +52,7 @@ export default function PeerActionCell() {
     return !isClientSSHEnabled;
   }, [peer]);
 
-  const showApprove = peer.approval_required && permission.peers.update;
+  const showApprove = shouldShowApprovePeerAction(peer, permission);
 
   const approvePeer = async () => {
     const choice = await confirm({
@@ -62,12 +66,7 @@ export default function PeerActionCell() {
     notify({
       title: t("peerActionCell.approvedTitle", { name: peer.name }),
       description: t("peerActionCell.approvedDescription"),
-      promise: update({
-        name: peer.name,
-        ssh: peer.ssh_enabled,
-        loginExpiration: peer.login_expiration_enabled,
-        approval_required: false,
-      }).then(() => {
+      promise: update(buildApprovePeerPayload(peer)).then(() => {
         mutate("/peers");
         mutate("/groups");
       }),
@@ -110,13 +109,10 @@ export default function PeerActionCell() {
 
   const disableDashboardSSH = async () => {
     const choice = await confirm({
-      title: `Disable SSH Access?`,
+      title: t("peerActionCell.disableSshAccessTitle"),
       description: (
         <div>
-          Starting from Cloink v0.61.0, once SSH access is disabled, you cannot
-          re-enable it again from the dashboard. You&apos;ll need to create an
-          explicit access control policy and update your Cloink client to
-          restore SSH functionality.{" "}
+          {t("peerActionCell.disableSshAccessDescription")}{" "}
           <InlineLink
             href={"https://docs.netbird.io/manage/peers/ssh"}
             target={"_blank"}
@@ -127,7 +123,7 @@ export default function PeerActionCell() {
           </InlineLink>
         </div>
       ),
-      confirmText: "Disable",
+      confirmText: t("peerActionCell.disable"),
       cancelText: t("common.cancel"),
       type: "warning",
       maxWidthClass: "max-w-xl",
@@ -157,7 +153,7 @@ export default function PeerActionCell() {
           >
             <div className={"flex gap-3 items-center"}>
               <MonitorIcon size={14} className={"shrink-0"} />
-              View Details
+              {t("actions.viewDetails")}
             </div>
           </DropdownMenuItem>
 
@@ -167,7 +163,7 @@ export default function PeerActionCell() {
               <DropdownMenuItem onClick={approvePeer}>
                 <div className={"flex gap-3 items-center"}>
                   <CheckCircle2 size={14} className={"shrink-0"} />
-                  Approve
+                  {t("peerActionCell.approve")}
                 </div>
               </DropdownMenuItem>
             </>
@@ -240,7 +236,7 @@ export default function PeerActionCell() {
           >
             <div className={"flex gap-3 items-center"}>
               <Trash2 size={14} className={"shrink-0"} />
-              Delete
+              {t("common.delete")}
             </div>
           </DropdownMenuItem>
         </DropdownMenuContent>

@@ -13,6 +13,7 @@ type Props = {
   showCopyIcon?: boolean;
   dark?: boolean;
   small?: boolean;
+  wrap?: boolean;
 };
 
 export default function Code({
@@ -24,6 +25,7 @@ export default function Code({
   showCopyIcon = true,
   dark = false,
   small = false,
+  wrap = false,
 }: Props) {
   const [wrapper, copyToClipboard, copied] = useCopyToClipboard(
     codeToCopy ? codeToCopy : undefined,
@@ -52,7 +54,10 @@ export default function Code({
         <ScrollArea className={"w-full min-w-0 max-w-full"}>
           <code
             className={cn(
-              "font-light pl-3 pr-12 inline-block cursor-text min-w-full w-max text-sm",
+              "font-light pl-3 pr-12 cursor-text text-sm",
+              wrap
+                ? "block min-w-0 w-full whitespace-normal break-all"
+                : "inline-block min-w-full w-max",
               className,
               small ? "py-[6.8px]" : "py-2.5",
             )}

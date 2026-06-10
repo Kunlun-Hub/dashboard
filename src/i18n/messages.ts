@@ -79,6 +79,7 @@ export const messages = {
     "nav.controlCenter": "Control Center",
     "nav.peers": "Peers",
     "nav.userDevices": "User Devices",
+    "nav.pendingPeerApprovals": "Pending Devices",
     "nav.servers": "Servers",
     "nav.setupKeys": "Setup Keys",
     "nav.accessControl": "Access Control",
@@ -333,6 +334,13 @@ export const messages = {
     "peers.serversBlockedTitle": "Add new server to your network",
     "peers.serversBlockedDescription":
       "To get started, install Cloink on the server and enroll it using a setup key.",
+    "peers.pendingApprovalTitle": "Pending Device Approvals",
+    "peers.pendingApprovals": "Pending Approvals",
+    "peers.pendingApprovalSearchPlaceholder":
+      "Search by device name, IP, owner or group...",
+    "peers.noPendingApprovalsTitle": "No devices pending approval",
+    "peers.noPendingApprovalsDescription":
+      "New user devices that require administrator approval will appear here.",
     "setupKeys.title": "Setup Keys",
     "setupKeys.description":
       "Setup keys are pre-authentication keys that allow to register new machines in your network.",
@@ -361,8 +369,7 @@ export const messages = {
     "userGroups.createTitle": "Create User Group",
     "userGroups.createDescription":
       "Create a user group to manage members and identity-based access policies.",
-    "userGroups.createdDescription":
-      "User group '{name}' successfully created",
+    "userGroups.createdDescription": "User group '{name}' successfully created",
     "userGroups.searchPlaceholder": "Search user groups...",
     "userGroups.members": "Members",
     "userGroups.membersCount": "{count} User(s)",
@@ -1689,12 +1696,21 @@ export const messages = {
     "activity.peerLoginExpirationEnable": "was enabled",
     "activity.peerRename": "was renamed to",
     "activity.peerApprove": "was approved",
+    "activity.peerApproveActor": "approved device",
+    "activity.peerApprovalRevokeActor": "revoked approval for device",
+    "activity.peerApproveDevice": "owned by",
+    "activity.peerApproveUser": "in account",
+    "activity.peerApproveAccount": "at",
+    "activity.peerApproveTime": "",
     "activity.peerIpUpdate": "IP address was updated from",
     "activity.peerUserAdd": "was added with the Cloink IP",
     "activity.groupAdd": "was created",
     "activity.groupDelete": "was deleted",
     "activity.groupUpdate": "was renamed to",
     "activity.accountCreate": "created an account",
+    "activity.accountPeerApprovalEnabled": "Device access approval was enabled",
+    "activity.accountPeerApprovalDisabled":
+      "Device access approval was disabled",
     "activity.accountNetworkRangeUpdate":
       "Account network range was updated from",
     "activity.nameserverGroupAdd": "was added",
@@ -2662,6 +2678,13 @@ export const messages = {
       "Require manual approval for new users joining via",
     "authenticationTab.userApprovalHelpLine2":
       "domain matching. Users will be blocked until approved.",
+    "authenticationTab.peerApprovalLabel": "Device Access Approval",
+    "authenticationTab.peerApprovalHelpLine1":
+      "Require new user devices to be approved by an administrator.",
+    "authenticationTab.peerApprovalHelpLine2":
+      "Setup Key devices and temporary Web SSH/RDP devices are not affected.",
+    "authenticationTab.peerApprovalHelpLine3":
+      "Disabling this setting automatically allows all currently pending devices to connect.",
     "authenticationTab.peerSessionLabel": "Peer Session Expiration",
     "authenticationTab.peerSessionHelpLine1":
       "Request periodic re-authentication of peers",
@@ -3517,6 +3540,11 @@ export const messages = {
     "peer.sshDisabled": "SSH Access successfully disabled",
     "peer.sshEnabling": "Enabling SSH Access...",
     "peer.sshDisabling": "Disabling SSH Access...",
+    "peer.loginExpiredIssueTooltip":
+      "This peer's login has expired. Re-authenticate from the Cloink client on the device to bring it back online.",
+    "peer.approvalRequiredBadge": "Pending",
+    "peer.approvalRequiredTooltip":
+      "This peer needs administrator approval before it can connect. Approve it from the row's actions menu.",
     "peer.editIpTitle": "Edit Peer IP Address",
     "peer.editIpDescription": "Update the Cloink IP address for this peer.",
     "peer.editIpPlaceholder": "e.g., 100.64.0.15",
@@ -3600,6 +3628,10 @@ export const messages = {
     "peerActionCell.enableSessionExpiration": "Enable Session Expiration",
     "peerActionCell.disableSshAccess": "Disable SSH Access",
     "peerActionCell.enableSshAccess": "Enable SSH Access",
+    "peerActionCell.disableSshAccessTitle": "Disable SSH Access?",
+    "peerActionCell.disableSshAccessDescription":
+      "Starting from Cloink v0.61.0, once SSH access is disabled, you cannot re-enable it again from the dashboard. You'll need to create an explicit access control policy and update your Cloink client to restore SSH functionality.",
+    "peerActionCell.disable": "Disable",
     "peerActionCell.expirationDisabledTooltip":
       "Expiration is disabled for all peers added with an setup-key.",
     "peerActionCell.approveTitle": "Approve peer '{name}'?",
@@ -3730,6 +3762,7 @@ export const messages = {
     "nav.controlCenter": "控制中心",
     "nav.peers": "设备",
     "nav.userDevices": "用户设备",
+    "nav.pendingPeerApprovals": "待审批设备",
     "nav.servers": "服务器",
     "nav.setupKeys": "注册密钥",
     "nav.accessControl": "访问控制",
@@ -3978,6 +4011,13 @@ export const messages = {
     "peers.serversBlockedTitle": "将新服务器加入你的网络",
     "peers.serversBlockedDescription":
       "开始使用前，请在服务器上安装 Cloink，并使用 setup key 完成注册。",
+    "peers.pendingApprovalTitle": "待审批设备",
+    "peers.pendingApprovals": "待审批",
+    "peers.pendingApprovalSearchPlaceholder":
+      "按设备名称、IP、所属用户或分组搜索...",
+    "peers.noPendingApprovalsTitle": "暂无待审批设备",
+    "peers.noPendingApprovalsDescription":
+      "需要管理员审批的新用户设备会显示在这里。",
     "setupKeys.title": "注册密钥",
     "setupKeys.description":
       "注册密钥是预认证密钥，可用于在你的网络中注册新的机器设备。",
@@ -5228,12 +5268,20 @@ export const messages = {
     "activity.peerLoginExpirationEnable": "已被启用",
     "activity.peerRename": "已被重命名为",
     "activity.peerApprove": "已被批准",
+    "activity.peerApproveActor": "审批了设备",
+    "activity.peerApprovalRevokeActor": "撤销了设备审批",
+    "activity.peerApproveDevice": "所属用户",
+    "activity.peerApproveUser": "所在账号",
+    "activity.peerApproveAccount": "审批时间",
+    "activity.peerApproveTime": "",
     "activity.peerIpUpdate": "IP地址已从以下地址更新为",
     "activity.peerUserAdd": "已添加，Cloink IP 为",
     "activity.groupAdd": "已被创建",
     "activity.groupDelete": "已被删除",
     "activity.groupUpdate": "已被重命名为",
     "activity.accountCreate": "创建了账户",
+    "activity.accountPeerApprovalEnabled": "设备接入审批已启用",
+    "activity.accountPeerApprovalDisabled": "设备接入审批已停用",
     "activity.accountNetworkRangeUpdate": "账户网络范围已从以下地址更新为",
     "activity.nameserverGroupAdd": "已被添加",
     "activity.nameserverGroupDelete": "已被删除",
@@ -6106,6 +6154,13 @@ export const messages = {
     "authenticationTab.userApprovalHelpLine1": "要求通过域名匹配加入的新用户",
     "authenticationTab.userApprovalHelpLine2":
       "必须经过人工审批后才能使用，审批前将被阻止访问。",
+    "authenticationTab.peerApprovalLabel": "设备接入审批",
+    "authenticationTab.peerApprovalHelpLine1":
+      "要求新用户设备通过管理员审批后才能接入网络。",
+    "authenticationTab.peerApprovalHelpLine2":
+      "Setup Key 设备和 Web SSH/RDP 临时设备不受影响。",
+    "authenticationTab.peerApprovalHelpLine3":
+      "关闭此设置后，当前待审批设备将自动允许接入。",
     "authenticationTab.peerSessionLabel": "设备会话过期",
     "authenticationTab.peerSessionHelpLine1": "要求已通过 SSO 注册的设备",
     "authenticationTab.peerSessionHelpLine2": "定期重新进行身份认证。",
@@ -6890,6 +6945,11 @@ export const messages = {
     "peer.sshDisabled": "SSH 访问已成功禁用",
     "peer.sshEnabling": "正在启用 SSH 访问...",
     "peer.sshDisabling": "正在禁用 SSH 访问...",
+    "peer.loginExpiredIssueTooltip":
+      "此设备的登录状态已过期。请在该设备的 Cloink 客户端重新认证，使其重新上线。",
+    "peer.approvalRequiredBadge": "待审批",
+    "peer.approvalRequiredTooltip":
+      "此设备接入前需要管理员审批。请在该行的操作菜单中审批。",
     "peer.editIpTitle": "编辑设备 IP 地址",
     "peer.editIpDescription": "更新该设备的 Cloink IP 地址。",
     "peer.editIpPlaceholder": "例如：100.64.0.15",
@@ -6966,6 +7026,10 @@ export const messages = {
     "peerActionCell.enableSessionExpiration": "启用会话过期",
     "peerActionCell.disableSshAccess": "禁用 SSH 访问",
     "peerActionCell.enableSshAccess": "启用 SSH 访问",
+    "peerActionCell.disableSshAccessTitle": "禁用 SSH 访问？",
+    "peerActionCell.disableSshAccessDescription":
+      "从 Cloink v0.61.0 开始，禁用 SSH 访问后，无法再从控制台重新启用。你需要创建显式访问控制策略，并更新 Cloink 客户端才能恢复 SSH 功能。",
+    "peerActionCell.disable": "禁用",
     "peerActionCell.expirationDisabledTooltip":
       "通过安装密钥添加的所有设备均禁用过期设置。",
     "peerActionCell.approveTitle": "审批设备“{name}”？",

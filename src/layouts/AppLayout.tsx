@@ -8,6 +8,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { Viewport } from "next";
 import localFont from "next/font/local";
+import { usePathname } from "next/navigation";
 import React, { Suspense } from "react";
 import { Toaster } from "sonner";
 import OIDCProvider from "@/auth/OIDCProvider";
@@ -39,6 +40,10 @@ export const viewport: Viewport = {
 export default function AppLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const pathname = usePathname();
+  const isDeviceApprovalPage =
+    pathname === "/device-approval" || pathname === "/device-approval.html";
+
   return (
     <html lang="zh-CN" suppressHydrationWarning>
       <head>
@@ -50,38 +55,42 @@ export default function AppLayout({
           "bg-white text-neutral-900 dark:bg-nb-gray dark:text-nb-gray-100",
         )}
       >
-        <Suspense fallback={<FullScreenLoading />}>
-          <I18nProvider>
-            <AnalyticsProvider>
-              <DialogProvider>
-                <GlobalThemeProvider>
-                  <PublicBrandingProvider>
-                    <ErrorBoundaryProvider>
-                      <InstanceSetupProvider>
-                        <OIDCProvider>
-                          <TooltipProvider delayDuration={0}>
-                            {children}
-                          </TooltipProvider>
-                        </OIDCProvider>
-                      </InstanceSetupProvider>
-                    </ErrorBoundaryProvider>
-                  </PublicBrandingProvider>
-                </GlobalThemeProvider>
-              </DialogProvider>
-              <Toaster
-                position="top-center"
-                duration={3000}
-                toastOptions={{ unstyled: true }}
-                style={{ "--width": "28rem" } as React.CSSProperties}
-                gap={0}
-                visibleToasts={5}
-                offset="12px"
-              />
-              <NavigationEvents />
-              <DisableDarkReader />
-            </AnalyticsProvider>
-          </I18nProvider>
-        </Suspense>
+        {isDeviceApprovalPage ? (
+          children
+        ) : (
+          <Suspense fallback={<FullScreenLoading />}>
+            <I18nProvider>
+              <AnalyticsProvider>
+                <DialogProvider>
+                  <GlobalThemeProvider>
+                    <PublicBrandingProvider>
+                      <ErrorBoundaryProvider>
+                        <InstanceSetupProvider>
+                          <OIDCProvider>
+                            <TooltipProvider delayDuration={0}>
+                              {children}
+                            </TooltipProvider>
+                          </OIDCProvider>
+                        </InstanceSetupProvider>
+                      </ErrorBoundaryProvider>
+                    </PublicBrandingProvider>
+                  </GlobalThemeProvider>
+                </DialogProvider>
+                <Toaster
+                  position="top-center"
+                  duration={3000}
+                  toastOptions={{ unstyled: true }}
+                  style={{ "--width": "28rem" } as React.CSSProperties}
+                  gap={0}
+                  visibleToasts={5}
+                  offset="12px"
+                />
+                <NavigationEvents />
+                <DisableDarkReader />
+              </AnalyticsProvider>
+            </I18nProvider>
+          </Suspense>
+        )}
       </body>
     </html>
   );

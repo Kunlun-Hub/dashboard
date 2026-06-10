@@ -27,6 +27,7 @@ import {
   CalendarClock,
   ChevronsUpDown,
   KeyRound,
+  MonitorCheckIcon,
   ShieldIcon,
   ShieldUserIcon,
   TimerResetIcon,
@@ -84,7 +85,11 @@ function LoginMethodSelector({
     if (option.startsWith("provider:")) {
       const providerId = option.replace("provider:", "");
       const provider = providers?.find((p) => p.id === providerId);
-      return provider?.name || getSSOIdentityProviderLabelByType(provider?.type) || providerId;
+      return (
+        provider?.name ||
+        getSSOIdentityProviderLabelByType(provider?.type) ||
+        providerId
+      );
     }
     return option;
   };
@@ -147,9 +152,7 @@ function LoginMethodSelector({
                     >
                       <Checkbox checked={values.length === 0} />
                       <div
-                        className={
-                          "flex justify-between items-center w-full"
-                        }
+                        className={"flex justify-between items-center w-full"}
                       >
                         <div
                           className={
@@ -178,9 +181,7 @@ function LoginMethodSelector({
                       >
                         <Checkbox checked={values.includes("email")} />
                         <div
-                          className={
-                            "flex justify-between items-center w-full"
-                          }
+                          className={"flex justify-between items-center w-full"}
                         >
                           <div
                             className={
@@ -221,7 +222,10 @@ function LoginMethodSelector({
                                 "flex items-center gap-2 whitespace-nowrap text-sm font-normal"
                               }
                             >
-                              {provider.name || getSSOIdentityProviderLabelByType(provider.type)}
+                              {provider.name ||
+                                getSSOIdentityProviderLabelByType(
+                                  provider.type,
+                                )}
                             </div>
                           </div>
                         </div>
@@ -249,9 +253,9 @@ export default function AuthenticationTab({ account }: Readonly<Props>) {
     (provider) => provider.type === "wechatwork",
   );
   const localAuthDisabled = account.settings.local_auth_disabled === true;
-  const [loginMethod, setLoginMethod] = useState<"all" | "email" | "wechatwork">(
-    () => account.settings.login_method || "all",
-  );
+  const [loginMethod, setLoginMethod] = useState<
+    "all" | "email" | "wechatwork"
+  >(() => account.settings.login_method || "all");
   const [enabledLoginOptions, setEnabledLoginOptions] = useState<string[]>(
     () => account.settings.enabled_login_options || [],
   );
@@ -357,7 +361,7 @@ export default function AuthenticationTab({ account }: Readonly<Props>) {
               peer_approval_enabled: peerApproval,
               user_approval_required: userApprovalRequired,
             },
-            local_mfa_enabled: isLocalMFAEnabled
+            local_mfa_enabled: isLocalMFAEnabled,
           },
         } as Account)
         .then(() => {
@@ -419,7 +423,7 @@ export default function AuthenticationTab({ account }: Readonly<Props>) {
                   选择允许的登录方式。如果只选择一种方式，登录时会直接跳转到该方式；如果选择多种方式，会显示所有选择的方式供用户选择。
                 </HelpText>
               </div>
-              
+
               <LoginMethodSelector
                 values={enabledLoginOptions}
                 onChange={setEnabledLoginOptions}
@@ -427,7 +431,7 @@ export default function AuthenticationTab({ account }: Readonly<Props>) {
                 providers={providers}
                 localAuthDisabled={localAuthDisabled}
               />
-              
+
               {localAuthDisabled && (
                 <HelpText>
                   {t("authenticationTab.loginMethodEmailDisabled")}
@@ -457,38 +461,58 @@ export default function AuthenticationTab({ account }: Readonly<Props>) {
             />
           </div>
 
-          {!account.settings.local_auth_disabled && account.settings.embedded_idp_enabled ?
-            (
-              <div className={"flex flex-col"}>
-                <FancyToggleSwitch
-                  value={isLocalMFAEnabled}
-                  onChange={setIsLocalMFAEnabled}
-                  dataCy={"local-mfa-enabled"}
-                  label={
-                    <>
-                      <KeyRound size={15} />
-                      {t("authenticationTab.localMfaLabel")}
-                      <SmallBadge
-                        text={t("common.beta")}
-                        variant={"sky"}
-                        className={"text-[9px] leading-none py-[3px] px-[5px]"}
-                        textClassName={"top-0"}
-                      />
-                    </>
-                  }
-                  helpText={
-                    <>
-                      {t("authenticationTab.localMfaHelpLine1")}
-                      <br />
-                      {t("authenticationTab.localMfaHelpLine2")}
-                    </>
-                  }
-                  disabled={!permission.settings.update}
-                />
-              </div>
-            ) : null
-          }
+          <div className={"flex flex-col"}>
+            <FancyToggleSwitch
+              value={peerApproval}
+              onChange={setPeerApproval}
+              dataCy={"peer-approval-enabled"}
+              label={
+                <>
+                  <MonitorCheckIcon size={15} />
+                  {t("authenticationTab.peerApprovalLabel")}
+                </>
+              }
+              helpText={
+                <>
+                  {t("authenticationTab.peerApprovalHelpLine1")} <br />
+                  {t("authenticationTab.peerApprovalHelpLine2")} <br />
+                  {t("authenticationTab.peerApprovalHelpLine3")}
+                </>
+              }
+              disabled={!permission.settings.update}
+            />
+          </div>
 
+          {!account.settings.local_auth_disabled &&
+          account.settings.embedded_idp_enabled ? (
+            <div className={"flex flex-col"}>
+              <FancyToggleSwitch
+                value={isLocalMFAEnabled}
+                onChange={setIsLocalMFAEnabled}
+                dataCy={"local-mfa-enabled"}
+                label={
+                  <>
+                    <KeyRound size={15} />
+                    {t("authenticationTab.localMfaLabel")}
+                    <SmallBadge
+                      text={t("common.beta")}
+                      variant={"sky"}
+                      className={"text-[9px] leading-none py-[3px] px-[5px]"}
+                      textClassName={"top-0"}
+                    />
+                  </>
+                }
+                helpText={
+                  <>
+                    {t("authenticationTab.localMfaHelpLine1")}
+                    <br />
+                    {t("authenticationTab.localMfaHelpLine2")}
+                  </>
+                }
+                disabled={!permission.settings.update}
+              />
+            </div>
+          ) : null}
 
           <div className={"flex flex-col"}>
             <FancyToggleSwitch
@@ -579,12 +603,12 @@ export default function AuthenticationTab({ account }: Readonly<Props>) {
                 value={peerInactivityExpirationEnabled}
                 onChange={setPeerInactivityExpirationEnabled}
                 dataCy={"peer-inactivity-expiration"}
-                label={<>{t("authenticationTab.requireLoginAfterDisconnect")}</>}
+                label={
+                  <>{t("authenticationTab.requireLoginAfterDisconnect")}</>
+                }
                 disabled={!permission.settings.update}
                 helpText={
-                  <>
-                    {t("authenticationTab.requireLoginAfterDisconnectHelp")}
-                  </>
+                  <>{t("authenticationTab.requireLoginAfterDisconnectHelp")}</>
                 }
               />
             </div>

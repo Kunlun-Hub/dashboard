@@ -10,6 +10,10 @@ import RoundedFlag from "@/assets/countries/RoundedFlag";
 import { useCountries } from "@/contexts/CountryProvider";
 import { useI18n } from "@/i18n/I18nProvider";
 import { ActivityEvent } from "@/interfaces/ActivityEvent";
+import {
+  getAccountPeerApprovalActivityKey,
+  getPeerApprovalActivityActorKey,
+} from "@/modules/activity/ActivityDescription.helpers";
 
 type Props = {
   event: ActivityEvent;
@@ -18,6 +22,11 @@ type Props = {
 export default function ActivityDescription({ event }: Props) {
   const { t } = useI18n();
   const m = event.meta;
+  const accountPeerApprovalActivityKey =
+    getAccountPeerApprovalActivityKey(event.activity_code);
+  const peerApprovalActivityActorKey = getPeerApprovalActivityActorKey(
+    event.activity_code,
+  );
   const meta = useMemo(() => {
     if (event.meta) {
       return Object.keys(event.meta)
@@ -34,6 +43,10 @@ export default function ActivityDescription({ event }: Props) {
         .filter((item) => item !== undefined);
     }
   }, [event.meta]);
+
+  if (accountPeerApprovalActivityKey) {
+    return <div className={"inline"}>{t(accountPeerApprovalActivityKey)}</div>;
+  }
 
   if (!m) return null;
 
@@ -399,13 +412,49 @@ export default function ActivityDescription({ event }: Props) {
       </div>
     );
 
-  if (event.activity_code == "peer.approve")
+  if (peerApprovalActivityActorKey) {
+    const approver =
+      m.approver_name ||
+      m.approver_email ||
+      event.initiator_name ||
+      event.initiator_email;
+    const peerName = m.peer_name || m.name;
+    const peerUser = m.peer_user_name || m.peer_user_email || m.peer_user_id;
+    const accountName = m.account_name || m.account_id;
+    if (!approver && !peerName && !peerUser && !accountName && !m.approved_at) {
+      return (
+        <div className={"inline"}>
+          {t("activity.peer")} {t("activity.with")} {t("activity.cloinkIp")}{" "}
+          <Value>{m.ip}</Value> {t("activity.peerApprove")}
+        </div>
+      );
+    }
     return (
       <div className={"inline"}>
-        {t("activity.peer")} {t("activity.with")} {t("activity.cloinkIp")}{" "}
-        <Value>{m.ip}</Value> {t("activity.peerApprove")}
+        <Value>{approver}</Value> {t(peerApprovalActivityActorKey)}{" "}
+        <Value>{peerName}</Value>
+        {peerUser && (
+          <>
+            {" "}
+            {t("activity.peerApproveDevice")} <Value>{peerUser}</Value>
+          </>
+        )}
+        {accountName && (
+          <>
+            {" "}
+            {t("activity.peerApproveUser")} <Value>{accountName}</Value>
+          </>
+        )}
+        {m.approved_at && (
+          <>
+            {" "}
+            {t("activity.peerApproveAccount")} <Value>{m.approved_at}</Value>
+          </>
+        )}{" "}
+        <PeerConnectionInfo meta={m} />
       </div>
     );
+  }
 
   if (event.activity_code == "peer.ip.update")
     return (

@@ -18,6 +18,10 @@ import { NavigationVersionInfo } from "@/components/VersionInfo";
 import { useApplicationContext } from "@/contexts/ApplicationProvider";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useI18n } from "@/i18n/I18nProvider";
+import {
+  pendingPeerApprovalsPath,
+  shouldShowPendingPeerApprovalsNavItem,
+} from "@/layouts/Navigation.helpers";
 import { useAccountEntitlements } from "@/modules/account/useAccountEntitlements";
 import { NetworkNavigation } from "@/modules/networks/misc/NetworkNavigation";
 
@@ -97,6 +101,16 @@ export default function Navigation({
                     href={"/peers/users"}
                     exactPathMatch={true}
                     visible={!isRestricted}
+                  />
+                  <SidebarItem
+                    label={t("nav.pendingPeerApprovals")}
+                    isChild
+                    href={pendingPeerApprovalsPath}
+                    exactPathMatch={true}
+                    visible={shouldShowPendingPeerApprovalsNavItem(
+                      isRestricted,
+                      permission,
+                    )}
                   />
                   <SidebarItem
                     label={t("nav.servers")}

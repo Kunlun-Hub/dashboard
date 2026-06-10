@@ -151,6 +151,7 @@ export default function UserInviteModal({ children, groups }: Readonly<Props>) {
 
           <div className={"px-8 pb-6"}>
             <Code
+              wrap={isInviteSuccess}
               message={
                 isPasswordSuccess
                   ? t("invite.passwordCopied")
@@ -178,10 +179,10 @@ export default function UserInviteModal({ children, groups }: Readonly<Props>) {
               </Paragraph>
             )}
           </div>
-          <ModalFooter className={"items-center"}>
+          <ModalFooter className={"items-center w-full min-w-0"}>
             <Button
               variant={"primary"}
-              className={"w-full"}
+              className={"w-full min-w-0"}
               onClick={handleCopyAndClose}
             >
               <CopyIcon size={14} />
