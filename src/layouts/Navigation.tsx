@@ -3,7 +3,7 @@
 import { ScrollArea } from "@components/ScrollArea";
 import { SmallBadge } from "@components/ui/SmallBadge";
 import { cn } from "@utils/helpers";
-import { LayoutDashboardIcon, RadioTowerIcon } from "lucide-react";
+import { Grid3X3Icon, LayoutDashboardIcon, RadioTowerIcon } from "lucide-react";
 import * as React from "react";
 import AccessControlIcon from "@/assets/icons/AccessControlIcon";
 import ActivityIcon from "@/assets/icons/ActivityIcon";
@@ -151,6 +151,14 @@ export default function Navigation({
                 </SidebarItem>
 
                 <NetworkNavigation />
+
+                <SidebarItem
+                  icon={<Grid3X3Icon size={16} />}
+                  label={"工作台"}
+                  href={"/workbench"}
+                  exactPathMatch={true}
+                  visible={permission.settings.read}
+                />
 
                 <SidebarItem
                   icon={<RadioTowerIcon size={16} />}

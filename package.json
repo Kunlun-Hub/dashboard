@@ -15,7 +15,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "test:unit": "node --import tsx --test src/layouts/Navigation.helpers.test.ts src/modules/access-control/useAccessControl.helpers.test.ts src/app/'(public)'/device-approval/DeviceApprovalContent.test.ts src/modules/activity/ActivityDescription.helpers.test.ts src/modules/peers/PeerActionCell.helpers.test.ts src/modules/peers/PeersTable.helpers.test.ts",
+    "test:unit": "node --import tsx --test src/layouts/Navigation.helpers.test.ts src/modules/access-control/useAccessControl.helpers.test.ts src/app/'(public)'/device-approval/DeviceApprovalContent.test.ts src/modules/activity/ActivityDescription.helpers.test.ts src/modules/peers/PeerActionCell.helpers.test.ts src/modules/peers/PeersTable.helpers.test.ts src/modules/workbench/WorkbenchResourcesPage.helpers.test.ts",
     "test:e2e:device-approval": "cypress run --spec cypress/e2e/device-approval.cy.ts",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run"
