@@ -207,6 +207,9 @@ function InviteActionCell({ invite }: { invite: UserInvite }) {
   const regenerateRequest = useApiCall<UserInviteRegenerateResponse>(
     `/users/invites/${invite.id}/regenerate`,
   );
+  const resendRequest = useApiCall<UserInviteRegenerateResponse>(
+    `/users/invites/${invite.id}/resend`,
+  );
   const { mutate } = useSWRConfig();
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -240,6 +243,19 @@ function InviteActionCell({ invite }: { invite: UserInvite }) {
     copyToClipboard(t("userInvites.linkCopied")).then(() => {
       setRegeneratedData(null);
       setModalOpen(false);
+    });
+  };
+
+  const handleResend = async () => {
+    notify({
+      title: t("userInvites.resendTitle"),
+      description: t("userInvites.resendDescription", {
+        email: invite.email,
+      }),
+      promise: resendRequest.post({}).then(() => {
+        mutate("/users/invites");
+      }),
+      loadingMessage: t("userInvites.sending"),
     });
   };
 
@@ -297,6 +313,16 @@ function InviteActionCell({ invite }: { invite: UserInvite }) {
               <div className={"flex gap-3 items-center"}>
                 <RefreshCw size={14} className={"shrink-0"} />
                 {t("userInvites.regenerate")}
+              </div>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={handleResend}
+              disabled={!permission.users.update}
+              data-cy={"resend-invite"}
+            >
+              <div className={"flex gap-3 items-center"}>
+                <MailPlus size={14} className={"shrink-0"} />
+                {t("userInvites.resend")}
               </div>
             </DropdownMenuItem>
             <DropdownMenuSeparator />

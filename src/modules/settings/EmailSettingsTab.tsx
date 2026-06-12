@@ -578,7 +578,9 @@ export default function EmailSettingsTab() {
                       })
                     }
                     disabled={!permission.settings.update}
-                    className={"min-h-[150px] font-mono"}
+                    className={
+                      "h-[360px] min-h-[220px] overflow-y-auto font-mono leading-relaxed"
+                    }
                     resize
                   />
                 </Field>
@@ -591,7 +593,9 @@ export default function EmailSettingsTab() {
                       })
                     }
                     disabled={!permission.settings.update}
-                    className={"min-h-[120px] font-mono"}
+                    className={
+                      "h-[220px] min-h-[140px] overflow-y-auto font-mono leading-relaxed"
+                    }
                     resize
                   />
                 </Field>
@@ -661,4 +665,3 @@ function SectionTitle({ title }: { title: string }) {
     </div>
   );
 }
-

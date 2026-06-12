@@ -34,7 +34,15 @@ const inputVariants = cva("", {
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, InputProps>(
   (
-    { className, variant = "default", resize, customElement, error, ...props },
+    {
+      className,
+      variant = "default",
+      resize,
+      customElement,
+      error,
+      style,
+      ...props
+    },
     ref,
   ) => {
     return (
@@ -49,12 +57,13 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, InputProps>(
               "file:border-0",
               "focus-visible:ring-2 focus-visible:ring-offset-2",
               "border",
-              "overflow-hidden",
+              "overflow-y-auto",
               className,
               resize ? "resize" : "resize-none",
             )}
             style={{
-              height: variant === "darker" ? "42px" : "auto",
+              height: style?.height ?? (variant === "darker" ? "42px" : undefined),
+              ...style,
             }}
           />
           {customElement && customElement}
