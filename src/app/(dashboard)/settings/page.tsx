@@ -6,11 +6,12 @@ import {
   ActivityIcon,
   AlertOctagonIcon,
   FingerprintIcon,
-  GlobeIcon,
   FolderGit2Icon,
+  GlobeIcon,
   KeyRound,
   KeyRoundIcon,
   LockIcon,
+  MailIcon,
   MonitorSmartphoneIcon,
   NetworkIcon,
   PaletteIcon,
@@ -29,6 +30,7 @@ import AuthenticationTab from "@/modules/settings/AuthenticationTab";
 import BrandingSettingsTab from "@/modules/settings/BrandingSettingsTab";
 import ClientSettingsTab from "@/modules/settings/ClientSettingsTab";
 import DangerZoneTab from "@/modules/settings/DangerZoneTab";
+import EmailSettingsTab from "@/modules/settings/EmailSettingsTab";
 import FlowLogsSettingsTab from "@/modules/settings/FlowLogsSettingsTab";
 import GroupsSettings from "@/modules/settings/GroupsSettings";
 import IdentityProvidersTab from "@/modules/settings/IdentityProvidersTab";
@@ -108,6 +110,10 @@ export default function NetBirdSettings() {
                 <MonitorSmartphoneIcon size={14} />
                 {t("settings.clients")}
               </VerticalTabs.Trigger>
+              <VerticalTabs.Trigger value="email">
+                <MailIcon size={14} />
+                邮件通知
+              </VerticalTabs.Trigger>
               <VerticalTabs.Trigger
                 value="flow-logs"
                 disabled={!flowLogsEnabled}
@@ -153,6 +159,7 @@ export default function NetBirdSettings() {
             {account && <GroupsSettings account={account} />}
             {account && <NetworkSettingsTab account={account} />}
             {account && <ClientSettingsTab account={account} />}
+            {account && <EmailSettingsTab />}
             {account &&
               (flowLogsEnabled ? (
                 <FlowLogsSettingsTab account={account} />
