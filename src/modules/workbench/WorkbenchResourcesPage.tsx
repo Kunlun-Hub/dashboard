@@ -2,6 +2,7 @@
 
 import Breadcrumbs from "@components/Breadcrumbs";
 import Button from "@components/Button";
+import Card from "@components/Card";
 import { Checkbox } from "@components/Checkbox";
 import {
   Dialog,
@@ -11,10 +12,44 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@components/Dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@components/DropdownMenu";
 import { Input } from "@components/Input";
+import { DataTable } from "@components/table/DataTable";
+import DataTableHeader from "@components/table/DataTableHeader";
 import DataTableRefreshButton from "@components/table/DataTableRefreshButton";
+import DataTableResetFilterButton from "@components/table/DataTableResetFilterButton";
+import {
+  CheckboxListPicker,
+  formatCheckboxChip,
+} from "@components/table/filters/CheckboxListPicker";
+import {
+  formatRadioChip,
+  RadioOption,
+  RadioPicker,
+} from "@components/table/filters/RadioPicker";
+import {
+  TableFilterChips,
+  TableFilterDef,
+  TableFiltersButton,
+} from "@components/table/TableFilters";
+import NoResults from "@components/ui/NoResults";
+import { ColumnDef, SortingState } from "@tanstack/react-table";
 import useFetchApi, { useApiCall } from "@utils/api";
-import { DownloadCloud, Globe2, ImagePlus, PencilLine, Plus, Trash2 } from "lucide-react";
+import {
+  ChevronDown,
+  DownloadCloud,
+  Globe2,
+  ImagePlus,
+  Layers3,
+  PencilLine,
+  Plus,
+  Trash2,
+} from "lucide-react";
 import Image from "next/image";
 import React, { useMemo, useState } from "react";
 import { useSWRConfig } from "swr";
@@ -22,7 +57,11 @@ import { useGroups } from "@/contexts/GroupsProvider";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import { useUsers } from "@/contexts/UsersProvider";
 import { GroupType } from "@/interfaces/Group";
-import { WorkbenchIconResult, WorkbenchResource } from "@/interfaces/Workbench";
+import {
+  WorkbenchCategory,
+  WorkbenchIconResult,
+  WorkbenchResource,
+} from "@/interfaces/Workbench";
 import {
   buildWorkbenchResourcePathSuffix,
   cleanIDList,
@@ -34,6 +73,7 @@ import {
 } from "./WorkbenchResourcesPage.helpers";
 
 const workbenchAdminPath = "/workbench/admin/resources";
+const workbenchCategoriesPath = "/workbench/admin/categories";
 const maxWorkbenchIconBytes = 1024 * 1024;
 
 export default function WorkbenchResourcesPage() {
@@ -42,7 +82,10 @@ export default function WorkbenchResourcesPage() {
   const canRead = permission.settings.read;
   const { data: resources, isLoading, isValidating } =
     useFetchApi<WorkbenchResource[]>(workbenchAdminPath, false, true, canRead);
+  const { data: categories, isLoading: isCategoriesLoading } =
+    useFetchApi<WorkbenchCategory[]>(workbenchCategoriesPath, false, true, canRead);
   const resourceRequest = useApiCall<WorkbenchResource>(workbenchAdminPath);
+  const categoryRequest = useApiCall<WorkbenchCategory>(workbenchCategoriesPath);
   const [editorOpen, setEditorOpen] = useState(false);
   const [editingResource, setEditingResource] = useState<
     WorkbenchResource | undefined
@@ -51,17 +94,40 @@ export default function WorkbenchResourcesPage() {
     WorkbenchResource | undefined
   >();
   const [deleting, setDeleting] = useState(false);
+  const [categoryDialogOpen, setCategoryDialogOpen] = useState(false);
+  const [editingCategory, setEditingCategory] = useState<
+    WorkbenchCategory | undefined
+  >();
+  const [quickSavingID, setQuickSavingID] = useState("");
+  const [quickError, setQuickError] = useState("");
+  const [sorting, setSorting] = useState<SortingState>([
+    { id: "sort", desc: false },
+  ]);
 
   const canCreate = canRead && permission.settings.create;
   const canUpdate = canRead && permission.settings.update;
   const canDelete = canRead && permission.settings.delete;
 
-  const sortedResources = useMemo(() => {
-    return [...(resources ?? [])].sort((a, b) => {
+  const workbenchCategories = useMemo(() => {
+    const seen = new Set<string>();
+    const result: WorkbenchCategory[] = [];
+    for (const category of categories ?? []) {
+      const name = textValue(category.name);
+      if (!name || seen.has(name)) continue;
+      seen.add(name);
+      result.push({ ...category, name });
+    }
+    for (const resource of resources ?? []) {
+      const name = textValue(resource.category);
+      if (!name || seen.has(name)) continue;
+      seen.add(name);
+      result.push({ id: `resource-category-${name}`, name, sort: result.length * 10 });
+    }
+    return result.sort((a, b) => {
       if ((a.sort ?? 0) !== (b.sort ?? 0)) return (a.sort ?? 0) - (b.sort ?? 0);
-      return textValue(a.name).localeCompare(textValue(b.name));
+      return a.name.localeCompare(b.name);
     });
-  }, [resources]);
+  }, [categories, resources]);
 
   const openCreate = () => {
     setEditingResource(undefined);
@@ -73,7 +139,25 @@ export default function WorkbenchResourcesPage() {
     setEditorOpen(true);
   };
 
-  const refresh = () => (canRead ? mutate(workbenchAdminPath).then() : Promise.resolve());
+  const openVisibilityEdit = (resource: WorkbenchResource) => {
+    setEditingResource({ ...resource, visibility: "restricted" });
+    setEditorOpen(true);
+  };
+
+  const handleEditorOpenChange = (open: boolean) => {
+    setEditorOpen(open);
+    if (!open) {
+      setEditingResource(undefined);
+    }
+  };
+
+  const refresh = async () => {
+    if (!canRead) return;
+    await Promise.all([
+      mutate(workbenchAdminPath),
+      mutate(workbenchCategoriesPath),
+    ]);
+  };
 
   const saveResource = async (resource: WorkbenchResource) => {
     const pathSuffix = buildWorkbenchResourcePathSuffix(resource.id);
@@ -90,6 +174,41 @@ export default function WorkbenchResourcesPage() {
     await mutate(workbenchAdminPath);
   };
 
+  const quickUpdateResource = async (
+    resource: WorkbenchResource,
+    patch: Partial<WorkbenchResource>,
+  ) => {
+    const pathSuffix = buildWorkbenchResourcePathSuffix(resource.id);
+    if (!canUpdate || !pathSuffix) return;
+    setQuickSavingID(resource.id ?? "");
+    setQuickError("");
+    try {
+      await saveResource({ ...resource, ...patch });
+    } catch (err) {
+      setQuickError(
+        err instanceof Error ? err.message : "更新工作台资源失败。",
+      );
+    } finally {
+      setQuickSavingID("");
+    }
+  };
+
+  const saveCategory = async (category: WorkbenchCategory) => {
+    const payload = {
+      ...category,
+      name: textValue(category.name),
+      sort: Number(category.sort || 0),
+    };
+    if (payload.id) {
+      await categoryRequest.put(payload, `/${encodeURIComponent(payload.id)}`);
+    } else {
+      await categoryRequest.post(payload);
+    }
+    setCategoryDialogOpen(false);
+    setEditingCategory(undefined);
+    await mutate(workbenchCategoriesPath);
+  };
+
   const deleteResource = async (resource: WorkbenchResource) => {
     const pathSuffix = buildWorkbenchResourcePathSuffix(resource.id);
     if (!pathSuffix || !canDelete) return;
@@ -103,138 +222,291 @@ export default function WorkbenchResourcesPage() {
     }
   };
 
+  const statusOptions = useMemo<RadioOption<boolean | undefined>[]>(
+    () => [
+      { value: undefined, label: "全部状态", dotClass: "bg-nb-gray-500" },
+      { value: true, label: "已启用", dotClass: "bg-green-500" },
+      { value: false, label: "已停用", dotClass: "bg-nb-gray-700" },
+    ],
+    [],
+  );
+
+  const visibilityOptions = useMemo<RadioOption<string | undefined>[]>(
+    () => [
+      { value: undefined, label: "全部范围" },
+      { value: "all", label: "全部用户" },
+      { value: "restricted", label: "指定范围" },
+    ],
+    [],
+  );
+
+  const categoryOptions = useMemo(
+    () =>
+      workbenchCategories.map((category) => ({
+        label: category.name,
+        value: category.name,
+      })),
+    [workbenchCategories],
+  );
+
+  const filterDefs = useMemo<TableFilterDef[]>(
+    () => [
+      {
+        id: "enabled",
+        label: "状态",
+        renderPicker: (p) => (
+          <RadioPicker
+            value={p.value as boolean | undefined}
+            onChange={p.onChange}
+            close={p.close}
+            options={statusOptions}
+          />
+        ),
+        formatChip: (v) =>
+          formatRadioChip(v as boolean | undefined, statusOptions),
+      },
+      {
+        id: "visibilityKind",
+        label: "可见范围",
+        renderPicker: (p) => (
+          <RadioPicker
+            value={p.value as string | undefined}
+            onChange={p.onChange}
+            close={p.close}
+            options={visibilityOptions}
+          />
+        ),
+        formatChip: (v) =>
+          formatRadioChip(v as string | undefined, visibilityOptions),
+      },
+      {
+        id: "categoryName",
+        label: "分类",
+        renderPicker: (p) => (
+          <CheckboxListPicker
+            value={p.value as string[] | undefined}
+            onChange={p.onChange}
+            close={p.close}
+            options={categoryOptions}
+          />
+        ),
+        formatChip: (v) =>
+          formatCheckboxChip(v as string[] | undefined, categoryOptions, "个分类"),
+      },
+    ],
+    [categoryOptions, statusOptions, visibilityOptions],
+  );
+
+  const columns: ColumnDef<WorkbenchResource>[] = [
+    {
+      id: "search",
+      accessorFn: (resource) =>
+        [
+          resource.name,
+          resource.url,
+          resource.category,
+          resource.description,
+          ...stringListValue(resource.tags),
+        ].join(" "),
+    },
+    {
+      id: "sort",
+      accessorKey: "sort",
+    },
+    {
+      id: "resource",
+      accessorFn: (resource) => textValue(resource.name),
+      header: ({ column }) => (
+        <DataTableHeader column={column}>资源</DataTableHeader>
+      ),
+      cell: ({ row }) => <WorkbenchResourceNameCell resource={row.original} />,
+    },
+    {
+      id: "categoryName",
+      accessorFn: (resource) => textValue(resource.category),
+      filterFn: "arrIncludesSomeExact",
+      header: ({ column }) => (
+        <DataTableHeader column={column}>分类 / 标签</DataTableHeader>
+      ),
+      cell: ({ row }) => <WorkbenchCategoryCell resource={row.original} />,
+    },
+    {
+      id: "enabled",
+      accessorFn: (resource) => resource.enabled !== false,
+      filterFn: "exactMatch",
+      header: ({ column }) => (
+        <DataTableHeader column={column}>状态</DataTableHeader>
+      ),
+      cell: ({ row }) => (
+        <WorkbenchStatusMenu
+          disabled={
+            !canUpdate ||
+            quickSavingID === row.original.id ||
+            !buildWorkbenchResourcePathSuffix(row.original.id)
+          }
+          resource={row.original}
+          onChange={(enabled) => quickUpdateResource(row.original, { enabled })}
+        />
+      ),
+    },
+    {
+      id: "visibilityKind",
+      accessorFn: (resource) =>
+        resource.visibility === "restricted" ? "restricted" : "all",
+      filterFn: "exactMatch",
+      header: ({ column }) => (
+        <DataTableHeader column={column}>可见范围</DataTableHeader>
+      ),
+      cell: ({ row }) => (
+        <WorkbenchVisibilityMenu
+          disabled={
+            !canUpdate ||
+            quickSavingID === row.original.id ||
+            !buildWorkbenchResourcePathSuffix(row.original.id)
+          }
+          resource={row.original}
+          onSetAll={() =>
+            quickUpdateResource(row.original, {
+              visibility: "all",
+              visibleGroups: [],
+              visibleUsers: [],
+            })
+          }
+          onEditRestricted={() => openVisibilityEdit(row.original)}
+        />
+      ),
+    },
+    {
+      id: "actions",
+      accessorKey: "id",
+      header: "",
+      cell: ({ row }) => (
+        <WorkbenchResourceActionCell
+          resource={row.original}
+          canUpdate={canUpdate}
+          canDelete={canDelete}
+          onEdit={openEdit}
+          onDelete={setDeletingResource}
+        />
+      ),
+    },
+  ];
+
   return (
     <div className={"p-default py-6"}>
       <Breadcrumbs>
         <Breadcrumbs.Item label={"工作台"} active />
       </Breadcrumbs>
 
-      <div className={"mt-6 flex max-w-6xl items-start justify-between gap-6"}>
+      <div className={"mt-6 flex items-start justify-between gap-6"}>
         <div>
           <h1>工作台资源</h1>
           <p className={"mt-2 max-w-2xl text-sm text-neutral-500 dark:text-nb-gray-400"}>
             管理新客户端工作台里的服务器资源和资源可见范围。个人资源由客户端用户自己维护。
           </p>
         </div>
-        <div className={"flex items-center gap-2"}>
-          <DataTableRefreshButton
-            onClick={refresh}
-            isDisabled={!canRead || isLoading || isValidating}
-          />
-          <Button
-            variant={"primary"}
-            onClick={openCreate}
-            disabled={!canRead || !canCreate}
-          >
-            <Plus size={16} />
-            新增资源
-          </Button>
-        </div>
       </div>
 
       {!canRead ? (
         <div
           className={
-            "mt-6 max-w-6xl rounded-lg border border-neutral-200 bg-white p-8 text-sm text-neutral-500 shadow-sm dark:border-nb-gray-800 dark:bg-nb-gray-900 dark:text-nb-gray-400"
+            "mt-6 rounded-lg border border-neutral-200 bg-white p-8 text-sm text-neutral-500 shadow-sm dark:border-nb-gray-800 dark:bg-nb-gray-900 dark:text-nb-gray-400"
           }
         >
           当前账号没有查看工作台资源的权限。
         </div>
       ) : (
-        <div
-          className={
-            "mt-6 max-w-6xl overflow-hidden rounded-lg border border-neutral-200 bg-white shadow-sm dark:border-nb-gray-800 dark:bg-nb-gray-900"
-          }
-        >
-          <div
-            className={
-              "grid grid-cols-[minmax(180px,1.4fr)_minmax(160px,1fr)_100px_160px_120px] border-b border-neutral-200 bg-neutral-50 px-4 py-3 text-xs font-medium uppercase tracking-wide text-neutral-500 dark:border-nb-gray-800 dark:bg-nb-gray-950 dark:text-nb-gray-400"
-            }
-          >
-            <div>资源</div>
-            <div>分类 / 标签</div>
-            <div>状态</div>
-            <div>可见范围</div>
-            <div className={"text-right"}>操作</div>
-          </div>
-          {isLoading ? (
-            <div className={"p-8 text-sm text-neutral-500"}>正在加载工作台资源。</div>
-          ) : sortedResources.length === 0 ? (
-            <div className={"p-8 text-sm text-neutral-500"}>
-              暂无服务器资源。新增后，新客户端会按可见范围展示。
+        <div className={"mt-6"}>
+          {quickError && (
+            <div className={"mb-3 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700 dark:border-red-900/40 dark:bg-red-950/20 dark:text-red-300"}>
+              {quickError}
             </div>
-          ) : (
-            sortedResources.map((resource) => (
-              <div
-                key={resource.id}
-                className={
-                  "grid grid-cols-[minmax(180px,1.4fr)_minmax(160px,1fr)_100px_160px_120px] items-center gap-3 border-b border-neutral-100 px-4 py-4 text-sm last:border-b-0 dark:border-nb-gray-800"
-                }
-              >
-                <div className={"flex min-w-0 items-center gap-3"}>
-                  <ResourceIcon resource={resource} />
-                  <div className={"min-w-0"}>
-                    <div className={"truncate font-medium text-neutral-900 dark:text-nb-gray-100"}>
-                      {resource.name || "未命名资源"}
-                    </div>
-                    <div className={"mt-1 truncate text-xs text-neutral-500 dark:text-nb-gray-400"}>
-                      {resource.url || "未配置 URL"}
-                    </div>
-                  </div>
-                </div>
-                <div className={"min-w-0"}>
-                  <div className={"truncate text-neutral-700 dark:text-nb-gray-300"}>
-                    {resource.category || "未分类"}
-                  </div>
-                  <div className={"mt-1 flex flex-wrap gap-1"}>
-                    {stringListValue(resource.tags).slice(0, 3).map((tag) => (
-                      <span
-                        key={tag}
-                        className={
-                          "rounded bg-neutral-100 px-2 py-0.5 text-xs text-neutral-500 dark:bg-nb-gray-800 dark:text-nb-gray-300"
-                        }
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <div>
-                  <span
-                    className={
-                      resource.enabled !== false
-                        ? "rounded bg-green-50 px-2 py-1 text-xs font-medium text-green-700 dark:bg-green-950/30 dark:text-green-300"
-                        : "rounded bg-neutral-100 px-2 py-1 text-xs font-medium text-neutral-500 dark:bg-nb-gray-800 dark:text-nb-gray-400"
-                    }
-                  >
-                    {resource.enabled !== false ? "启用" : "停用"}
-                  </span>
-                </div>
-                <div className={"text-sm text-neutral-600 dark:text-nb-gray-300"}>
-                  {formatVisibility(resource)}
-                </div>
-                <div className={"flex justify-end gap-2"}>
-                  <Button
-                    variant={"default-outline"}
-                    size={"xs"}
-                    onClick={() => openEdit(resource)}
-                    disabled={!canUpdate}
-                  >
-                    <PencilLine size={14} />
-                    编辑
-                  </Button>
-                  <Button
-                    variant={"danger-outline"}
-                    size={"xs"}
-                    onClick={() => setDeletingResource(resource)}
-                    disabled={!canDelete || !buildWorkbenchResourcePathSuffix(resource.id)}
-                  >
-                    <Trash2 size={14} />
-                  </Button>
-                </div>
-              </div>
-            ))
           )}
+
+          <DataTable
+            wrapperComponent={Card}
+            wrapperProps={{ className: "mt-6 pb-2 w-full" }}
+            sorting={sorting}
+            setSorting={setSorting}
+            minimal={true}
+            showSearchAndFilters={true}
+            inset={false}
+            tableClassName={"mt-0"}
+            text={"工作台资源"}
+            columns={columns}
+            keepStateInLocalStorage={false}
+            initialPageSize={25}
+            showResetFilterButton={false}
+            aboveTable={(table) => (
+              <TableFilterChips table={table} filters={filterDefs} />
+            )}
+            data={resources}
+            searchPlaceholder={"搜索名称、URL、分类或标签"}
+            isLoading={isLoading || isCategoriesLoading}
+            getStartedCard={
+              <NoResults
+                className={"py-8"}
+                title={"暂无工作台资源"}
+                description={"新增服务器资源后，新客户端会按可见范围展示。"}
+                icon={
+                  <Layers3
+                    size={20}
+                    className={"text-neutral-500 dark:text-nb-gray-400"}
+                  />
+                }
+              />
+            }
+            columnVisibility={{
+              search: false,
+              sort: false,
+            }}
+            paginationPaddingClassName={"px-0 pt-8"}
+            rightSide={() => (
+              <div className={"ml-auto mr-4 flex items-center gap-2"}>
+                <DataTableRefreshButton
+                  onClick={refresh}
+                  isDisabled={!canRead || isLoading || isValidating || isCategoriesLoading}
+                />
+                <Button
+                  variant={"secondary"}
+                  onClick={() => {
+                    setEditingCategory(undefined);
+                    setCategoryDialogOpen(true);
+                  }}
+                  disabled={!canRead || !canCreate}
+                >
+                  <Plus size={16} />
+                  新增分类
+                </Button>
+                <Button
+                  variant={"primary"}
+                  onClick={() => openCreate()}
+                  disabled={!canRead || !canCreate}
+                >
+                  <Plus size={16} />
+                  新增资源
+                </Button>
+              </div>
+            )}
+          >
+            {(table) => (
+              <>
+                <TableFiltersButton
+                  table={table}
+                  filters={filterDefs}
+                  disabled={!resources || resources.length === 0}
+                />
+                <DataTableResetFilterButton
+                  table={table}
+                  onClick={() => {
+                    table.setPageIndex(0);
+                    table.resetColumnFilters();
+                    table.resetGlobalFilter();
+                  }}
+                />
+              </>
+            )}
+          </DataTable>
         </div>
       )}
 
@@ -242,8 +514,19 @@ export default function WorkbenchResourcesPage() {
         open={editorOpen}
         canSave={buildWorkbenchResourcePathSuffix(editingResource?.id) ? canUpdate : canCreate}
         resource={editingResource}
-        onOpenChange={setEditorOpen}
+        categories={workbenchCategories}
+        onOpenChange={handleEditorOpenChange}
         onSave={saveResource}
+      />
+      <WorkbenchCategoryDialog
+        open={categoryDialogOpen}
+        category={editingCategory}
+        canSave={editingCategory?.id ? canUpdate : canCreate}
+        onCancel={() => {
+          setCategoryDialogOpen(false);
+          setEditingCategory(undefined);
+        }}
+        onSave={saveCategory}
       />
       <DeleteWorkbenchResourceDialog
         deleting={deleting}
@@ -297,16 +580,275 @@ function DeleteWorkbenchResourceDialog({
   );
 }
 
+function WorkbenchResourceNameCell({ resource }: { resource: WorkbenchResource }) {
+  return (
+    <div className={"flex min-w-0 items-center gap-3"}>
+      <ResourceIcon resource={resource} />
+      <div className={"min-w-0"}>
+        <div className={"truncate font-medium text-neutral-900 dark:text-nb-gray-100"}>
+          {resource.name || "未命名资源"}
+        </div>
+        <div className={"mt-1 truncate text-xs text-neutral-500 dark:text-nb-gray-400"}>
+          {resource.url || "未配置 URL"}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function WorkbenchCategoryCell({ resource }: { resource: WorkbenchResource }) {
+  return (
+    <div className={"min-w-0"}>
+      <div className={"truncate text-neutral-700 dark:text-nb-gray-300"}>
+        {resource.category || "未分类"}
+      </div>
+      <div className={"mt-1 flex flex-wrap gap-1"}>
+        {stringListValue(resource.tags).slice(0, 3).map((tag) => (
+          <span
+            key={tag}
+            className={
+              "rounded bg-neutral-100 px-2 py-0.5 text-xs text-neutral-500 dark:bg-nb-gray-800 dark:text-nb-gray-300"
+            }
+          >
+            {tag}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function WorkbenchResourceActionCell({
+  resource,
+  canUpdate,
+  canDelete,
+  onEdit,
+  onDelete,
+}: {
+  resource: WorkbenchResource;
+  canUpdate: boolean;
+  canDelete: boolean;
+  onEdit: (resource: WorkbenchResource) => void;
+  onDelete: (resource: WorkbenchResource) => void;
+}) {
+  return (
+    <div className={"flex justify-end gap-2"}>
+      <Button
+        variant={"default-outline"}
+        size={"xs"}
+        onClick={() => onEdit(resource)}
+        disabled={!canUpdate}
+      >
+        <PencilLine size={14} />
+        编辑
+      </Button>
+      <Button
+        variant={"danger-outline"}
+        size={"xs"}
+        onClick={() => onDelete(resource)}
+        disabled={!canDelete || !buildWorkbenchResourcePathSuffix(resource.id)}
+      >
+        <Trash2 size={14} />
+      </Button>
+    </div>
+  );
+}
+
+function WorkbenchStatusMenu({
+  disabled,
+  resource,
+  onChange,
+}: {
+  disabled: boolean;
+  resource: WorkbenchResource;
+  onChange: (enabled: boolean) => void;
+}) {
+  const enabled = resource.enabled !== false;
+  return (
+    <DropdownMenu modal={false}>
+      <DropdownMenuTrigger asChild disabled={disabled}>
+        <Button
+          variant={"default-outline"}
+          size={"xs"}
+          disabled={disabled}
+          className={
+            enabled
+              ? "text-green-700 hover:text-green-800 dark:text-green-300"
+              : "text-neutral-500 dark:text-nb-gray-400"
+          }
+        >
+          {enabled ? "启用" : "停用"}
+          <ChevronDown size={13} />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className={"w-32"} align={"start"}>
+        <DropdownMenuItem
+          disabled={enabled}
+          onClick={() => onChange(true)}
+        >
+          启用
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          disabled={!enabled}
+          onClick={() => onChange(false)}
+        >
+          停用
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+function WorkbenchVisibilityMenu({
+  disabled,
+  resource,
+  onSetAll,
+  onEditRestricted,
+}: {
+  disabled: boolean;
+  resource: WorkbenchResource;
+  onSetAll: () => void;
+  onEditRestricted: () => void;
+}) {
+  const restricted = resource.visibility === "restricted";
+  return (
+    <DropdownMenu modal={false}>
+      <DropdownMenuTrigger asChild disabled={disabled}>
+        <Button
+          variant={"default-outline"}
+          size={"xs"}
+          disabled={disabled}
+          className={"max-w-[170px] justify-start"}
+        >
+          <span className={"truncate"}>{formatVisibility(resource)}</span>
+          <ChevronDown size={13} />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className={"w-44"} align={"start"}>
+        <DropdownMenuItem disabled={!restricted} onClick={onSetAll}>
+          全部用户可见
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={onEditRestricted}>
+          指定范围...
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+function WorkbenchCategoryDialog({
+  open,
+  category,
+  canSave,
+  onCancel,
+  onSave,
+}: {
+  open: boolean;
+  category?: WorkbenchCategory;
+  canSave: boolean;
+  onCancel: () => void;
+  onSave: (category: WorkbenchCategory) => Promise<void>;
+}) {
+  const isEditing = !!category?.id;
+  const [draft, setDraft] = useState<WorkbenchCategory>(() =>
+    createCategoryDraft(category),
+  );
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+
+  React.useEffect(() => {
+    setDraft(createCategoryDraft(category));
+    setError("");
+  }, [category, open]);
+
+  const submit = async () => {
+    const next = {
+      ...draft,
+      name: textValue(draft.name),
+      sort: Number(draft.sort || 0),
+    };
+    if (!next.name) {
+      setError("分类名称必填。");
+      return;
+    }
+    setSaving(true);
+    setError("");
+    try {
+      await onSave(next);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "保存工作台分类失败。");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={(nextOpen) => !nextOpen && onCancel()}>
+      <DialogContent className={"max-w-md"}>
+        <DialogHeader>
+          <DialogTitle>{isEditing ? "编辑工作台分类" : "新增工作台分类"}</DialogTitle>
+          <DialogDescription>
+            分类保存后会出现在新增资源和资源筛选里。
+          </DialogDescription>
+        </DialogHeader>
+        <div className={"grid gap-4"}>
+          <Field label={"分类名称"}>
+            <Input
+              value={draft.name}
+              placeholder={"例如：内部系统"}
+              onChange={(event) =>
+                setDraft((current) => ({ ...current, name: event.target.value }))
+              }
+            />
+          </Field>
+          <Field label={"排序"}>
+            <Input
+              type={"number"}
+              value={draft.sort}
+              onChange={(event) =>
+                setDraft((current) => ({
+                  ...current,
+                  sort: Number(event.target.value || 0),
+                }))
+              }
+            />
+          </Field>
+        </div>
+        {error && <div className={"text-sm text-red-500"}>{error}</div>}
+        {!canSave && (
+          <div className={"text-sm text-neutral-500 dark:text-nb-gray-400"}>
+            当前账号没有保存工作台分类的权限。
+          </div>
+        )}
+        <DialogFooter>
+          <Button variant={"default"} onClick={onCancel} disabled={saving}>
+            取消
+          </Button>
+          <Button
+            variant={"primary"}
+            onClick={submit}
+            disabled={saving || !canSave}
+          >
+            保存分类
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 function WorkbenchResourceDialog({
   open,
   canSave,
   resource,
+  categories,
   onOpenChange,
   onSave,
 }: {
   open: boolean;
   canSave: boolean;
   resource?: WorkbenchResource;
+  categories: WorkbenchCategory[];
   onOpenChange: (open: boolean) => void;
   onSave: (resource: WorkbenchResource) => void;
 }) {
@@ -466,11 +1008,27 @@ function WorkbenchResourceDialog({
             />
           </Field>
           <Field label={"分类"}>
-            <Input
-              value={draft.category}
-              placeholder={"常用应用"}
-              onChange={(event) => update("category", event.target.value)}
-            />
+            <div className={"grid gap-2"}>
+              <select
+                value={categories.some((category) => category.name === draft.category) ? draft.category : ""}
+                onChange={(event) => update("category", event.target.value)}
+                className={
+                  "h-[42px] w-full rounded-md border border-neutral-200 bg-white px-3 text-sm text-neutral-800 outline-none focus:border-netbird-300 focus:ring-2 focus:ring-netbird-400/30 dark:border-nb-gray-800 dark:bg-nb-gray-920 dark:text-nb-gray-100"
+                }
+              >
+                <option value={""}>选择分类</option>
+                {categories.map((category) => (
+                  <option key={category.id ?? category.name} value={category.name}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+              <Input
+                value={draft.category}
+                placeholder={"也可以手动输入分类"}
+                onChange={(event) => update("category", event.target.value)}
+              />
+            </div>
           </Field>
           <Field label={"URL"}>
             <Input
@@ -783,6 +1341,14 @@ function createDraft(resource?: WorkbenchResource): WorkbenchResource {
     visibleGroups: cleanIDList(resource?.visibleGroups),
     visibleUsers: cleanIDList(resource?.visibleUsers),
     metadata: resource?.metadata ?? {},
+  };
+}
+
+function createCategoryDraft(category?: WorkbenchCategory): WorkbenchCategory {
+  return {
+    id: category?.id,
+    name: category?.name ?? "",
+    sort: category?.sort ?? 0,
   };
 }
 

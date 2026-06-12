@@ -26,3 +26,12 @@ export interface WorkbenchIconResult {
   iconUrl: string;
   iconMode: WorkbenchIconMode | string;
 }
+
+export interface WorkbenchCategory {
+  id?: string;
+  name: string;
+  sort: number;
+  createdBy?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
