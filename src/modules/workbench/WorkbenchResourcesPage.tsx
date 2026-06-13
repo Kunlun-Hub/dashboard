@@ -1008,27 +1008,20 @@ function WorkbenchResourceDialog({
             />
           </Field>
           <Field label={"分类"}>
-            <div className={"grid gap-2"}>
-              <select
-                value={categories.some((category) => category.name === draft.category) ? draft.category : ""}
-                onChange={(event) => update("category", event.target.value)}
-                className={
-                  "h-[42px] w-full rounded-md border border-neutral-200 bg-white px-3 text-sm text-neutral-800 outline-none focus:border-netbird-300 focus:ring-2 focus:ring-netbird-400/30 dark:border-nb-gray-800 dark:bg-nb-gray-920 dark:text-nb-gray-100"
-                }
-              >
-                <option value={""}>选择分类</option>
-                {categories.map((category) => (
-                  <option key={category.id ?? category.name} value={category.name}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
-              <Input
-                value={draft.category}
-                placeholder={"也可以手动输入分类"}
-                onChange={(event) => update("category", event.target.value)}
-              />
-            </div>
+            <select
+              value={categories.some((category) => category.name === draft.category) ? draft.category : ""}
+              onChange={(event) => update("category", event.target.value)}
+              className={
+                "h-[42px] w-full rounded-md border border-neutral-200 bg-white px-3 text-sm text-neutral-800 outline-none focus:border-netbird-300 focus:ring-2 focus:ring-netbird-400/30 dark:border-nb-gray-800 dark:bg-nb-gray-920 dark:text-nb-gray-100"
+              }
+            >
+              <option value={""}>选择分类</option>
+              {categories.map((category) => (
+                <option key={category.id ?? category.name} value={category.name}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
           </Field>
           <Field label={"URL"}>
             <Input
@@ -1146,21 +1139,26 @@ function WorkbenchResourceDialog({
           )}
         </div>
 
-        <div className={"flex flex-wrap gap-5"}>
-          <label className={"flex items-center gap-3 text-sm text-neutral-600 dark:text-nb-gray-300"}>
-            <Checkbox
-              checked={draft.enabled}
-              onCheckedChange={(checked) => update("enabled", checked === true)}
-            />
-            启用
-          </label>
-          <label className={"flex items-center gap-3 text-sm text-neutral-600 dark:text-nb-gray-300"}>
-            <Checkbox
-              checked={draft.favorite}
-              onCheckedChange={(checked) => update("favorite", checked === true)}
-            />
-            常用资源
-          </label>
+        <div className={"grid gap-3 rounded-md border border-neutral-200 p-4 dark:border-nb-gray-800"}>
+          <div className={"text-sm font-medium text-neutral-900 dark:text-nb-gray-100"}>
+            显示设置
+          </div>
+          <div className={"flex flex-wrap gap-5"}>
+            <label className={"flex items-center gap-3 text-sm text-neutral-600 dark:text-nb-gray-300"}>
+              <Checkbox
+                checked={draft.enabled}
+                onCheckedChange={(checked) => update("enabled", checked === true)}
+              />
+              启用资源
+            </label>
+            <label className={"flex items-center gap-3 text-sm text-neutral-600 dark:text-nb-gray-300"}>
+              <Checkbox
+                checked={draft.favorite}
+                onCheckedChange={(checked) => update("favorite", checked === true)}
+              />
+              客户端优先显示
+            </label>
+          </div>
         </div>
 
         {error && <div className={"text-sm text-red-500"}>{error}</div>}
@@ -1326,7 +1324,7 @@ function createDraft(resource?: WorkbenchResource): WorkbenchResource {
   return {
     id: resource?.id,
     name: resource?.name ?? "",
-    category: resource?.category ?? "常用应用",
+    category: resource?.category ?? "",
     description: resource?.description ?? "",
     iconUrl: resource?.iconUrl ?? "",
     iconMode: resource?.iconMode ?? "letter",
