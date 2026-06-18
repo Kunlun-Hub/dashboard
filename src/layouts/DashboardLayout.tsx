@@ -16,6 +16,7 @@ import ApplicationProvider, {
 import CountryProvider from "@/contexts/CountryProvider";
 import GroupsProvider from "@/contexts/GroupsProvider";
 import { usePermissions } from "@/contexts/PermissionsProvider";
+import { SaaSProvider } from "@/contexts/SaaSProvider";
 import UsersProvider from "@/contexts/UsersProvider";
 import Navigation from "@/layouts/Navigation";
 import AccountBrandingTitle from "@/modules/account/AccountBrandingTitle";
@@ -33,8 +34,10 @@ export default function DashboardLayout({
       <UsersProvider>
         <GroupsProvider>
           <CountryProvider>
-            {!isNetBirdHosted() && <OnboardingProvider />}
-            <DashboardPageContent>{children}</DashboardPageContent>
+            <SaaSProvider>
+              {!isNetBirdHosted() && <OnboardingProvider />}
+              <DashboardPageContent>{children}</DashboardPageContent>
+            </SaaSProvider>
           </CountryProvider>
         </GroupsProvider>
       </UsersProvider>

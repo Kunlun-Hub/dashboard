@@ -8,6 +8,7 @@ import { DeviceDistributionMap } from "@/modules/overview/DeviceDistributionMap"
 import { DeviceTypeDistribution } from "@/modules/overview/DeviceTypeDistribution";
 import { RefreshContext } from "@/modules/overview/OverviewRefreshContext";
 import { RelayTrafficStats } from "@/modules/overview/RelayTrafficStats";
+import { SaaSUsageSummary } from "@/modules/overview/SaaSUsageSummary";
 import React, { useCallback, useState } from "react";
 import {
   Select,
@@ -87,6 +88,9 @@ export default function OverviewPage() {
         </div>
 
         <div className="grid grid-cols-1 gap-4 px-4 pb-6 lg:grid-cols-2">
+          <div className="lg:col-span-2">
+            <SaaSUsageSummary />
+          </div>
           <DeviceDistributionMap />
           <DeviceTypeDistribution />
           <RelayTrafficStats />

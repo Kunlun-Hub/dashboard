@@ -17,6 +17,7 @@ import SidebarItem from "@/components/SidebarItem";
 import { NavigationVersionInfo } from "@/components/VersionInfo";
 import { useApplicationContext } from "@/contexts/ApplicationProvider";
 import { usePermissions } from "@/contexts/PermissionsProvider";
+import { useSaaS } from "@/contexts/SaaSProvider";
 import { useI18n } from "@/i18n/I18nProvider";
 import {
   pendingPeerApprovalsPath,
@@ -37,6 +38,7 @@ export default function Navigation({
   const { isNavigationCollapsed } = useApplicationContext();
   const { permission, isRestricted } = usePermissions();
   const { isFeatureEnabled } = useAccountEntitlements();
+  const { isMenuVisible } = useSaaS();
   const { t } = useI18n();
 
   const dnsEnabled = isFeatureEnabled("dns");
@@ -93,7 +95,7 @@ export default function Navigation({
                   label={t("nav.peers")}
                   href={"/peers"}
                   collapsible
-                  visible={!isRestricted}
+                  visible={!isRestricted && isMenuVisible("peers")}
                 >
                   <SidebarItem
                     label={t("nav.userDevices")}
@@ -125,7 +127,7 @@ export default function Navigation({
                   icon={<AccessControlIcon />}
                   label={t("nav.accessControl")}
                   collapsible
-                  visible={permission.policies.read}
+                  visible={permission.policies.read && isMenuVisible("policies")}
                 >
                   <SidebarItem
                     label={t("nav.policies")}
@@ -150,14 +152,14 @@ export default function Navigation({
                   />
                 </SidebarItem>
 
-                <NetworkNavigation />
+                {isMenuVisible("networks") && <NetworkNavigation />}
 
                 <SidebarItem
                   icon={<Grid3X3Icon size={16} />}
                   label={"工作台"}
                   href={"/workbench"}
                   exactPathMatch={true}
-                  visible={permission.settings.read}
+                  visible={permission.settings.read && isMenuVisible("workbench")}
                 />
 
                 <SidebarItem
@@ -165,7 +167,7 @@ export default function Navigation({
                   label={t("nav.relays")}
                   href={"/relays"}
                   exactPathMatch={false}
-                  visible={permission?.settings?.read}
+                  visible={permission?.settings?.read && isMenuVisible("relays")}
                 />
 
                 <SidebarItem
@@ -185,7 +187,7 @@ export default function Navigation({
                   href={"/reverse-proxy"}
                   collapsible
                   exactPathMatch={false}
-                  visible={permission?.services?.read}
+                  visible={permission?.services?.read && isMenuVisible("reverse_proxy")}
                 >
                   <SidebarItem
                     label={t("nav.services")}
@@ -224,6 +226,7 @@ export default function Navigation({
                   exactPathMatch={true}
                   visible={
                     dnsEnabled &&
+                    isMenuVisible("dns") &&
                     (permission.dns.read || permission.nameservers.read)
                   }
                 >
@@ -250,7 +253,7 @@ export default function Navigation({
                   icon={<TeamIcon />}
                   label={t("nav.team")}
                   collapsible
-                  visible={permission.users.read}
+                  visible={permission.users.read && isMenuVisible("team")}
                 >
                   <SidebarItem
                     label={t("nav.users")}
@@ -272,7 +275,7 @@ export default function Navigation({
                     visible={permission.users.read}
                   />
                 </SidebarItem>
-                <ActivityNavigationItem />
+                {isMenuVisible("activity") && <ActivityNavigationItem />}
               </SidebarItemGroup>
 
               <SidebarItemGroup>
@@ -281,7 +284,7 @@ export default function Navigation({
                   label={t("nav.settings")}
                   href={"/settings"}
                   exactPathMatch={true}
-                  visible={permission.settings.read}
+                  visible={permission.settings.read && isMenuVisible("settings")}
                 />
               </SidebarItemGroup>
             </div>
