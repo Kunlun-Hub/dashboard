@@ -143,7 +143,7 @@ type FormProps = {
   gaId?: string;
   // portalId overrides config.hubspotPortalId for callers that target a fixed
   // HubSpot portal regardless of the deployment's env (e.g. the self-hosted
-  // Agent Network signup, which always reports to NetBird's portal).
+  // Agent Network signup, which always reports to Cloink's portal).
   portalId?: string;
 };
 

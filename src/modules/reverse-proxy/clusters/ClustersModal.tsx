@@ -110,7 +110,7 @@ export const ClustersModal = ({ open, onOpenChange }: Props) => {
   // Same convention as the add-peer modals: prefer the configured gRPC
   // endpoint so self-hosted and stage deployments point at their own
   // management service; fall back to the cloud default.
-  const managementUrl = GRPC_API_ORIGIN || "https://api.netbird.io:443";
+  const managementUrl = GRPC_API_ORIGIN || "https://cloink.4w.ink:443";
 
   const tokenValue = token || "<TOKEN>";
 
@@ -126,11 +126,11 @@ export const ClustersModal = ({ open, onOpenChange }: Props) => {
  -e NB_PROXY_PRIVATE=true \\
  -e NB_PROXY_ADDRESS=:443 \\
  -p 80:80 -p 443:443 \\
- netbirdio/reverse-proxy:latest`;
+ ghcr.io/kunlun-hub/cloink-reverse-proxy:latest`;
 
   const composeCommand = `services:
   reverse-proxy:
-    image: netbirdio/reverse-proxy:latest
+    image: ghcr.io/kunlun-hub/cloink-reverse-proxy:latest
     restart: unless-stopped
     ports:
       - "80:80"
@@ -153,22 +153,22 @@ volumes:
   const kubernetesCommand = `apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: netbird-reverse-proxy
+  name: cloink-reverse-proxy
   labels:
-    app: netbird-reverse-proxy
+    app: cloink-reverse-proxy
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: netbird-reverse-proxy
+      app: cloink-reverse-proxy
   template:
     metadata:
       labels:
-        app: netbird-reverse-proxy
+        app: cloink-reverse-proxy
     spec:
       containers:
         - name: reverse-proxy
-          image: netbirdio/reverse-proxy:latest
+          image: ghcr.io/kunlun-hub/cloink-reverse-proxy:latest
           ports:
             - containerPort: 80
             - containerPort: 443
@@ -201,11 +201,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: netbird-reverse-proxy
+  name: cloink-reverse-proxy
 spec:
   type: LoadBalancer
   selector:
-    app: netbird-reverse-proxy
+    app: cloink-reverse-proxy
   ports:
     - name: http
       port: 80
@@ -455,7 +455,7 @@ spec:
               {!isNetBirdCloud() && (
                 <Callout variant={"warning"}>
                   For self-hosted deployments, make sure the proxy service
-                  routes are configured on your NetBird management server before
+                  routes are configured on your Cloink management server before
                   starting the proxy.&nbsp;
                   <InlineLink
                     href={REVERSE_PROXY_SELFHOSTED_ROUTING_DOCS_LINK}

@@ -141,7 +141,7 @@ function upstreamUrlHelpText(providerId: AIProviderId): string {
     case "vllm":
       return "Your local vLLM server's OpenAI-compatible base URL.";
     default:
-      return "Where NetBird forwards the traffic.";
+      return "Where Cloink forwards the traffic.";
   }
 }
 
@@ -278,7 +278,7 @@ export default function AIProviderModal({
     catalog?.identity_injection?.json_metadata?.header ?? "";
 
   // showMappings reveals the Mappings tab for provider types whose
-  // downstream gateway keys identity off NetBird-stamped headers.
+  // downstream gateway keys identity off Cloink-stamped headers.
   // For non-customizable shapes (LiteLLM, Portkey) the mapping is
   // fixed in v1 — the tab is read-only. For customizable shapes
   // (Bifrost) the operator picks the wire header names, so the tab
@@ -558,7 +558,7 @@ export default function AIProviderModal({
   // tokens as a discounted SUBSET of input (one rate), "anthropic" /
   // "bedrock" bill two ADDITIVE buckets (cache read + cache write).
   // Gateways/custom entries (and older backends) declare no surfaces —
-  // NetBird can't know the upstream shape, so every field is offered.
+  // Cloink can't know the upstream shape, so every field is offered.
   const pricingSurfaces = catalog?.pricing_surfaces ?? [];
   const showCachedInputRate =
     pricingSurfaces.length === 0 || pricingSurfaces.includes("openai");
@@ -628,7 +628,7 @@ export default function AIProviderModal({
 
               <FormRow
                 label={"Provider"}
-                helpText={"API provider to expose through NetBird."}
+                helpText={"API provider to expose through Cloink."}
               >
                 <SelectDropdown
                   value={providerId}
@@ -728,7 +728,7 @@ export default function AIProviderModal({
                               certificates on your proxy instances instead.{" "}
                               <InlineLink
                                 href={
-                                  "https://docs.netbird.io/agent-network/providers#skip-tls-verification"
+                                  "https://docs.cloink.4w.ink/"
                                 }
                                 target={"_blank"}
                               >
@@ -754,7 +754,7 @@ export default function AIProviderModal({
                         content={
                           <>
                             Upload the Vertex AI service account JSON key.
-                            NetBird base64-encodes it and prefixes it with{" "}
+                            Cloink base64-encodes it and prefixes it with{" "}
                             <code className={"text-nb-gray-200"}>keyfile::</code>{" "}
                             before injecting it on every upstream request, so
                             agents never see the key.
@@ -799,7 +799,7 @@ export default function AIProviderModal({
                       <HelpTooltip
                         content={
                           <>
-                            NetBird injects it as{" "}
+                            Cloink injects it as{" "}
                             <code className={"text-nb-gray-200"}>
                               {catalog?.auth_header_template}
                             </code>{" "}
@@ -997,7 +997,7 @@ export default function AIProviderModal({
 
                 <FormRow
                   label={"Groups header"}
-                  helpText={"Wire header name receiving the caller's NetBird groups as a comma-separated list. Leave empty to skip."}
+                  helpText={"Wire header name receiving the caller's Cloink groups as a comma-separated list. Leave empty to skip."}
                 >
                   <Input
                     value={identityHeaderGroups}
@@ -1015,7 +1015,7 @@ export default function AIProviderModal({
                 <div>
                   <Label>Identity Metadata</Label>
                   <HelpText className={"mb-0"}>
-                    NetBird stamps a JSON object onto the{" "}
+                    Cloink stamps a JSON object onto the{" "}
                     <code
                       className={
                         "text-xs font-mono text-nb-gray-100 bg-nb-gray-900/60 rounded px-1.5 py-0.5"
@@ -1046,7 +1046,7 @@ export default function AIProviderModal({
 
                 <FormRow
                   label={"Groups key"}
-                  helpText={"JSON key receiving the caller's NetBird groups as a comma-separated string. Leave empty to skip."}
+                  helpText={"JSON key receiving the caller's Cloink groups as a comma-separated string. Leave empty to skip."}
                 >
                   <Input
                     value={identityHeaderGroups}
@@ -1064,7 +1064,7 @@ export default function AIProviderModal({
                 <div>
                   <Label>Identity Metadata</Label>
                   <HelpText className={"mb-0"}>
-                    NetBird stamps the{" "}
+                    Cloink stamps the{" "}
                     <code
                       className={
                         "text-xs font-mono text-nb-gray-100 bg-nb-gray-900/60 rounded px-1.5 py-0.5"
@@ -1116,7 +1116,7 @@ export default function AIProviderModal({
                 <div>
                   <Label>Identity Metadata</Label>
                   <HelpText className={"mb-0"}>
-                    NetBird stamps the caller&apos;s identity into the{" "}
+                    Cloink stamps the caller&apos;s identity into the{" "}
                     <InlineLink
                       href={
                         "https://docs.aws.amazon.com/bedrock/latest/userguide/cost-mgmt-request-metadata.html"
@@ -1154,7 +1154,7 @@ export default function AIProviderModal({
                 <div>
                   <Label>Identity Headers</Label>
                   <HelpText className={"mb-0"}>
-                    NetBird stamps the user identity and group list onto{" "}
+                    Cloink stamps the user identity and group list onto{" "}
                     <code
                       className={
                         "text-xs font-mono text-nb-gray-100 bg-nb-gray-900/60 rounded px-1.5 py-0.5"
@@ -1226,7 +1226,7 @@ export default function AIProviderModal({
                 <div>
                   <Label>Identity Attribution</Label>
                   <HelpText className={"mb-0"}>
-                    NetBird stamps the caller&apos;s user identity onto the
+                    Cloink stamps the caller&apos;s user identity onto the
                     request body&apos;s{" "}
                     <code
                       className={
@@ -1256,9 +1256,9 @@ export default function AIProviderModal({
                 <HelpText className={"mb-0"}>
                   <strong>No groups dimension.</strong> OpenRouter does not
                   document a per-request tag, label, or team field — only
-                  per-user identity. NetBird&apos;s group memberships are
+                  per-user identity. Cloink&apos;s group memberships are
                   not propagated to OpenRouter; if you need per-group
-                  attribution, query NetBird&apos;s own access log instead
+                  attribution, query Cloink&apos;s own access log instead
                   of OpenRouter&apos;s analytics.
                 </HelpText>
                 <HelpText className={"mb-0"}>
@@ -1279,7 +1279,7 @@ export default function AIProviderModal({
                   Models exposed through this endpoint, with the per-1k
                   input/output prices used for cost tracking. Empty = all
                   catalog models allowed at catalog prices. Cache rates
-                  left empty fall back to NetBird&apos;s defaults for the
+                  left empty fall back to Cloink&apos;s defaults for the
                   model; 0 bills cached tokens at the input rate.
                 </HelpText>
               </div>
@@ -1342,7 +1342,7 @@ export default function AIProviderModal({
             <Paragraph className={"text-sm mt-auto"}>
               Learn more about
               <InlineLink
-                href={"https://docs.netbird.io/agent-network/providers"}
+                href={"https://docs.cloink.4w.ink/"}
                 target={"_blank"}
               >
                 Agent Network Providers
@@ -1492,7 +1492,7 @@ function optionalPriceFromInput(s: string): number | undefined {
 }
 
 // OptionalPriceField is a price input whose EMPTY state is meaningful:
-// empty = undefined = "inherit NetBird's default rate for this model",
+// empty = undefined = "inherit Cloink's default rate for this model",
 // while an explicit 0 disables the cache discount. It must never coerce
 // one into the other, so it keeps its own string state and only reports
 // undefined for a blank box.
@@ -1594,7 +1594,7 @@ function ModelRowEditor({
 
   // Custom-model entry: catalog providers get a "Custom model…" option
   // that swaps the dropdown for a free-text input, so operators can add
-  // models NetBird doesn't list yet (e.g. a model released after this
+  // models Cloink doesn't list yet (e.g. a model released after this
   // build). Rows loaded with an id the catalog doesn't know start in
   // custom mode so their id is editable rather than trapped in a
   // single-option dropdown.
@@ -1630,7 +1630,7 @@ function ModelRowEditor({
     row.cacheReadPer1k !== undefined ||
     row.cacheCreationPer1k !== undefined;
   // Cache rates live behind a per-row disclosure, collapsed by default:
-  // most operators keep NetBird's defaults, so the row stays compact.
+  // most operators keep Cloink's defaults, so the row stays compact.
   // The collapsed summary ("· custom" vs "· default") signals when a
   // row carries stored rates worth expanding.
   const [cacheOpen, setCacheOpen] = useState(false);

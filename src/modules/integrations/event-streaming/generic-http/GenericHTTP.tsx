@@ -74,8 +74,8 @@ export default function GenericHTTP() {
         name="Generic HTTP"
         description="Provide your custom HTTP endpoint to stream audit & traffic events."
         url={{
-          title: "docs.netbird.io",
-          href: "https://docs.netbird.io/how-to/stream-activity-to-generic-http",
+          title: "docs.cloink.4w.ink",
+          href: "https://docs.cloink.4w.ink/",
         }}
         image={integrationImage}
         data={genericHTTPIntegration}

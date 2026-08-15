@@ -82,7 +82,7 @@ export const MSPUnlinkModal = ({ open, setOpen, tenant }: Props) => {
             <div className={"w-full"}>
               <Paragraph className={"text-sm mt-auto"}>
                 Learn more about
-                <InlineLink href={"https://docs.netbird.io/"} target={"_blank"}>
+                <InlineLink href={"https://docs.cloink.4w.ink/"} target={"_blank"}>
                   Unlinking Tenants
                   <ExternalLinkIcon size={12} />
                 </InlineLink>

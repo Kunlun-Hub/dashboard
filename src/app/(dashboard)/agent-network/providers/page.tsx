@@ -44,7 +44,7 @@ function EndpointBadge({ endpoint }: { endpoint: string }) {
                 LLM SDK clients (e.g. OpenAI&apos;s
                 <code className={"font-mono"}> base_url</code>, Anthropic&apos;s{" "}
                 <code className={"font-mono"}>baseURL</code>, or any HTTP
-                client). Calls hit NetBird first, get authorised by your
+                client). Calls hit Cloink first, get authorised by your
                 policies, and only then reach the upstream provider.
               </>
             }
@@ -125,7 +125,7 @@ function EndpointHeader() {
                     <code className={"font-mono"}> base_url</code>,
                     Anthropic&apos;s{" "}
                     <code className={"font-mono"}>baseURL</code>, or any HTTP
-                    client). Calls hit NetBird first, get authorised by your
+                    client). Calls hit Cloink first, get authorised by your
                     policies, and only then reach the upstream provider.
                   </>
                 }
@@ -191,9 +191,9 @@ export default function AgentNetworkProvidersPage() {
             <Paragraph>
               Connect AI providers and gateways like LiteLLM, OpenAI, and
               Anthropic through one keyless endpoint, accessible only via
-              NetBird’s tunnel.
+              Cloink’s tunnel.
               <InlineLink
-                href={"https://docs.netbird.io/agent-network/providers"}
+                href={"https://docs.cloink.4w.ink/"}
                 target={"_blank"}
               >
                 Learn more

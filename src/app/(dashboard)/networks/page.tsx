@@ -33,10 +33,10 @@ export default function Networks() {
         </Breadcrumbs>
         <h1 ref={headingRef}>Networks</h1>
         <Paragraph>
-          Access internal resources in LANs and VPCs without installing NetBird
+          Access internal resources in LANs and VPCs without installing Cloink
           on every machine.{" "}
           <InlineLink
-            href={"https://docs.netbird.io/how-to/networks"}
+            href={"https://docs.cloink.4w.ink/"}
             target={"_blank"}
           >
             Learn more

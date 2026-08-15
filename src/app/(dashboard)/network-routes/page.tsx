@@ -44,12 +44,10 @@ export default function NetworkRoutes() {
             </Breadcrumbs>
             <h1 ref={headingRef}>Routes</h1>
             <Paragraph>
-              Access other networks like LANs and VPCs without installing
-              NetBird on every resource.{" "}
+              Access other networks like LANs and VPCs without installing Cloink
+              on every resource.{" "}
               <InlineLink
-                href={
-                  "https://docs.netbird.io/how-to/routing-traffic-to-private-networks"
-                }
+                href={"https://docs.cloink.4w.ink/#routes"}
                 target={"_blank"}
                 aria-label={
                   "Learn more about routing traffic to private networks"

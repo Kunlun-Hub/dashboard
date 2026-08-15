@@ -6,6 +6,7 @@ import {
   SetupResponse,
 } from "@/interfaces/Instance";
 import { UserInviteInfo, UserInviteAcceptResponse } from "@/interfaces/User";
+import { PublicBranding } from "@/interfaces/PublicBranding";
 
 const config = loadConfig();
 
@@ -48,6 +49,10 @@ async function unauthenticatedRequest<T>(
 
 export async function fetchInstanceStatus(): Promise<InstanceStatus> {
   return unauthenticatedRequest<InstanceStatus>("GET", "/instance");
+}
+
+export async function fetchInstanceBranding(): Promise<PublicBranding> {
+  return unauthenticatedRequest<PublicBranding>("GET", "/instance/branding");
 }
 
 export async function submitSetup(data: SetupRequest): Promise<SetupResponse> {

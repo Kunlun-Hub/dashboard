@@ -65,7 +65,7 @@ export const AccountMfaCard = () => {
             </div>
 
             <p className={"text-xs font-light !text-nb-gray-300 "}>
-              Enable NetBird MFA if not configured in your IdP
+              Enable Cloink MFA if not configured in your IdP
             </p>
           </div>
         </div>

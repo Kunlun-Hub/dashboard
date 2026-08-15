@@ -56,8 +56,8 @@ function PeersView() {
     kindParam === "servers"
       ? "servers"
       : kindParam === "users"
-        ? "users"
-        : undefined;
+      ? "users"
+      : undefined;
 
   const onKindChange = (next: PeersTableKind | undefined) => {
     const params = new URLSearchParams(searchParams?.toString() ?? "");
@@ -100,9 +100,10 @@ function PeersView() {
         </Breadcrumbs>
         <h1 ref={headingRef}>Peers</h1>
         <Paragraph>
-            User devices and headless machines, such as servers and autonomous agents, connected to your network.{" "}
+          User devices and headless machines, such as servers and autonomous
+          agents, connected to your network.{" "}
           <InlineLink
-            href={"https://docs.netbird.io/how-to/add-machines-to-your-network"}
+            href={"https://docs.cloink.4w.ink/#peers"}
             target={"_blank"}
           >
             Learn more
@@ -129,11 +130,11 @@ function PeersBlockedView() {
       <div className={"p-default py-6 max-w-3xl text-center"}>
         <h1>Add new device to your network</h1>
         <Paragraph className={"inline"}>
-          To get started, install NetBird and log in using your email account.
+          To get started, install Cloink and log in using your email account.
           After that you should be connected. If you have further questions
           check out our{" "}
           <InlineLink
-            href={"https://docs.netbird.io/how-to/getting-started#installation"}
+            href={"https://docs.cloink.4w.ink/#quickstart"}
             target={"_blank"}
           >
             Installation Guide

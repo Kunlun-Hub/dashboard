@@ -56,7 +56,7 @@ export const OnboardingTestP2P = ({
             If something isn’t right, please check our{" "}
             <InlineLink
               onClick={onTroubleshootingClick}
-              href={"https://docs.netbird.io/how-to/troubleshooting-client"}
+              href={"https://docs.cloink.4w.ink/"}
               target={"_blank"}
             >
               troubleshooting guide

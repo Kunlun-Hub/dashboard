@@ -27,7 +27,7 @@ export type APIProviderModel = {
   id: string;
   input_per_1k: number;
   output_per_1k: number;
-  // Optional cache rates. Omitted on the wire = inherit NetBird's
+  // Optional cache rates. Omitted on the wire = inherit Cloink's
   // default rate for this model (the backend folds it in at synthesis
   // time); explicit 0 = no discount (bucket bills at the input rate).
   // Never coerce undefined to 0 — the two mean different things.
@@ -217,7 +217,7 @@ function fromAPI(p: APIProvider): AIProvider {
 
 function toAPIModels(models: ProviderModel[]): APIProviderModel[] {
   // undefined cache rates stay undefined so JSON.stringify omits the
-  // key: an omitted rate inherits NetBird's default, an explicit 0
+  // key: an omitted rate inherits Cloink's default, an explicit 0
   // disables the discount. Coercing here would change billing.
   return models.map((m) => ({
     id: m.id,

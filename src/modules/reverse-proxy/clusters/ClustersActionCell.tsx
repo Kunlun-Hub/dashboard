@@ -21,7 +21,7 @@ export default function ClustersActionCell({ cluster }: Readonly<Props>) {
   const { mutate } = useSWRConfig();
   const { permission } = usePermissions();
 
-  // Shared clusters are operated by NetBird; only account-owned (BYOP)
+  // Shared clusters are operated by Cloink; only account-owned (BYOP)
   // clusters can be deleted from this page. Rendering nothing for
   // shared rows keeps the cell column-aligned without an inert button.
   if (cluster.type !== ReverseProxyClusterType.ACCOUNT) {

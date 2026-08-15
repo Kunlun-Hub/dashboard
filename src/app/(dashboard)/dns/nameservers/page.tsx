@@ -45,9 +45,9 @@ export default function NameServers() {
         </Breadcrumbs>
         <h1 ref={headingRef}>Nameservers</h1>
         <Paragraph>
-          Add nameservers for domain name resolution in your NetBird network.{" "}
+          Add nameservers for domain name resolution in your Cloink network.{" "}
           <InlineLink
-            href={"https://docs.netbird.io/how-to/manage-dns-in-your-network"}
+            href={"https://docs.cloink.4w.ink/#dns"}
             target={"_blank"}
           >
             Learn more

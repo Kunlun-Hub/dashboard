@@ -4,7 +4,7 @@ const config = loadConfig();
 export const GRPC_API_ORIGIN = config.grpcApiOrigin;
 
 export const getNetBirdUpCommand = () => {
-  let cmd = "netbird up";
+  let cmd = "cloink up";
   if (GRPC_API_ORIGIN) {
     cmd += " --management-url " + GRPC_API_ORIGIN;
   }
@@ -47,7 +47,7 @@ export const testEditionOverride = (): Edition | undefined => {
   return undefined;
 };
 
-// isNetBirdCloud returns true when the dashboard runs on the NetBird-managed
+// isNetBirdCloud returns true when the dashboard runs on the Cloink-managed
 // cloud infrastructure (billing, MSP, trial, hosted integrations).
 // The hostname fallback keeps deployments without NETBIRD_CLOUD working.
 export const isNetBirdCloud = () => {
@@ -62,7 +62,10 @@ export const isNetBirdCloud = () => {
   const hostname = window.location.hostname;
   if (hostname.includes("selfhosted")) return false;
   return (
-    hostname.endsWith(".netbird.io") || hostname.endsWith(".wiretrustee.com")
+    hostname.endsWith(".netbird.io") ||
+    hostname.endsWith(".wiretrustee.com") ||
+    hostname === "cloink.4w.ink" ||
+    hostname.endsWith(".cloink.4w.ink")
   );
 };
 
@@ -107,11 +110,14 @@ export const isAgentNetworkOnly = () => {
   return config.agentNetworkOnly;
 };
 
-// pkgsDownloadUrl builds a NetBird client installer download link on
-// pkgs.netbird.io. `path` is the platform path without a
-// leading slash, e.g. "windows/x64" or "macos/universal".
+// Build a Cloink install-page link. The page resolves signed release metadata
+// for the requested platform instead of exposing a third-party package host.
 export const pkgsDownloadUrl = (path: string) =>
-  `https://pkgs.netbird.io/${path}`;
+  `${
+    typeof window === "undefined"
+      ? "https://cloink.4w.ink"
+      : window.location.origin
+  }/install?platform=${encodeURIComponent(path)}`;
 
 // isAgentNetworkEnabled returns true when the Agent Network product surface
 // (Providers, Policies, Usage & Logs) is available — in either the dedicated

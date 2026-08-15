@@ -15,7 +15,7 @@ export const FirewallGptNotApproved = ({ status }: Props) => {
       >
         <LockIcon size={20} className={"text-nb-gray-300"} />
         <span className={"text-center max-w-xl text-sm text-nb-gray-300"}>
-          {`You don't have access to NetBird's Smart Firewall.`}
+          {`You don't have access to Cloink's Smart Firewall.`}
           <br />
           {`We will notify you by email as soon as it's available for your account.`}
         </span>

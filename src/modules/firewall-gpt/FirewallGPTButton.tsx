@@ -26,7 +26,7 @@ export const FirewallGPTButton = ({ onClick }: Props) => {
             </div>
             <div className={"text-xs text-nb-gray-300 font-light"}>
               Smart Firewall uses AI to help you create access policies and is
-              available with a NetBird Enterprise commercial license.
+              available with a Cloink Enterprise commercial license.
             </div>
             <SelfHostedUpgradeButton />
           </div>

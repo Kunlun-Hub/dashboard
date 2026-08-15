@@ -55,7 +55,7 @@ export default function DockerTab({
           )}
           <Steps.Step step={2 + offset}>
             <p>
-              Run NetBird container
+              Run Cloink container
               {showSetupKeyInfo && <RoutingPeerSetupKeyInfo />}
             </p>
             <Code>
@@ -78,7 +78,7 @@ export default function DockerTab({
                 </Code.Line>
               )}
 
-              <Code.Line> -v netbird-client:/var/lib/netbird \</Code.Line>
+              <Code.Line> -v cloink-client:/var/lib/cloink \</Code.Line>
               {GRPC_API_ORIGIN && (
                 <Code.Line>
                   {" "}
@@ -86,17 +86,17 @@ export default function DockerTab({
                   <span className={"text-netbird"}>{GRPC_API_ORIGIN}</span> \
                 </Code.Line>
               )}
-              <Code.Line> netbirdio/netbird:latest</Code.Line>
+              <Code.Line> ghcr.io/kunlun-hub/cloink:latest</Code.Line>
             </Code>
           </Steps.Step>
           <Steps.Step step={3 + offset} line={false}>
             <p>Read our documentation</p>
             <InlineLink
-              href={"https://docs.netbird.io/how-to/installation/docker"}
+              href={"https://docs.cloink.4w.ink/#docker"}
               passHref={true}
               target={"_blank"}
             >
-              Running NetBird in Docker
+              Running Cloink in Docker
             </InlineLink>
           </Steps.Step>
         </Steps>

@@ -80,7 +80,7 @@ export default function WindowsTab({
               >
                 <Button variant={"primary"}>
                   <DownloadIcon size={14} />
-                  Download NetBird
+                  Download Cloink
                 </Button>
               </Link>
             </div>
@@ -89,7 +89,7 @@ export default function WindowsTab({
           {GRPC_API_ORIGIN && (
             <Steps.Step step={baseMgmtStep}>
               <p>
-                {`Click on "Settings" then "Advanced Settings" from the NetBird icon in your system tray and enter the following "Management URL"`}
+                {`Click on "Settings" then "Advanced Settings" from the Cloink icon in your system tray and enter the following "Management URL"`}
               </p>
               <Code>
                 <Code.Line>{GRPC_API_ORIGIN}</Code.Line>
@@ -104,7 +104,7 @@ export default function WindowsTab({
           {useCliRun ? (
             <Steps.Step step={runStep} line={false}>
               <p>
-                Open Command-line and run NetBird{" "}
+                Open Command-line and run Cloink{" "}
                 {showSetupKeyInfo && <RoutingPeerSetupKeyInfo />}
               </p>
 
@@ -120,7 +120,7 @@ export default function WindowsTab({
               <Steps.Step step={runStep}>
                 <p>
                   {/* eslint-disable-next-line react/no-unescaped-entities */}
-                  Click on "Connect" from the NetBird icon in your system tray
+                  Click on "Connect" from the Cloink icon in your system tray
                 </p>
               </Steps.Step>
               <Steps.Step step={runStep + 1} line={false}>

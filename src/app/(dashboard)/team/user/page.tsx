@@ -309,7 +309,7 @@ function UserOverview({ user, initialGroups }: Readonly<Props>) {
                   <div>
                     <h2>Access Tokens</h2>
                     <Paragraph>
-                      Access tokens give access to NetBird API.
+                      Access tokens give access to Cloink API.
                     </Paragraph>
                   </div>
                   <div className={"inline-flex gap-4 justify-end"}>

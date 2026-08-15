@@ -224,9 +224,9 @@ export function GenericHTTPModalContent({
         title={
           stream
             ? "Generic HTTP Configuration"
-            : "Connect NetBird with Generic HTTP"
+            : "Connect Cloink with Generic HTTP"
         }
-        description={`Start streaming your NetBird audit & traffic events to a Generic HTTP endpoint. ${
+        description={`Start streaming your Cloink audit & traffic events to a Generic HTTP endpoint. ${
           stream ? "" : "Follow the steps to get started."
         }`}
       />
@@ -317,7 +317,7 @@ export function GenericHTTPModalContent({
                 how to use them.
                 <InlineLink
                   href={
-                    "https://docs.netbird.io/how-to/stream-activity-to-generic-http#custom-body-template-optional"
+                    "https://docs.cloink.4w.ink/"
                   }
                   className={"relative top-[0px] ml-1"}
                 >
@@ -361,7 +361,7 @@ export function GenericHTTPModalContent({
             Learn more about
             <InlineLink
               href={
-                "https://docs.netbird.io/how-to/stream-activity-to-generic-http"
+                "https://docs.cloink.4w.ink/"
               }
               target={"_blank"}
             >

@@ -23,7 +23,7 @@ export const NoPeersGettingStarted = ({
           size={"large"}
         />
       }
-      title={"Get Started with NetBird"}
+      title={"Get Started with Cloink"}
       description={
         "It looks like you don't have any connected machines.\n" +
         "Get started by adding one to your network."
@@ -33,7 +33,7 @@ export const NoPeersGettingStarted = ({
         <>
           Learn more in our{" "}
           <InlineLink
-            href={"https://docs.netbird.io/how-to/getting-started"}
+            href={"https://docs.cloink.4w.ink/#quickstart"}
             target={"_blank"}
           >
             Getting Started Guide

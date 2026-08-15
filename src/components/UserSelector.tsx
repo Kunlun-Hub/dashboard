@@ -209,7 +209,7 @@ export const UserListItem = ({
           )}
         >
           <TextWithTooltip
-            text={user?.email || "NetBird"}
+            text={isSystemUser ? "Cloink" : user?.email}
             maxChars={maxChars}
           />
         </span>

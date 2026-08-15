@@ -58,7 +58,7 @@ export default function JoinMspPage() {
       .finally(() => setIsAccepting(false));
 
     notify({
-      title: `NetBird Managed Service Provider`,
+      title: `Cloink Managed Service Provider`,
       description: `Successfully joined as an Managed Service Provider`,
       loadingMessage: `Processing your invitation...`,
       promise,
@@ -96,10 +96,10 @@ export default function JoinMspPage() {
           </div>
 
           <div className={"text-xl font-medium text-center max-w-xs mb-1"}>
-            NetBird invites you to join as an Managed Service Provider (MSP)
+            Cloink invites you to join as an Managed Service Provider (MSP)
           </div>
           <div className={"text-sm text-nb-gray-300 text-center"}>
-            You will get access to the NetBird MSP portal where you can manage
+            You will get access to the Cloink MSP portal where you can manage
             multiple customers and their networks from a single place.
           </div>
           {!isOwner && !isMSPAccount && (

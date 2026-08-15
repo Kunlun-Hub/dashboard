@@ -27,11 +27,11 @@ export const PeerAddressTooltipContent = ({ peer }: Props) => {
     >
       <ListItem
         icon={<MapPin size={14} />}
-        label={"NetBird IP"}
+        label={"Cloink IP"}
         value={
           <CopyToClipboardText
             iconAlignment={"right"}
-            message={"NetBird IP has been copied to your clipboard"}
+            message={"Cloink IP has been copied to your clipboard"}
             alwaysShowIcon={true}
           >
             {peer.ip}
@@ -41,11 +41,11 @@ export const PeerAddressTooltipContent = ({ peer }: Props) => {
       {peer.ipv6 && (
         <ListItem
           icon={<MapPin size={14} />}
-          label={"NetBird IPv6"}
+          label={"Cloink IPv6"}
           value={
             <CopyToClipboardText
               iconAlignment={"right"}
-              message={"NetBird IPv6 has been copied to your clipboard"}
+              message={"Cloink IPv6 has been copied to your clipboard"}
               alwaysShowIcon={true}
             >
               {peer.ipv6}

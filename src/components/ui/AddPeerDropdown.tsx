@@ -22,7 +22,7 @@ type AddMode = "user" | "server" | "agent";
 
 // AddPeerDropdown replaces the single "Add Peer" button on the merged peers
 // table: the operator picks what to add (User Device / Server / Autonomous
-// Agent) and the matching Install NetBird flow opens.
+// Agent) and the matching Install Cloink flow opens.
 function AddPeerDropdown() {
   const { data: peers } = useFetchApi<Peer[]>("/peers");
   const { oidcUser: user } = useOidcUser();

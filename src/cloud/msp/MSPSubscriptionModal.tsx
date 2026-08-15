@@ -51,7 +51,7 @@ const MSPSubscriptionModalContent = ({
     >
       <ModalHeader
         icon={<CreditCardIcon size={18} />}
-        title={`NetBird Plan for ${tenant.name}`}
+        title={`Cloink Plan for ${tenant.name}`}
         description={"Select the plan that best fits your tenant's needs."}
         color={"netbird"}
       />

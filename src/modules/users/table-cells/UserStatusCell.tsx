@@ -48,7 +48,7 @@ export default function UserStatusCell({ user }: Readonly<Props>) {
       <div>
         <InlineLink
           href={
-            "https://docs.netbird.io/selfhosted/identity-providers/disable-local-authentication"
+            "https://docs.cloink.4w.ink/"
           }
           target={"_blank"}
         >
@@ -76,7 +76,7 @@ export default function UserStatusCell({ user }: Readonly<Props>) {
       </div>
       <div>
         <InlineLink
-          href={"https://docs.netbird.io/how-to/approve-users"}
+          href={"https://docs.cloink.4w.ink/"}
           target={"_blank"}
         >
           Learn more <ExternalLinkIcon size={12} />

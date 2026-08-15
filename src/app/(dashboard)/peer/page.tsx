@@ -416,7 +416,7 @@ const PeerOverviewTabs = () => {
             hideResourceColumn
             emptyTableTitle={"This peer has no services"}
             emptyTableDescription={
-              "Add your services to this peer and securely expose them through NetBird's reverse proxy"
+              "Add your services to this peer and securely expose them through Cloink's reverse proxy"
             }
           />
         </TabsContent>
@@ -501,7 +501,7 @@ function PeerInformationCard({ peer }: Readonly<{ peer: Peer }>) {
   const handleSaveIP = (newIP: string) => {
     notify({
       title: peer.name,
-      description: "NetBird Peer IP was successfully updated",
+      description: "Cloink peer IP was successfully updated",
       promise: update({ ip: newIP }).then(() => {
         mutate("/peers/" + peer.id);
         setShowEditIPModal(false);
@@ -513,7 +513,7 @@ function PeerInformationCard({ peer }: Readonly<{ peer: Peer }>) {
   const handleSaveIPv6 = (newIPv6: string) => {
     notify({
       title: peer.name,
-      description: "NetBird Peer IPv6 was successfully updated",
+      description: "Cloink peer IPv6 was successfully updated",
       promise: update({ ipv6: newIPv6 }).then(() => {
         mutate("/peers/" + peer.id);
         setShowEditIPv6Modal(false);
@@ -545,11 +545,11 @@ function PeerInformationCard({ peer }: Readonly<{ peer: Peer }>) {
           <Card.ListItem
             copy
             tooltip={false}
-            copyText={"NetBird IP Address"}
+            copyText={"Cloink IP Address"}
             label={
               <>
                 <MapPin size={16} className={"shrink-0"} />
-                NetBird IP Address
+                Cloink IP Address
               </>
             }
             valueToCopy={peer.ip}
@@ -566,11 +566,11 @@ function PeerInformationCard({ peer }: Readonly<{ peer: Peer }>) {
             <Card.ListItem
               copy
               tooltip={false}
-              copyText={"NetBird IPv6 Address"}
+              copyText={"Cloink IPv6 Address"}
               label={
                 <>
                   <MapPin size={16} className={"shrink-0"} />
-                  NetBird IPv6 Address
+                  Cloink IPv6 Address
                 </>
               }
               valueToCopy={peer.ipv6}
@@ -730,7 +730,9 @@ function PeerInformationCard({ peer }: Readonly<{ peer: Peer }>) {
                   UI Version
                 </>
               }
-              value={peer.ui_version?.replace("netbird-desktop-ui/", "")}
+              value={peer.ui_version
+                ?.replace("cloink-desktop-ui/", "")
+                .replace("netbird-desktop-ui/", "")}
             />
           )}
         </Card.List>

@@ -272,12 +272,12 @@ function ClientSettingsTabContent({ account }: Readonly<Props>) {
               />
             </Label>
             <HelpText>
-              Configure how NetBird clients receive update notifications. When
+              Configure how Cloink clients receive update notifications. When
               enabled, users will be prompted to install the selected version.
-              This requires at least NetBird{" "}
+              This requires at least Cloink{" "}
               <span className={"text-white font-medium"}>v0.61.0</span>.{" "}
               <InlineLink
-                href={"https://docs.netbird.io/manage/peers/auto-update"}
+                href={"https://docs.cloink.4w.ink/"}
                 target={"_blank"}
               >
                 Learn more
@@ -333,7 +333,7 @@ function ClientSettingsTabContent({ account }: Readonly<Props>) {
                   />
                 }
               >
-                Enabling automatic updates will restart the NetBird client
+                Enabling automatic updates will restart the Cloink client
                 during updates, which can temporarily disrupt active
                 connections. Use with caution in production environments.
               </Callout>
@@ -347,12 +347,12 @@ function ClientSettingsTabContent({ account }: Readonly<Props>) {
                 Expose Services from CLI
               </Label>
               <HelpText>
-                Allow peers to expose local services through the NetBird reverse
-                proxy using the CLI. <br /> This requires at least NetBird{" "}
+                Allow peers to expose local services through the Cloink reverse
+                proxy using the CLI. <br /> This requires at least Cloink{" "}
                 <span className={"text-white font-medium"}>v0.66.0</span>.{" "}
                 <InlineLink
                   href={
-                    "https://docs.netbird.io/manage/reverse-proxy/expose-from-cli"
+                    "https://docs.cloink.4w.ink/"
                   }
                   target={"_blank"}
                 >
@@ -405,11 +405,11 @@ function ClientSettingsTabContent({ account }: Readonly<Props>) {
             </Label>
 
             <HelpText>
-              Instead of maintaining always-on connections, NetBird activates
+              Instead of maintaining always-on connections, Cloink activates
               them on-demand based on activity or signaling. This requires
-              NetBird client v0.50.1 or higher.{" "}
+              Cloink client v0.50.1 or higher.{" "}
               <InlineLink
-                href={"https://docs.netbird.io/how-to/lazy-connection"}
+                href={"https://docs.cloink.4w.ink/"}
                 target={"_blank"}
               >
                 Learn more

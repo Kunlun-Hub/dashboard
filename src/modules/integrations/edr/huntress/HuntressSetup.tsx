@@ -128,7 +128,7 @@ export function SetupContent({ onSuccess, account }: Readonly<ModalProps>) {
 
     notify({
       title: "Huntress Integration",
-      description: `Huntress was successfully connected to NetBird.`,
+      description: `Huntress was successfully connected to Cloink.`,
       promise: huntressRequest
         .post({
           api_key: apiKey,
@@ -184,7 +184,7 @@ export function SetupContent({ onSuccess, account }: Readonly<ModalProps>) {
 
       <IntegrationModalHeader
         image={integrationImage}
-        title={"Connect NetBird with Huntress"}
+        title={"Connect Cloink with Huntress"}
         description={
           "Restrict network access to devices managed by Huntress based on their security posture."
         }
@@ -270,7 +270,7 @@ export function SetupContent({ onSuccess, account }: Readonly<ModalProps>) {
               <p>
                 Under User API Credentials click <Mark>+ Add</Mark> then select
                 your user and add
-                <Mark copy={true}>NetBird</Mark> as the description
+                <Mark copy={true}>Cloink</Mark> as the description
               </p>
             </Steps.Step>
             <Steps.Step step={3} line={false}>

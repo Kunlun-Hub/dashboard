@@ -37,8 +37,8 @@ export const OnboardingFirstDevice = ({
             "text-sm text-nb-gray-300 font-light mt-2 block text-center sm:px-4"
           }
         >
-          {`To access other machines, install NetBird, sign in, and your device joins the network.
-          Every device you add becomes a NetBird peer in your network. It's that simple.`}
+          {`To access other machines, install Cloink, sign in, and your device joins the network.
+          Every device you add becomes a Cloink peer in your network. It's that simple.`}
         </div>
       </div>
 
@@ -48,13 +48,13 @@ export const OnboardingFirstDevice = ({
         </Button>
         <Button variant={"primary"} onClick={() => setOpen(true)}>
           <DownloadIcon size={16} />
-          Install NetBird
+          Install Cloink
         </Button>
       </div>
 
       <Modal open={open} onOpenChange={setOpen}>
         <ModalContent className={"!z-[70]"}>
-          <SetupModalContent title={"Install NetBird"} isUserDevice={true} />
+          <SetupModalContent title={"Install Cloink"} isUserDevice={true} />
         </ModalContent>
       </Modal>
     </div>

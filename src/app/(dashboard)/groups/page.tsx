@@ -33,7 +33,7 @@ export default function GroupsPage() {
         <Paragraph>
           Organize peers, users and resources into groups to manage access.{" "}
           <InlineLink
-            href={"https://docs.netbird.io/how-to/manage-network-access"}
+            href={"https://docs.cloink.4w.ink/#policies"}
             target={"_blank"}
           >
             Learn more

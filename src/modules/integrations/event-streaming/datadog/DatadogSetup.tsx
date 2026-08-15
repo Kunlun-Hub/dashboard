@@ -98,7 +98,7 @@ export function SetupContent({ onSuccess }: Readonly<ModalProps>) {
   const connect = async () => {
     notify({
       title: "Datadog Integration",
-      description: `Datadog was successfully connected to NetBird.`,
+      description: `Datadog was successfully connected to Cloink.`,
       promise: integrationRequest
         .post({
           platform: "datadog",
@@ -128,9 +128,9 @@ export function SetupContent({ onSuccess }: Readonly<ModalProps>) {
 
       <IntegrationModalHeader
         image={datadogLogo}
-        title={"Connect NetBird with Datadog"}
+        title={"Connect Cloink with Datadog"}
         description={
-          "Start streaming your NetBird audit & traffic events to Datadog. Follow the steps below to get started."
+          "Start streaming your Cloink audit & traffic events to Datadog. Follow the steps below to get started."
         }
       />
 
@@ -202,7 +202,7 @@ export function SetupContent({ onSuccess }: Readonly<ModalProps>) {
             <Steps.Step step={3}>
               <p className={"font-normal"}>
                 Give it a descriptive name like{" "}
-                <Mark copy>NetBird Activity Events</Mark>
+                <Mark copy>Cloink Activity Events</Mark>
                 and click <Mark>Create Key</Mark>
                 <Tooltip>
                   <TooltipTrigger>

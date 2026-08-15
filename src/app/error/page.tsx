@@ -65,7 +65,7 @@ export default function ErrorPage() {
 
   const getDescription = () => {
     if (isBlockedUser) {
-      return "Your access has been blocked by the NetBird account administrator, possibly due to new user approval requirements or security policies. Please contact your administrator to regain access.";
+      return "Your access has been blocked by the Cloink account administrator, possibly due to new user approval requirements or security policies. Please contact your administrator to regain access.";
     }
     if (isPendingApproval) {
       return "Your account is pending approval from an administrator. Please wait for approval before accessing the dashboard.";

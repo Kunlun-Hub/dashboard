@@ -120,13 +120,15 @@ export function SetupModalContent({
   const [generatedKey, setGeneratedKey] = useState<SetupKey | undefined>();
   const effectiveSetupKey = setupKey ?? generatedKey?.key;
 
+  // Cloink desktop scope intentionally excludes mobile installers. Keep the
+  // mobile components in the tree for a later product decision, but do not
+  // expose their upstream stores in this release.
   // Visibility rules:
   //   hideDocker  – only when explicitly a user-device flow.
-  //   hideMobile  – server flow (explicit false), or legacy callers
-  //                 that already have a setupKey (routing peers etc.).
+  //   hideMobile  – always true for the desktop-only release.
   //   showKeyGen  – server flow, and the caller didn't pre-supply a key.
   const hideDocker = isUserDevice === true;
-  const hideMobile = isUserDevice === false || !!setupKey;
+  const hideMobile = true;
   const showKeyGenerator = isUserDevice === false && !setupKey;
 
   // setupKeyPlaceholder keeps the `--setup-key SETUP_KEY` token visible
@@ -144,17 +146,15 @@ export function SetupModalContent({
         <HelpTooltip
           content={
             <>
-              A setup key is a one-time, pre-authentication token used to
-              enroll an unattended machine with NetBird. Pass it to{" "}
-              <code>netbird up</code> via <code>--setup-key</code> and the
-              peer registers without an interactive login.
+              A setup key is a one-time, pre-authentication token used to enroll
+              an unattended machine with Cloink. Pass it to{" "}
+              <code>cloink up</code> via <code>--setup-key</code> and the peer
+              registers without an interactive login.
             </>
           }
         />
         <InlineLink
-          href={
-            "https://docs.netbird.io/how-to/register-machines-using-setup-keys"
-          }
+          href={"https://docs.cloink.4w.ink/#setup-keys"}
           target={"_blank"}
         >
           Learn more
@@ -181,15 +181,9 @@ export function SetupModalContent({
     }
 
     return effectiveSetupKey
-      ? "Install NetBird with Setup Key"
-      : "Install NetBird";
-  }, [
-    isFirstRun,
-    isInstallPage,
-    effectiveSetupKey,
-    title,
-    user?.given_name,
-  ]);
+      ? "Install Cloink with Setup Key"
+      : "Install Cloink";
+  }, [isFirstRun, isInstallPage, effectiveSetupKey, title, user?.given_name]);
 
   return (
     <>
@@ -210,8 +204,8 @@ export function SetupModalContent({
             )}
           >
             {isUserDevice === false || effectiveSetupKey
-              ? "To get started, install and run NetBird with the setup key as a parameter."
-              : "To get started, install NetBird and log in with your email account."}
+              ? "To get started, install and run Cloink with the setup key as a parameter."
+              : "To get started, install Cloink and log in with your email account."}
           </Paragraph>
         </div>
       )}
@@ -328,9 +322,7 @@ export function SetupModalContent({
               network or manage your existing devices in the admin panel. If you
               have further questions check out our{" "}
               <InlineLink
-                href={
-                  "https://docs.netbird.io/how-to/getting-started#installation"
-                }
+                href={"https://docs.cloink.4w.ink/#quickstart"}
                 target={"_blank"}
               >
                 Installation Guide
@@ -377,7 +369,7 @@ type NetBirdUpCommandProps = {
   continuation?: string;
 };
 
-// NetBirdUpCommand renders `netbird up` inside a <Code> block. When
+// NetBirdUpCommand renders `cloink up` inside a <Code> block. When
 // extra flags are present it splits across multiple lines with the
 // shell's line-continuation character (purely visual) so long commands
 // stay readable; the clipboard always gets the single-line form.
@@ -471,7 +463,7 @@ type SetupKeyGeneratorProps = {
 // SetupKeyGenerator renders the inline banner that lets the operator
 // create a one-off setup key without leaving the install modal. The
 // resulting key is lifted to the parent so the OS tabs can splice it
-// into the `netbird up --setup-key=...` command.
+// into the `cloink up --setup-key=...` command.
 function SetupKeyGenerator({
   generatedKey,
   onGenerated,
@@ -523,11 +515,7 @@ function SetupKeyGenerator({
   if (!generatedKey) {
     return (
       <div className={"mt-2"}>
-        <Button
-          variant={"primary"}
-          onClick={generate}
-          disabled={isGenerating}
-        >
+        <Button variant={"primary"} onClick={generate} disabled={isGenerating}>
           {isGenerating ? (
             <Loader2 size={14} className={"animate-spin"} />
           ) : (
@@ -560,11 +548,8 @@ function SetupKeyGenerator({
           {generatedKey.key}
         </div>
         <div
-          className={
-            "text-nb-gray-400 text-[0.72rem] flex items-center gap-1"
-          }
+          className={"text-nb-gray-400 text-[0.72rem] flex items-center gap-1"}
         >
-
           This setup key can be used only once and expires in 24 hours.
         </div>
       </div>

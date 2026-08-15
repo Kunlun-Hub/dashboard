@@ -754,7 +754,7 @@ export function RouteModalContent({
                   </>
                 }
                 helpText={
-                  "Automatically apply this exit node to your distribution groups. This requires NetBird client v0.55.0 or higher."
+                  "Automatically apply this exit node to your distribution groups. This requires Cloink client v0.55.0 or higher."
                 }
               />
             )}
@@ -805,8 +805,8 @@ export function RouteModalContent({
             <InlineLink
               href={
                 exitNode
-                  ? "https://docs.netbird.io/how-to/configuring-default-routes-for-internet-traffic"
-                  : "https://docs.netbird.io/how-to/routing-traffic-to-private-networks"
+                  ? "https://docs.cloink.4w.ink/"
+                  : "https://docs.cloink.4w.ink/"
               }
               target={"_blank"}
             >

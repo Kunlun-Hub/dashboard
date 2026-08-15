@@ -119,14 +119,14 @@ export const OnboardingAddRoutingPeer = ({
                 }
             >
                 Think of a routing peer as a connector to your internal network.
-                It runs NetBird and lets your remote devices access internal resources, while enforcing access control policies.
+                It runs Cloink and lets your remote devices access internal resources, while enforcing access control policies.
             </div>
             <div
                 className={
                     "text-sm text-nb-gray-300 font-light mt-2 block text-center sm:px-4"
                 }
             >
-                Generate a setup key and install NetBird on that machine.
+                Generate a setup key and install Cloink on that machine.
             </div>
         </div>
 
@@ -174,7 +174,7 @@ export const OnboardingAddRoutingPeer = ({
           <ModalContent>
             <SetupModalContent
               hostname={"routing-peer"}
-              title={"Install NetBird"}
+              title={"Install Cloink"}
               setupKey={setupKey.key}
             />
           </ModalContent>

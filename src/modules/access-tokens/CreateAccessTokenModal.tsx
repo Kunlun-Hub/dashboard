@@ -166,7 +166,7 @@ export function AccessTokenModalContent({
       <ModalHeader
         icon={<IconApi />}
         title={"Create Access Token"}
-        description={"Use this token to access NetBird's public API"}
+        description={"Use this token to access Cloink's public API"}
         color={"netbird"}
       />
 
@@ -211,7 +211,7 @@ export function AccessTokenModalContent({
           <Paragraph className={"text-sm mt-auto"}>
             Learn more about
             <InlineLink
-              href={"https://docs.netbird.io/how-to/access-netbird-public-api"}
+              href={"https://docs.cloink.4w.ink/"}
               target={"_blank"}
             >
               Access Tokens

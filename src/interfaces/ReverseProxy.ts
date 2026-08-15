@@ -67,7 +67,7 @@ export interface ServiceTargetOptions {
   proxy_protocol?: boolean;
   /**
    * When true, the proxy dials this target via the host's network stack
-   * instead of through its embedded NetBird client. Use for upstreams
+   * instead of through its embedded Cloink client. Use for upstreams
    * reachable without WireGuard (public APIs, LAN services, localhost
    * sidecars).
    */
@@ -227,40 +227,40 @@ export function isL4Mode(mode?: ServiceMode): boolean {
 }
 
 export const REVERSE_PROXY_DOCS_LINK =
-  "https://docs.netbird.io/manage/reverse-proxy";
+  "https://docs.cloink.4w.ink/";
 
 export const REVERSE_PROXY_SERVICES_DOCS_LINK =
-  "https://docs.netbird.io/manage/reverse-proxy#services";
+  "https://docs.cloink.4w.ink/";
 
 export const REVERSE_PROXY_TARGETS_DOCS_LINK =
-  "https://docs.netbird.io/manage/reverse-proxy#targets";
+  "https://docs.cloink.4w.ink/";
 
 export const REVERSE_PROXY_AUTHENTICATION_DOCS_LINK =
-  "https://docs.netbird.io/manage/reverse-proxy/authentication";
+  "https://docs.cloink.4w.ink/";
 
 export const REVERSE_PROXY_SETTINGS_DOCS_LINK =
-  "https://docs.netbird.io/manage/reverse-proxy#step-4-configure-advanced-settings";
+  "https://docs.cloink.4w.ink/";
 
 export const REVERSE_PROXY_CLUSTERS_DOCS_LINK =
-  "https://docs.netbird.io/manage/reverse-proxy/bring-your-own-proxy#shared-and-account-clusters";
+  "https://docs.cloink.4w.ink/";
 
 export const REVERSE_PROXY_SELFHOSTED_ROUTING_DOCS_LINK =
-  "https://docs.netbird.io/selfhosted/migration/enable-reverse-proxy#connecting-through-traefik-instead-of-docker-network";
+  "https://docs.cloink.4w.ink/";
 
 export const REVERSE_PROXY_ENV_REFERENCE_DOCS_LINK =
-  "https://docs.netbird.io/selfhosted/migration/enable-reverse-proxy#environment-variable-reference";
+  "https://docs.cloink.4w.ink/";
 
 export const REVERSE_PROXY_CUSTOM_DOMAINS_DOCS_LINK =
-  "https://docs.netbird.io/manage/reverse-proxy/custom-domains";
+  "https://docs.cloink.4w.ink/";
 
 export const REVERSE_PROXY_DOMAIN_VERIFICATION_LINK =
-  "https://docs.netbird.io/manage/reverse-proxy/custom-domains#verifying-a-custom-domain";
+  "https://docs.cloink.4w.ink/";
 
 export const REVERSE_PROXY_EVENTS_DOCS_LINK =
-  "https://docs.netbird.io/manage/reverse-proxy/access-logs";
+  "https://docs.cloink.4w.ink/";
 
 export const REVERSE_PROXY_ACCESS_CONTROL_DOCS_LINK =
-  "https://docs.netbird.io/manage/reverse-proxy#step-3b-configure-access-control";
+  "https://docs.cloink.4w.ink/";
 
 export const REVERSE_PROXY_TROUBLESHOOTING_DOCS_LINK =
-  "https://docs.netbird.io/manage/reverse-proxy/troubleshooting";
+  "https://docs.cloink.4w.ink/";

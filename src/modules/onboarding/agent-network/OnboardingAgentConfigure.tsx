@@ -33,8 +33,8 @@ export const OnboardingAgentConfigure = ({ onBack, onNext }: Props) => {
             "text-sm text-nb-gray-300 font-light mt-2 block text-center sm:px-4"
           }
         >
-          {`Point your agent to the NetBird base URL. No client API key is needed,
-          NetBird authorizes each request and injects the upstream key server
+          {`Point your agent to the Cloink base URL. No client API key is needed,
+          Cloink authorizes each request and injects the upstream key server
           side.`}
         </div>
       </div>

@@ -225,7 +225,7 @@ export default function ServiceUsersTable({
               Learn more about
               <InlineLink
                 href={
-                  "https://docs.netbird.io/how-to/access-netbird-public-api"
+                  "https://docs.cloink.4w.ink/"
                 }
                 target={"_blank"}
               >

@@ -47,7 +47,7 @@ export const NetworkRoutingPeersTabContent = ({
             Add routing peers to this network to access resources inside this
             network.{" "}
             <InlineLink
-              href={"https://docs.netbird.io/manage/networks#routing-peers"}
+              href={"https://docs.cloink.4w.ink/"}
               target={"_blank"}
             >
               Learn more

@@ -20,7 +20,7 @@ export const TrialSuccessModal = ({ open, setOpen }: Props) => {
             Your 14-Day Trial has started!
           </div>
           <div className={"text-sm text-nb-gray-300 text-center"}>
-            {`Welcome aboard! You have now access to NetBird's full set of features & integrations `}
+            {`Welcome aboard! You have now access to Cloink's full set of features & integrations `}
             <b className={"text-nb-gray-200 font-medium"}>
               for the next two weeks
             </b>
@@ -51,7 +51,7 @@ export const TrialSuccessModal = ({ open, setOpen }: Props) => {
               variant={"primary"}
               onClick={() => setOpen(false)}
             >
-              Explore NetBird
+              Explore Cloink
             </Button>
           </div>
         </div>

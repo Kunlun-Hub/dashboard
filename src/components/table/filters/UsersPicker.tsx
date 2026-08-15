@@ -32,7 +32,7 @@ const ALL_USERS_ID = "all-users";
 
 const searchPredicate = (item: UserOption, query: string) => {
   const q = query.toLowerCase();
-  if (item.email === "NetBird" && "NetBird System".toLowerCase().includes(q))
+  if (item.email === "NetBird" && "Cloink System".toLowerCase().includes(q))
     return true;
   if (item.name?.toLowerCase().includes(q)) return true;
   if (item.email?.toLowerCase().includes(q)) return true;
@@ -141,7 +141,7 @@ export function UsersPicker({ value, onChange, close, options }: Props) {
                     }
                   >
                     <TextWithTooltip
-                      text={user?.email || "NetBird"}
+                      text={isSystemUser ? "Cloink" : user?.email}
                       maxChars={22}
                     />
                   </span>

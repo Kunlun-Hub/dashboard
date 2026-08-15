@@ -106,7 +106,7 @@ export const useNetBirdClient = () => {
         setTimeout(resolve, WASM_CONFIG.RETRY_DELAY),
       );
     }
-    throw new Error("NetBird WASM failed to initialize in time");
+    throw new Error("Cloink WASM failed to initialize in time");
   }, []);
 
   const initIronRDP = useCallback(() => {
@@ -166,7 +166,7 @@ export const useNetBirdClient = () => {
       if (typeof (window as any).NetBirdClient !== "function") {
         netBirdStore.setState({
           status: NetBirdStatus.DISCONNECTED,
-          error: "NetBirdClient is not available or not a function",
+          error: "Cloink client is not available or not a function",
         });
         return false;
       }
@@ -211,7 +211,7 @@ export const useNetBirdClient = () => {
   const detectSSHServerType = useCallback(
     async (host: string, port: number, timeoutMs: number): Promise<boolean> => {
       if (!netBirdClient.current?.detectSSHServerType) {
-        throw new Error("NetBird client not ready");
+        throw new Error("Cloink client not ready");
       }
       return netBirdClient.current.detectSSHServerType(host, port, timeoutMs);
     },

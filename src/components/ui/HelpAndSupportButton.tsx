@@ -55,7 +55,7 @@ export default function HelpAndSupportButton() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem
-          href="https://docs.netbird.io/"
+          href="https://docs.cloink.4w.ink/"
           target="_blank"
           rel="noopener noreferrer"
           asChild
@@ -69,7 +69,7 @@ export default function HelpAndSupportButton() {
           </DropdownMenuShortcut>
         </DropdownMenuItem>
         <DropdownMenuItem
-          href="https://docs.netbird.io/help/troubleshooting-client"
+          href="https://docs.cloink.4w.ink/#troubleshooting"
           target="_blank"
           rel="noopener noreferrer"
           asChild
@@ -84,10 +84,10 @@ export default function HelpAndSupportButton() {
         </DropdownMenuItem>
 
         {isNetBirdCloud() && (
-          <DropdownMenuItem href="mailto:support@netbird.io?subject=Support Request">
+          <DropdownMenuItem href="mailto:support@cloink.4w.ink?subject=Support Request">
             <div className={"flex gap-3 items-center"}>
               <MailIcon size={14} />
-              support@netbird.io
+              support@cloink.4w.ink
             </div>
           </DropdownMenuItem>
         )}
@@ -95,28 +95,28 @@ export default function HelpAndSupportButton() {
         <DropdownMenuSeparator />
 
         <DropdownMenuItem
-          href="https://forum.netbird.io/"
+          href="https://cloink.4w.ink/"
           target="_blank"
           rel="noopener noreferrer"
           asChild
         >
           <div className={"flex gap-3 items-center"}>
             <MessagesSquareIcon size={14} />
-            NetBird Forum
+            Cloink Community
           </div>
           <DropdownMenuShortcut>
             <ArrowUpRightIcon size={16} />
           </DropdownMenuShortcut>
         </DropdownMenuItem>
         <DropdownMenuItem
-          href="https://docs.netbird.io/slack-url"
+          href="https://cloink.4w.ink/"
           target="_blank"
           rel="noopener noreferrer"
           asChild
         >
           <div className={"flex gap-3 items-center"}>
             <SlackIcon size={14} />
-            NetBird Slack
+            Cloink Support
           </div>
           <DropdownMenuShortcut>
             <ArrowUpRightIcon size={16} />

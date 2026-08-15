@@ -92,7 +92,7 @@ chpasswd:
 `
     : ""
 }write_files:
-  - path: /opt/netbird-proxy/env
+  - path: /opt/cloink-proxy/env
     permissions: "0600"
     content: |
       NB_PROXY_TOKEN=${token}
@@ -105,12 +105,12 @@ chpasswd:
       NB_PROXY_LOG_LEVEL=info
       NB_PROXY_ADDRESS=:443
       NB_PROXY_WG_PORT=${DEFAULT_WIREGUARD_PORT}
-  - path: /opt/netbird-proxy/docker-compose.yml
+  - path: /opt/cloink-proxy/docker-compose.yml
     permissions: "0644"
     content: |
       services:
         reverse-proxy:
-          image: netbirdio/reverse-proxy:latest
+          image: ghcr.io/kunlun-hub/cloink-reverse-proxy:latest
           restart: unless-stopped
           logging:
             driver: json-file
@@ -122,14 +122,14 @@ chpasswd:
             - "443:443"
             - "${DEFAULT_WIREGUARD_PORT}:${DEFAULT_WIREGUARD_PORT}/udp"
           env_file:
-            - /opt/netbird-proxy/env
+            - /opt/cloink-proxy/env
           volumes:
             - proxy_certs:/certs
       volumes:
         proxy_certs:
 runcmd:
   - curl -fsSL https://get.docker.com | sh
-  - docker compose -f /opt/netbird-proxy/docker-compose.yml up -d
+  - docker compose -f /opt/cloink-proxy/docker-compose.yml up -d
 `;
 
 export const ClusterCloudDeploy = ({ provider, ...props }: Props) => {
@@ -280,14 +280,14 @@ const RegistrationCheck = ({
         <>
           <CheckCircle2 size={16} className={"text-green-500 shrink-0"} />
           <span className={"text-nb-gray-100"}>
-            Proxy registered with NetBird and connected.
+            Proxy registered with Cloink and connected.
           </span>
         </>
       ) : (
         <>
           <Loader2 size={16} className={"animate-spin shrink-0"} />
           <span className={"text-nb-gray-300"}>
-            Waiting for the proxy to register with NetBird...
+            Waiting for the proxy to register with Cloink...
           </span>
         </>
       )}
@@ -297,7 +297,7 @@ const RegistrationCheck = ({
 
 // DeploySuccess shows the deployment result: the DNS records to create for
 // the new instance IP and a live check that the proxy registered with the
-// NetBird management service.
+// Cloink management service.
 const DeploySuccess = ({
   resourceLabel,
   name,
@@ -386,7 +386,7 @@ const HetznerDeploy = ({
 
   const serverName = useMemo(() => {
     const label = domain.replace(/[^a-zA-Z0-9-]/g, "-").toLowerCase();
-    return `netbird-proxy-${label}`.slice(0, 63).replace(/-+$/, "");
+    return `cloink-proxy-${label}`.slice(0, 63).replace(/-+$/, "");
   }, [domain]);
 
   // Load the live catalog once a plausible token is entered, debounced so we
@@ -541,7 +541,7 @@ const HetznerDeploy = ({
             content={
               <>
                 The token goes straight from your browser to Hetzner and never
-                touches NetBird&apos;s servers, and you can delete it once setup
+                touches Cloink&apos;s servers, and you can delete it once setup
                 succeeds.{" "}
                 <InlineLink
                   href={
@@ -556,7 +556,7 @@ const HetznerDeploy = ({
           />
         </Label>
         <HelpText>
-          Create a read &amp; write API token. It is never stored by NetBird.
+          Create a read &amp; write API token. It is never stored by Cloink.
         </HelpText>
         <Input
           type={"password"}
@@ -694,7 +694,7 @@ const DigitalOceanDeploy = ({
 
   const dropletName = useMemo(() => {
     const label = domain.replace(/[^a-zA-Z0-9.-]/g, "-").toLowerCase();
-    return `netbird-proxy-${label}`.slice(0, 63).replace(/[-.]+$/, "");
+    return `cloink-proxy-${label}`.slice(0, 63).replace(/[-.]+$/, "");
   }, [domain]);
 
   const deploy = async () => {
@@ -711,7 +711,7 @@ const DigitalOceanDeploy = ({
         size,
         image: "ubuntu-24-04-x64",
         user_data: buildCloudInit(domain, token, managementUrl, rootPassword),
-        tags: ["netbird-proxy"],
+        tags: ["cloink-proxy"],
       }),
     })
       .then(async (res) => {
@@ -803,7 +803,7 @@ const DigitalOceanDeploy = ({
                 <span className={"font-mono text-netbird"}>droplet</span>, and{" "}
                 <span className={"font-mono text-netbird"}>reserved_ip</span>{" "}
                 only. The token goes straight from your browser to DigitalOcean
-                and never touches NetBird&apos;s servers, and you can delete it
+                and never touches Cloink&apos;s servers, and you can delete it
                 once setup succeeds.{" "}
                 <InlineLink
                   href={
@@ -818,7 +818,7 @@ const DigitalOceanDeploy = ({
           />
         </Label>
         <HelpText>
-          Create a token with write access. It is never stored by NetBird.
+          Create a token with write access. It is never stored by Cloink.
         </HelpText>
         <Input
           type={"password"}
@@ -884,7 +884,7 @@ const AWSDeploy = ({
   const launchUrl = useMemo(() => {
     const params = new URLSearchParams({
       templateURL: CFN_TEMPLATE_URL,
-      stackName: "netbird-proxy",
+      stackName: "cloink-proxy",
       param_ProxyDomain: domain,
       param_ManagementURL: managementUrl,
     });

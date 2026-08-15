@@ -12,7 +12,7 @@ export function InstallNetBirdButton() {
       <ModalTrigger asChild>
         <Button variant={"secondary"} size={"sm"}>
           <DownloadIcon size={16} />
-          Install NetBird
+          Install Cloink
         </Button>
       </ModalTrigger>
       <SetupModal />

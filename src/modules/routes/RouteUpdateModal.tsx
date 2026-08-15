@@ -470,7 +470,7 @@ function RouteUpdateModalContent({ onSuccess, route, cell }: ModalProps) {
                       Auto Apply Route
                     </>
                   }
-                  helpText={"Automatically apply this exit node to your distribution groups. This requires NetBird client v0.55.0 or higher."}
+                  helpText={"Automatically apply this exit node to your distribution groups. This requires Cloink client v0.55.0 or higher."}
                 />
             )}
 
@@ -517,7 +517,7 @@ function RouteUpdateModalContent({ onSuccess, route, cell }: ModalProps) {
             Learn more about
             <InlineLink
               href={
-                "https://docs.netbird.io/how-to/routing-traffic-to-private-networks"
+                "https://docs.cloink.4w.ink/"
               }
               target={"_blank"}
             >

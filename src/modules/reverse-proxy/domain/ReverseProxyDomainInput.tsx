@@ -71,12 +71,12 @@ export default function ReverseProxyDomainInput({
           <Callout variant={"warning"} className={"mt-3"}>
             Cluster {clusterOffline.clusterName} is offline. Please try again in
             a few minutes. If the issue persists, check{" "}
-            <InlineLink href={"https://status.netbird.io/"} target={"_blank"}>
-              NetBird Status
+            <InlineLink href={"https://cloink.4w.ink/"} target={"_blank"}>
+              Cloink Status
             </InlineLink>{" "}
             or reach out to{"  "}
-            <InlineLink href={"mailto:support@netbird.io"}>
-              support@netbird.io
+            <InlineLink href={"mailto:support@cloink.4w.ink"}>
+              support@cloink.4w.ink
             </InlineLink>
           </Callout>
         ) : (

@@ -37,10 +37,10 @@ export const AccessiblePeersSection = ({ peerID }: Props) => {
         <div className={"flex justify-between items-center mb-5"}>
           <div>
             <Paragraph>
-              This peer can connect to the following peers within the NetBird
+              This peer can connect to the following peers within the Cloink
               network.{" "}
               <InlineLink
-                href={"https://docs.netbird.io/how-to/manage-network-access"}
+                href={"https://docs.cloink.4w.ink/"}
                 target={"_blank"}
               >
                 Learn more

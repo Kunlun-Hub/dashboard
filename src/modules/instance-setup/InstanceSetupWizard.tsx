@@ -194,7 +194,7 @@ export default function InstanceSetupWizard() {
       </div>
       <Card className={"max-w-[420px] mt-8 mx-auto"}>
         <h1 className={"text-xl text-center z-10 relative"}>
-          Welcome to NetBird
+          Welcome to Cloink
         </h1>
         <div
           className={
@@ -289,7 +289,7 @@ export default function InstanceSetupWizard() {
         <span
           className={"text-sm text-nb-gray-400 font-light pb-10 text-center"}
         >
-          This is a one-time setup for your NetBird instance.
+          This is a one-time setup for your Cloink instance.
         </span>
       </div>
     </div>

@@ -12,24 +12,12 @@ import { trialExpiresInfo, usageLimitInfo } from "@/contexts/BillingProvider";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import { isNetBirdCloud } from "@utils/netbird";
 
-const ANNOUNCEMENTS_URL =
-  "https://raw.githubusercontent.com/netbirdio/dashboard/main/announcements.json";
+const ANNOUNCEMENTS_URL = "/announcements.json";
 const STORAGE_KEY = "netbird-announcements";
 const CACHE_DURATION_MS = 30 * 60 * 1000;
 
 // MSP only
-const initialMSPAnnouncements: Announcement[] = [
-  {
-    tag: "New",
-    text: "Huntress now integrates with NetBird",
-    link: "https://docs.netbird.io/manage/access-control/endpoint-detection-and-response/huntress-edr",
-    linkText: "Learn more",
-    variant: "default",
-    isExternal: true,
-    closeable: true,
-    isCloudOnly: true,
-  },
-];
+const initialMSPAnnouncements: Announcement[] = [];
 
 interface AnnouncementStore {
   timestamp: number;

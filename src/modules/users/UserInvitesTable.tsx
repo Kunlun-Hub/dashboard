@@ -595,7 +595,7 @@ export default function UserInvitesTable({
               Learn more about
               <InlineLink
                 href={
-                  "https://docs.netbird.io/how-to/add-users-to-your-network"
+                  "https://docs.cloink.4w.ink/"
                 }
                 target={"_blank"}
               >

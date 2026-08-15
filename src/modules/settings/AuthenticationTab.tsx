@@ -197,7 +197,7 @@ export default function AuthenticationTab({ account }: Readonly<Props>) {
               Learn more about
               <InlineLink
                 href={
-                  "https://docs.netbird.io/how-to/enforce-periodic-user-authentication"
+                  "https://docs.cloink.4w.ink/"
                 }
                 target={"_blank"}
               >
@@ -207,7 +207,7 @@ export default function AuthenticationTab({ account }: Readonly<Props>) {
               or{" "}
               <InlineLink
                 href={
-                  "https://docs.netbird.io/how-to/multi-factor-authentication"
+                  "https://docs.cloink.4w.ink/"
                 }
                 target={"_blank"}
               >

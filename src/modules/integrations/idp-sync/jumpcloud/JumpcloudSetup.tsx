@@ -189,9 +189,9 @@ export function SetupContent({ onSuccess, onClose }: ModalProps) {
 
       <IntegrationModalHeader
         image={integrationImage}
-        title={"Connect NetBird with Jumpcloud"}
+        title={"Connect Cloink with Jumpcloud"}
         description={
-          "Start syncing your users and groups from Jumpcloud to NetBird. Follow the steps below to get started."
+          "Start syncing your users and groups from Jumpcloud to Cloink. Follow the steps below to get started."
         }
       />
 
@@ -268,7 +268,7 @@ export function SetupContent({ onSuccess, onClose }: ModalProps) {
                 sync.{" "}
                 <InlineLink
                   href={
-                    "https://docs.netbird.io/how-to/single-sign-on#jump-cloud"
+                    "https://docs.cloink.4w.ink/"
                   }
                   target={"_blank"}
                 >
@@ -344,7 +344,7 @@ export function SetupContent({ onSuccess, onClose }: ModalProps) {
             <Steps.Step step={2}>
               <p className={"font-normal"}>
                 Go to <Mark>{"SSO Applications"}</Mark> and select your{" "}
-                <Mark>NetBird</Mark> application, and then select{" "}
+                <Mark>Cloink</Mark> application, and then select{" "}
                 <Mark>Identity Management</Mark> tab.
               </p>
             </Steps.Step>
@@ -367,7 +367,7 @@ export function SetupContent({ onSuccess, onClose }: ModalProps) {
                   },
                   {
                     label: "Base URL",
-                    value: "https://api.netbird.io/api/scim/v2",
+                    value: "https://cloink.4w.ink/api/scim/v2",
                   },
                   {
                     label: "Token Key",

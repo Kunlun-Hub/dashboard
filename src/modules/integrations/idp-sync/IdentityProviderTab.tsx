@@ -43,11 +43,11 @@ export default function IdentityProviderTab() {
         <h1>Identity Provider Sync</h1>
         <Paragraph>
           Configure your preferred Identity Provider (IdP) to synchronize your
-          users and groups to NetBird.
+          users and groups to Cloink.
         </Paragraph>
         <Paragraph>
           <InlineLink
-            href={"https://docs.netbird.io/how-to/idp-sync"}
+            href={"https://docs.cloink.4w.ink/"}
             target={"_blank"}
           >
             Learn more
@@ -88,11 +88,11 @@ export default function IdentityProviderTab() {
             Looking to enable a custom IdP like Keycloak? <br />
             Please contact us at{" "}
             <InlineLink
-              href={"mailto:support@netbird.io"}
+              href={"mailto:support@cloink.4w.ink"}
               className={"inline !text-netbird-500 font-medium"}
             >
               {" "}
-              support@netbird.io
+              support@cloink.4w.ink
             </InlineLink>{" "}
           </Callout>}
         </LockedFeatureOverlay>

@@ -85,7 +85,7 @@ export default function GroupsSettings({ account }: Props) {
     const choice = showConfirm
       ? await confirm({
           title: `JWT allow group - ${jwtAllowGroups[0]}`,
-          description: `Only users part of the ${jwtAllowGroups[0]} group will be able to access NetBird. Are you sure you want to save the changes?`,
+          description: `Only users part of the ${jwtAllowGroups[0]} group will be able to access Cloink. Are you sure you want to save the changes?`,
           confirmText: "Save",
           children: (
             <div
@@ -237,8 +237,8 @@ export default function GroupsSettings({ account }: Props) {
                     <div>
                       <Label>JWT allow groups</Label>
                       <HelpText>
-                        Limit access to NetBird for the specified group names,
-                        e.g., NetBird users. To use the groups, you need to
+                        Limit access to Cloink for the specified group names,
+                        e.g., Cloink users. To use the groups, you need to
                         configure them first in your IdP.
                       </HelpText>
                       <div>

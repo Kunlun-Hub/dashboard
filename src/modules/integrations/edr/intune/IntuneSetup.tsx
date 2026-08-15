@@ -121,7 +121,7 @@ export function SetupContent({ onSuccess, account }: Readonly<ModalProps>) {
 
     notify({
       title: "Intune Integration",
-      description: `Intune was successfully connected to NetBird.`,
+      description: `Intune was successfully connected to Cloink.`,
       promise: intuneRequest
         .post({
           secret: clientSecret,
@@ -166,7 +166,7 @@ export function SetupContent({ onSuccess, account }: Readonly<ModalProps>) {
 
       <IntegrationModalHeader
         image={integrationImage}
-        title={"Connect NetBird with Intune"}
+        title={"Connect Cloink with Intune"}
         description={
           "Restrict network access to IT-managed devices marked Compliant in Intune. Follow the steps below to get started."
         }
@@ -265,7 +265,7 @@ export function SetupContent({ onSuccess, account }: Readonly<ModalProps>) {
             data={[
               {
                 label: "Name",
-                value: "NetBird",
+                value: "Cloink",
               },
               {
                 label: "Account Types",
@@ -334,7 +334,7 @@ export function SetupContent({ onSuccess, account }: Readonly<ModalProps>) {
             </Steps.Step>
             <Steps.Step step={3}>
               <p className={"font-normal"}>
-                Add <Mark copy>NetBird</Mark> as the description and click{" "}
+                Add <Mark copy>Cloink</Mark> as the description and click{" "}
                 <Mark>Add</Mark>
               </p>
             </Steps.Step>
@@ -384,7 +384,7 @@ export function SetupContent({ onSuccess, account }: Readonly<ModalProps>) {
             </Steps.Step>
             <Steps.Step step={2} line={false}>
               <p className={"font-normal"}>
-                Select <Mark>NetBird</Mark> application in overview page and
+                Select <Mark>Cloink</Mark> application in overview page and
                 enter your <Mark>Application (client) ID</Mark> and{" "}
                 <Mark>Directory (tenant) ID</Mark>
               </p>

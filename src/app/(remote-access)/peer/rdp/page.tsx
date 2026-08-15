@@ -70,7 +70,7 @@ function RDPSession({ peer }: Props) {
   };
 
   /**
-   * Reset the RDP session state but keep the NetBird client connected,
+   * Reset the RDP session state but keep the Cloink client connected,
    * so a retry does not pay the full engine reconnect.
    */
   const reset = useCallback(async () => {
@@ -104,7 +104,7 @@ function RDPSession({ peer }: Props) {
         status = NetBirdStatus.DISCONNECTED;
       } catch (error) {
         sendErrorNotification(
-          "NetBird Connection Error",
+          "Cloink Connection Error",
           (error as Error).message,
         );
         return;
@@ -121,7 +121,7 @@ function RDPSession({ peer }: Props) {
         setIsNetBirdConnecting(false);
       } catch (error) {
         sendErrorNotification(
-          "NetBird Connection Error",
+          "Cloink Connection Error",
           (error as Error).message,
         );
         setIsNetBirdConnecting(false);
@@ -155,7 +155,7 @@ function RDPSession({ peer }: Props) {
   }, [credentials, peer.ip, rdp, reset]);
 
   /**
-   * Establish RDP session when NetBird connection is ready
+   * Establish RDP session when Cloink connection is ready
    */
   useEffect(() => {
     if (
@@ -177,14 +177,14 @@ function RDPSession({ peer }: Props) {
   ]);
 
   /**
-   * Display notifications for RDP and NetBird client errors
+   * Display notifications for RDP and Cloink client errors
    */
   useEffect(() => {
     if (rdp.error) {
       sendErrorNotification("RDP Error", rdp.error);
     }
     if (client.error) {
-      sendErrorNotification("NetBird Client Error", client.error);
+      sendErrorNotification("Cloink Client Error", client.error);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rdp.error, client.error]);

@@ -74,20 +74,20 @@ export const OnboardingAddUserDevice = ({ device, policy, onNext }: Props) => {
             "text-sm text-nb-gray-300 font-light mt-2 block text-center sm:px-4"
           }
         >
-          {`Your first resource and routing peer are all set. Now, take your device, install NetBird, and let's get you connected.`}
+          {`Your first resource and routing peer are all set. Now, take your device, install Cloink, and let's get you connected.`}
         </div>
       </div>
 
       <div className={"flex items-center justify-center mt-3"}>
         <Button variant={"primary"} onClick={() => setOpen(true)}>
           <DownloadIcon size={16} />
-          Install NetBird
+          Install Cloink
         </Button>
       </div>
 
       <Modal open={open} onOpenChange={setOpen}>
         <ModalContent>
-          <SetupModalContent title={"Install NetBird"} isUserDevice={true} />
+          <SetupModalContent title={"Install Cloink"} isUserDevice={true} />
         </ModalContent>
       </Modal>
     </div>

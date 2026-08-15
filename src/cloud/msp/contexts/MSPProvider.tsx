@@ -36,7 +36,7 @@ const MSPContext = React.createContext(
 );
 
 export default function MSPProvider({ children }: Readonly<Props>) {
-  // MSP is a NetBird Cloud-only feature. Skip the calls on self-hosted
+  // MSP is a Cloink Cloud-only feature. Skip the calls on self-hosted
   // deployments where the endpoints are not served.
   const isCloud = isNetBirdCloud();
   const {

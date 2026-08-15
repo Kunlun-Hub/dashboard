@@ -44,7 +44,7 @@ export default function Activity() {
           Audit configuration changes, access policy updates, and peer
           registration and login events across your network.{" "}
           <InlineLink
-            href={"https://docs.netbird.io/how-to/audit-events-logging"}
+            href={"https://docs.cloink.4w.ink/"}
             target={"_blank"}
           >
             Learn more

@@ -19,14 +19,17 @@ import { PlanCard, PlanLoadingSkeleton } from "@/modules/billing/PlanCard";
 import { PlanCurrentPlan } from "@/modules/billing/PlanCurrentPlan";
 import { PlanSuccessModal } from "@/modules/billing/PlanSuccessModal";
 import { TrialGradientCard } from "@/modules/billing/trial/TrialGradientCard";
+import { useDashboardFeatures } from "@/modules/account/useDashboardFeatures";
 
 export const PlansAndBillingTab = () => {
   const { permission } = usePermissions();
+  const { billing: billingEnabled } = useDashboardFeatures();
 
   const { isAccountWithMSPParent } = useMSP();
   if (isAccountWithMSPParent) return;
 
-  const canViewBilling = permission?.billing?.update && isNetBirdCloud();
+  const canViewBilling =
+    permission?.billing?.update && isNetBirdCloud() && billingEnabled;
   if (!canViewBilling) return;
 
   return <PlansAndBillingTabContent />;
@@ -34,11 +37,13 @@ export const PlansAndBillingTab = () => {
 
 export const PlansAndBillingTabTrigger = () => {
   const { permission } = usePermissions();
+  const { billing: billingEnabled } = useDashboardFeatures();
 
   const { isAccountWithMSPParent } = useMSP();
   if (isAccountWithMSPParent) return;
 
-  const canViewBilling = permission?.billing?.update && isNetBirdCloud();
+  const canViewBilling =
+    permission?.billing?.update && isNetBirdCloud() && billingEnabled;
   if (!canViewBilling) return;
 
   return (
@@ -205,8 +210,8 @@ const PlansAndBillingTabContent = () => {
         <div className={"max-w-3xl"}>
           <h2>
             {subscription?.active
-              ? "Update your NetBird Plan"
-              : "Upgrade your NetBird Plan"}
+              ? "Update your Cloink Plan"
+              : "Upgrade your Cloink Plan"}
           </h2>
 
           <Paragraph>
@@ -218,7 +223,7 @@ const PlansAndBillingTabContent = () => {
           </Paragraph>
           <Paragraph>
             Find out which{" "}
-            <InlineLink href={"https://netbird.io/pricing"} target={"_blank"}>
+            <InlineLink href={"https://cloink.4w.ink/"} target={"_blank"}>
               Pricing Plan
               <ExternalLinkIcon size={12} />
             </InlineLink>

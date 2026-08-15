@@ -39,7 +39,7 @@ export default function InstanceSetupProvider({
   const bypassRoutes = ["/install"];
   const shouldBypass = bypassRoutes.includes(pathname) || isOIDCCallback();
 
-  // Skip setup check for NetBird hosted (cloud) deployments
+  // Skip setup check for Cloink hosted (cloud) deployments
   const isCloud = isNetBirdCloud();
   const isSetupPage = pathname === "/setup";
 

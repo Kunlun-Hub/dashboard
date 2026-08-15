@@ -94,7 +94,7 @@ export const MSPDomainVerificationModal = ({
 
           <Paragraph className={"text-sm mt-4"}>
             {
-              "Note: DNS changes may take some time to apply. If NetBird doesn't find the record immediately, please wait a day and try again."
+              "Note: DNS changes may take some time to apply. If Cloink doesn't find the record immediately, please wait a day and try again."
             }
           </Paragraph>
 
@@ -106,11 +106,11 @@ export const MSPDomainVerificationModal = ({
             If you do not have access to your DNS configuration, you can also
             verify your domain by sending us an email to{" "}
             <InlineLink
-              href={"mailto:support@netbird.io"}
+              href={"mailto:support@cloink.4w.ink"}
               className={"inline font-medium"}
             >
               {" "}
-              support@netbird.io
+              support@cloink.4w.ink
             </InlineLink>
             . The email should be sent from the domain you are trying to verify.
           </div>

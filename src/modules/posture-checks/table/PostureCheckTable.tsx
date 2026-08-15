@@ -230,7 +230,7 @@ export default function PostureCheckTable({
                 }
                 title={"Create Posture Check"}
                 description={
-                  "Add posture checks to further restrict access in your network. E.g., only clients with a specific NetBird client version, operating system or location are allowed to connect."
+                  "Add posture checks to further restrict access in your network. E.g., only clients with a specific Cloink client version, operating system or location are allowed to connect."
                 }
                 button={
                   <Button
@@ -250,7 +250,7 @@ export default function PostureCheckTable({
                     Learn more about
                     <InlineLink
                       href={
-                        "https://docs.netbird.io/how-to/manage-posture-checks"
+                        "https://docs.cloink.4w.ink/"
                       }
                       target={"_blank"}
                     >

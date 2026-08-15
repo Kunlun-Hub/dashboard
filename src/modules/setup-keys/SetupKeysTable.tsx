@@ -338,7 +338,7 @@ export default function SetupKeysTable({
                   Learn more about
                   <InlineLink
                     href={
-                      "https://docs.netbird.io/how-to/register-machines-using-setup-keys"
+                      "https://docs.cloink.4w.ink/"
                     }
                     target={"_blank"}
                   >

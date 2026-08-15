@@ -308,7 +308,7 @@ export function AccessControlModalContent({
                         side={"right"}
                         content={
                           <>
-                            Select NetBird SSH for SSH-specific policies with
+                            Select Cloink SSH for SSH-specific policies with
                             fine-grained access control, or use TCP with port 22
                             for basic network-level SSH access
                           </>
@@ -316,7 +316,7 @@ export function AccessControlModalContent({
                       />
                     }
                   >
-                    NetBird SSH
+                    Cloink SSH
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -564,7 +564,7 @@ export function AccessControlModalContent({
           <Paragraph className={"text-sm mt-auto"}>
             Learn more about
             <InlineLink
-              href={"https://docs.netbird.io/how-to/manage-network-access"}
+              href={"https://docs.cloink.4w.ink/"}
               target={"_blank"}
             >
               Access Controls

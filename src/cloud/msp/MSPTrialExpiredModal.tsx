@@ -51,8 +51,8 @@ export const MSPTrialExpiredModal = () => {
 
   const mailToEmail =
     mspInfo?.reseller_status === "active"
-      ? "support@netbird.io"
-      : mspInfo?.parent_owner_email || "support@netbird.io";
+      ? "support@cloink.4w.ink"
+      : mspInfo?.parent_owner_email || "support@cloink.4w.ink";
 
   return (
     <Modal open={true} onOpenChange={undefined}>
@@ -69,17 +69,17 @@ export const MSPTrialExpiredModal = () => {
             <div className={"text-sm text-nb-gray-300 text-center"}>
               <TenantName currentAccount={currentAccount} />
               has reached the end of the free trial period. To continue using
-              NetBird, please upgrade the plan for this tenant.
+              Cloink, please upgrade the plan for this tenant.
             </div>
           ) : mspInfo?.reseller_status === "active" ? (
             <div className={"text-sm text-nb-gray-300 text-center"}>
               Your account has reached the end of the free trial period. <br />{" "}
-              To continue using NetBird, please contact your distributor.
+              To continue using Cloink, please contact your distributor.
             </div>
           ) : (
             <div className={"text-sm text-nb-gray-300 text-center"}>
               Your account has reached the end of the free trial period. To
-              continue using NetBird, please contact your account administrator{" "}
+              continue using Cloink, please contact your account administrator{" "}
               <MSPName />.
             </div>
           )}

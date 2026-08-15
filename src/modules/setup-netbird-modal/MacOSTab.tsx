@@ -40,7 +40,7 @@ export default function MacOSTab({
   hostname,
 }: Readonly<Props>) {
   // Mirrors WindowsTab: server flow (setupKeyContent present) forces
-  // the CLI run branch so the netbird up command stays visible while
+  // the CLI run branch so the cloink up command stays visible while
   // the operator generates a key.
   const useCliRun = !!setupKey || !!setupKeyContent;
   const baseMgmtStep = 2;
@@ -67,7 +67,7 @@ export default function MacOSTab({
               >
                 <Button variant={"primary"}>
                   <DownloadIcon size={14} />
-                  Download NetBird
+                  Download Cloink
                 </Button>
               </Link>
             </div>
@@ -76,7 +76,7 @@ export default function MacOSTab({
           {GRPC_API_ORIGIN && (
             <Steps.Step step={baseMgmtStep}>
               <p>
-                {`Click on "Settings" then "Advanced Settings" from the NetBird icon in your system tray and enter the following "Management URL"`}
+                {`Click on "Settings" then "Advanced Settings" from the Cloink icon in your system tray and enter the following "Management URL"`}
               </p>
               <Code>
                 <Code.Line>{GRPC_API_ORIGIN}</Code.Line>
@@ -91,7 +91,7 @@ export default function MacOSTab({
           {useCliRun ? (
             <Steps.Step step={runStep} line={false}>
               <p>
-                Open Terminal and run NetBird{" "}
+                Open Terminal and run Cloink{" "}
                 {showSetupKeyInfo && <RoutingPeerSetupKeyInfo />}
               </p>
 
@@ -106,7 +106,7 @@ export default function MacOSTab({
               <Steps.Step step={runStep}>
                 <p>
                   {/* eslint-disable-next-line react/no-unescaped-entities */}
-                  Click on "Connect" from the NetBird icon in your system tray
+                  Click on "Connect" from the Cloink icon in your system tray
                 </p>
               </Steps.Step>
               <Steps.Step step={runStep + 1} line={false}>
@@ -127,13 +127,11 @@ export default function MacOSTab({
             <AccordionContent>
               <Steps>
                 <Steps.Step step={1}>
-                  <Code>
-                    curl -fsSL https://pkgs.netbird.io/install.sh | sh
-                  </Code>
+                  <Code>curl -fsSL https://cloink.4w.ink/install.sh | sh</Code>
                 </Steps.Step>
                 <Steps.Step step={2} line={false}>
                   <p>
-                    Run NetBird {!usingSetupKeyParam && "and log in the browser"}
+                    Run Cloink {!usingSetupKeyParam && "and log in the browser"}
                     {showSetupKeyInfo && <RoutingPeerSetupKeyInfo />}
                   </p>
                   <NetBirdUpCommand
@@ -168,31 +166,29 @@ export default function MacOSTab({
                   </div>
                 </Steps.Step>
                 <Steps.Step step={2}>
-                  <p>Install NetBird </p>
+                  <p>Install Cloink </p>
                   <Code
                     codeToCopy={[
-                      `brew install netbirdio/tap/netbird`,
-                      `brew install --cask netbirdio/tap/netbird-ui`,
+                      `brew install cloink`,
+                      `brew install --cask cloink-ui`,
                     ].join("\n")}
                   >
                     <Code.Comment># for CLI only</Code.Comment>
-                    <Code.Line>brew install netbirdio/tap/netbird</Code.Line>
+                    <Code.Line>brew install cloink</Code.Line>
                     <Code.Comment># for GUI package</Code.Comment>
-                    <Code.Line>
-                      brew install --cask netbirdio/tap/netbird-ui
-                    </Code.Line>
+                    <Code.Line>brew install --cask cloink-ui</Code.Line>
                   </Code>
                 </Steps.Step>
                 <Steps.Step step={3}>
-                  <p>Start NetBird daemon</p>
+                  <p>Start Cloink daemon</p>
                   <Code>
-                    <Code.Line>sudo netbird service install</Code.Line>
-                    <Code.Line>sudo netbird service start</Code.Line>
+                    <Code.Line>sudo cloink service install</Code.Line>
+                    <Code.Line>sudo cloink service start</Code.Line>
                   </Code>
                 </Steps.Step>
                 <Steps.Step step={4} line={false}>
                   <p>
-                    Run NetBird {!usingSetupKeyParam && "and log in the browser"}
+                    Run Cloink {!usingSetupKeyParam && "and log in the browser"}
                     {showSetupKeyInfo && <RoutingPeerSetupKeyInfo />}
                   </p>
                   <NetBirdUpCommand

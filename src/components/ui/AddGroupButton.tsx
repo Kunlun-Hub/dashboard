@@ -86,7 +86,7 @@ export const AddGroupButton = () => {
               <Paragraph className={"text-sm mt-auto"}>
                 Learn more about
                 <InlineLink
-                  href={"https://docs.netbird.io/how-to/manage-network-access"}
+                  href={"https://docs.cloink.4w.ink/"}
                   target={"_blank"}
                 >
                   Groups

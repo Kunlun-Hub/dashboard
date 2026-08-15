@@ -215,7 +215,7 @@ export const FirewallGptPolicyPreview = ({
         } as Policy;
 
         notify({
-          title: "NetBird's Smart Firewall",
+          title: "Cloink's Smart Firewall",
           preventSuccessToast: true,
           description: `Policy ${policyObj?.name} was successfully created.`,
           promise: createPolicyRequest(policyObj)

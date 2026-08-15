@@ -8,9 +8,54 @@ export interface Account {
     extra: {
       peer_approval_enabled: boolean;
       user_approval_required: boolean;
-      network_traffic_logs_enabled: boolean;
-      network_traffic_packet_counter_enabled: boolean;
-      network_traffic_logs_groups: string[];
+      network_traffic_logs_enabled?: boolean;
+      network_traffic_packet_counter_enabled?: boolean;
+      network_traffic_logs_groups?: string[];
+      network_traffic_exit_node_collection_enabled?: boolean;
+      network_traffic_dns_collection_enabled?: boolean;
+      dns_domain_filter_mode?: string;
+      flow_dns_domain_filter_mode?: string;
+      network_traffic_dns_domain_filter_mode?: string;
+      dns_domain_filter_list?: string[];
+      flow_dns_domain_filter_list?: string[];
+      network_traffic_dns_domain_filter_list?: string[];
+      flow_enabled?: boolean;
+      flow_groups?: string[];
+      flow_packet_counter_enabled?: boolean;
+      flow_exit_node_collection_enabled?: boolean;
+      flow_dns_collection_enabled?: boolean;
+      flow_local_storage_enabled?: boolean;
+      flow_local_storage_path?: string;
+      flow_local_storage_max_size_mb?: number;
+      flow_local_storage_max_files?: number;
+      flow_syslog_enabled?: boolean;
+      flow_syslog_server?: string;
+      flow_syslog_protocol?: string;
+      flow_syslog_facility?: string;
+      flow_syslog_tag?: string;
+      branding_logo_data_url?: string;
+      branding_logo_dark_data_url?: string;
+      branding_icon_data_url?: string;
+      branding_tab_title?: string;
+      branding_primary_color?: string;
+    };
+    flow?: {
+      enabled?: boolean;
+      groups?: string[];
+      counters?: boolean;
+      dns_collection?: boolean;
+      exit_node_collection?: boolean;
+      dns_domain_filter_mode?: string;
+      dns_domain_filter_list?: string[];
+    };
+    flow_logs?: {
+      enabled?: boolean;
+      groups?: string[];
+      counters?: boolean;
+      dns_collection?: boolean;
+      exit_node_collection?: boolean;
+      dns_domain_filter_mode?: string;
+      dns_domain_filter_list?: string[];
     };
     peer_login_expiration_enabled: boolean;
     peer_expose_enabled?: boolean;
@@ -44,6 +89,8 @@ export interface Account {
 // AccountDashboardFeatures holds per-account dashboard section visibility
 // overrides. Omitted keys follow the default dashboard behavior.
 export interface AccountDashboardFeatures {
+  cloud?: boolean;
+  billing?: boolean;
   agent_network?: boolean;
 }
 

@@ -42,7 +42,7 @@ const DistributorContext = React.createContext(
 );
 
 export default function DistributorProvider({ children }: Readonly<Props>) {
-  // Distributor (reseller) data lives behind an MSP endpoint that only NetBird
+  // Distributor (reseller) data lives behind an MSP endpoint that only Cloink
   // Cloud serves. Skip the call on self-hosted deployments.
   const {
     data: distributorInfo,

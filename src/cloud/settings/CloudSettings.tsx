@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import {
   PlansAndBillingTab,
@@ -8,8 +10,11 @@ import {
   NotificationsTabTrigger,
   NotificationTab,
 } from "@/cloud/notifications/NotificationTab";
+import { useDashboardFeatures } from "@/modules/account/useDashboardFeatures";
 
 export const CloudSettingsTabContent = () => {
+  const { billing } = useDashboardFeatures();
+  if (!billing) return null;
   return (
     <>
       <NotificationTab />
@@ -20,6 +25,8 @@ export const CloudSettingsTabContent = () => {
 };
 
 export const CloudSettingsTabTrigger = () => {
+  const { billing } = useDashboardFeatures();
+  if (!billing) return null;
   return (
     <>
       <NotificationsTabTrigger />

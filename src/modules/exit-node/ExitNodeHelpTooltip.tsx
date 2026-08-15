@@ -27,7 +27,7 @@ export const ExitNodeHelpTooltip = ({
               Learn more about{" "}
               <InlineLink
                 href={
-                  "https://docs.netbird.io/how-to/configuring-default-routes-for-internet-traffic"
+                  "https://docs.cloink.4w.ink/"
                 }
                 target={"_blank"}
                 className={"mr-1"}

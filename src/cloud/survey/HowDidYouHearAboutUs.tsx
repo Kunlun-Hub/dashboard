@@ -109,13 +109,13 @@ export default function HowDidYouHearAboutUs() {
             <Paragraph
               className={cn("text-sm text-center max-w-[400px] px-4 mt-2")}
             >
-              Help us improve by sharing how you discovered NetBird. Your
+              Help us improve by sharing how you discovered Cloink. Your
               feedback truly helps us grow.
             </Paragraph>
           </div>
           <div className={"px-8 py-3 flex flex-col mt-5 z-0 gap-6"}>
             <div className={"flex w-full flex-col gap-2"}>
-              <Label>How did you hear about NetBird?</Label>
+              <Label>How did you hear about Cloink?</Label>
               <SelectDropdown
                 value={referralSource}
                 onChange={setReferralSource}

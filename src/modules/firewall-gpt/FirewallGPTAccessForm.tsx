@@ -114,7 +114,7 @@ export const FirewallGptAccessForm = ({ account_id, onSubmit }: Props) => {
             <div className={"flex w-full flex-col gap-2"}>
               <div>
                 <Label>
-                  How many people in your company will use NetBird?
+                  How many people in your company will use Cloink?
                   <span className={"text-red-500 relative -top-[2.5px] "}>
                     *
                   </span>

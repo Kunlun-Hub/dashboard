@@ -22,7 +22,7 @@ export const AccountMFAInfoModal = ({
         <GradientFadedBackground />
         <div className={"flex items-center justify-center flex-col gap-3 px-6"}>
           <div className={"text-xl font-medium text-center"}>
-            You may not need NetBird MFA
+            You may not need Cloink MFA
           </div>
           <div className={"text-sm text-nb-gray-300 text-center mb-2"}>
             {`Your`}

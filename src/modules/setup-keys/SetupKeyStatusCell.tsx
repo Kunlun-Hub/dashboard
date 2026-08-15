@@ -22,7 +22,7 @@ export const AllowExtraDNSLabels = () => {
       content={
         <div className="max-w-xs text-xs">
           Allow multiple DNS labels in the peer name (e.g. <br />
-          host.europe.netbird.io.)
+          host.europe.cloink.4w.ink.)
         </div>
       }
     >

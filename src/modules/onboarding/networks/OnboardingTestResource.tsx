@@ -73,7 +73,7 @@ export const OnboardingTestResource = ({
             Everything working? Great! You can now continue with the onboarding.
             If something isn’t right, please check our{" "}
             <InlineLink
-              href={"https://docs.netbird.io/how-to/troubleshooting-client"}
+              href={"https://docs.cloink.4w.ink/"}
               target={"_blank"}
               onClick={onTroubleshootingClick}
             >
@@ -95,7 +95,7 @@ export const OnboardingTestResource = ({
 
       <Modal open={open} onOpenChange={setOpen}>
         <ModalContent>
-          <SetupModalContent title={"Install NetBird"} />
+          <SetupModalContent title={"Install Cloink"} />
         </ModalContent>
       </Modal>
     </div>

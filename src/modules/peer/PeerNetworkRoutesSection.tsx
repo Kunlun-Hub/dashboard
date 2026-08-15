@@ -26,11 +26,11 @@ export const PeerNetworkRoutesSection = ({ peer }: Props) => {
         <div className={"flex justify-between items-center mb-5"}>
           <div>
             <Paragraph>
-              Access other networks without installing NetBird on every
+              Access other networks without installing Cloink on every
               resource.{" "}
               <InlineLink
                 href={
-                  "https://docs.netbird.io/how-to/routing-traffic-to-private-networks"
+                  "https://docs.cloink.4w.ink/"
                 }
                 target={"_blank"}
               >

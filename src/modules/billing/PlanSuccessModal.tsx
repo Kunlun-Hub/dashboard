@@ -25,11 +25,11 @@ export const PlanSuccessModal = () => {
         >
           <h2 className={"text-xl my-0 leading-[1.5] mb-2"}>
             Thank you for subscribing <br />
-            to NetBird! 🎉
+            to Cloink! 🎉
           </h2>
           <Paragraph className={cn("text-sm text-center max-w-xs")}>
             Your subscription has been successfully activated. You have now full
-            access to all NetBird features of your selected plan.
+            access to all Cloink features of your selected plan.
           </Paragraph>
           <ModalClose asChild={true}>
             <Button variant={"primary"} className={"w-full mt-4"} size={"xs"}>

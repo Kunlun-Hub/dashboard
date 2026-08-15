@@ -287,7 +287,7 @@ export function UserInviteModalContent({
     if (isCloud)
       return "Invite a user to your network and set their permissions.";
     if (mode === "create") {
-      return "Create a NetBird user account with email and password.";
+      return "Create a Cloink user account with email and password.";
     }
     return "Generate an invite link that the user can use to set their own password.";
   };
@@ -372,7 +372,7 @@ export function UserInviteModalContent({
                 <MailIcon size={16} className={"text-nb-gray-300"} />
               </div>
             }
-            placeholder={"hello@netbird.io"}
+          placeholder={"hello@cloink.4w.ink"}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />

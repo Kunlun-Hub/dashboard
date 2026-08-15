@@ -92,7 +92,7 @@ export function SetupContent({ onSuccess }: ModalProps) {
   const connect = async () => {
     notify({
       title: "Entra ID Integration",
-      description: `Entra ID was successfully connected to NetBird.`,
+      description: `Entra ID was successfully connected to Cloink.`,
       promise: azureRequest
         .post({
           client_secret: btoa(clientSecret), // Encode client secret to base64
@@ -145,9 +145,9 @@ export function SetupContent({ onSuccess }: ModalProps) {
 
       <IntegrationModalHeader
         image={integrationImage}
-        title={"Connect NetBird with Entra ID (API)"}
+        title={"Connect Cloink with Entra ID (API)"}
         description={
-          "Start syncing your users and groups from Entra ID to NetBird. Follow the steps below to get started."
+          "Start syncing your users and groups from Entra ID to Cloink. Follow the steps below to get started."
         }
       />
 
@@ -253,7 +253,7 @@ export function SetupContent({ onSuccess }: ModalProps) {
             data={[
               {
                 label: "Name",
-                value: "NetBird",
+                value: "Cloink",
               },
               {
                 label: "Account Types",
@@ -266,7 +266,7 @@ export function SetupContent({ onSuccess }: ModalProps) {
               },
               {
                 label: "Redirect URI",
-                value: "https://app.netbird.io/silent-auth",
+                value: "https://cloink.4w.ink/silent-auth",
               },
             ]}
           />
@@ -330,7 +330,7 @@ export function SetupContent({ onSuccess }: ModalProps) {
             </Steps.Step>
             <Steps.Step step={3}>
               <p className={"font-normal"}>
-                Add <Mark copy>NetBird</Mark> as the description and click{" "}
+                Add <Mark copy>Cloink</Mark> as the description and click{" "}
                 <Mark>Add</Mark>
               </p>
             </Steps.Step>
@@ -380,7 +380,7 @@ export function SetupContent({ onSuccess }: ModalProps) {
             </Steps.Step>
             <Steps.Step step={2} line={false}>
               <p className={"font-normal"}>
-                Select <Mark>NetBird</Mark> application in overview page and
+                Select <Mark>Cloink</Mark> application in overview page and
                 enter your <Mark>Application (client) ID</Mark> and{" "}
                 <Mark>Directory (tenant) ID</Mark>
               </p>

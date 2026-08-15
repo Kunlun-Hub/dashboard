@@ -26,7 +26,7 @@ export const IntegrationModalHeader = ({
         >
           <Image
             src={netBirdLogo}
-            alt={"NetBird"}
+            alt={"Cloink"}
             className={"rounded-[4px]"}
           />
         </div>

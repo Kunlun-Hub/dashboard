@@ -13,15 +13,18 @@ import { useBilling } from "@/contexts/BillingProvider";
 import { usePermissions } from "@/contexts/PermissionsProvider";
 import { PlanIcon } from "@/modules/billing/PlanIcon";
 import { TrialNavigationInfoCard } from "@/modules/billing/trial/TrialNavigationInfoCard";
+import { useDashboardFeatures } from "@/modules/account/useDashboardFeatures";
 
 export const NavigationUsageInfo = () => {
   const { permission } = usePermissions();
+  const { billing: billingEnabled } = useDashboardFeatures();
   const { isNavigationCollapsed, mobileNavOpen } = useApplicationContext();
 
   const { isAccountWithMSPParent } = useMSP();
   if (isAccountWithMSPParent) return;
 
-  const canViewBilling = permission?.billing?.update && isNetBirdCloud();
+  const canViewBilling =
+    permission?.billing?.update && isNetBirdCloud() && billingEnabled;
   if (!canViewBilling) return;
 
   return (

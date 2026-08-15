@@ -280,7 +280,7 @@ export function AgentConnectTabs({
               `model_provider = "netbird"`,
               ``,
               `[model_providers.netbird]`,
-              `name = "NetBird"`,
+              `name = "Cloink"`,
               `base_url = "${openaiBase}"`,
               `wire_api = "responses"`,
             ]}
@@ -294,7 +294,7 @@ export function AgentConnectTabs({
             // Kimi CLI reads providers from ~/.kimi/config.toml. Unlike
             // Claude Code, its "anthropic" provider type needs the bare
             // endpoint — no /anthropic prefix in base_url; api_key is a
-            // placeholder since NetBird injects the real key server-side.
+            // placeholder since Cloink injects the real key server-side.
             caption={"Add to ~/.kimi/config.toml:"}
             lines={[
               `default_model = "kimi-k3"`,
@@ -333,7 +333,7 @@ export function AgentConnectTabs({
               ``,
               `client.chat.completions.create(`,
               `    model="gpt-5.5",`,
-              `    messages=[{"role": "user", "content": "What is NetBird Agent Network?"}],`,
+              `    messages=[{"role": "user", "content": "What is Cloink Agent Network?"}],`,
               `)`,
             ]}
           />
@@ -351,11 +351,11 @@ export function AgentConnectTabs({
               `  -d '{`,
               `    "model": "gpt-5.5",`,
               `    "messages": [`,
-              `      { "role": "user", "content": "What is NetBird Agent Network?" }`,
+              `      { "role": "user", "content": "What is Cloink Agent Network?" }`,
               `    ]`,
               `  }'`,
             ]}
-            copyText={`curl ${openaiBase}/chat/completions -H "Content-Type: application/json" -d '{"model":"gpt-5.5","messages":[{"role":"user","content":"What is NetBird Agent Network?"}]}'`}
+            copyText={`curl ${openaiBase}/chat/completions -H "Content-Type: application/json" -d '{"model":"gpt-5.5","messages":[{"role":"user","content":"What is Cloink Agent Network?"}]}'`}
           />
         </div>
       </TabsContent>
@@ -380,8 +380,8 @@ export default function AgentConnectModal({
             <h2 className={"text-lg my-0 leading-[1.5]"}>Configure Your Agent</h2>
           </div>
           <Paragraph className={"text-sm mt-3"}>
-            Point your agent at the NetBird endpoint as its base URL. No provider
-            API key is needed on the client. NetBird authorizes the request
+            Point your agent at the Cloink endpoint as its base URL. No provider
+            API key is needed on the client. Cloink authorizes the request
             against your policies and injects the upstream key.
           </Paragraph>
         </div>

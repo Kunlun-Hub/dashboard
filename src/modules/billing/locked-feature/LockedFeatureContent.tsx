@@ -85,7 +85,7 @@ const AvailableOnPlanText = ({
   if (!isNetBirdCloud()) {
       return (
       <>
-        {featureText} {isOrAre} available with a NetBird Enterprise commercial license, or on NetBird Cloud with the {teamOrBusiness}
+        {featureText} {isOrAre} available with a Cloink Enterprise commercial license, or on Cloink Cloud with the {teamOrBusiness}
       </>
       )
   }
@@ -145,7 +145,7 @@ const UpgradeOrTrialText = ({
 
 const GetMSPSupportButton = () => {
   const { mspInfo, hasReseller } = useMSP();
-  const mailToEmail = mspInfo?.parent_owner_email || "support@netbird.io";
+  const mailToEmail = mspInfo?.parent_owner_email || "support@cloink.4w.ink";
   if (hasReseller) return;
 
   return (

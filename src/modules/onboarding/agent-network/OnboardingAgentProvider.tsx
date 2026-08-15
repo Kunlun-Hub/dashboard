@@ -29,8 +29,8 @@ export const OnboardingAgentProvider = ({ onBack, onNext }: Props) => {
             "text-sm text-nb-gray-300 font-light mt-2 block text-center sm:px-4"
           }
         >
-          {`A provider is an upstream LLM service NetBird routes to, such as
-          OpenAI, Anthropic, or an AI gateway. NetBird
+          {`A provider is an upstream LLM service Cloink routes to, such as
+          OpenAI, Anthropic, or an AI gateway. Cloink
           stores the API key securely and returns a tunnel-only endpoint.`}
         </div>
       </div>

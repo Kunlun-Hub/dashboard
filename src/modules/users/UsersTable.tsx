@@ -384,7 +384,7 @@ export default function UsersTable({
                 Learn more about
                 <InlineLink
                   href={
-                    "https://docs.netbird.io/how-to/add-users-to-your-network"
+                    "https://docs.cloink.4w.ink/"
                   }
                   target={"_blank"}
                 >
@@ -502,7 +502,7 @@ export const InviteUserButton = ({
             <div className={"text-xs mt-1.5"}>
               <InlineLink
                 href={
-                  "https://docs.netbird.io/selfhosted/identity-providers/disable-local-authentication"
+                  "https://docs.cloink.4w.ink/"
                 }
                 target={"_blank"}
                 className={"flex gap-1 items-center"}

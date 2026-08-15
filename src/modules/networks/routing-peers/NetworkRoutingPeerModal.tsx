@@ -289,7 +289,7 @@ function RoutingPeerModalContent({
               <div>
                 <Label>{"Don't have a routing peer?"}</Label>
                 <HelpText className={""}>
-                  You can install NetBird with a setup key on one or more
+                  You can install Cloink with a setup key on one or more
                   machines to act as routing peers.
                 </HelpText>
               </div>
@@ -358,7 +358,7 @@ function RoutingPeerModalContent({
           <Paragraph className={"text-sm mt-auto"}>
             Learn more about
             <InlineLink
-              href={"https://docs.netbird.io/how-to/networks#routing-peers"}
+              href={"https://docs.cloink.4w.ink/"}
               target={"_blank"}
             >
               Routing Peers
@@ -432,7 +432,7 @@ const InstallNetBirdWithSetupKeyButton = ({
     const choice = await confirm({
       title: `Create a Setup Key?`,
       description:
-        "If you continue, a one-off setup key will be automatically created and you will be able to install NetBird.",
+        "If you continue, a one-off setup key will be automatically created and you will be able to install Cloink.",
       confirmText: "Continue",
       cancelText: "Cancel",
       type: "default",
@@ -477,7 +477,7 @@ const InstallNetBirdWithSetupKeyButton = ({
         ) : (
           <DownloadIcon size={14} />
         )}
-        Install NetBird
+        Install Cloink
       </Button>
       {setupKey && (
         <Modal

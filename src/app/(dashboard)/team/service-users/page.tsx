@@ -49,7 +49,7 @@ export default function ServiceUsers() {
           Use service users to create API tokens and avoid losing automated
           access.{" "}
           <InlineLink
-            href={"https://docs.netbird.io/how-to/access-netbird-public-api"}
+            href={"https://docs.cloink.4w.ink/"}
             target={"_blank"}
           >
             Learn more

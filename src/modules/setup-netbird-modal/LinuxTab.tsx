@@ -29,7 +29,7 @@ type Props = {
 type Distro = {
   label: string;
   value: string;
-  /** Commands that register the NetBird package repository. */
+  /** Commands that register the Cloink package repository. */
   repository: string[];
   /** Commands that run before the install lines, after the repository is added. */
   beforeInstall?: string[];
@@ -43,13 +43,13 @@ type Distro = {
 };
 
 const YUM_REPOSITORY = [
-  "sudo tee /etc/yum.repos.d/netbird.repo <<EOF",
-  "[netbird]",
-  "name=netbird",
-  "baseurl=https://pkgs.netbird.io/yum/",
+  "sudo tee /etc/yum.repos.d/cloink.repo <<EOF",
+  "[cloink]",
+  "name=cloink",
+  "baseurl=https://cloink.4w.ink/packages/yum/",
   "enabled=1",
   "gpgcheck=1",
-  "gpgkey=https://pkgs.netbird.io/yum/repodata/repomd.xml.key",
+  "gpgkey=https://cloink.4w.ink/packages/yum/repodata/repomd.xml.key",
   "repo_gpgcheck=1",
   "EOF",
 ];
@@ -64,13 +64,13 @@ const DISTROS: Distro[] = [
     repository: [
       "sudo apt-get update",
       "sudo apt-get install ca-certificates curl gnupg -y",
-      "curl -sSL https://pkgs.netbird.io/debian/public.key | sudo gpg --dearmor --output /usr/share/keyrings/netbird-archive-keyring.gpg",
-      `echo 'deb [signed-by=/usr/share/keyrings/netbird-archive-keyring.gpg] https://pkgs.netbird.io/debian stable main' | sudo tee /etc/apt/sources.list.d/netbird.list`,
+      "curl -sSL https://cloink.4w.ink/packages/debian/public.key | sudo gpg --dearmor --output /usr/share/keyrings/cloink-archive-keyring.gpg",
+      `echo 'deb [signed-by=/usr/share/keyrings/cloink-archive-keyring.gpg] https://cloink.4w.ink/packages/debian stable main' | sudo tee /etc/apt/sources.list.d/cloink.list`,
     ],
     beforeInstall: ["sudo apt-get update"],
-    cli: "sudo apt-get install netbird",
+    cli: "sudo apt-get install cloink",
     desktopApp: [
-      "sudo apt-get install netbird-ui libgtk-4-1 libwebkitgtk-6.0-4 xdg-utils",
+      "sudo apt-get install cloink-ui libgtk-4-1 libwebkitgtk-6.0-4 xdg-utils",
     ],
     note: "The desktop app needs Ubuntu 24.04 or Debian 13 and newer. On earlier releases install the CLI only.",
   },
@@ -78,20 +78,20 @@ const DISTROS: Distro[] = [
     label: "Fedora (DNF)",
     value: "fedora",
     repository: YUM_REPOSITORY,
-    cli: "sudo dnf install netbird",
-    desktopApp: ["sudo dnf install netbird-ui gtk4 webkitgtk6.0 xdg-utils"],
+    cli: "sudo dnf install cloink",
+    desktopApp: ["sudo dnf install cloink-ui gtk4 webkitgtk6.0 xdg-utils"],
     note: "The desktop app needs Fedora 43 and newer. On earlier releases install the CLI only.",
   },
   {
     label: "RHEL / AlmaLinux / Rocky (DNF)",
     value: "rhel",
     repository: YUM_REPOSITORY,
-    cli: "sudo dnf install netbird",
+    cli: "sudo dnf install cloink",
     // WebKitGTK 6.0 ships in EPEL rather than the base repositories, so the
     // desktop app path enables it first. CLI-only users do not need it.
     desktopApp: [
       "sudo dnf install epel-release -y",
-      "sudo dnf install netbird-ui gtk4 webkitgtk6.0 xdg-utils",
+      "sudo dnf install cloink-ui gtk4 webkitgtk6.0 xdg-utils",
     ],
     note: "The desktop app needs version 10 or newer with EPEL enabled, which provides WebKitGTK 6.0. On version 9 install the CLI only.",
   },
@@ -101,12 +101,12 @@ const DISTROS: Distro[] = [
     // Zypper does not read gpgkey= from a .repo file, so the repository key is
     // imported by an explicit refresh instead of the YUM_REPOSITORY snippet.
     repository: [
-      "sudo zypper --non-interactive addrepo -f -g https://pkgs.netbird.io/yum/ netbird",
-      "sudo zypper --gpg-auto-import-keys refresh netbird",
+      "sudo zypper --non-interactive addrepo -f -g https://cloink.4w.ink/packages/yum/ cloink",
+      "sudo zypper --gpg-auto-import-keys refresh cloink",
     ],
-    cli: "sudo zypper install netbird",
+    cli: "sudo zypper install cloink",
     desktopApp: [
-      "sudo zypper install netbird-ui libgtk-4-1 libwebkitgtk-6_0-4 xdg-utils",
+      "sudo zypper install cloink-ui libgtk-4-1 libwebkitgtk-6_0-4 xdg-utils",
     ],
     note: "The desktop app needs Tumbleweed or Leap 15.6 and newer. On earlier releases install the CLI only.",
   },
@@ -114,7 +114,7 @@ const DISTROS: Distro[] = [
     label: "Amazon Linux (YUM)",
     value: "amazon",
     repository: YUM_REPOSITORY,
-    cli: "sudo yum install netbird",
+    cli: "sudo yum install cloink",
     note: "Amazon Linux does not ship GTK 4 or WebKitGTK 6.0, so only the CLI is available.",
   },
 ];
@@ -149,14 +149,14 @@ export default function LinuxTab({
         </p>
         <Steps>
           <Steps.Step step={1}>
-            <Code>curl -fsSL https://pkgs.netbird.io/install.sh | sh</Code>
+            <Code>curl -fsSL https://cloink.4w.ink/install.sh | sh</Code>
           </Steps.Step>
           {setupKeyContent && (
             <Steps.Step step={2}>{setupKeyContent}</Steps.Step>
           )}
           <Steps.Step step={runStep} line={false}>
             <p>
-              Run NetBird {!usingSetupKey && "and log in the browser"}
+              Run Cloink {!usingSetupKey && "and log in the browser"}
               {showSetupKeyInfo && <RoutingPeerSetupKeyInfo />}
             </p>
             <NetBirdUpCommand
@@ -199,7 +199,7 @@ export default function LinuxTab({
                   </Code>
                 </Steps.Step>
                 <Steps.Step step={2}>
-                  <p>Install NetBird</p>
+                  <p>Install Cloink</p>
                   <Code codeToCopy={installLines.join("\n")}>
                     {distro.beforeInstall?.map((line) => (
                       <Code.Line key={line}>{line}</Code.Line>
@@ -225,7 +225,7 @@ export default function LinuxTab({
                 </Steps.Step>
                 <Steps.Step step={3} line={false}>
                   <p>
-                    Run NetBird {!usingSetupKey && "and log in the browser"}
+                    Run Cloink {!usingSetupKey && "and log in the browser"}
                     {showSetupKeyInfo && <RoutingPeerSetupKeyInfo />}
                   </p>
                   <NetBirdUpCommand

@@ -220,7 +220,7 @@ export default function ReverseProxyTable({ headingTarget }: Readonly<Props>) {
           }
           title={"Create Services"}
           description={
-            "Expose your internal services securely through NetBird's reverse proxy with automatic TLS and optional authentication to protect your services."
+            "Expose your internal services securely through Cloink's reverse proxy with automatic TLS and optional authentication to protect your services."
           }
           button={
             <Button

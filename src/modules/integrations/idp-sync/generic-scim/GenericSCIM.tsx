@@ -37,8 +37,8 @@ export const GenericSCIM = ({
   name = "Generic SCIM",
   description = "Provide your own custom SCIM provider to sync users and groups.",
   url = {
-    title: "docs.netbird.io",
-    href: "https://docs.netbird.io/how-to/idp-sync#supported-identity-providers",
+    title: "docs.cloink.4w.ink",
+    href: "https://docs.cloink.4w.ink/",
   },
   image = integrationImage,
   provider = IdentityProvider.GENERIC,

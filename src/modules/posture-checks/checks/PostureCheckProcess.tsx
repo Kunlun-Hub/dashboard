@@ -169,7 +169,7 @@ const CheckContent = ({ value, onChange, disabled }: Props) => {
                   <div className={"w-full flex flex-col gap-1.5"}>
                     <Input
                       customPrefix={<TerminalIcon size={16} />}
-                      placeholder={"/usr/local/bin/netbird"}
+                      placeholder={"/usr/local/bin/cloink"}
                       value={p.linux_path}
                       error={
                         pathErrors.find((e) => e.id === p.id)?.errorLinuxPath
@@ -198,7 +198,7 @@ const CheckContent = ({ value, onChange, disabled }: Props) => {
                         />
                       }
                       placeholder={
-                        "/Applications/NetBird.app/Contents/MacOS/netbird"
+                        "/Applications/Cloink.app/Contents/MacOS/cloink"
                       }
                       value={p.mac_path}
                       error={
@@ -227,7 +227,7 @@ const CheckContent = ({ value, onChange, disabled }: Props) => {
                           )}
                         />
                       }
-                      placeholder={`C:\\ProgramData\\NetBird\\netbird.exe`}
+                      placeholder={`C:\\ProgramData\\Cloink\\cloink.exe`}
                       value={p.windows_path}
                       errorTooltip={true}
                       errorTooltipPosition={"top-right"}
@@ -277,7 +277,7 @@ const CheckContent = ({ value, onChange, disabled }: Props) => {
             Learn more about
             <InlineLink
               href={
-                "https://docs.netbird.io/how-to/manage-posture-checks#process-check"
+                "https://docs.cloink.4w.ink/"
               }
               target={"_blank"}
             >

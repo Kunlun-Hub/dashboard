@@ -31,12 +31,12 @@ export default function EventStreamingTab() {
         </Breadcrumbs>
         <h1>Event Streaming</h1>
         <Paragraph>
-          Event Streaming allows you to stream NetBirds audit & traffic events
+          Event Streaming allows you to stream Cloink audit & traffic events
           to different third-party services.
         </Paragraph>
         <Paragraph>
           <InlineLink
-            href={"https://docs.netbird.io/how-to/activity-event-streaming"}
+            href={"https://docs.cloink.4w.ink/"}
             target={"_blank"}
           >
             Learn more

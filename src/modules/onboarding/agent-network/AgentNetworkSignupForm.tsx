@@ -47,8 +47,8 @@ export const AgentNetworkSignupForm = ({ onSubmit }: Props) => {
   const { loggedInUser } = useLoggedInUser();
   const name = user?.given_name || user?.name || user?.preferred_username;
   const welcomeMessage = name
-    ? `Welcome to NetBird, ${name}!`
-    : "Welcome to NetBird!";
+    ? `Welcome to Cloink, ${name}!`
+    : "Welcome to Cloink!";
 
   // The email is already known from the authenticated user, so it's submitted
   // with the form silently — no field to fill or correct.

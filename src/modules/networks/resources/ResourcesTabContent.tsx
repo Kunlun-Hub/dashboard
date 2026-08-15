@@ -25,7 +25,7 @@ export const ResourcesTabContent = ({
           <Paragraph>
             Add resources to this network to control what peers can access.{" "}
             <InlineLink
-              href={"https://docs.netbird.io/how-to/networks#resources"}
+              href={"https://docs.cloink.4w.ink/"}
               target={"_blank"}
             >
               Learn more

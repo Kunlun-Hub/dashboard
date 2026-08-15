@@ -20,7 +20,7 @@ export function GroupPrefixInput({
   addText = "Add group filter",
   icon = <Folder size={14} />,
   text = "Group starts with...",
-  placeholder = "e.g., NetBird_",
+  placeholder = "e.g., Cloink_",
 }: GroupPrefixInputProps) {
   const [groupPrefixes, setGroupPrefixes] = useState<string[]>(value);
   const prefixes = useDebounce(groupPrefixes, 100);

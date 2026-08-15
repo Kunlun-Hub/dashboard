@@ -39,7 +39,7 @@ const OPEN_SOURCE_FEATURES: Array<keyof typeof PlanFeatures> = [
 
 /**
  * Hook to check if a feature is locked based on the current plan.
- * On NetBird Cloud the lock follows the subscription plan, for trial users it
+ * On Cloink Cloud the lock follows the subscription plan, for trial users it
  * always returns false. On self-hosted deployments features included in the
  * open-source management server are always unlocked, the rest follow the
  * license (NETBIRD_LICENSED or the licensed management server probe).

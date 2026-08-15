@@ -339,11 +339,11 @@ function NetworkSettingsTabContent({ account }: Readonly<Props>) {
             helpText={
               <>
                 Resolves DNS for routed domains on the routing peer instead of
-                on the client. Requires NetBird client v0.35 or higher. Changes
+                on the client. Requires Cloink client v0.35 or higher. Changes
                 will only take effect after restarting the clients.{" "}
                 <InlineLink
                   href={
-                    "https://docs.netbird.io/how-to/accessing-entire-domains-within-networks#enabling-dns-wildcard-routing"
+                    "https://docs.cloink.4w.ink/"
                   }
                   target={"_blank"}
                   onClick={(e) => e.stopPropagation()}

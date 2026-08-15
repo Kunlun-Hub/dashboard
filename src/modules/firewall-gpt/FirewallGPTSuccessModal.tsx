@@ -58,7 +58,7 @@ export const FirewallGPTSuccessModal = ({
           </h2>
           <Paragraph className={cn("text-sm text-center max-w-xs")}>
             {
-              "How would you rate your experience with NetBird's Smart Firewall?"
+              "How would you rate your experience with Cloink's Smart Firewall?"
             }
           </Paragraph>
 

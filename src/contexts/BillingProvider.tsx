@@ -23,6 +23,7 @@ import {
 } from "@/interfaces/Subscription";
 import { LimitsReachedModal } from "@/modules/billing/LimitsReachedModal";
 import { TrialSuccessModal } from "@/modules/billing/trial/TrialSuccessModal";
+import { useDashboardFeatures } from "@/modules/account/useDashboardFeatures";
 
 type Props = {
   children: React.ReactNode;
@@ -43,8 +44,8 @@ export const trialExpiresInfo: Announcement = {
   tag: "Trial",
   text: "Your trial is ending soon. Need more time? Contact us to extend your trial.",
   variant: "default", // "default" or "important"
-  link: "mailto:support@netbird.io",
-  linkText: "support@netbird.io",
+  link: "mailto:support@cloink.4w.ink",
+  linkText: "support@cloink.4w.ink",
   isExternal: false,
   closeable: false,
   isCloudOnly: true,
@@ -93,8 +94,9 @@ export const BillingContext = React.createContext(
 
 export default function BillingProvider({ children }: Props) {
   const { permission } = usePermissions();
+  const { billing: billingEnabled } = useDashboardFeatures();
 
-  return permission?.billing?.read && isNetBirdCloud() ? (
+  return permission?.billing?.read && isNetBirdCloud() && billingEnabled ? (
     <BillingContextProvider>{children}</BillingContextProvider>
   ) : (
     <>{children}</>
@@ -251,9 +253,9 @@ function BillingContextProvider({ children }: Readonly<Props>) {
           mutate("/integrations/billing/subscription");
         });
         notify({
-          title: "NetBird Subscription",
+          title: "Cloink Subscription",
           description: `Successfully subscribed to the ${plan.name} plan`,
-          loadingMessage: "Subscribing to NetBird via AWS Marketplace...",
+          loadingMessage: "Subscribing to Cloink via AWS Marketplace...",
           promise: promise,
         });
         return promise;

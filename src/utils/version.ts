@@ -3,7 +3,6 @@ import dayjs from "dayjs";
 import { OperatingSystem } from "@/interfaces/OperatingSystem";
 import { NetbirdRelease } from "@/interfaces/Version";
 
-const GITHUB_API_ENDPOINT = "https://api.github.com";
 const LATEST_RELEASE_CHECK_INTERVAL_IN_MINUTES = 10;
 
 export const getLatestNetbirdRelease = async (
@@ -17,15 +16,27 @@ export const getLatestNetbirdRelease = async (
     );
 
   if (runFetch) {
-    const data = (await fetch(
-      `${GITHUB_API_ENDPOINT}/repos/netbirdio/netbird/releases/latest`,
-    ).then((response) => response.json())) as any;
+    const endpoint = `${
+      typeof window === "undefined" ? "" : window.location.origin
+    }/api/version-releases/public?channel=stable&latest=true`;
+    const releases = (await fetch(endpoint).then((response) =>
+      response.json(),
+    )) as Array<{
+      version?: string;
+      downloadUrl?: string;
+      isLatest?: boolean;
+    }>;
+    const data = releases.find((item) => item?.isLatest) ?? releases[0];
 
     try {
       return {
-        latest_version: data.name,
+        latest_version: data.version ?? "",
         last_checked: new Date(),
-        url: data.html_url as string,
+        url:
+          data.downloadUrl ??
+          `${
+            typeof window === "undefined" ? "" : window.location.origin
+          }/install`,
       } as NetbirdRelease;
     } catch (e) {
       console.warn(e);
@@ -64,7 +75,7 @@ export const compareVersions = (
 
 /**
  * Check if peer as routing peer is supported by the provided version and operating system.
- * Routing peers are supported on Windows, macOS, iOS & Android starting from NetBird v0.36.6+.
+ * Routing peers are supported on Windows, macOS, iOS & Android starting from Cloink v0.36.6+.
  * @param version
  * @param os
  */
@@ -77,7 +88,7 @@ export const isRoutingPeerSupported = (version: string, os: string) => {
 
 /**
  * Check if native SSH is supported.
- * Supported starting from NetBird v0.60.0+.
+ * Supported starting from Cloink v0.60.0+.
  * @param version
  */
 export const isNativeSSHSupported = (version: string) => {
@@ -86,8 +97,8 @@ export const isNativeSSHSupported = (version: string) => {
 };
 
 /**
- * Check if NetBird SSH protocol is supported.
- * Supported starting from NetBird v0.61.0+.
+ * Check if Cloink SSH protocol is supported.
+ * Supported starting from Cloink v0.61.0+.
  * @param version
  */
 export const isNetbirdSSHProtocolSupported = (version: string) => {

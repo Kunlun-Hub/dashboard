@@ -46,7 +46,7 @@ export default function EDRTab({ account }: Props) {
         <Paragraph>
           <InlineLink
             href={
-              "https://docs.netbird.io/how-to/endpoint-detection-and-response"
+              "https://docs.cloink.4w.ink/"
             }
             target={"_blank"}
           >

@@ -66,7 +66,7 @@ export const HorizontalUsersStack = ({
                   </span>
                   <span className={"text-nb-gray-350 font-light"}>
                     <TextWithTooltip
-                      text={user?.email || "NetBird"}
+                      text={user?.email === "NetBird" ? "Cloink" : user?.email}
                       maxChars={500}
                     />
                   </span>

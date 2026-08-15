@@ -113,7 +113,7 @@ export function ServiceUserModalContent({ onSuccess }: Readonly<ModalProps>) {
           <Paragraph className={"text-sm mt-auto"}>
             Learn more about
             <InlineLink
-              href={"https://docs.netbird.io/how-to/access-netbird-public-api"}
+              href={"https://docs.cloink.4w.ink/"}
               target={"_blank"}
             >
               Service Users

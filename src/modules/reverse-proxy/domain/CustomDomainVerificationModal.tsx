@@ -85,14 +85,14 @@ export const CustomDomainVerificationModal = ({
                   No proxy clusters are currently connected. Please try again in
                   a few minutes. If the issue persists, check{" "}
                   <InlineLink
-                    href={"https://status.netbird.io/"}
+                    href={"https://cloink.4w.ink/"}
                     target={"_blank"}
                   >
-                    NetBird Status
+                    Cloink Status
                   </InlineLink>{" "}
                   or reach out to{"  "}
-                  <InlineLink href={"mailto:support@netbird.io"}>
-                    support@netbird.io
+                  <InlineLink href={"mailto:support@cloink.4w.ink"}>
+                    support@cloink.4w.ink
                   </InlineLink>
                 </Callout>
               ) : (
@@ -140,7 +140,7 @@ export const CustomDomainVerificationModal = ({
                 )}
 
                 <Callout variant={"warning"}>
-                  DNS changes may take some time to propagate. If NetBird does
+                  DNS changes may take some time to propagate. If Cloink does
                   not find the record immediately, please wait up to 24 hours
                   and try again.
                 </Callout>

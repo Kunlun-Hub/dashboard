@@ -194,7 +194,7 @@ const CheckContent = ({ value, onChange, disabled }: Props) => {
             Learn more about
             <InlineLink
               href={
-                "https://docs.netbird.io/how-to/manage-posture-checks#peer-network-range-check"
+                "https://docs.cloink.4w.ink/"
               }
               target={"_blank"}
             >

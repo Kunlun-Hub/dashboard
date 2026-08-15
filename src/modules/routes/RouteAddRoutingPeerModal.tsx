@@ -166,7 +166,7 @@ function Content({ onSuccess, groupedRoute, peer }: ModalProps) {
         icon={<NetworkRoutesIcon className={"fill-netbird"} />}
         title={"Add New Routing Peer"}
         description={
-          "When you add multiple routing peers, NetBird enables high availability for this network."
+          "When you add multiple routing peers, Cloink enables high availability for this network."
         }
         color={"netbird"}
       />
@@ -223,7 +223,7 @@ function Content({ onSuccess, groupedRoute, peer }: ModalProps) {
             Learn more about
             <InlineLink
               href={
-                "https://docs.netbird.io/how-to/routing-traffic-to-private-networks"
+                "https://docs.cloink.4w.ink/"
               }
               target={"_blank"}
             >

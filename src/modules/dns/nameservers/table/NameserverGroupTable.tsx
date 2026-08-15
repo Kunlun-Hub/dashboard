@@ -304,7 +304,7 @@ export default function NameserverGroupTable({
                   Learn more about
                   <InlineLink
                     href={
-                      "https://docs.netbird.io/how-to/manage-dns-in-your-network"
+                      "https://docs.cloink.4w.ink/"
                     }
                     target={"_blank"}
                   >

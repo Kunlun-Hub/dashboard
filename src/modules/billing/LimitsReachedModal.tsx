@@ -117,7 +117,7 @@ const LimitReachedContent = () => {
         <ModalFooter separator={false} className={"gap-x-2 mt-1"}>
           <a
             href={
-              "mailto:support@netbird.io?subject=Request%20for%20Assistance%3A%20Account%20Limit%20Reached"
+              "mailto:support@cloink.4w.ink?subject=Request%20for%20Assistance%3A%20Account%20Limit%20Reached"
             }
             className={"w-full"}
           >

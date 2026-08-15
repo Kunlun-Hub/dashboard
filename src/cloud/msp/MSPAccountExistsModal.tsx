@@ -42,7 +42,7 @@ export const MSPAccountExistsModal = ({
             {tenant?.domain}
           </div>
           <div className={"text-xl font-medium text-center mb-1"}>
-            This NetBird account already <br />
+            This Cloink account already <br />
             exists in our system
           </div>
           <div className={"text-sm text-nb-gray-300 text-center"}>

@@ -105,14 +105,14 @@ export const CustomDomainModal = ({
                 No proxy clusters are currently connected. Please try again in a
                 few minutes. If the issue persists, check{" "}
                 <InlineLink
-                  href={"https://status.netbird.io/"}
+                  href={"https://cloink.4w.ink/"}
                   target={"_blank"}
                 >
-                  NetBird Status
+                  Cloink Status
                 </InlineLink>{" "}
                 or reach out to{"  "}
-                <InlineLink href={"mailto:support@netbird.io"}>
-                  support@netbird.io
+                <InlineLink href={"mailto:support@cloink.4w.ink"}>
+                  support@cloink.4w.ink
                 </InlineLink>
               </Callout>
             ) : (

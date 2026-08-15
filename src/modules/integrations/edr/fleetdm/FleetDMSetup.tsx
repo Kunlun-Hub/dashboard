@@ -134,7 +134,7 @@ export function SetupContent({ onSuccess, account }: Readonly<ModalProps>) {
 
     notify({
       title: "FleetDM Integration",
-      description: `FleetDM was successfully connected to NetBird.`,
+      description: `FleetDM was successfully connected to Cloink.`,
       promise: fleetDMRequest
         .post({
           api_token: apiToken,
@@ -191,7 +191,7 @@ export function SetupContent({ onSuccess, account }: Readonly<ModalProps>) {
 
       <IntegrationModalHeader
         image={integrationImage}
-        title={"Connect NetBird with FleetDM"}
+        title={"Connect Cloink with FleetDM"}
         description={
           "Restrict network access to devices managed by FleetDM based on their compliance policies."
         }

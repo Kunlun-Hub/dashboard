@@ -194,8 +194,8 @@ export function SetupContent({
 
       <IntegrationModalHeader
         image={image || integrationImage}
-        title={`Connect NetBird with ${name}`}
-        description={`Start syncing your users and groups from ${name} to NetBird. Follow the steps below to get started.`}
+        title={`Connect Cloink with ${name}`}
+        description={`Start syncing your users and groups from ${name} to Cloink. Follow the steps below to get started.`}
       />
 
       {step === -1 && (
@@ -218,7 +218,7 @@ export function SetupContent({
               className={"inline"}
               target={"_blank"}
               href={
-                "https://docs.netbird.io/how-to/idp-sync#supported-identity-providers"
+                "https://docs.cloink.4w.ink/"
               }
             >
               IdP Documentation
@@ -234,10 +234,10 @@ export function SetupContent({
               className={"inline"}
               target={"_blank"}
               href={
-                "mailto:support@netbird.io?subject=Request%20for%20Assistance%3A%20Custom%20Identity%20Provider"
+                "mailto:support@cloink.4w.ink?subject=Request%20for%20Assistance%3A%20Custom%20Identity%20Provider"
               }
             >
-              support@netbird.io
+              support@cloink.4w.ink
             </InlineLink>
           </p>
           {!genericConnection && !isSSOLoading && isAuth0() && (
@@ -246,7 +246,7 @@ export function SetupContent({
                 Single-Sign-On needs to be enabled and active before you can
                 enable IdP sync.{" "}
                 <InlineLink
-                  href={"https://docs.netbird.io/how-to/single-sign-on"}
+                  href={"https://docs.cloink.4w.ink/"}
                   target={"_blank"}
                 >
                   How to enable SSO
@@ -309,7 +309,7 @@ export function SetupContent({
             data={[
               {
                 label: "Name",
-                value: "NetBird",
+                value: "Cloink",
               },
               {
                 label: "API Type",
@@ -323,7 +323,7 @@ export function SetupContent({
               },
               {
                 label: "Base URL",
-                value: "https://api.netbird.io/api/scim/v2",
+                value: "https://cloink.4w.ink/api/scim/v2",
               },
               {
                 label: "Token",

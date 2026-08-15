@@ -134,7 +134,7 @@ export default function OktaSSOSetup({ open, onOpenChange }: Props) {
 
           <IntegrationModalHeader
             image={integrationImage}
-            title={"Connect NetBird with Okta SSO"}
+            title={"Connect Cloink with Okta SSO"}
             description={
               "Use Okta as a Single Sign-On provider to authenticate users. Follow the steps below to get started."
             }
@@ -197,7 +197,7 @@ export default function OktaSSOSetup({ open, onOpenChange }: Props) {
             <div className={"px-8 py-3 flex flex-col gap-0 mt-4"}>
               <p className={"font-medium flex gap-3 items-center text-base"}>
                 <Box size={20} />
-                Install NetBird application for Okta
+                Install Cloink application for Okta
               </p>
               <Steps>
                 <Steps.Step step={1}>
@@ -206,7 +206,7 @@ export default function OktaSSOSetup({ open, onOpenChange }: Props) {
                     <InlineLink
                       className={"inline"}
                       target={"_blank"}
-                      href={"https://www.okta.com/integrations/netbird"}
+                      href={"https://docs.cloink.4w.ink/"}
                     >
                       Okta Integration Network
                     </InlineLink>
@@ -277,7 +277,7 @@ export default function OktaSSOSetup({ open, onOpenChange }: Props) {
                   <p className={"font-normal"}>
                     Enter your
                     <Mark>Primary E-Mail Domain</Mark> which will later be used
-                    to log in to NetBird.
+                    to log in to Cloink.
                   </p>
                   <Input
                     customPrefix={<GlobeIcon size={16} />}

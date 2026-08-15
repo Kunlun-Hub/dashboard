@@ -24,7 +24,7 @@ export const FirewallGPTAccessFormSuccessModal = ({ open, setOpen }: Props) => {
           <div className={"text-sm text-center mb-2"}>
             <p
               className={"!text-nb-gray-300"}
-            >{`We'll send you an email once NetBird's Smart Firewall is ready to use in your account.`}</p>
+            >{`We'll send you an email once Cloink's Smart Firewall is ready to use in your account.`}</p>
           </div>
           <Button
             variant={"secondary"}

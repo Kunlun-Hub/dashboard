@@ -31,10 +31,10 @@ export const TrialGradientCard = () => {
               )}
             >
               <Sparkles size={16} className={cn("relative", "-top-[0px]")} />
-              {`Try all of NetBird's features for free`}
+              {`Try all of Cloink's features for free`}
             </div>
             <div className={cn("font-light")}>
-              {`Activate your 14-day trial to access NetBird's full set of features & integrations. After the trial, you will return to your ${planName} plan unless you choose to upgrade.`}
+              {`Activate your 14-day trial to access Cloink's full set of features & integrations. After the trial, you will return to your ${planName} plan unless you choose to upgrade.`}
             </div>
           </div>
           <TrialOrUpgradeButton plan={PlanTier.BUSINESS} variant={"white"} />

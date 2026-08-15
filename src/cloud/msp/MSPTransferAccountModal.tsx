@@ -128,7 +128,7 @@ export const MSPTransferAccountModal = () => {
             >
               <Image
                 src={netBirdLogo}
-                alt={"NetBird"}
+                alt={"Cloink"}
                 className={"rounded-[4px]"}
               />
             </div>

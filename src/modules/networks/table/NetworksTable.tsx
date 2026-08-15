@@ -191,7 +191,7 @@ export default function NetworksTable({
                   <>
                     Learn more about
                     <InlineLink
-                      href={"https://docs.netbird.io/how-to/networks"}
+                      href={"https://docs.cloink.4w.ink/"}
                       target={"_blank"}
                     >
                       Networks

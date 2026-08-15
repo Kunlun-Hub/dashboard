@@ -291,7 +291,7 @@ export default function IdentityProviderModal({
                   Not all identity providers support logout.{" "}
                   <InlineLink
                     href={
-                      "https://docs.netbird.io/selfhosted/identity-providers"
+                      "https://docs.cloink.4w.ink/"
                     }
                     target={"_blank"}
                   >

@@ -43,7 +43,7 @@ export default function AccessControlPage() {
             Policies connect users and agents to your network resources,
             controlling what each identity can reach.{" "}
             <InlineLink
-              href={"https://docs.netbird.io/how-to/manage-network-access"}
+              href={"https://docs.cloink.4w.ink/#policies"}
               target={"_blank"}
             >
               Learn more

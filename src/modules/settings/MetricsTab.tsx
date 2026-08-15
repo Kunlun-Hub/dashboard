@@ -69,14 +69,14 @@ export default function MetricsTab({ account }: Readonly<Props>) {
         <div>
           <h1>Metrics</h1>
           <Paragraph>
-            Help us improve NetBird by sharing performance metrics
+            Help us improve Cloink by sharing performance metrics
             such as connection timing, sync duration, and login latency.
           </Paragraph>
           <Paragraph>
             Learn more about{" "}
             <InlineLink
               href={
-                "https://docs.netbird.io/manage/client-metrics"
+                "https://docs.cloink.4w.ink/"
               }
               target={"_blank"}
             >

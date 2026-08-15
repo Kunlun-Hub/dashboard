@@ -42,7 +42,7 @@ export const ALL_NOTIFICATION_EVENT_TYPES = Object.values(
 );
 
 export const NOTIFICATION_CHANNELS_DOCS_LINK =
-  "https://docs.netbird.io/manage/settings/notifications";
+  "https://docs.cloink.4w.ink/";
 
 export const NOTIFICATION_CHANNELS_WEBHOOK_DOCS_LINK =
-  "https://docs.netbird.io/manage/settings/notifications#webhook-notifications";
+  "https://docs.cloink.4w.ink/";

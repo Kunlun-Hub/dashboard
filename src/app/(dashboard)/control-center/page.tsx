@@ -1946,7 +1946,7 @@ function ControlCenterView() {
                   <>
                     Learn more about
                     <InlineLink
-                      href={"https://docs.netbird.io/how-to/networks"}
+                      href={"https://docs.cloink.4w.ink/#networks"}
                       target={"_blank"}
                     >
                       Networks

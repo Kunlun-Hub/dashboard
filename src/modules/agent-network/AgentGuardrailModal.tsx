@@ -182,7 +182,7 @@ export default function AgentGuardrailModal({
           <div className={"w-full"}>
             <Paragraph className={"text-sm mt-auto"}>
               Learn more about
-              <InlineLink href={"https://docs.netbird.io/"} target={"_blank"}>
+              <InlineLink href={"https://docs.cloink.4w.ink/"} target={"_blank"}>
                 Agent Network
                 <ExternalLinkIcon size={12} />
               </InlineLink>
@@ -352,7 +352,7 @@ function ModelAllowlistContent({
         <div className={"w-full"}>
           <Paragraph className={"text-sm mt-auto"}>
             Learn more about
-            <InlineLink href={"https://docs.netbird.io/"} target={"_blank"}>
+            <InlineLink href={"https://docs.cloink.4w.ink/"} target={"_blank"}>
               Model Allowlist
               <ExternalLinkIcon size={12} />
             </InlineLink>
@@ -412,7 +412,7 @@ function PromptCaptureContent({ onConfirm }: { onConfirm: () => void }) {
     <>
       <div className={"flex flex-col px-8 gap-3 pb-6"}>
         <div className={"text-sm text-nb-gray-300"}>
-          NetBird redacts emails, SSN-shaped, phone-shaped, and credit-card
+          Cloink redacts emails, SSN-shaped, phone-shaped, and credit-card
           patterns before storing the prompt body. Enabling this guardrail
           adds strict redaction on top of the proxy&apos;s built-in token
           redaction.
@@ -422,7 +422,7 @@ function PromptCaptureContent({ onConfirm }: { onConfirm: () => void }) {
         <div className={"w-full"}>
           <Paragraph className={"text-sm mt-auto"}>
             Learn more about
-            <InlineLink href={"https://docs.netbird.io/"} target={"_blank"}>
+            <InlineLink href={"https://docs.cloink.4w.ink/"} target={"_blank"}>
               Prompt Capture
               <ExternalLinkIcon size={12} />
             </InlineLink>

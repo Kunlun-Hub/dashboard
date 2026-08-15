@@ -197,7 +197,7 @@ export function ConfigurationContent({
         image={image || integrationImage}
         title={`${name} Configuration`}
         description={
-          "Sync your users and groups from your identity provider to NetBird."
+          "Sync your users and groups from your identity provider to Cloink."
         }
       />
 
@@ -314,7 +314,7 @@ export function ConfigurationContent({
             </Label>
             <HelpText className={"max-w-lg mt-2"}>
               Deleting this integration will remove the ability to sync users
-              and groups from your IdP to NetBird. If you delete the integration
+              and groups from your IdP to Cloink. If you delete the integration
               you will need to reconfigure it again to enable the
               synchronization.
             </HelpText>

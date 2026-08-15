@@ -57,8 +57,8 @@ const HEADER_AUTH_METHOD = {
 };
 
 const NETBIRD_ONLY_METHOD = {
-  label: "NetBird Only",
-  hoverLabel: "NetBird-Only Access",
+  label: "Cloink Only",
+  hoverLabel: "Cloink-Only Access",
   Icon: CircleUser,
 };
 

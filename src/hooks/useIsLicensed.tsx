@@ -51,7 +51,7 @@ const writeLicenseCache = (value: boolean) => {
 
 /**
  * useIsLicensed determines whether premium features are available on this
- * deployment. NetBird Cloud and deployments with NETBIRD_LICENSED=true are
+ * deployment. Cloink Cloud and deployments with NETBIRD_LICENSED=true are
  * licensed by definition. For backwards compatibility, deployments without
  * the flag are probed once against a licensed-only management endpoint and the
  * result is cached so the probe does not repeat on every page load.

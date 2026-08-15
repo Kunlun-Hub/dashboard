@@ -82,16 +82,16 @@ export const referralSourceOptions = [
     value: "Other",
   },
   {
-    label: "NetBird YouTube Channel",
-    value: "NetBird YouTube Channel",
+    label: "Cloink YouTube Channel",
+    value: "Cloink YouTube Channel",
   },
   {
     label: "Other YouTube Channel",
     value: "Other YouTube Channel",
   },
   {
-    label: "NetBird SubReddit",
-    value: "NetBird SubReddit",
+    label: "Cloink SubReddit",
+    value: "Cloink SubReddit",
   },
   {
     label: "Other Reddit Thread",
@@ -107,8 +107,8 @@ export const OnboardingSurvey = ({ domainCategory, onSubmit }: Props) => {
   const { oidcUser: user } = useOidcUser();
   const name = user?.given_name || user?.name || user?.preferred_username;
   const welcomeMessage = name
-    ? `Welcome to NetBird, ${name}!`
-    : "Welcome to NetBird!";
+    ? `Welcome to Cloink, ${name}!`
+    : "Welcome to Cloink!";
 
   const isPrivate = domainCategory === "private";
   const [personalOrBusiness, setPersonalOrBusiness] = useState(
@@ -315,7 +315,7 @@ export const OnboardingSurvey = ({ domainCategory, onSubmit }: Props) => {
             <div className={"flex w-full flex-col gap-2"}>
               <div>
                 <Label>
-                  How many people in your company will use NetBird?
+                  How many people in your company will use Cloink?
                   <RequiredAsterisk />
                 </Label>
               </div>
@@ -340,7 +340,7 @@ export const OnboardingSurvey = ({ domainCategory, onSubmit }: Props) => {
 
           <div className={"flex w-full flex-col gap-2"}>
             <Label>
-              How did you hear about NetBird?
+              How did you hear about Cloink?
               <RequiredAsterisk />
             </Label>
             <SelectDropdown
@@ -356,7 +356,7 @@ export const OnboardingSurvey = ({ domainCategory, onSubmit }: Props) => {
           <div className={"flex w-full flex-col gap-2"}>
             <div>
               <Label>
-                How do you plan to use NetBird?
+                How do you plan to use Cloink?
                 <RequiredAsterisk />
               </Label>
               <HelpText className={"mt-1.5"}>

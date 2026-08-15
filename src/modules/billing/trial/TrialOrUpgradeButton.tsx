@@ -149,8 +149,8 @@ export const SelfHostedUpgradeButton = ({
   // (tagged so the visit is attributable); the regular self-hosted product
   // keeps the on-prem pricing anchor.
   const href = agentNetworkOnly
-    ? "https://netbird.ai/pricing?utm_source=dashboard_oss"
-    : "https://netbird.io/pricing#on-prem";
+    ? "https://cloink.4w.ink/"
+    : "https://cloink.4w.ink/";
   return (
     <div className={"relative top-1 min-w-[160px]"}>
       <a
